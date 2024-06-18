@@ -108,20 +108,6 @@ function Componypostjobs() {
   });
   const [loading,setLoading] = useState(false);
   
-  // const [categoryData,setCategoryData] = useState({});
-
-  // const fetchCategories = () => {
-  //   axios
-  //     .get(CATEGORY_URL)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setCategoryData(res.data);
-  //     })
-  //     .catch((err) => {
-        
-  //     });
-  // 
-
   useEffect(()=>{
     axios.post(CHECK_CREDENTIALS,{
       headers: {
