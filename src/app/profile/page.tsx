@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Form } from 'react-bootstrap';
@@ -10,12 +10,12 @@ import { useSession } from "next-auth/react";
 import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 import Loading from '@/components/Loading';
 
-function Companyprofile() {
+function CompanyProfile() {
   const { data } = useSession();
   const userSession = data as CustomSession;
   const token = userSession?.user?.data?.token;
-console.log('data***', data)
-  const [user, setUser] = useState({});
+  console.log('data***', data);
+
   const [profileData, setProfileData] = useState({
     company_name: "",
     image: "",
@@ -34,13 +34,18 @@ console.log('data***', data)
     google: "",
     linkedin: "",
   });
-  const [loading2, setLoading2] = useState(true);  // Add loading state
+  const [loading2, setLoading2] = useState(true);
+  const [errors, setErrors] = useState({
+    email: [],
+    name: [],
+    mobile_number: [],
+  });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    try {
-        if (token) {
+    if (token) {
       console.log('userSessiontop', token);
-      setLoading2(true);  // Set loading to true when starting the API call
+      setLoading2(true);
 
       axios.post(CHECK_CREDENTIALS, {}, {
         headers: {
@@ -83,27 +88,33 @@ console.log('data***', data)
       .finally(() => {
         setLoading2(false);
       });
-    } 
-    } catch (err) {
-      toast.error("Failed to fetch profile data");
     }
-
   }, [token]);
 
-  const [errors, setErrors] = useState({
-    email: [],
-    name: [],
-    mobile_number: [],
-  });
- 
-  const [loading, setLoading] = useState(false);
-    
-  const handleSubmit = (event: any) => {
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setProfileData({ ...profileData, image: file });
+  };
+
+  const handleSubmit = (event) => {
     event.preventDefault();
 
+    // Custom validation for URLs
+    const urlFields = ["facebook", "twitter", "google", "linkedin"];
+    for (const field of urlFields) {
+      const url = profileData[field];
+      if (url && !/^https?:\/\/.+$/.test(url)) {
+        toast.error(`Invalid URL in ${field} field`);
+        return;
+      }
+    }
+
     const formData = new FormData();
-   
-    formData.append('image', profileData.image);
+    if (profileData.image instanceof File) {
+      formData.append('image', profileData.image);
+    } else {
+      formData.append('image', profileData.image);
+    }
     formData.append('company_name', profileData.company_name);
     formData.append('email', profileData.email);
     formData.append('website', profileData.website);
@@ -111,7 +122,7 @@ console.log('data***', data)
     formData.append('category', profileData.category);
     formData.append('country', profileData.country);
     formData.append('description', profileData.description);
-    formData.append('phone', profileData?.phone);
+    formData.append('mobile_number', profileData.mobile_number);
     formData.append('city', profileData.city);
     formData.append('zip', profileData.zip);
     formData.append('address', profileData.address);
@@ -120,7 +131,7 @@ console.log('data***', data)
     formData.append('google', profileData.google);
     formData.append('linkedin', profileData.linkedin);
 
-    setLoading(true);  // Set loading to true when starting the API call
+    setLoading(true);
 
     axios.post(UPDATE_PROFILE, formData, {
       headers: {
@@ -132,14 +143,11 @@ console.log('data***', data)
       const response = res.data;
       setLoading(false);
 
-      if (response?.code == 200) {
-        toast.success("Profile Updated successfully!", {
-          theme: "colored",
-        });
-      } else if (response?.code == 401) {
+      if (response?.code === 200) {
+        toast.success("Profile Updated successfully!", { theme: "colored" });
+      } else if (response?.code === 401) {
         toast.error(response?.message, { theme: "colored" });
-      } else if (response?.code == 404) {
-        setLoading(false);
+      } else if (response?.code === 404) {
         setErrors(response?.data?.error);
       }
     })
@@ -147,7 +155,7 @@ console.log('data***', data)
       setLoading(false);
       console.error('Error updating profile', err.response ? err.response.data : err.message);
     });
-  }
+  };
 
   return (
     <>
@@ -173,22 +181,22 @@ console.log('data***', data)
                         </div>
                         <ul>
                           <li><Link href='/profile' className="active">
-                            <i className="fa fa-user-o" aria-hidden="true"></i> 
+                            <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>{profileData.company_name}'s Profile</span></Link></li>
                           <li><Link href='/post-job'>
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i> 
+                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
                             <span>Post A job</span></Link></li>
                           <li><Link href='/credit-earned'>
-                            <i className="fa fa-heart-o" aria-hidden="true"></i> 
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Credit Earned</span></Link></li>
                           <li><Link href='/manage-job'>
-                            <i className="fa fa-heart-o" aria-hidden="true"></i> 
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Manage Jobs</span></Link></li>
                           <li><Link href='/change-password'>
-                            <i className="fa fa-key" aria-hidden="true"></i> 
+                            <i className="fa fa-key" aria-hidden="true"></i>
                             <span>Change Password</span></Link></li>
                           <li><Link href='/'>
-                            <i className="fa fa-sign-out" aria-hidden="true"></i> 
+                            <i className="fa fa-sign-out" aria-hidden="true"></i>
                             <span>Log Out</span></Link></li>
                         </ul>
                       </div>
@@ -198,19 +206,19 @@ console.log('data***', data)
                     <div className="job-bx submit-resume">
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">{data?.user?.data?.name}'s Profile</h5>
-                        <Link href={"/company-profile"} className="site-button right-arrow button-sm float-right" style={{fontFamily:'__Inter_Fallback_aaf875'}}>Back</Link>
+                        <Link href={"/company-profile"} className="site-button right-arrow button-sm float-right" style={{ fontFamily: '__Inter_Fallback_aaf875' }}>Back</Link>
                       </div>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Company Name</label>
-                            <input type="text" 
-                              name="company_name" 
+                            <input type="text"
+                              name="company_name"
                               value={profileData?.company_name}
                               className="form-control"
                               onChange={(e) =>
                                 setProfileData({ ...profileData, company_name: e.target.value })
-                              } 
+                              }
                               placeholder="Enter Company Name" />
                           </div>
                         </div>
@@ -218,12 +226,13 @@ console.log('data***', data)
                           <div className="form-group">
                             <label>Your Email</label>
                             <input type="email"
-                            name="email" 
-                            value={profileData?.email}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, email: e.target.value })
-                            } 
-                            className="form-control" placeholder="info@gmail.com" />
+                              name="email"
+                              value={profileData?.email}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, email: e.target.value })
+                              }
+                              className="form-control"
+                              placeholder="info@gmail.com" />
                           </div>
                           <span className="text-red-500 text-danger">{errors?.email?.[0]}</span>
                         </div>
@@ -231,63 +240,62 @@ console.log('data***', data)
                           <div className="form-group">
                             <label>Website</label>
                             <input type="text"
-                            name="website"
-                            value={profileData?.website}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, website: e.target.value })
-                            } 
-                            className="form-control" placeholder="Website Link" />
+                              name="website"
+                              value={profileData?.website}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, website: e.target.value })
+                              }
+                              className="form-control"
+                              placeholder="Website Link" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Founded Date </label>
-                            <input type="text" 
-                            name="founded_date" 
-                            value={profileData?.founded_date}
-                            className="form-control" 
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, founded_date: e.target.value })
-                            } 
-                            placeholder="17/12/2018" />
+                            <input type="text"
+                              name="founded_date"
+                              value={profileData?.founded_date}
+                              className="form-control"
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, founded_date: e.target.value })
+                              }
+                              placeholder="17/12/2018" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Category</label>
-                            <Form.Control as="select" 
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, category: e.target.value })
-                            }
-                            name="category" 
-                            className="custom-select">
-                            <option value="">Select Category</option>
-                            <option value="1" selected={profileData?.category_id == '1'}>Website Design</option>
-                            <option value="2" selected={profileData?.category_id == '2'}>Website Development</option>
-                            <option value="3" selected={profileData?.category_id == '3'}>App Development</option>
+                            <Form.Control as="select"
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, category: e.target.value })
+                              }
+                              name="category"
+                              className="custom-select">
+                              <option value="">Select Category</option>
+                              <option value="1" selected={profileData?.category === '1'}>Website Design</option>
+                              <option value="2" selected={profileData?.category === '2'}>Website Development</option>
+                              <option value="3" selected={profileData?.category === '3'}>App Development</option>
                             </Form.Control>
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Upload Profile Picture</label>
-                            <input type="file" 
-                            name="image"
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, image: e.target.files?.[0] })
-                            } 
-                            className="form-control" />
+                            <input type="file"
+                              name="image"
+                              onChange={handleFileChange}
+                              className="form-control" />
                           </div>
                         </div>
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Description:</label>
-                            <textarea className="form-control" 
-                            placeholder='Description'
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, description: e.target.value })
-                            }
-                            name="description" value={profileData?.description} rows="4">{profileData?.description}</textarea>
+                            <textarea className="form-control"
+                              placeholder='Description'
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, description: e.target.value })
+                              }
+                              name="description" value={profileData?.description} rows="4">{profileData?.description}</textarea>
                           </div>
                         </div>
                       </div>
@@ -298,69 +306,62 @@ console.log('data***', data)
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Phone</label>
-                            <input type="text" 
-                            name="mobile_number"
-                            value={profileData?.mobile_number}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, mobile_number: e.target.value })
-                            } 
-                            className="form-control" placeholder="+1 123 456 7890" />
+                            <input type="text"
+                              name="mobile_number"
+                              value={profileData?.mobile_number}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, mobile_number: e.target.value })
+                              }
+                              className="form-control" placeholder="+1 123 456 7890" />
                           </div>
-                          <span className="text-red-500 text-danger">{errors?.phone?.[0]}</span>
+                          <span className="text-red-500 text-danger">{errors?.mobile_number?.[0]}</span>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Country</label>
                             <input type="text"
-                            value={profileData?.country}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, country: e.target.value })
-                            } 
+                              value={profileData?.country}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, country: e.target.value })
+                              }
                               name="country" className="form-control" placeholder="India" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>City</label>
-                            <input type="text" 
-                            name="city"
-                            value={profileData?.city}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, city: e.target.value })
-                            } 
-                            className="form-control" placeholder="Delhi" />
+                            <input type="text"
+                              name="city"
+                              value={profileData?.city}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, city: e.target.value })
+                              }
+                              className="form-control" placeholder="Delhi" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Zip</label>
-                            <input type="text" 
-                            name="zip"
-                            value={profileData?.zip}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, zip: e.target.value })
-                            } 
-                             className="form-control" placeholder="504030" />
+                            <input type="text"
+                              name="zip"
+                              value={profileData?.zip}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, zip: e.target.value })
+                              }
+                              className="form-control" placeholder="504030" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Address</label>
-                            <input type="text" 
-                            name="address"
-                            value={profileData?.address}
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, address: e.target.value })
-                            }  
-                            className="form-control" placeholder="New York City" />
+                            <input type="text"
+                              name="address"
+                              value={profileData?.address}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, address: e.target.value })
+                              }
+                              className="form-control" placeholder="New York City" />
                           </div>
-                        </div>
-                      </div>
-                      <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">Map</h5>
-                      </div>
-                      <div className="row m-b30">
-                        <div className="col-lg-12 col-md-12">
                         </div>
                       </div>
                       <div className="job-bx-title clearfix">
@@ -370,38 +371,51 @@ console.log('data***', data)
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Facebook</label>
-                            <input type="text" name="facebook" 
-                            value={profileData?.facebook}
-                             onChange={(e) =>
-                              setProfileData({ ...profileData, facebook: e.target.value })
-                            } 
-                            className="form-control" placeholder="https://www.facebook.com/" />
+                            <input type="url" name="facebook"
+                              value={profileData?.facebook}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, facebook: e.target.value })
+                              }
+                              className="form-control" placeholder="https://www.facebook.com/" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Twitter</label>
-                            <input type="text"
-                             name="twitter" 
-                             value={profileData?.twitter}
-                             onChange={(e) =>
-                              setProfileData({ ...profileData, twitter: e.target.value })
-                            } 
-                             className="form-control" placeholder="https://www.twitter.com/" />
+                            <input type="url"
+                              name="twitter"
+                              value={profileData?.twitter}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, twitter: e.target.value })
+                              }
+                              className="form-control" placeholder="https://www.twitter.com/" />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
-                        </div> 
+                          <div className="form-group">
+                            <label>Google</label>
+                            <input type="url"
+                              name="google"
+                              value={profileData?.google}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, google: e.target.value })
+                              }
+                              className="form-control" placeholder="https://www.google.com/" />
+                          </div>
+                        </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Linkedin</label>
-                            <input type="text" name="linkedin" value={profileData?.linkedin} onChange={(e) =>
-                              setProfileData({ ...profileData, linkedin: e.target.value })
-                            }  className="form-control" placeholder="https://www.linkedin.com/" />
+                            <input type="url" name="linkedin"
+                              value={profileData?.linkedin}
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, linkedin: e.target.value })
+                              }
+                              className="form-control" placeholder="https://www.linkedin.com/" />
                           </div>
                         </div>
                       </div>
-                      <button type="submit" className="site-button m-b30" style={{fontFamily:'__Inter_Fallback_aaf875'}}>Update Setting</button>
+                      <button type="submit" className="site-button m-b30" style={{ fontFamily: '__Inter_Fallback_aaf875' }}>Update Setting</button>
                     </div>
                   </div>
                 </div>
@@ -414,4 +428,4 @@ console.log('data***', data)
   );
 }
 
-export default Companyprofile;
+export default CompanyProfile;
