@@ -12,7 +12,7 @@ import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions";
 
 const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {  
   // console.log('profi;e',sessionUser);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleDropdown = () => {
