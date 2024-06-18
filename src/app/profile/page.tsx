@@ -14,7 +14,7 @@ function Companyprofile() {
   const { data } = useSession();
   const userSession = data as CustomSession;
   const token = userSession?.user?.data?.token;
-
+console.log('data***', data)
   const [user, setUser] = useState({});
   const [profileData, setProfileData] = useState({
     company_name: "",
@@ -197,7 +197,7 @@ function Companyprofile() {
                   <div className="col-xl-9 col-lg-8 m-b30">
                     <div className="job-bx submit-resume">
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">{profileData.company_name}'s Profile</h5>
+                        <h5 className="font-weight-700 pull-left text-uppercase">{data?.user?.data?.name}'s Profile</h5>
                         <Link href={"/company-profile"} className="site-button right-arrow button-sm float-right" style={{fontFamily:'__Inter_Fallback_aaf875'}}>Back</Link>
                       </div>
                       <div className="row m-b30">
