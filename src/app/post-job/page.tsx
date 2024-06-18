@@ -7,46 +7,71 @@ import { CHECK_CREDENTIALS, IMAGE_URL, JOB_POST_URL } from "@/lib/apiEndPoints";
 import { navigateSource } from "@/lib/action";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 import { toast } from "react-toastify";
 
 var teamImg = require("../../images/team/pic1.jpg");
 
-function Componypostjobs() {
+const Componypostjobs: React.FC = () => {
   const { data } = useSession();
-	const userSession = data as CustomSession;
-  const [isHovered1, setIsHovered1] = useState(false);
-  const [isHovered2, setIsHovered2] = useState(false);
-  const [isHovered3, setIsHovered3] = useState(false);
-  const [isHovered4, setIsHovered4] = useState(false);
-  const [isHovered5, setIsHovered5] = useState(false);
-  const [isHovered6, setIsHovered6] = useState(false);
-  const [isHovered7, setIsHovered7] = useState(false);
-  const [isHovered8, setIsHovered8] = useState(false);
+  const userSession = data as CustomSession;
   const [isHovered, setIsHovered] = useState(Array(15).fill(false));
   const [isSelected, setIsSelected] = useState(Array(15).fill(false));
+  const [user, setUser] = useState({});
+  const [errors, setErrors] = useState({
+    company_name: [],
+    job_title: [],
+    job_type: [],
+    experience: [],
+    location: [],
+    address: [],
+    compensation: [],
+    additonal_perk: [],
+    joining_fee: [],
+    candidate_requirement: [],
+    maximum_education: [],
+    total_experience: [],
+    job_description: [],
+  });
+  const [profileData, setProfileData] = useState({
+    company_name: "",
+    job_title: "",
+    job_type: "",
+    experience: "",
+    location: "",
+    address: "",
+    compensation: "",
+    additonal_perk: "",
+    joining_fee: "",
+    candidate_requirement: "",
+    maximum_education: "",
+    total_experience: "",
+    job_description: "",
+  });
+  const [loading, setLoading] = useState(false);
 
-  const handleMouseEnter = (index) => {
+  const handleMouseEnter = (index: number) => {
     const newHoverState = [...isHovered];
     newHoverState[index] = true;
     setIsHovered(newHoverState);
   };
 
-  const handleMouseLeave = (index) => {
+  const handleMouseLeave = (index: number) => {
     const newHoverState = [...isHovered];
     newHoverState[index] = false;
     setIsHovered(newHoverState);
   };
 
-  const handleToggleSelect = (index) => {
+  const handleToggleSelect = (index: number, field: string, value: string) => {
     const newSelectState = [...isSelected];
     newSelectState[index] = !newSelectState[index];
     setIsSelected(newSelectState);
+
+    setProfileData({ ...profileData, [field]: value });
   };
 
-  const spanStyles = (isHovered, isSelected) => ({
+  const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
     fontFamily: "Lato",
     padding: "8px 20px",
@@ -61,7 +86,7 @@ function Componypostjobs() {
     transition: "color 0.3s, border-color 0.3s",
     margin: "5px",
     whiteSpace: "nowrap",
-    cursor: "pointer"
+    cursor: "pointer",
   });
 
   const plusStyle = {
@@ -73,90 +98,51 @@ function Componypostjobs() {
     fontWeight: "bold",
   };
 
-  
-  const [user,setUser] = useState({});
-  
-  const [errors, setErrors] = useState({
-    company_name: [],
-    job_title: [],
-    job_type: [],
-    experience: [],
-    location : [],
-    address: [],
-    compensation: [],
-    additonal_perk : [],
-    joining_fee : [],
-    candidate_requirement : [],
-    maximum_education : [],
-    total_experience : [],
-    job_description : [],
-  });
-  const [profileData,setProfileData] = useState({
-    company_name: "",
-    job_title: "",
-    job_type: "",
-    experience: "",
-    location : "",
-    address: "",
-    compensation: "",
-    additonal_perk : "",
-    joining_fee : "",
-    candidate_requirement : "",
-    maximum_education : "",
-    total_experience : "",
-    job_description : "",
-  });
-  const [loading,setLoading] = useState(false);
-  
-  useEffect(()=>{
-    axios.post(CHECK_CREDENTIALS,{
-      headers: {
-        Authorization:`Bearer ${userSession?.user?.data?.token}`,
-      }
-    }).then((data) => {
-      setUser(data.data.user);
-      });
-  },[]); 
-  //alert(profileData.location);
-  
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(profileData);
+  useEffect(() => {
     axios
-    .post(JOB_POST_URL, profileData, {
-      headers: {
-        Authorization:`Bearer ${userSession.user.data.token}`,
-        Accept: "application/json",
-      },
-    })
-    .then((res) => {
-      const response = res.data;
-      setLoading(false);
+      .post(CHECK_CREDENTIALS, {}, {
+        headers: {
+          Authorization: `Bearer ${userSession?.user?.data?.token}`,
+        },
+      })
+      .then((data) => {
+        setUser(data.data.user);
+      });
+  }, []);
 
-      if (response?.code == 200) {
-        
-        navigateSource('/manage-job');
-        toast.success("Post Job successfully!", {
-          theme: "colored",
-        });
-        
-      } else if (response?.code == 401) {
-        toast.error(response?.message, { theme: "colored" });
-      }else if (response?.code == 404) {
-        
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    axios
+      .post(JOB_POST_URL, profileData, {
+        headers: {
+          Authorization: `Bearer ${userSession.user.data.token}`,
+          Accept: "application/json",
+        },
+      })
+      .then((res) => {
+        const response = res.data;
         setLoading(false);
-        setErrors(response?.data?.error);
-      }
-    })
-    .catch((err) => {
-      setLoading(false);
-      // setErrors(err?.response?.data?.errors);
-    });
-  }
+
+        if (response?.code == 200) {
+          navigateSource('/manage-job');
+          toast.success("Post Job successfully!", {
+            theme: "colored",
+          });
+        } else if (response?.code == 401) {
+          toast.error(response?.message, { theme: "colored" });
+        } else if (response?.code == 404) {
+          setErrors(response?.data?.error);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error('Error posting job', err.response ? err.response.data : err.message);
+      });
+  };
 
   return (
     <>
-      {/* <h1>{JSON.stringify(data.user.data.name)}</h1> */}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -167,7 +153,7 @@ function Componypostjobs() {
                     <div className="candidate-info company-info">
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
-                        <Link href={"#"}>
+                          <Link href={"#"}>
                             <Image src={`${IMAGE_URL}${user?.image}`} alt="Company Logo" width={300} height={300} />
                           </Link>
                           <div
@@ -247,7 +233,7 @@ function Componypostjobs() {
                       <Link
                         href={"/company-profile"}
                         className="site-button right-arrow button-sm float-right"
-                        style={{fontFamily:'__Inter_Fallback_aaf875'}}
+                        style={{ fontFamily: '__Inter_Fallback_aaf875' }}
                       >
                         Back
                       </Link>
@@ -273,13 +259,13 @@ function Componypostjobs() {
                               name="company_name"
                               onChange={(e) =>
                                 setProfileData({ ...profileData, company_name: e.target.value })
-                              } 
+                              }
                               placeholder="Enter Company Name"
                             />
                           </div>
                           <span className="text-red-500 text-danger">{errors?.company_name?.[0]}</span>
                         </div>
-                        
+
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Job Title / Designation</label>
@@ -288,14 +274,14 @@ function Componypostjobs() {
                               name="job_title"
                               onChange={(e) =>
                                 setProfileData({ ...profileData, job_title: e.target.value })
-                              } 
+                              }
                               placeholder="Enter a job title"
                               className="form-control tags_input"
                             />
                             <span className="text-red-500 text-danger">{errors?.job_title?.[0]}</span>
                           </div>
                         </div>
-                        
+
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Experience</label>
@@ -304,7 +290,7 @@ function Componypostjobs() {
                               name="experience"
                               onChange={(e) =>
                                 setProfileData({ ...profileData, experience: e.target.value })
-                              } 
+                              }
                               custom
                               className="custom-select"
                             >
@@ -323,55 +309,28 @@ function Componypostjobs() {
                               className="job-time d-flex gap-3 mr-auto"
                               style={{ gap: "1rem", marginBottom: "26px" }}
                             >
-
+                              {["Full Time", "Part Time", "Contract"].map((text, index) => (
                                 <span
-                                  name="job_type"
-                                  onChange={(e) =>
-                                    setProfileData({ ...profileData, job_type: e.target.value })
-                                  } 
-                                  style={spanStyles(isHovered1)}
-                                  onMouseEnter={() => setIsHovered1(true)}
-                                  onMouseLeave={() => setIsHovered1(false)}
+                                  key={index}
+                                  style={spanStyles(isHovered[index], isSelected[index])}
+                                  onMouseEnter={() => handleMouseEnter(index)}
+                                  onMouseLeave={() => handleMouseLeave(index)}
+                                  onClick={() => handleToggleSelect(index, "job_type", text)}
                                 >
-                                  Full Time
+                                  {text}
                                 </span>
-                              
-                                <span
-                                name="job_type"
-                                onChange={(e) =>
-                                  setProfileData({ ...profileData, job_type: e.target.value })
-                                } 
-                                  style={spanStyles(isHovered2)}
-                                  onMouseEnter={() => setIsHovered2(true)}
-                                  onMouseLeave={() => setIsHovered2(false)}
-                                >
-                                  Part Time
-                                </span>
-                              
-                                <span
-                                  name="job_type"
-                                  onChange={(e) =>
-                                    setProfileData({ ...profileData, job_type: e.target.value })
-                                  } 
-                                  style={spanStyles(isHovered3)}
-                                  onMouseEnter={() => setIsHovered3(true)}
-                                  onMouseLeave={() => setIsHovered3(false)}
-                                >
-                                  Contract
-                                </span>
-                                <span className="text-red-500 text-danger">{errors?.job_type?.[0]}</span>
+                              ))}
                             </div>
-
+                            <span className="text-red-500 text-danger">{errors?.job_type?.[0]}</span>
                             <div className="custom-control custom-checkbox">
                               <input
                                 type="checkbox"
                                 className="custom-control-input"
                                 id="check1"
                                 name="job_type"
-                                  onChange={(e) =>
-                                    setProfileData({ ...profileData, job_type: e.target.innerText })
-                                  } 
-                                
+                                onChange={(e) =>
+                                  setProfileData({ ...profileData, job_type: e.target.innerText })
+                                }
                               />
                               <label
                                 className="custom-control-label"
@@ -389,44 +348,19 @@ function Componypostjobs() {
                               className="job-time d-flex gap-3 mr-auto"
                               style={{ gap: "1rem" }}
                             >
-                              
-                                <span
-                                name="location"
-                                onClick={(e) =>
-                                  setProfileData({ ...profileData, location: e.target.innerText })
-                                } 
-                                  style={spanStyles(isHovered4)}
-                                  onMouseEnter={() => setIsHovered4(true)}
-                                  onMouseLeave={() => setIsHovered4(false)}
-                                >
-                                  Work From Office
-                                </span>
-                              
-                              
-                                <span
-                                name="location"
-                                onClick={(e) =>
-                                  setProfileData({ ...profileData, location: e.target.innerText })
-                                } 
-                                  style={spanStyles(isHovered5)}
-                                  onMouseEnter={() => setIsHovered5(true)}
-                                  onMouseLeave={() => setIsHovered5(false)}
-                                >
-                                  Work From Home
-                                </span>
-                              
-                                <span
-                                name="location"
-                                onClick={(e) =>
-                                  setProfileData({ ...profileData, location: e.target.innerText })
-                                } 
-                                  style={spanStyles(isHovered6)}
-                                  onMouseEnter={() => setIsHovered6(true)}
-                                  onMouseLeave={() => setIsHovered6(false)}
-                                >
-                                  Both Full Time & Part Time
-                                </span>
-                              
+                              {["Work From Office", "Work From Home", "Both Full Time & Part Time"].map(
+                                (text, index) => (
+                                  <span
+                                    key={index + 3}
+                                    style={spanStyles(isHovered[index + 3], isSelected[index + 3])}
+                                    onMouseEnter={() => handleMouseEnter(index + 3)}
+                                    onMouseLeave={() => handleMouseLeave(index + 3)}
+                                    onClick={() => handleToggleSelect(index + 3, "location", text)}
+                                  >
+                                    {text}
+                                  </span>
+                                )
+                              )}
                             </div>
                           </div>
                           <span className="text-red-500 text-danger">{errors?.location?.[0]}</span>
@@ -437,13 +371,13 @@ function Componypostjobs() {
                             <input
                               type="text"
                               name="address"
-                                onChange={(e) =>
-                                  setProfileData({ ...profileData, address: e.target.value })
-                                } 
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, address: e.target.value })
+                              }
                               placeholder="Enter a address"
                               className="form-control tags_input"
                             />
-                          </div>  
+                          </div>
                           <span className="text-red-500 text-danger">{errors?.address?.[0]}</span>
                         </div>
                         <div className="col-lg-12 col-md-12">
@@ -453,31 +387,17 @@ function Componypostjobs() {
                               className="job-time d-flex gap-3 mr-auto"
                               style={{ gap: "1rem" }}
                             >
-
+                              {["Fixed Only", "Fixed + Incentive"].map((text, index) => (
                                 <span
-                                name="compensation"
-                                onChange={(e) =>
-                                  setProfileData({ ...profileData, compensation: e.target.innerText })
-                                } 
-                                  style={spanStyles(isHovered7)}
-                                  onMouseEnter={() => setIsHovered7(true)}
-                                  onMouseLeave={() => setIsHovered7(false)}
+                                  key={index + 6}
+                                  style={spanStyles(isHovered[index + 6], isSelected[index + 6])}
+                                  onMouseEnter={() => handleMouseEnter(index + 6)}
+                                  onMouseLeave={() => handleMouseLeave(index + 6)}
+                                  onClick={() => handleToggleSelect(index + 6, "compensation", text)}
                                 >
-                                  Fixed Only
+                                  {text}
                                 </span>
-                              
-                                <span
-                                name="compensation"
-                                onChange={(e) =>
-                                  setProfileData({ ...profileData, compensation: e.target.innerText })
-                                } 
-                                  style={spanStyles(isHovered8)}
-                                  onMouseEnter={() => setIsHovered8(true)}
-                                  onMouseLeave={() => setIsHovered8(false)}
-                                >
-                                  Fixed + Incentive
-                                </span>
-                              
+                              ))}
                             </div>
                             <span className="text-red-500 text-danger">{errors?.compensation?.[0]}</span>
                           </div>
@@ -496,20 +416,16 @@ function Componypostjobs() {
                                 "Travel Allowance (TA) ",
                                 "Annual Bonus ",
                               ].map((text, index) => (
-                                
-                                  <span
-                                  name='additonal_perk'
-                                  onClick={(e) =>
-                                    setProfileData({ ...profileData, additonal_perk : e.target.innerText })
-                                  } 
-                                    style={spanStyles(isHovered[index])}
-                                    onMouseEnter={() => handleMouseEnter(index)}
-                                    onMouseLeave={() => handleMouseLeave(index)}
-                                  >
-                                    {text.replace(" +", "")}
-                                    <span style={plusStyle}>+</span>
-                                  </span>
-                               
+                                <span
+                                  key={index + 8}
+                                  style={spanStyles(isHovered[index + 8], isSelected[index + 8])}
+                                  onMouseEnter={() => handleMouseEnter(index + 8)}
+                                  onMouseLeave={() => handleMouseLeave(index + 8)}
+                                  onClick={() => handleToggleSelect(index + 8, "additonal_perk", text)}
+                                >
+                                  {text.replace(" +", "")}
+                                  <span style={plusStyle}>+</span>
+                                </span>
                               ))}
                             </div>
                             <span className="text-red-500 text-danger">{errors?.additonal_perk?.[0]}</span>
@@ -527,43 +443,33 @@ function Componypostjobs() {
                               style={{ gap: "1rem" }}
                             >
                               {["No", "YES"].map((text, index) => (
-                               
-                                  <span
-                                  name='joining_fee'
-                                  onChange={(e) =>
-                                    setProfileData({ ...profileData, joining_fee : e.target.innerText })
-                                  } 
-                                    style={spanStyles(isHovered[index + 5])}
-                                    onMouseEnter={() =>
-                                      handleMouseEnter(index + 5)
-                                    }
-                                    onMouseLeave={() =>
-                                      handleMouseLeave(index + 5)
-                                    }
-                                  >
-                                    {text}
-                                  </span>
-                                
+                                <span
+                                  key={index + 13}
+                                  style={spanStyles(isHovered[index + 13], isSelected[index + 13])}
+                                  onMouseEnter={() => handleMouseEnter(index + 13)}
+                                  onMouseLeave={() => handleMouseLeave(index + 13)}
+                                  onClick={() => handleToggleSelect(index + 13, "joining_fee", text)}
+                                >
+                                  {text}
+                                </span>
                               ))}
                             </div>
                           </div>
                           <span className="text-red-500 text-danger">{errors?.joining_fee?.[0]}</span>
                         </div>
 
-                        
-                        
-                        
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Candidate Requirement</label>
                             <p>Requirement</p>
-                            <input type="text" 
-                            className="form-control"
-                            name="candidate_requirement"
-                            placeholder="Requirement"
-                            onChange={(e) =>
-                              setProfileData({ ...profileData, candidate_requirement : e.target.value })
-                            }
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="candidate_requirement"
+                              placeholder="Requirement"
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, candidate_requirement: e.target.value })
+                              }
                             />
                           </div>
                           <span className="text-red-500 text-danger">{errors?.candidate_requirement?.[0]}</span>
@@ -578,23 +484,15 @@ function Componypostjobs() {
                             >
                               {["10th", "12th", "Graduate"].map(
                                 (text, index) => (
-                                  
-                                    <span
-                                      name='maximum_education'
-                                      onChange={(e) =>
-                                        setProfileData({ ...profileData, maximum_education : e.target.innerText })
-                                      } 
-                                      style={spanStyles(isHovered[index + 7])}
-                                      onMouseEnter={() =>
-                                        handleMouseEnter(index + 7)
-                                      }
-                                      onMouseLeave={() =>
-                                        handleMouseLeave(index + 7)
-                                      }
-                                    >
-                                      {text}
-                                    </span>
-                                  
+                                  <span
+                                    key={index + 15}
+                                    style={spanStyles(isHovered[index + 15], isSelected[index + 15])}
+                                    onMouseEnter={() => handleMouseEnter(index + 15)}
+                                    onMouseLeave={() => handleMouseLeave(index + 15)}
+                                    onClick={() => handleToggleSelect(index + 15, "maximum_education", text)}
+                                  >
+                                    {text}
+                                  </span>
                                 )
                               )}
                             </div>
@@ -611,23 +509,15 @@ function Componypostjobs() {
                             >
                               {["Fresher Only", "Experience Only", "Any"].map(
                                 (text, index) => (
-                                  
-                                    <span
-                                    name='total_experience'
-                                    onChange={(e) =>
-                                      setProfileData({ ...profileData, total_experience : e.target.innerText })
-                                    } 
-                                      style={spanStyles(isHovered[index + 10])}
-                                      onMouseEnter={() =>
-                                        handleMouseEnter(index + 10)
-                                      }
-                                      onMouseLeave={() =>
-                                        handleMouseLeave(index + 10)
-                                      }
-                                    >
-                                      {text}
-                                    </span>
-                                 
+                                  <span
+                                    key={index + 18}
+                                    style={spanStyles(isHovered[index + 18], isSelected[index + 18])}
+                                    onMouseEnter={() => handleMouseEnter(index + 18)}
+                                    onMouseLeave={() => handleMouseLeave(index + 18)}
+                                    onClick={() => handleToggleSelect(index + 18, "total_experience", text)}
+                                  >
+                                    {text}
+                                  </span>
                                 )
                               )}
                             </div>
@@ -639,14 +529,14 @@ function Componypostjobs() {
                           <div className="form-group">
                             <label>Job Description</label>
                             <textarea className="form-control" name='job_description' placeholder="Job Description"
-                                    onChange={(e) =>
-                                      setProfileData({ ...profileData, job_description : e.target.value })
-                                    } ></textarea>
+                              onChange={(e) =>
+                                setProfileData({ ...profileData, job_description: e.target.value })
+                              } ></textarea>
                           </div>
                         </div>
                         <span className="text-red-500 text-danger">{errors?.job_description?.[0]}</span>
                       </div>
-                      <button type="submit" className="site-button m-b30" style={{fontFamily:'__Inter_Fallback_aaf875'}}>
+                      <button type="submit" className="site-button m-b30" style={{ fontFamily: '__Inter_Fallback_aaf875' }}>
                         Upload
                       </button>
                     </form>
@@ -683,4 +573,5 @@ function Componypostjobs() {
     </>
   );
 }
+
 export default Componypostjobs;
