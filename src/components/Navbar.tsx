@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo2 from "../images/Untitled_picture.png";
-import  {ProfileDropdown}  from "@/app/user-profile/page";
+import  ProfileDropdown  from "@/app/user-profile/page";
 // var bnr3 = require("./../../images/background/bg3.jpg");
 
 export default function Navbar() {

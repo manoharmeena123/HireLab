@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { signOut } from "next-auth/react";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
-import {ProfileDropdown} from "@/app/user-profile/page";
+import ProfileDropdown from "@/app/user-profile/page";
 var bnr3 = require("./../../images/background/bg3.jpg");
 
 export default function Header({session}: { session: CustomSession | null }) {

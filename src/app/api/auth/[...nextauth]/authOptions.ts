@@ -9,18 +9,18 @@ export interface CustomSession {
   expires: ISODateString;
 }
 export interface CustomUser {
-  user: any;
   token: any;
-  data :{
-    id?: string | null;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  token?: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
-  }
-  
+  user: {
+    data: {
+      id?: string | null;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+      token?: string | null;
+      created_at?: string | null;
+      updated_at?: string | null;
+    };
+  };
 }
 export const authOptions: AuthOptions = {
   pages: {
