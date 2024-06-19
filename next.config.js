@@ -8,7 +8,7 @@ const nextConfig = {
         },
         {
           protocol: "https",
-          hostname: "thinkdream.in",
+          hostname: "https://luxury-lollipop-4d9f79.netlify.app/",
         }
       ]
     },
