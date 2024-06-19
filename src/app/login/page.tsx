@@ -35,7 +35,7 @@ function Login() {
             email: authState.email,
             mobile_number: authState.mobile_number,
             redirect: true,
-            callbackUrl: '/',
+            callbackUrl: process.env.NEXT_PUBLIC_NEXTAUTH_URL || "http://localhost:3000",
           });
           
         } else if (response?.code == 401) {
