@@ -1,5 +1,5 @@
 import Env from "./Env";
-
+export const Base_URL = Env.APP_URL
 export const API_URL = Env.API_URL + "/api";
 export const LOGIN_URL = API_URL + "/login";
 export const REGISTER_URL = API_URL + "/register1";

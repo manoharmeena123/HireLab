@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import axios from "axios";
-import { LOGIN_URL } from "@/lib/apiEndPoints";
+import { LOGIN_URL ,Base_URL} from "@/lib/apiEndPoints";
 import { signIn } from "next-auth/react";
 import { toast } from "react-toastify";
 var bnr = require("./../../images/background/bg6.jpg");
@@ -35,7 +35,7 @@ function Login() {
             email: authState.email,
             mobile_number: authState.mobile_number,
             redirect: true,
-            callbackUrl: "/",
+            callbackUrl: `/${Base_URL}`,
           });
           
         } else if (response?.code == 401) {
