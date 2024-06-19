@@ -3,24 +3,27 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-import profilePic from "../../../public/images/pic.png" // Update the path to the profile picture
+import profilePic from "../../../public/images/pic.png"; // Update the path to the profile picture
 import { toast } from "react-toastify";
 import axios from "axios";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions";
 
-const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {  
-  // console.log('profi;e',sessionUser);
+interface ProfileDropdownProps {
+  sessionUser: CustomUser;
+}
+
+const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ sessionUser }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  const handleClickOutside = (event: MouseEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
       setIsOpen(false);
     }
   };
@@ -28,7 +31,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
-    
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
@@ -40,7 +42,7 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
         {},
         {
           headers: {
-            Authorization: `Bearer ${sessionUser?.token}`
+            Authorization: `Bearer ${sessionUser?.token}`,
           },
         }
       )
@@ -52,36 +54,38 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
         }
       })
       .catch((err) => {
-        // toast.error("Something went wrong.please try again", {
-        //   theme: "colored",
-        // });
+        console.error("Logout error: ", err);
       });
 
     signOut({ redirect: true, callbackUrl: "/login" });
   };
 
   return (
-    
     <div className="profile-dropdown" ref={dropdownRef}>
       <div className="profile-header" onClick={toggleDropdown}>
-        <Image src={profilePic} className="profile-image" alt="Profile Image" style={{ width: "41px", height: "41px" }} />
+        <Image
+          src={profilePic}
+          className="profile-image"
+          alt="Profile Image"
+          style={{ width: "41px", height: "41px" }}
+        />
         <span className="profile-name">PROFILE</span>
-        <span className="dropdown-arrow">
-         
-        </span>
+        <span className="dropdown-arrow"></span>
       </div>
       {isOpen && (
         <div className="profile-sidebar">
           <div className="profile-details">
-            <Image src={profilePic} className="profile-image-large" alt="Profile Image" />
+            <Image
+              src={profilePic}
+              className="profile-image-large"
+              alt="Profile Image"
+            />
             <h2 className="profile-name-tab">{sessionUser?.user?.data?.name}</h2>
-            
           </div>
           <ul className="profile-menu">
             <li>
               <Link href="/dashboard">
                 <div className="menu-item">
-                  {/* <DashboardIcon className="menu-icon" /> */}
                   <span className="menu-text">Dashboard</span>
                 </div>
               </Link>
@@ -90,7 +94,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/profile">
                 <div className="menu-item">
-                  {/* <ProfileIcon className="menu-icon" /> */}
                   <span className="menu-text">Profile</span>
                 </div>
               </Link>
@@ -99,7 +102,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/my-resume">
                 <div className="menu-item">
-                  {/* <ResumeIcon className="menu-icon" /> */}
                   <span className="menu-text">My Resume</span>
                 </div>
               </Link>
@@ -108,7 +110,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/saved-jobs">
                 <div className="menu-item">
-                  {/* <SavedJobsIcon className="menu-icon" /> */}
                   <span className="menu-text">Saved Jobs</span>
                 </div>
               </Link>
@@ -117,7 +118,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/apply-jobs">
                 <div className="menu-item">
-                  {/* <AppliedJobsIcon className="menu-icon" /> */}
                   <span className="menu-text">Applied Jobs</span>
                 </div>
               </Link>
@@ -126,7 +126,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/job-alert">
                 <div className="menu-item">
-                  {/* <JobAlertsIcon className="menu-icon" /> */}
                   <span className="menu-text">Job Alerts</span>
                 </div>
               </Link>
@@ -135,7 +134,6 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/my-resume">
                 <div className="menu-item">
-                  {/* <CVManagerIcon className="menu-icon" /> */}
                   <span className="menu-text">CV Manager</span>
                 </div>
               </Link>
@@ -144,19 +142,15 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
             <li>
               <Link href="/change-password">
                 <div className="menu-item">
-                  {/* <ChangePasswordIcon className="menu-icon" /> */}
                   <span className="menu-text">Change Password</span>
                 </div>
               </Link>
               <hr />
             </li>
             <li>
-              {/* <Link href="/logout"> */}
-                <div className="menu-item">
-                  {/* <LogoutIcon className="menu-icon" /> */}
-                  <span onClick={logoutUser} className="menu-text">Logout</span>
-                </div>
-              {/* </Link> */}
+              <div className="menu-item" onClick={logoutUser}>
+                <span className="menu-text">Logout</span>
+              </div>
             </li>
           </ul>
         </div>
@@ -180,7 +174,7 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
           font-size: 14px;
           font-style: normal;
           font-weight: 600;
-          line-height: 21px; /* 150% */
+          line-height: 21px;
           text-transform: uppercase;
           margin-right: 10px;
           margin-left: 10px;
@@ -233,7 +227,7 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
           font-size: 16px;
           font-style: normal;
           font-weight: 400;
-          line-height: 24px; /* 150% */
+          line-height: 24px;
           text-decoration: none;
         }
         .menu-item:hover {
@@ -245,13 +239,9 @@ const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {
           border-top: 1px solid #ddd;
           width: 100%;
         }
-        .menu-icon {
-          width: 24px;
-          height: 24px;
-        }
       `}</style>
     </div>
   );
 };
+
 export default ProfileDropdown;
-// ProfileDropdown;
