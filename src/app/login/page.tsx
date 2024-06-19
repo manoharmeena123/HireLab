@@ -35,7 +35,7 @@ function Login() {
             email: authState.email,
             mobile_number: authState.mobile_number,
             redirect: true,
-            callbackUrl: "https://luxury-lollipop-4d9f79.netlify.app/",
+            callbackUrl: "/",
           });
           
         } else if (response?.code == 401) {
