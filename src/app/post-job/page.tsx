@@ -17,7 +17,14 @@ const Componypostjobs: React.FC = () => {
   const { data } = useSession();
   const userSession = data as CustomSession;
   const [isHovered, setIsHovered] = useState(Array(15).fill(false));
-  const [isSelected, setIsSelected] = useState(Array(15).fill(false));
+  const [selectedIndexes, setSelectedIndexes] = useState({
+    job_type: null,
+    location: null,
+    compensation: null,
+    joining_fee: null,
+    maximum_education: null,
+    total_experience: null,
+  });
   const [user, setUser] = useState({});
   const [errors, setErrors] = useState({
     company_name: [],
@@ -64,10 +71,7 @@ const Componypostjobs: React.FC = () => {
   };
 
   const handleToggleSelect = (index: number, field: string, value: string) => {
-    const newSelectState = [...isSelected];
-    newSelectState[index] = !newSelectState[index];
-    setIsSelected(newSelectState);
-
+    setSelectedIndexes({ ...selectedIndexes, [field]: index });
     setProfileData({ ...profileData, [field]: value });
   };
 
@@ -312,7 +316,7 @@ const Componypostjobs: React.FC = () => {
                               {["Full Time", "Part Time", "Contract"].map((text, index) => (
                                 <span
                                   key={index}
-                                  style={spanStyles(isHovered[index], isSelected[index])}
+                                  style={spanStyles(isHovered[index], selectedIndexes.job_type === index)}
                                   onMouseEnter={() => handleMouseEnter(index)}
                                   onMouseLeave={() => handleMouseLeave(index)}
                                   onClick={() => handleToggleSelect(index, "job_type", text)}
@@ -352,7 +356,7 @@ const Componypostjobs: React.FC = () => {
                                 (text, index) => (
                                   <span
                                     key={index + 3}
-                                    style={spanStyles(isHovered[index + 3], isSelected[index + 3])}
+                                    style={spanStyles(isHovered[index + 3], selectedIndexes.location === index + 3)}
                                     onMouseEnter={() => handleMouseEnter(index + 3)}
                                     onMouseLeave={() => handleMouseLeave(index + 3)}
                                     onClick={() => handleToggleSelect(index + 3, "location", text)}
@@ -390,7 +394,7 @@ const Componypostjobs: React.FC = () => {
                               {["Fixed Only", "Fixed + Incentive"].map((text, index) => (
                                 <span
                                   key={index + 6}
-                                  style={spanStyles(isHovered[index + 6], isSelected[index + 6])}
+                                  style={spanStyles(isHovered[index + 6], selectedIndexes.compensation === index + 6)}
                                   onMouseEnter={() => handleMouseEnter(index + 6)}
                                   onMouseLeave={() => handleMouseLeave(index + 6)}
                                   onClick={() => handleToggleSelect(index + 6, "compensation", text)}
@@ -418,7 +422,7 @@ const Componypostjobs: React.FC = () => {
                               ].map((text, index) => (
                                 <span
                                   key={index + 8}
-                                  style={spanStyles(isHovered[index + 8], isSelected[index + 8])}
+                                  style={spanStyles(isHovered[index + 8], selectedIndexes.additonal_perk === index + 8)}
                                   onMouseEnter={() => handleMouseEnter(index + 8)}
                                   onMouseLeave={() => handleMouseLeave(index + 8)}
                                   onClick={() => handleToggleSelect(index + 8, "additonal_perk", text)}
@@ -445,7 +449,7 @@ const Componypostjobs: React.FC = () => {
                               {["No", "YES"].map((text, index) => (
                                 <span
                                   key={index + 13}
-                                  style={spanStyles(isHovered[index + 13], isSelected[index + 13])}
+                                  style={spanStyles(isHovered[index + 13], selectedIndexes.joining_fee === index + 13)}
                                   onMouseEnter={() => handleMouseEnter(index + 13)}
                                   onMouseLeave={() => handleMouseLeave(index + 13)}
                                   onClick={() => handleToggleSelect(index + 13, "joining_fee", text)}
@@ -486,7 +490,7 @@ const Componypostjobs: React.FC = () => {
                                 (text, index) => (
                                   <span
                                     key={index + 15}
-                                    style={spanStyles(isHovered[index + 15], isSelected[index + 15])}
+                                    style={spanStyles(isHovered[index + 15], selectedIndexes.maximum_education === index + 15)}
                                     onMouseEnter={() => handleMouseEnter(index + 15)}
                                     onMouseLeave={() => handleMouseLeave(index + 15)}
                                     onClick={() => handleToggleSelect(index + 15, "maximum_education", text)}
@@ -511,7 +515,7 @@ const Componypostjobs: React.FC = () => {
                                 (text, index) => (
                                   <span
                                     key={index + 18}
-                                    style={spanStyles(isHovered[index + 18], isSelected[index + 18])}
+                                    style={spanStyles(isHovered[index + 18], selectedIndexes.total_experience === index + 18)}
                                     onMouseEnter={() => handleMouseEnter(index + 18)}
                                     onMouseLeave={() => handleMouseLeave(index + 18)}
                                     onClick={() => handleToggleSelect(index + 18, "total_experience", text)}
