@@ -35,7 +35,7 @@ function Login() {
             email: authState.email,
             mobile_number: authState.mobile_number,
             redirect: true,
-            callbackUrl: `/${Base_URL}`,
+            callbackUrl: '/',
           });
           
         } else if (response?.code == 401) {
