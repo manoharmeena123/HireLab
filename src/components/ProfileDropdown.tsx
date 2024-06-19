@@ -14,7 +14,7 @@ interface ProfileDropdownProps {
   sessionUser: CustomUser;
 }
 
-const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ sessionUser }) => {
+export const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ sessionUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -244,4 +244,3 @@ const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ sessionUser }) => {
   );
 };
 
-export default ProfileDropdown;

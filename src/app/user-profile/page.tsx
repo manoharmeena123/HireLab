@@ -1,7 +1,7 @@
 // src/app/user-profile/page.tsx
 "use client";
 import React from "react";
-import ProfileDropdown from "@/components/ProfileDropdown"; // Ensure this path is correct
+import { ProfileDropdown } from "@/components/ProfileDropdown"; // Ensure this path is correct
 import { getSession } from "next-auth/react";
 import { GetServerSideProps } from "next";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions"; // Ensure this path is correct
