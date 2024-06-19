@@ -9,6 +9,8 @@ export interface CustomSession {
   expires: ISODateString;
 }
 export interface CustomUser {
+  user: any;
+  token: any;
   data :{
     id?: string | null;
   name?: string | null;

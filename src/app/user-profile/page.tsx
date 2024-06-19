@@ -12,9 +12,11 @@ import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions";
 
 interface ProfileDropdownProps {
   sessionUser: CustomUser;
+  token:string
+  user:object
 }
 
-const ProfileDropdown: React.FC<ProfileDropdownProps> = ({ sessionUser }) => {
+const ProfileDropdown = ({ sessionUser }:ProfileDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
