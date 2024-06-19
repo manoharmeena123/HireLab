@@ -19,12 +19,13 @@ const Componypostjobs: React.FC = () => {
 
   const router = useRouter();
 
-	useEffect(() => {
-		// Redirect to login page if no session exists and user is authenticated
-		if (!data) {
-		  router.push('/login');
-		}
-	  }, [data, status, router]);
+	// useEffect(() => {
+	// 	// Redirect to login page if no session exists and user is authenticated
+	// 	if (!data) {
+	// 	  router.push('/login');
+	// 	}
+	//   }, [data, status, router]);
+  
   const [selectedIndexes, setSelectedIndexes] = useState({
     job_type: null,
     location: null,
