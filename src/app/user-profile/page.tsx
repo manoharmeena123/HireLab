@@ -2,19 +2,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
 import profilePic from "../../../public/images/pic.png" // Update the path to the profile picture
 import { toast } from "react-toastify";
 import axios from "axios";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
 import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {  
   // console.log('profi;e',sessionUser);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+	const router = useRouter();
+	const { data: session, status } = useSession();
 
+	useEffect(() => {
+		// Redirect to login page if no session exists and user is authenticated
+		if (!session) {
+		  router.push('/login');
+		}
+	  }, [session, status, router]);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };

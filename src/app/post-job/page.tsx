@@ -6,17 +6,25 @@ import Image from "next/image";
 import { CHECK_CREDENTIALS, IMAGE_URL, JOB_POST_URL } from "@/lib/apiEndPoints";
 import { navigateSource } from "@/lib/action";
 import axios from "axios";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 var teamImg = require("../../images/team/pic1.jpg");
 
 const Componypostjobs: React.FC = () => {
-  const { data } = useSession();
+  const { data ,status} = useSession();
   const userSession = data as CustomSession;
   const [isHovered, setIsHovered] = useState(Array(15).fill(false));
+
+  const router = useRouter();
+
+	useEffect(() => {
+		// Redirect to login page if no session exists and user is authenticated
+		if (!data) {
+		  router.push('/login');
+		}
+	  }, [data, status, router]);
   const [selectedIndexes, setSelectedIndexes] = useState({
     job_type: null,
     location: null,
