@@ -91,10 +91,10 @@ const CompanyManage: React.FC = () => {
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
                           <Image src={`${IMAGE_URL}${user?.image}`} alt="Company Logo" width={300} height={300} />
-                          <div className="upload-link" title="update" data-toggle="tooltip" data-placement="right">
+                          {/* <div className="upload-link" title="update" data-toggle="tooltip" data-placement="right">
                             <input type="file" className="update-flie" />
                             <i className="fa fa-pencil"></i>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">@COMPANY</h4>

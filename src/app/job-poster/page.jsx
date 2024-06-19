@@ -61,7 +61,7 @@ const Companyprofile = () => {
                               alt="Company Logo"
                             />
                           </Link>
-                          <div
+                          {/* <div
                             className="upload-link"
                             title="update"
                             data-toggle="tooltip"
@@ -69,7 +69,7 @@ const Companyprofile = () => {
                           >
                             <input type="file" className="update-flie" />
                             <i className="fa fa-pencil"></i>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
