@@ -13,11 +13,11 @@ export default async function HireLabLayout({
     
      return (
          <div>
-            <AuthProvider>
+            {/* <AuthProvider> */}
            <Header session={session} />
             {children}
           <Footer />
-          </AuthProvider>
+          {/* </AuthProvider> */}
          </div>
      )
 }
