@@ -1,0 +1,21 @@
+.containerFluid {
+  padding-left: 12rem !important;
+}
+
+.logoHeader {
+  padding-right: 2rem;
+}
+
+
+
+@media (max-width: 1200px) {
+  .containerFluid {
+    padding-left: 6rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .containerFluid {
+    padding-left: 1rem !important;
+  }
+}

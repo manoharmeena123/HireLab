@@ -7,11 +7,11 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
-import { CustomUser } from "@/app/api/auth/[...nextauth]/authOptions";
+import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 // import { useRouter } from "next/navigation";
 // import { useSession } from "next-auth/react";
 
-export const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) => {  
+export const ProfileDropdown = ({ sessionUser } : any) => {  
   // console.log('profi;e',sessionUser);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -28,7 +28,7 @@ export const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) =>
     setIsOpen(!isOpen);
   };
 
-  const handleClickOutside = (event) => {
+  const handleClickOutside = (event:any) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setIsOpen(false);
     }
@@ -49,7 +49,7 @@ export const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) =>
         {},
         {
           headers: {
-            Authorization: `Bearer ${sessionUser?.token}`
+            Authorization: `Bearer ${sessionUser?.user?.token}`
           },
         }
       )
@@ -83,7 +83,7 @@ export const ProfileDropdown = ({ sessionUser }: { sessionUser: CustomUser }) =>
         <div className="profile-sidebar">
           <div className="profile-details">
             <Image src={profilePic} className="profile-image-large" alt="Profile Image" />
-            <h2 className="profile-name-tab">{sessionUser?.user?.data?.name}</h2>
+            <h2 className="profile-name-tab">{sessionUser?.user?.user?.data?.name}</h2>
             
           </div>
           <ul className="profile-menu">
