@@ -6,8 +6,6 @@
   padding-right: 2rem;
 }
 
-
-
 @media (max-width: 1200px) {
   .containerFluid {
     padding-left: 6rem !important;

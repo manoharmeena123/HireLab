@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import Link from "next/link";
 // import {Link} from 'react-router-dom';
-import Header from "@/app/layout/Header";
-import Footer from "@/app/layout/Footer";
+import Header from "@/app/layouts/Header";
+import Footer from "@/app/layouts/Footer";
 import CountUp from "react-countup";
 import IndexBanner from "../Element/IndexBanner";
 import Jobcategories from "../Element/Jobcategories";

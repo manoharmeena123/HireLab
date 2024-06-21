@@ -13,8 +13,8 @@ import { useRouter } from "next/navigation";
 var teamImg = require("../../images/team/pic1.jpg");
 
 const Componypostjobs: React.FC = () => {
-  const { data ,status} = useSession();
-  const userSession = data as CustomSession;
+  // const { data ,status} = useSession();
+  // const userSession = data as CustomSession;
   const [isHovered, setIsHovered] = useState(Array(15).fill(false));
 
   const router = useRouter();
@@ -115,7 +115,7 @@ const Componypostjobs: React.FC = () => {
     axios
       .post(CHECK_CREDENTIALS, {}, {
         headers: {
-          Authorization: `Bearer ${userSession?.user?.data?.token}`,
+          // Authorization: `Bearer ${userSession?.user?.data?.token}`,
         },
       })
       .then((data) => {
@@ -129,7 +129,7 @@ const Componypostjobs: React.FC = () => {
     axios
       .post(JOB_POST_URL, profileData, {
         headers: {
-          Authorization: `Bearer ${userSession.user.data.token}`,
+          // Authorization: `Bearer ${userSession.user.data.token}`,
           Accept: "application/json",
         },
       })

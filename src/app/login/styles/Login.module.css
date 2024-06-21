@@ -1,0 +1,18 @@
+/* src/components/Login.module.css */
+.width-form {
+    width: 180%;
+  }
+  .otp-button-center {
+    margin-left: 50%;
+  }
+  .account-button-center {
+    margin-left: 30%;
+  }
+  .rubik-font {
+    font-family: "Rubik", sans-serif !important;
+  }
+  .lato-font {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.03em;
+  }
+  

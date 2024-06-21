@@ -3,21 +3,16 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { signOut } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import ProfileDropdown from "@/app/user-profile/page";
-import { CustomSession } from "../api/auth/[...nextauth]/authOptions";
 import logo2 from "../../images/Untitled_picture.png";
 import styles from "@/styles/Header.module.css";
 
 const bnr3 = require("../../images/background/bg3.jpg");
 
-interface HeaderProps {
-  session: CustomSession | null;
-}
+const Header: React.FC = () => {
+  // const { data: session } = useSession();
 
-export default function Header({ session }: HeaderProps) {
   return (
     <header className="site-header mo-left header fullwidth">
       <div className="sticky-header main-bar-wraper navbar-expand-lg">
@@ -43,14 +38,19 @@ export default function Header({ session }: HeaderProps) {
               <span></span>
             </button>
             <div className="extra-nav">
-              <div className="extra-cell">
-                {session && session?.user?.user?.data?.email !== null ? (
+              {/* <div className="extra-cell">
+                {session && session.user && session?.user?.user?.data?.email ? (
                   <ProfileDropdown sessionUser={session?.user?.user?.data} />
                 ) : (
                   <Link href="/login" className="site-button">
                     LOGIN/SIGN UP
                   </Link>
                 )}
+              </div> */}
+              <div className="extra-cell">
+              <Link href="/login" className="site-button">
+                    LOGIN/SIGN UP
+                  </Link>
               </div>
             </div>
 
@@ -86,4 +86,6 @@ export default function Header({ session }: HeaderProps) {
       </div>
     </header>
   );
-}
+};
+
+export default Header;
