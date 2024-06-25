@@ -1,10 +1,7 @@
-import { RootState } from '@/store';
+import { getCookie } from 'typescript-cookie';
 
-export const prepareHeaders = (headers: Headers, { getState }: { getState: () => RootState }) => {
-  const state = getState();
-  const token = state.login.token;
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
-  }
-  return headers;
+export const prepareHeaders = (headers: Headers) => {
+  const accessToken = getCookie('cred');
+
+  if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`);
 };

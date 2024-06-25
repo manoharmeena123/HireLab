@@ -10,7 +10,8 @@ import Jobcategories from "../Element/Jobcategories";
 import Featureblog from "../Element/Featureblog";
 import Jobsection from "../Element/Jobsection";
 import Owltestimonial from "../Element/Owlblog1";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLoginState, selectLoginErrors } from '@/app/login/store/login.selectors';
 //Images
 var bnr2 = require("./../../images/background/bg4.jpg");
 var bnr3 = require("./../../images/lines.png");
@@ -35,6 +36,8 @@ function Homepage() {
   const handleIconClick4 = () => {
     setIsClicked4(!isClicked4);
   };
+  const authState = useSelector(selectLoginState);
+  console.log('authState', authState)
 
   return (
     <div className="page-wraper">
@@ -66,13 +69,13 @@ function Homepage() {
                     }}
                     onMouseEnter={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -125,7 +128,7 @@ function Homepage() {
                         <h3
                           className="font-weight-300 m-t10 m-b0"
                           style={{
-                            fontWeight: "bold",
+                            // fontWeight: "bold",
                             fontSize: "20px",
                             textAlign: "center",
                             fontWeight: "700",
@@ -175,13 +178,13 @@ function Homepage() {
                     }}
                     onMouseEnter={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -234,7 +237,7 @@ function Homepage() {
                         <h3
                           className="font-weight-300 m-t10 m-b0"
                           style={{
-                            fontWeight: "bold",
+                            // fontWeight: "bold",
                             fontSize: "20px",
                             textAlign: "center",
                             fontWeight: "700",
@@ -284,13 +287,13 @@ function Homepage() {
                     }}
                     onMouseEnter={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -343,7 +346,7 @@ function Homepage() {
                         <h3
                           className="font-weight-300 m-t10 m-b0"
                           style={{
-                            fontWeight: "bold",
+                            // fontWeight: "bold",
                             fontSize: "20px",
                             textAlign: "center",
                             fontWeight: "700",
@@ -393,13 +396,13 @@ function Homepage() {
                     }}
                     onMouseEnter={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button") as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
                       const button =
-                        e.currentTarget.querySelector(".site-button");
+                        e.currentTarget.querySelector(".site-button")as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -452,7 +455,7 @@ function Homepage() {
                         <h3
                           className="font-weight-300 m-t10 m-b0"
                           style={{
-                            fontWeight: "bold",
+                            // fontWeight: "bold",
                             fontSize: "20px",
                             textAlign: "center",
                             fontWeight: "700",

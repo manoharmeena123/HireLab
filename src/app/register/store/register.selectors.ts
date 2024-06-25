@@ -7,10 +7,13 @@ const registerSelector = (state: RootState): RegisterState => state.register;
 
 export const selectRegisterState = createSelector(
   registerSelector,
-  (state) => state
+  (registerState) => ({ ...registerState }) // Ensure transformation by creating a new object
 );
 
 export const selectRegisterErrors = createSelector(
   registerSelector,
-  (state) => state.errors
+  (registerState) => 
+    Object.fromEntries(
+      Object.entries(registerState.errors).map(([key, value]) => [key, [...value]])
+    ) // Ensure transformation by creating a new object with new arrays
 );

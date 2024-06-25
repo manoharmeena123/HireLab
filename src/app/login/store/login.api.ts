@@ -4,7 +4,7 @@ import { LoginArgs } from '../types';
 export const queries = {
   login: {
     query: (credentials: LoginArgs) => ({
-      url: 'login',
+      url: 'api/login',
       method: 'POST',
       body: credentials,
     }),

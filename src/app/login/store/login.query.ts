@@ -14,7 +14,8 @@ const loginApiSlice = hirelabEnhancedSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          if (data.token) {
+          console.log('logindata', data)
+          if (data?.token) {
             dispatch(setAuthToken(data.token));
           }
         } catch (error) {

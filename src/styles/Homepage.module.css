@@ -1,0 +1,62 @@
+/* Homepage.module.css */
+.member-ship-div {
+    min-height: 500px;
+    border-radius: 20px;
+  }
+  
+  .member-ship-div:hover {
+    background-color: #0b66c3 !important;
+    color: white !important;
+  }
+  
+  .member-ship-div:hover .site-button {
+    background-color: #fff !important; /* Changes the button background color to white */
+    color: #000 !important; /* Changes the button text color to black */
+  }
+  
+  .member-ship-div:hover div h4 {
+    color: white !important;
+    border-color: white !important;
+  }
+  
+  .member-ship-div:hover div ul li {
+    color: white !important;
+  }
+  
+  .white-hover {
+    border: 1px solid white !important;
+  }
+  
+  .member-ship-div:hover div div h3 {
+    color: white !important;
+  }
+  
+  .display-property {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .pagination-bx .pagination {
+    width: 300px;
+    margin-left: 0px;
+  }
+  
+  .display-item-center {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @media (max-width: 1042px) {
+    .display-property {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .display-property {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  

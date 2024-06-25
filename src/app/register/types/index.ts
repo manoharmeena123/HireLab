@@ -12,6 +12,7 @@ export interface RegisterState {
   
   export interface RegisterResponse {
     code: number;
+    message:string;
     data?: {
       error: {
         name: string[];

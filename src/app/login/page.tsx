@@ -1,6 +1,7 @@
 // src/components/Login.tsx
 "use client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
+import Env from "@/lib/Env";
 import Link from "next/link";
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '@/app/login/store/login.query';
@@ -8,6 +9,7 @@ import { setAuthState, setErrors } from '@/app/login/store/login.slice';
 import { selectLoginState, selectLoginErrors } from '@/app/login/store/login.selectors';
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
+import useAuthToken from "@/hooks/useAuthToken";
 import styles from './styles/Login.module.css';
 
 const bnr = require("./../../images/background/bg6.jpg");
@@ -19,21 +21,34 @@ const Login = () => {
   const errors = useSelector(selectLoginErrors);
   const [loading, setLoading] = useState(false);
 
+  const { saveToken } = useAuthToken();
+
+  console.log('authState', authState);
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setLoading(true);
     try {
       const res = await login(authState).unwrap();
       setLoading(false);
-      if (res.code === 200) {
+      console.log('login response', res); 
+
+      if (res.code === 200 && res?.data) {
+        dispatch(setAuthState(res.data));
+
+        if (res.data.token) {
+          saveToken(res.data.token, res.data);
+        }
+
         await signIn("credentials", {
-          email: authState.email,
-          mobile_number: authState.mobile_number,
+          email: res.data.email,
+          mobile_number: res.data.mobile_number,
           redirect: true,
-          callbackUrl: process.env.NEXT_PUBLIC_NEXTAUTH_URL || "http://localhost:3000",
+          callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
         });
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
-      } else if (res.code === 404 && res.data) {
+      } else if (res.code === 404 && res.data?.error) {
         dispatch(setErrors(res.data.error));
       }
     } catch (err) {
@@ -131,7 +146,7 @@ const Login = () => {
                             marginTop: "32px",
                           }}
                         >
-                          <p className={styles["lato-font"]}>Create Account</p>
+                          <p className={styles["lato-fonts"]}>Create Account</p>
                         </Link>
                       </div>
                     </div>

@@ -3,15 +3,13 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-// import { useSession } from "next-auth/react";
 import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/Untitled_picture.png";
 import styles from "@/styles/Header.module.css";
-
-const bnr3 = require("../../images/background/bg3.jpg");
+import useAuthToken from '@/hooks/useAuthToken';
 
 const Header: React.FC = () => {
-  // const { data: session } = useSession();
+  const { token, user } = useAuthToken();
 
   return (
     <header className="site-header mo-left header fullwidth">
@@ -33,24 +31,16 @@ const Header: React.FC = () => {
               aria-expanded="false"
               aria-label="Toggle navigation"
             >
-              <span></span>
-              <span></span>
-              <span></span>
             </button>
             <div className="extra-nav">
-              {/* <div className="extra-cell">
-                {session && session.user && session?.user?.user?.data?.email ? (
-                  <ProfileDropdown sessionUser={session?.user?.user?.data} />
+              <div className="extra-cell">
+                {token ? (
+                  <ProfileDropdown sessionUser={user} />
                 ) : (
                   <Link href="/login" className="site-button">
                     LOGIN/SIGN UP
                   </Link>
                 )}
-              </div> */}
-              <div className="extra-cell">
-              <Link href="/login" className="site-button">
-                    LOGIN/SIGN UP
-                  </Link>
               </div>
             </div>
 

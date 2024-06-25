@@ -23,6 +23,12 @@
   .lato-font {
     font-family: 'Lato', sans-serif !important;
     letter-spacing: 0.03em;
+    padding: 0px;
+    margin: 0px;
+  }
+  .lato-font {
+    font-family: 'Lato', sans-serif !important;
+    letter-spacing: 0.03em;
   }
   
   .rubik-font {

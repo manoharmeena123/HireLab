@@ -16,6 +16,8 @@ const bnr = require("./../../images/background/bg6.jpg");
 const Register2 = () => {
   const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
+
+  console.log('register', register)
   const authState = useSelector(selectRegisterState);
   const errors = useSelector(selectRegisterErrors);
 
@@ -24,7 +26,7 @@ const Register2 = () => {
     try {
       const res = await register(authState).unwrap();
       if (res.code === 200) {
-        toast.success('Register Successfully! Please Login', { theme: "colored" });
+        toast.success(res?.message, { theme: "colored" });
         navigateSource('/login');
       } else if (res.code === 404 && res.data) {
         dispatch(setErrors(res.data.error));
@@ -67,7 +69,7 @@ const Register2 = () => {
                   >
                     <form className="dez-form p-b30" method="post" onSubmit={handleSubmit}>
                       <div>
-                        <div className="mb-3">
+                        <div className="mb-3 mt-5">
                           <img
                             src="/images/logo1__2_-removebg-preview.png"
                             alt="Logo 1"
@@ -86,7 +88,7 @@ const Register2 = () => {
                       <div className="dez-separator-outer m-b5">
                         <div className="dez-separator bg-primary style-liner"></div>
                       </div>
-                      <p className={styles["lato-font"]}>
+                      <p className={styles["lato-fonts"]}>
                         Enter your Personal details below:
                       </p>
                       <div className="form-group">
@@ -120,7 +122,7 @@ const Register2 = () => {
                       <div className="form-group w-full d-flex justify-content-center">
                         <button
                           type="submit"
-                          className={`site-button dz-xs-flex m-r5 text-center ${styles["lato-font"]}`}
+                          className={`site-button dz-xs-flex m-r5 text-center ${styles["lato-fonts"]}`}
                           disabled={isLoading}
                         >
                           {isLoading ? 'Loading...' : 'Send OTP'}
