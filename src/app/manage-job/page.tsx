@@ -55,7 +55,7 @@ const CompanyManage: React.FC = () => {
       try {
         const userResponse = await axios.post(CHECK_CREDENTIALS, user, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             Accept: 'application/json',
             'Content-Type': 'application/json', 
           },
