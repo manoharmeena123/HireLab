@@ -1,15 +1,39 @@
-"use client";
-
+'use client'
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileDropdown from "@/app/user-profile/page";
-import logo2 from "../../images/Untitled_picture.png";
+import logo2 from "../../images/Hire Labs_Final logo.png";
 import styles from "@/styles/Header.module.css";
-import useAuthToken from '@/hooks/useAuthToken';
+import { usePathname } from 'next/navigation'
 
 const Header: React.FC = () => {
-  const { token, user } = useAuthToken();
+  const pathname = usePathname()
+
+  // Check if the current route is either /login or /register
+  const isLoginPage = pathname === "/login";
+  const isRegisterPage = pathname === "/register";
+
+  // Dummy user and token for testing
+  const token = "dummyToken";
+  const user = { name: "John Doe" };
+
+  // Render profile dropdown if user is logged in and not on login/register pages
+  const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
+    <ProfileDropdown sessionUser={user} />
+  );
+
+  // Render login/register links if user is not logged in and not on login/register pages
+  const renderLoginRegisterButtons = !isLoginPage && !isRegisterPage && !token && (
+    <>
+      <Link href="/login" className="site-button">
+        LOGIN
+      </Link>
+      <Link href="/register" className="site-button">
+        REGISTER
+      </Link>
+    </>
+  );
 
   return (
     <header className="site-header mo-left header fullwidth">
@@ -18,7 +42,7 @@ const Header: React.FC = () => {
           <div className={`container-fluid ${styles.containerFluid} pr-5`}>
             <div className={`logo-header mostion ${styles.logoHeader}`}>
               <Link href="/">
-                <Image src={logo2} className="logo" alt="img" />
+                <Image src={logo2} className="logo" alt="img" layout="fill" objectFit="contain" />
               </Link>
             </div>
 
@@ -30,17 +54,11 @@ const Header: React.FC = () => {
               aria-controls="navbarNavDropdown"
               aria-expanded="false"
               aria-label="Toggle navigation"
-            >
-            </button>
+            ></button>
             <div className="extra-nav">
               <div className="extra-cell">
-                {token ? (
-                  <ProfileDropdown sessionUser={user} />
-                ) : (
-                  <Link href="/login" className="site-button">
-                    LOGIN/SIGN UP
-                  </Link>
-                )}
+                {renderProfileDropdown}
+                {renderLoginRegisterButtons}
               </div>
             </div>
 

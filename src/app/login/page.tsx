@@ -41,7 +41,7 @@ const Login = () => {
         }
 
         await signIn("credentials", {
-          email: res.data.email,
+          email: res.data.email || "manoharmeena245@gmail.com",
           mobile_number: res.data.mobile_number,
           redirect: true,
           callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
@@ -76,11 +76,6 @@ const Login = () => {
           <div className="row">
             <div className="col-xl-4 col-lg-5 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll skew-section left-bottom">
               <div className="login-form style-2" style={{ width: "50%" }}>
-                <div className="logo-header text-center p-tb30">
-                  <Link href={"./"}>
-                    <img src={require("./../../images/logo.png")} alt="" />
-                  </Link>
-                </div>
                 <div className="clearfix"></div>
                 <div className="tab-content nav p-b30 tab">
                   <form
@@ -90,7 +85,7 @@ const Login = () => {
                   >
                     <div id="login" className="tab-pane active">
                       <div className="width-main-div">
-                        <div>
+                        {/* <div>
                           <div className="mb-3">
                             <img
                               src="/images/logo1__2_-removebg-preview.png"
@@ -101,7 +96,7 @@ const Login = () => {
                               alt="Logo 2"
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <h3
                           className={`form-title m-t0 ${styles["rubik-font"]}`}
                           style={{ fontWeight: "600" }}

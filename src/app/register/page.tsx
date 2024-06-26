@@ -68,7 +68,7 @@ const Register2 = () => {
                     style={{ marginBottom: "50px" }}
                   >
                     <form className="dez-form p-b30" method="post" onSubmit={handleSubmit}>
-                      <div>
+                      {/* <div>
                         <div className="mb-3 mt-5">
                           <img
                             src="/images/logo1__2_-removebg-preview.png"
@@ -79,7 +79,7 @@ const Register2 = () => {
                             alt="Logo 2"
                           />
                         </div>
-                      </div>
+                      </div> */}
                       <h3
                         className={`${styles["form-title"]} ${styles["rubik-font"]}`}
                       >
@@ -125,13 +125,13 @@ const Register2 = () => {
                           className={`site-button dz-xs-flex m-r5 text-center ${styles["lato-fonts"]}`}
                           disabled={isLoading}
                         >
-                          {isLoading ? 'Loading...' : 'Send OTP'}
+                          {isLoading ? 'Loading...' : 'Register'}
                         </button>
                       </div>
                     </form>
                     <div
                       className={styles["lato-font"]}
-                      style={{ marginTop: "35px" }}
+                      style={{ marginTop: "5px" }}
                     >
                       <h5
                         className={styles["lato-font"]}
