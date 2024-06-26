@@ -8,15 +8,15 @@ import { useRouter } from "next/navigation";
 import { useEffect } from 'react'
 
 const JobSeeker = () => {
-	const router = useRouter();
-	const { data: session, status } = useSession();
+	// const router = useRouter();
+	// const { data: session, status } = useSession();
 
-	useEffect(() => {
-		// Redirect to login page if no session exists and user is authenticated
-		if (!session) {
-		  router.push('/login');
-		}
-	  }, [session, status, router]);
+	// useEffect(() => {
+	// 	// Redirect to login page if no session exists and user is authenticated
+	// 	if (!session) {
+	// 	  router.push('/login');
+	// 	}
+	//   }, [session, status, router]);
 	
   return (
     <>

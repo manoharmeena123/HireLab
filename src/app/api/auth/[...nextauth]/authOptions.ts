@@ -1,48 +1,23 @@
-import { LOGIN_URL } from "@/lib/apiEndPoints";
-import axios, { AxiosResponse } from "axios";
-import { AuthOptions, ISODateString, User } from "next-auth";
-import { JWT } from "next-auth/jwt";
-import CredentialsProvider from "next-auth/providers/credentials";
+// src/pages/api/auth/[...nextauth]/authOptions.ts
+import { AuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import { CustomSession, CustomUser, LoginResponse } from './types/index';
+import axios from 'axios';
+import { LOGIN_URL } from '@/lib/apiEndPoints';
 
-export interface CustomSession {
-  user?: CustomUser;
-  expires: ISODateString;
-}
-export interface CustomUser {
-  token: any;
-  user: {
-    data: {
-      id?: string | null;
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-      token?: string | null;
-      created_at?: string | null;
-      updated_at?: string | null;
-    };
-  };
-}
 export const authOptions: AuthOptions = {
   pages: {
-    signIn: "/",
+    signIn: '/',
   },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
+        token.user = user as CustomUser;
       }
       return token;
     },
 
-    async session({
-      session,
-      token,
-      user,
-    }: {
-      session: CustomSession;
-      token: JWT;
-      user: User;
-    }) {
+    async session({ session, token }) {
       session.user = token.user as CustomUser;
       return session;
     },
@@ -50,16 +25,17 @@ export const authOptions: AuthOptions = {
 
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: {},
-        mobile_number: {},
+        email: { label: 'Email', type: 'text' },
+        mobile_number: { label: 'Mobile Number', type: 'text' },
       },
       async authorize(credentials, req) {
-        const res = await axios.post(LOGIN_URL, credentials);
+        const res = await axios.post<LoginResponse>(LOGIN_URL, credentials);
         const response = res.data;
-        // update code
-        const user = response;
+
+        const user: CustomUser = response.user;
+
         if (user) {
           return user;
         } else {

@@ -3,14 +3,14 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
+// import { useSession } from "next-auth/react";
+// import { useRouter } from 'next/navigation';
 
 const Companyprofile = () => {
-  const router = useRouter();
-  const { data: session, status } = useSession();
+  // const router = useRouter();
+  // const { data: session, status } = useSession();
 
- console.log('session', session,status)
+//  console.log('session', session,status)
   const [profileData, setProfileData] = useState({
     company_name: "",
     email: "",
@@ -34,12 +34,12 @@ const Companyprofile = () => {
     console.log(profileData);
   }
 
-  useEffect(() => {
-    // Redirect to login page if no session exists and user is authenticated
-    if (!session) {
-      router.push('/login');
-    }
-  }, [session, status, router]);
+  // useEffect(() => {
+  //   // Redirect to login page if no session exists and user is authenticated
+  //   if (!session) {
+  //     router.push('/login');
+  //   }
+  // }, [session, status, router]);
 
   
   return (

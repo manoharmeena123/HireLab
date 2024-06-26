@@ -1,58 +1,70 @@
 "use client";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import Env from "@/lib/Env";
 import Link from "next/link";
-import axios from "axios";
-import { LOGIN_URL ,Base_URL} from "@/lib/apiEndPoints";
-import { signIn } from "next-auth/react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "@/app/login/store/login.query";
+import { setAuthState, setErrors } from "@/app/login/store/login.slice";
+import {
+  selectLoginState,
+  selectLoginErrors,
+} from "@/app/login/store/login.selectors";
 import { toast } from "react-toastify";
-var bnr = require("./../../images/background/bg6.jpg");
+import { signIn } from "next-auth/react";
+import useAuthToken from "@/hooks/useAuthToken";
+import styles from "./styles/Login.module.css";
 
-function Login() {
-  
-  const [loading,setLoading] = useState<boolean>(false);
-  const [authState, setAuthState] = useState({
-    email: "",
-    mobile_number: "",
-  });
-  const [errors, setErrors] = useState({
-    email: [],
-    mobile_number: [],
-  });
-  const handleSubmit = (event: React.FormEvent) => {
-      event.preventDefault();
-      axios
-      .post(LOGIN_URL, authState, {
-        headers: {
-          Accept: "application/json",
-        },
-      })
-      .then((res) => {
-        const response = res.data;
-        setLoading(false);
-        if (response?.code == 200) {
-          
-          signIn("credentials", {
-            email: authState.email,
-            mobile_number: authState.mobile_number,
-            redirect: true,
-            callbackUrl: process.env.NEXT_PUBLIC_NEXTAUTH_URL || "http://localhost:3000",
-          });
-          
-        } else if (response?.code == 401) {
-          toast.error("user not found!", { theme: "colored" });
-        }else if (response?.code == 404) {
-          console.log(response?.data);
-          setLoading(false);
-          setErrors(response?.data?.error);
+const bnr = require("./../../images/background/bg6.jpg");
+
+const Login = () => {
+  const dispatch = useDispatch();
+  const [login, { isLoading }] = useLoginMutation();
+  const authState = useSelector(selectLoginState);
+  const errors = useSelector(selectLoginErrors);
+  const [loading, setLoading] = useState(false);
+
+  const { saveToken } = useAuthToken();
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    setLoading(true);
+    try {
+      const res = await login(authState).unwrap();
+      setLoading(false);
+      console.log("login response", res);
+
+      if (res.code === 200 && res?.data) {
+        dispatch(setAuthState(res.data));
+
+        if (res.data.token) {
+          saveToken(res.data.token, res.data);
         }
-      })
-      .catch((err) => {
-        setLoading(false);
-        // setErrors(err?.response?.data?.errors);
-      });
-  }
+
+        await signIn("credentials", {
+          email: res.data.email || "manoharmeena245@gmail.com",
+          mobile_number: res.data.mobile_number,
+          redirect: true,
+          callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
+        });
+      } else if (res.code === 401) {
+        toast.error("User not found!", { theme: "colored" });
+      } else if (res.code === 404 && res.data?.error) {
+        dispatch(setErrors(res.data.error));
+      }
+    } catch (err) {
+      setLoading(false);
+      console.error("Login failed:", err);
+      toast.error("Login failed. Please try again.");
+    }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    dispatch(setAuthState({ [name]: value }));
+  };
+
   return (
-    <div className="page-wraper">
+    <div className={styles["page-wraper"]}>
       <div className="browse-job login-style3">
         <div
           className="bg-img-fix"
@@ -64,18 +76,16 @@ function Login() {
           <div className="row">
             <div className="col-xl-4 col-lg-5 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll skew-section left-bottom">
               <div className="login-form style-2" style={{ width: "50%" }}>
-                <div className="logo-header text-center p-tb30">
-                  <Link href={"./"}>
-                    <img src={require("./../../images/logo.png")} alt="" />
-                  </Link>
-                </div>
                 <div className="clearfix"></div>
                 <div className="tab-content nav p-b30 tab">
-                <form className="dez-form p-b30 mx-2" method="post" onSubmit={handleSubmit}>
-                  <div id="login" className="tab-pane active">
-                    
+                  <form
+                    className="dez-form p-b30 mx-2"
+                    method="post"
+                    onSubmit={handleSubmit}
+                  >
+                    <div id="login" className="tab-pane active">
                       <div className="width-main-div">
-                        <div>
+                        {/* <div>
                           <div className="mb-3">
                             <img
                               src="/images/logo1__2_-removebg-preview.png"
@@ -86,9 +96,9 @@ function Login() {
                               alt="Logo 2"
                             />
                           </div>
-                        </div>
+                        </div> */}
                         <h3
-                          className="form-title m-t0 rubik-font"
+                          className={`form-title m-t0 ${styles["rubik-font"]}`}
                           style={{ fontWeight: "600" }}
                         >
                           Login
@@ -96,85 +106,80 @@ function Login() {
                         <div className="dez-separator-outer m-b5">
                           <div className="dez-separator bg-primary style-liner"></div>
                         </div>
-                        <p className="lato-font">Enter your login details</p>
-                        <div className="form-group width-form">
-                          <input
-                            className="form-control w-full lato-font"
-                            placeholder="User Name/Email"
-                            name="email"
-                            onChange={(e) =>
-                              setAuthState({ ...authState, email: e.target.value })
-                            }
-                          />
-                          <span className="text-red-500 text-danger">{errors?.email?.[0]}</span>
-                        </div>
-                        <div className="form-group width-form">
+                        <p className={styles["lato-font"]}>
+                          Enter your login details
+                        </p>
+                        <div className={`form-group ${styles["width-form"]}`}>
                           <input
                             type="number"
                             name="mobile_number"
-                            onChange={(e) =>
-                              setAuthState({ ...authState, mobile_number: e.target.value })
-                            }
-                            className="form-control w-full lato-font"
+                            onChange={handleInputChange}
+                            className={`form-control w-full ${styles["lato-font"]}`}
                             placeholder="Mobile Number"
                           />
-                          <span className="text-red-500 text-danger">{errors?.mobile_number?.[0]}</span>
+                          <span className="text-red-500 text-danger">
+                            {errors?.mobile_number?.[0]}
+                          </span>
+                          <div className={`row ${styles["div-style"]}`}>
+                            <div className="form-check mt-3">
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id="rememberMe"
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="rememberMe"
+                              >
+                                Remember Me
+                              </label>
+                            </div>
+                            <div className={styles["forget-div"]}>
+                              <Link
+                                href="/forgot-password"
+                                className={styles["forgot-password-link"]}
+                              >
+                                Forgot Password?
+                              </Link>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div
-                        className="form-group text-right otp-button-center"
-                        style={{ marginTop: "49px" }}
+                        className={`form-group text-right ${styles["otp-button-center"]}`}
                       >
-                        {/* <Link
-                          href="/send-otp"
-                          className="site-button button-md text-white lato-font"
+                        <button
+                          type="submit"
+                          className={`site-button button-md text-white ${styles["lato-font"]}`}
+                          disabled={isLoading}
+                          style={{ width: "100%" }}
                         >
-                          <p className="lato-font p-0 m-0">Send OTP</p>
-                        </Link> */}
-                        <button type="submit" className="site-button button-md text-white lato-font">Send OTP</button>
+                          {isLoading ? "Loading..." : "Send OTP"}
+                        </button>
                       </div>
-                      <div className="text-center bottom">
-                        <Link
-                          href="/register"
-                          className="site-button button-md btn-block text-white margin-left lato-font"
-                          style={{
-                            marginLeft: "30%",
-                            fontWeight: "400",
-                            marginTop: "32px",
-                          }}
+                      <div className={`${styles["create-div"]}`}>
+                        <p
+                          className={`${styles["lato-font"]} ${styles["no-wrap"]}`}
                         >
-                          <p className="lato-font p-0 m-0">Create Account</p>
-                        </Link>
+                          If you are new on our platform?{" "}
+                          <Link
+                            href="/register"
+                            className={styles["forgot-password-link"]}
+                          >
+                            Create Account
+                          </Link>
+                        </p>
                       </div>
-                    
-                  </div>
-                </form>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <style jsx>{`
-        .width-form {
-          width: 180%;
-        }
-        .otp-button-center {
-          margin-left: 50%;
-        }
-        .account-button-center {
-          margin-left: 30%;
-        }
-        .rubik-font {
-          font-family: "Rubik", sans-serif !important;
-        }
-        .lato-font {
-          font-family: "Lato", sans-serif !important;
-          letter-spacing: 0.03em;
-        }
-      `}</style>
     </div>
   );
-}
+};
 
 export default Login;

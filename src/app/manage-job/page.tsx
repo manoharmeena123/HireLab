@@ -2,10 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Modal } from 'react-bootstrap';
-import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
+// import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 import axios from 'axios';
 import { CHECK_CREDENTIALS, IMAGE_URL, MANAGE_JOBS } from '@/lib/apiEndPoints';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { toast } from "react-toastify";
 interface Job {
@@ -22,10 +21,6 @@ interface User {
 const Loading = () => <div>Loading...</div>;
 
 const CompanyManage: React.FC = () => {
-  const { data } = useSession();
-  const userSession = data as CustomSession;
-  const token = userSession?.user?.data?.token;
-
   const [company, setCompany] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [user, setUser] = useState<User>({});
@@ -55,7 +50,7 @@ const CompanyManage: React.FC = () => {
       try {
         const userResponse = await axios.post(CHECK_CREDENTIALS, user, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
             Accept: 'application/json',
             'Content-Type': 'application/json', 
           },
