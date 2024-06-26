@@ -1,16 +1,18 @@
-// src/components/Login.tsx
 "use client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import Env from "@/lib/Env";
 import Link from "next/link";
-import { useDispatch, useSelector } from 'react-redux';
-import { useLoginMutation } from '@/app/login/store/login.query';
-import { setAuthState, setErrors } from '@/app/login/store/login.slice';
-import { selectLoginState, selectLoginErrors } from '@/app/login/store/login.selectors';
+import { useDispatch, useSelector } from "react-redux";
+import { useLoginMutation } from "@/app/login/store/login.query";
+import { setAuthState, setErrors } from "@/app/login/store/login.slice";
+import {
+  selectLoginState,
+  selectLoginErrors,
+} from "@/app/login/store/login.selectors";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import useAuthToken from "@/hooks/useAuthToken";
-import styles from './styles/Login.module.css';
+import styles from "./styles/Login.module.css";
 
 const bnr = require("./../../images/background/bg6.jpg");
 
@@ -23,15 +25,13 @@ const Login = () => {
 
   const { saveToken } = useAuthToken();
 
-  console.log('authState', authState);
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
     try {
       const res = await login(authState).unwrap();
       setLoading(false);
-      console.log('login response', res); 
+      console.log("login response", res);
 
       if (res.code === 200 && res?.data) {
         dispatch(setAuthState(res.data));
@@ -53,8 +53,8 @@ const Login = () => {
       }
     } catch (err) {
       setLoading(false);
-      console.error('Login failed:', err);
-      toast.error('Login failed. Please try again.');
+      console.error("Login failed:", err);
+      toast.error("Login failed. Please try again.");
     }
   };
 
@@ -83,7 +83,11 @@ const Login = () => {
                 </div>
                 <div className="clearfix"></div>
                 <div className="tab-content nav p-b30 tab">
-                  <form className="dez-form p-b30 mx-2" method="post" onSubmit={handleSubmit}>
+                  <form
+                    className="dez-form p-b30 mx-2"
+                    method="post"
+                    onSubmit={handleSubmit}
+                  >
                     <div id="login" className="tab-pane active">
                       <div className="width-main-div">
                         <div>
@@ -107,16 +111,9 @@ const Login = () => {
                         <div className="dez-separator-outer m-b5">
                           <div className="dez-separator bg-primary style-liner"></div>
                         </div>
-                        <p className={styles["lato-font"]}>Enter your login details</p>
-                        <div className={`form-group ${styles["width-form"]}`}>
-                          <input
-                            className={`form-control w-full ${styles["lato-font"]}`}
-                            placeholder="User Name/Email"
-                            name="email"
-                            onChange={handleInputChange}
-                          />
-                          <span className="text-red-500 text-danger">{errors?.email?.[0]}</span>
-                        </div>
+                        <p className={styles["lato-font"]}>
+                          Enter your login details
+                        </p>
                         <div className={`form-group ${styles["width-form"]}`}>
                           <input
                             type="number"
@@ -125,29 +122,58 @@ const Login = () => {
                             className={`form-control w-full ${styles["lato-font"]}`}
                             placeholder="Mobile Number"
                           />
-                          <span className="text-red-500 text-danger">{errors?.mobile_number?.[0]}</span>
+                          <span className="text-red-500 text-danger">
+                            {errors?.mobile_number?.[0]}
+                          </span>
+                          <div className={`row ${styles["div-style"]}`}>
+                            <div className="form-check mt-3">
+                              <input
+                                type="checkbox"
+                                className="form-check-input"
+                                id="rememberMe"
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor="rememberMe"
+                              >
+                                Remember Me
+                              </label>
+                            </div>
+                            <div className={styles["forget-div"]}>
+                              <Link
+                                href="/forgot-password"
+                                className={styles["forgot-password-link"]}
+                              >
+                                Forgot Password?
+                              </Link>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div
                         className={`form-group text-right ${styles["otp-button-center"]}`}
-                        style={{ marginTop: "49px" }}
                       >
-                        <button type="submit" className={`site-button button-md text-white ${styles["lato-font"]}`} disabled={isLoading}>
-                          {isLoading ? 'Loading...' : 'Send OTP'}
+                        <button
+                          type="submit"
+                          className={`site-button button-md text-white ${styles["lato-font"]}`}
+                          disabled={isLoading}
+                          style={{ width: "100%" }}
+                        >
+                          {isLoading ? "Loading..." : "Send OTP"}
                         </button>
                       </div>
-                      <div className="text-center bottom">
-                        <Link
-                          href="/register"
-                          className={`site-button button-md btn-block text-white margin-left ${styles["lato-font"]}`}
-                          style={{
-                            marginLeft: "30%",
-                            fontWeight: "400",
-                            marginTop: "32px",
-                          }}
+                      <div className={`${styles["create-div"]}`}>
+                        <p
+                          className={`${styles["lato-font"]} ${styles["no-wrap"]}`}
                         >
-                          <p className={styles["lato-fonts"]}>Create Account</p>
-                        </Link>
+                          If you are new on our platform?{" "}
+                          <Link
+                            href="/register"
+                            className={styles["forgot-password-link"]}
+                          >
+                            Create Account
+                          </Link>
+                        </p>
                       </div>
                     </div>
                   </form>

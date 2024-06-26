@@ -1,0 +1,19 @@
+.discussionCard {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .font-weight-bold {
+    font-weight: 700 !important;
+  }
+  
+  .section-head {
+    margin-bottom: 2rem;
+  }
+  
+  .head-counter-bx {
+    text-align: center;
+  }
+  

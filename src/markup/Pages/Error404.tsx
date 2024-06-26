@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import Header from './../Layout/Header';
-import Footer from './../Layout/Footer';
-import PageTitle from './../Layout/PageTitle';
+import Header from '../Layout/Header';
+import Footer from '../Layout/Footer';
+import PageTitle from '../Layout/PageTitle';
 
 var bnr = require('./../../images/banner/bnr1.jpg');
 

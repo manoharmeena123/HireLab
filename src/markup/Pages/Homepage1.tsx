@@ -10,8 +10,12 @@ import Jobcategories from "../Element/Jobcategories";
 import Featureblog from "../Element/Featureblog";
 import Jobsection from "../Element/Jobsection";
 import Owltestimonial from "../Element/Owlblog1";
-import { useDispatch, useSelector } from 'react-redux';
-import { selectLoginState, selectLoginErrors } from '@/app/login/store/login.selectors';
+import LatestDiscussions from "../Element/LatestDiscussions";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectLoginState,
+  selectLoginErrors,
+} from "@/app/login/store/login.selectors";
 //Images
 var bnr2 = require("./../../images/background/bg4.jpg");
 var bnr3 = require("./../../images/lines.png");
@@ -37,7 +41,7 @@ function Homepage() {
     setIsClicked4(!isClicked4);
   };
   const authState = useSelector(selectLoginState);
-  console.log('authState', authState)
+  console.log("authState", authState);
 
   return (
     <div className="page-wraper">
@@ -68,14 +72,16 @@ function Homepage() {
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -177,14 +183,16 @@ function Homepage() {
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -286,14 +294,16 @@ function Homepage() {
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -395,14 +405,16 @@ function Homepage() {
                       position: "relative",
                     }}
                     onMouseEnter={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button") as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
                       button.style.color = "#0B66C3";
                     }}
                     onMouseLeave={(e) => {
-                      const button =
-                        e.currentTarget.querySelector(".site-button")as HTMLElement;
+                      const button = e.currentTarget.querySelector(
+                        ".site-button"
+                      ) as HTMLElement;
                       button.style.backgroundColor = "";
                       button.style.color = "";
                     }}
@@ -732,35 +744,7 @@ function Homepage() {
         </div>
 
         <div className="section-full job-categories content-inner-2 bg-white">
-          <div className="container">
-            <div className="section-head d-flex head-counter clearfix">
-              <div className="mr-auto">
-                <h2 style={{ fontWeight: "600" }} className="m-b5">
-                  Popular Categories
-                </h2>
-                <h6 className="fw3">20+ Catetories work wating for you</h6>
-              </div>
-              <div className="head-counter-bx">
-                <h2 style={{ fontWeight: "600" }} className="m-b5 counter">
-                  {<CountUp end={1800} duration={5} />}
-                </h2>
-                <h6 className="fw3">Jobs Posted</h6>
-              </div>
-              <div className="head-counter-bx">
-                <h2 style={{ fontWeight: "600" }} className="m-b5 counter">
-                  {<CountUp end={4500} duration={5} />}
-                </h2>
-                <h6 className="fw3">Tasks Posted</h6>
-              </div>
-              <div className="head-counter-bx">
-                <h2 style={{ fontWeight: "600" }} className="m-b5 counter">
-                  {<CountUp end={1500} duration={5} />}
-                </h2>
-                <h6 className="fw3">Freelancers</h6>
-              </div>
-            </div>
-            <Jobcategories />
-          </div>
+          <LatestDiscussions />
         </div>
 
         <Featureblog />
