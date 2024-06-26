@@ -76,14 +76,14 @@ function Homepage() {
                         ".site-button"
                       ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
-                      button.style.color = "#0B66C3";
+                      button.style.color = "#000";
                     }}
                     onMouseLeave={(e) => {
                       const button = e.currentTarget.querySelector(
                         ".site-button"
                       ) as HTMLElement;
-                      button.style.backgroundColor = "";
-                      button.style.color = "";
+                      button.style.backgroundColor = "#2A6310";
+                      button.style.color = "#fff";
                     }}
                   >
                     <div className="">
@@ -187,14 +187,14 @@ function Homepage() {
                         ".site-button"
                       ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
-                      button.style.color = "#0B66C3";
+                      button.style.color = "#000";
                     }}
                     onMouseLeave={(e) => {
                       const button = e.currentTarget.querySelector(
                         ".site-button"
                       ) as HTMLElement;
-                      button.style.backgroundColor = "";
-                      button.style.color = "";
+                      button.style.backgroundColor = "#2A6310";
+                      button.style.color = "#fff";
                     }}
                   >
                     <div className="">
@@ -298,14 +298,14 @@ function Homepage() {
                         ".site-button"
                       ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
-                      button.style.color = "#0B66C3";
+                      button.style.color = "#000";
                     }}
                     onMouseLeave={(e) => {
                       const button = e.currentTarget.querySelector(
                         ".site-button"
                       ) as HTMLElement;
-                      button.style.backgroundColor = "";
-                      button.style.color = "";
+                      button.style.backgroundColor = "#2A6310";
+                      button.style.color = "#fff";
                     }}
                   >
                     <div className="">
@@ -409,14 +409,14 @@ function Homepage() {
                         ".site-button"
                       ) as HTMLElement;
                       button.style.backgroundColor = "#fff";
-                      button.style.color = "#0B66C3";
+                      button.style.color = "#000";
                     }}
                     onMouseLeave={(e) => {
                       const button = e.currentTarget.querySelector(
                         ".site-button"
                       ) as HTMLElement;
-                      button.style.backgroundColor = "";
-                      button.style.color = "";
+                      button.style.backgroundColor = "#2A6310";
+                      button.style.color = "#fff";
                     }}
                   >
                     <div className="">
@@ -550,8 +550,8 @@ function Homepage() {
                           >
                             <path
                               d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked1 ? "#0B66C3" : "#fff"}
-                              stroke="#0B66C3"
+                              fill={isClicked1 ? "#2A6310" : "#fff"}
+                              stroke="#2A6310"
                             />
                           </svg>
                         </div>
@@ -561,12 +561,13 @@ function Homepage() {
                           display: "flex",
                           justifyContent: "space-around",
                           marginTop: "20px",
+                          color:"#2A6310 !important"
                         }}
                       >
                         <li className="mr-4">
                           <i
                             className="fa fa-map-marker"
-                            style={{ fontSize: "large" }}
+                            style={{ fontSize: "large", color:"#2A6310" }}
                           ></i>
                           Whitefield, Banglore
                         </li>
@@ -604,8 +605,8 @@ function Homepage() {
                           >
                             <path
                               d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked2 ? "#0B66C3" : "#fff"}
-                              stroke="#0B66C3"
+                              fill={isClicked2 ? "#2A6310" : "#fff"}
+                              stroke="#2A6310"
                             />
                           </svg>
                         </div>
@@ -620,7 +621,7 @@ function Homepage() {
                         <li className="mr-4">
                           <i
                             className="fa fa-map-marker"
-                            style={{ fontSize: "large" }}
+                            style={{ fontSize: "large", color:"#2A6310" }}
                           ></i>
                           Whitefield, Banglore
                         </li>
@@ -658,8 +659,8 @@ function Homepage() {
                           >
                             <path
                               d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked3 ? "#0B66C3" : "#fff"}
-                              stroke="#0B66C3"
+                              fill={isClicked3 ? "#2A6310" : "#fff"}
+                              stroke="#2A6310"
                             />
                           </svg>
                         </div>
@@ -674,7 +675,7 @@ function Homepage() {
                         <li className="mr-4">
                           <i
                             className="fa fa-map-marker"
-                            style={{ fontSize: "large" }}
+                            style={{ fontSize: "large", color:"#2A6310" }}
                           ></i>
                           Whitefield, Banglore
                         </li>
@@ -712,8 +713,8 @@ function Homepage() {
                           >
                             <path
                               d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked4 ? "#0B66C3" : "#fff"}
-                              stroke="#0B66C3"
+                              fill={isClicked4 ? "#2A6310" : "#fff"}
+                              stroke="#2A6310"
                             />
                           </svg>
                         </div>
@@ -728,7 +729,7 @@ function Homepage() {
                         <li className="mr-4">
                           <i
                             className="fa fa-map-marker"
-                            style={{ fontSize: "large" }}
+                            style={{ fontSize: "large", color:"#2A6310" }}
                           ></i>
                           Whitefield, Banglore
                         </li>
@@ -770,7 +771,7 @@ function Homepage() {
           border-radius: 20px;
         }
         .member-ship-div:hover {
-          background-color: #0b66c3 !important;
+          background-color: #2A6310 !important;
           color: white !important;
         }
         .member-ship-div:hover .site-button {

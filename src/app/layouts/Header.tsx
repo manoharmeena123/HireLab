@@ -1,39 +1,34 @@
-'use client'
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/Hire Labs_Final logo.png";
 import styles from "@/styles/Header.module.css";
-import { usePathname } from 'next/navigation'
+import { usePathname } from "next/navigation";
+import useAuthToken from "@/hooks/useAuthToken";
 
-const Header: React.FC = () => {
-  const pathname = usePathname()
-
-  // Check if the current route is either /login or /register
+const Header = () => {
+  const { token, user } = useAuthToken();
+  const pathname = usePathname();
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
 
-  // Dummy user and token for testing
-  const token = "dummyToken";
-  const user = { name: "John Doe" };
-
-  // Render profile dropdown if user is logged in and not on login/register pages
   const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
     <ProfileDropdown sessionUser={user} />
   );
-
-  // Render login/register links if user is not logged in and not on login/register pages
-  const renderLoginRegisterButtons = !isLoginPage && !isRegisterPage && !token && (
-    <>
-      <Link href="/login" className="site-button">
-        LOGIN
-      </Link>
-      <Link href="/register" className="site-button">
-        REGISTER
-      </Link>
-    </>
-  );
+  const renderLoginRegisterButtons = !isLoginPage &&
+    !isRegisterPage &&
+    !token && (
+      <>
+        <Link href="/login" className="site-button" style={{backgroundColor:"#2A6310"}}>
+          LOGIN
+        </Link>
+        <Link href="/register" className="site-button" style={{backgroundColor:"#2A6310"}}>
+          REGISTER
+        </Link>
+      </>
+    );
 
   return (
     <header className="site-header mo-left header fullwidth">
@@ -42,10 +37,15 @@ const Header: React.FC = () => {
           <div className={`container-fluid ${styles.containerFluid} pr-5`}>
             <div className={`logo-header mostion ${styles.logoHeader}`}>
               <Link href="/">
-                <Image src={logo2} className="logo" alt="img" layout="fill" objectFit="contain" />
+                <Image
+                  src={logo2}
+                  className="logo"
+                  alt="img"
+                  layout="fill"
+                  objectFit="contain"
+                />
               </Link>
             </div>
-
             <button
               className="navbar-toggler collapsed navicon justify-content-end"
               type="button"
@@ -61,7 +61,6 @@ const Header: React.FC = () => {
                 {renderLoginRegisterButtons}
               </div>
             </div>
-
             <div
               className="header-nav navbar-collapse collapse myNavbar justify-content-start"
               id="navbarNavDropdown"
