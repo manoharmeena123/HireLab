@@ -408,7 +408,6 @@ const CompanyProfile = () => {
                                   description: e.target.value,
                                 })
                               }
-                              name="description"
                               value={profileData?.description}
                               rows={4}
                             >

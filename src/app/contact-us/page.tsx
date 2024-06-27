@@ -148,7 +148,7 @@ const Contact = () => {
                           <div className="input-group">
                             <textarea
                               name="dzMessage"
-							  rows={4}
+							                rows={4}
                               className="form-control"
                               required
                               placeholder="Your Message..."
