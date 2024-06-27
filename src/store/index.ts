@@ -4,13 +4,15 @@ import { configureStoreInit, hirelabApiSlice } from "@/rtk";
 import { registerReducer } from "@/app/register/store/register.slice";
 import { loginReducer } from "@/app/login/store/login.slice";
 import { storeMiddleware } from "@/rtk/middlewares";
-import { postJobReducer } from '@/app/post-job/store/post-job.slice';
+import { postJobReducer } from "@/app/post-job/store/post-job.slice";
+import { verifyOtpReducer } from "@/app/send-otp/store/send-otp.slice";
 // Combine all reducers into a single root reducer
 const appReducer = combineReducers({
   [hirelabApiSlice.reducerPath]: hirelabApiSlice.reducer,
   register: registerReducer,
   login: loginReducer,
-  postJob: postJobReducer
+  postJob: postJobReducer,
+  verifyOtp: verifyOtpReducer
 });
 
 export const makeStore = () =>

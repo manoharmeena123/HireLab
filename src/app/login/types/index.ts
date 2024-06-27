@@ -19,10 +19,14 @@ export interface LoginArgs {
   email: string;
   mobile_number: string;
 }
+export interface VerifyOtp {
+  otp: string;
+  mobile_number: string;
+}
 
 export interface LoginResponse {
-  token: string | null;
   code: number;
+  message:string;
   data?: {
     id: number;
     name: string;
@@ -31,13 +35,14 @@ export interface LoginResponse {
     mobile_number: string;
     created_at: string;
     updated_at: string;
-    token: string;
     error?: {
       email: string[];
       mobile_number: string[];
     };
   };
 }
+
+
 
 export interface CustomUser {
   user: {

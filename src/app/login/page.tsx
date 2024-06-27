@@ -13,11 +13,13 @@ import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import useAuthToken from "@/hooks/useAuthToken";
 import styles from "./styles/Login.module.css";
+import { useRouter } from "next/navigation";
 
 const bnr = require("./../../images/background/bg6.jpg");
 
 const Login = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const authState = useSelector(selectLoginState);
   const errors = useSelector(selectLoginErrors);
@@ -34,17 +36,16 @@ const Login = () => {
       console.log("login response", res);
 
       if (res.code === 200 && res?.data) {
-        dispatch(setAuthState(res.data));
-
-        if (res.data.token) {
-          saveToken(res.data.token, res.data);
-        }
+        console.log('res', res)
+        toast.success(res?.message, { theme: "colored" });
+        
+        // Redirect to /send-otp page
+        router.push('/send-otp');
 
         await signIn("credentials", {
-          email: res.data.email || "manoharmeena245@gmail.com",
           mobile_number: res.data.mobile_number,
-          redirect: true,
-          callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
+          redirect: false,
+          // callbackUrl:"http://localhost:3000/send-otp",
         });
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
