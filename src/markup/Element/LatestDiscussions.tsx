@@ -80,7 +80,7 @@ const LatestDiscussions = () => {
       <div className="row align-items-center mb-4">
         <div className="col"></div>
         <div className="col text-right">
-          <button className="btn btn-primary">View All</button>
+          <button className="site-button button-md" style={{ backgroundColor:"#2A6310", color:"#fff", borderColor:"#2A8310"}}>View All</button>
         </div>
       </div>
       <div className="row">

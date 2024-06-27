@@ -41,8 +41,8 @@ const Header = () => {
                   src={logo2}
                   className="logo"
                   alt="img"
-                  layout="fill"
-                  objectFit="contain"
+                  fill
+                  style={{ objectFit: "contain" }}
                 />
               </Link>
             </div>

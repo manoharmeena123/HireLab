@@ -13,7 +13,7 @@
 }
 .fullwidth .header-nav .nav > li.active > a,
 .fullwidth .header-nav .nav > li:hover > a {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   color: #fff;
 }
 .extra-nav {
@@ -121,7 +121,7 @@
 .job-categories .icon-bx-wraper {
   padding: 40px 10px;
   margin-bottom: 20px;
-  background: #0b66c3;
+  background: #2A8310;
   border-radius: 10px;
   text-align: center;
   -moz-transition: all 0.5s;
@@ -172,7 +172,7 @@
   height: 0;
 }
 .job-categories .icon-bx-wraper:hover {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   transform: scale(1.05);
   -moz-transform: scale(1.05);
   -webkit-transform: scale(1.05);
@@ -499,7 +499,7 @@
   border: 0;
 }
 .active.center .testimonial-5 .testimonial-text {
-  background-color: #0b66c3;
+  background-color: #2A8310;
 }
 .active.center .testimonial-5 .testimonial-text p {
   color: #fff;
@@ -522,7 +522,7 @@
 .active.center .testimonial-5 .testimonial-text:after {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-top: 15px solid #0b66c3;
+  border-top: 15px solid #2A8310;
 }
 .browse-job .btn.dropdown-toggle.btn-default,
 .browse-job .form-control,
@@ -603,7 +603,7 @@
   border-radius: 0;
   background-color: transparent;
   border-width: 0 0 2px;
-  border-color: #0b66c3;
+  border-color: #2A8310;
 }
 .find-job-bx .form-control {
   padding: 0;
@@ -636,7 +636,7 @@
 }
 .find-job-bx .input-group-text {
   padding: 0;
-  color: #0b66c3;
+  color: #2A8310;
 }
 .find-job-bx .dezPlaceAni .site-button {
   height: 50px;
@@ -646,7 +646,7 @@
 .find-job-bx .bootstrap-select .dropdown-toggle:focus,
 .find-job-bx .bootstrap-select .dropdown-toggle:hover {
   border-width: 0 0 2px !important;
-  border-color: #0b66c3 !important;
+  border-color: #2A8310 !important;
   background-color: transparent !important;
   border-radius: 0;
   height: 50px;
@@ -665,7 +665,7 @@
 }
 .find-job-bx .bootstrap-select.btn-group .dropdown-toggle .caret::before {
   content: "\f078";
-  color: #0b66c3;
+  color: #2A8310;
 }
 .post-job-bx,
 .post-job-bx li,
@@ -677,7 +677,7 @@
 .post-job-bx ul li {
   display: inline-block;
   margin-right: 10px;
-  color: #0b66c3;
+  color: #2A8310;
 }
 .post-job-bx ul li i {
   margin-right: 5px;
@@ -691,7 +691,7 @@
   position: relative;
 }
 .post-job-bx a:hover {
-  border-color: #0b66c3;
+  border-color: #2A8310;
 }
 .post-job-bx > li {
   margin-bottom: 30px;
@@ -725,7 +725,7 @@
 .job-time span,
 .post-like {
   text-align: center;
-  color: #0b66c3;
+  color: #2A8310;
 }
 .job-time span {
   text-transform: uppercase;
@@ -740,14 +740,14 @@
   width: 30px;
   height: 30px;
   border-radius: 30px;
-  border: 1px solid #0b66c3;
+  border: 1px solid #2A8310;
   line-height: 30px;
   position: absolute;
   top: 25px;
   right: 25px;
 }
 .post-like:hover {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   color: #fff;
 }
 .candidates-are-sys {
@@ -784,7 +784,7 @@
 }
 .testimonial-name {
   font-weight: 500;
-  color: #0b66c3;
+  color: #2A8310;
 }
 .testimonial-position {
   font-style: inherit;
@@ -863,7 +863,7 @@
   -o-transition: all 0.5s;
 }
 .city-bx:hover:after {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   opacity: 0.95;
 }
 .city-info {

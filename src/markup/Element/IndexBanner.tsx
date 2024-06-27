@@ -112,7 +112,6 @@ const IndexBanner: React.FC = () => {
                   <button
                     type="submit"
                     style={{
-                       backgroundColor:"#2A6310",
                       fontFamily:
                         "apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol",
                     }}

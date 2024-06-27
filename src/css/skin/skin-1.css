@@ -1,4 +1,4 @@
-/*===================== #0B66C3#0B66C3#0B66C3#0B66C3#0B66C3#0B66C3#0B66C3#0B66C3#0B66C3
+/*===================== #2A6310#2A6310#2A6310#2A6310#2A6310#2A6310#2A6310#2A6310#2A6310
 	Premery bg color 
 =====================*/
 /* Hex */
@@ -80,7 +80,7 @@
 .job-time a:hover span,
 .category-jobs-info .nav ul li.active a,
 .slick-slide.slick-active.slick-current + .slick-active .testimonial-text {
- background-color: #0B66C3;
+ background-color: #2A6310;
 }
 /*Hex color :hover */
 .site-button:active,
@@ -104,10 +104,10 @@
 .owl-btn-1.primary .owl-next:hover,
 .owl-btn-2.primary .owl-prev:hover, 
 .owl-btn-2.primary .owl-next:hover{
- background-color: #0B66C3;
+ background-color: #2A6310;
 }
 .about-us .dez-tabs .nav-tabs li a.active {
- border-right: 4px solid #0B66C3;
+ border-right: 4px solid #2A6310;
 }
 
 
@@ -208,13 +208,13 @@ h6 a:hover,
 .feature,
 .dez-post-meta ul li,
 .recent-posts-entry .post-date{
- color: #0B66C3;
+ color: #2A6310;
 }
 @media only screen and (max-width: 991px) {
  .nav-dark.header-nav .nav > li > a:hover, 
 	.nav-dark.header-nav .nav > li > a:active, 
 	.nav-dark.header-nav .nav > li > a:focus {
-  color: #0B66C3;
+  color: #2A6310;
  }
 }
 /*===================== 
@@ -238,22 +238,22 @@ input[type="radio"] + label:hover:before,
 .owl-theme.dots-style-3 .owl-dots .owl-dot.active, 
 .owl-theme.dots-style-3 .owl-dots .owl-dot:hover,
 .side-bar .widget_tag_cloud a:hover {
-	border-color: #0B66C3;
+	border-color: #2A6310;
 }
 .owl-item.active.center .testimonial-8 .testimonial-text:after{
- border-top:15px solid #0B66C3;
+ border-top:15px solid #2A6310;
 }
 .dez-tabs.border-top .nav-tabs > li > a.active,
 .header-nav .nav > li .sub-menu, 
 .header-nav .nav > li .mega-menu {
- border-top-color: #0B66C3;
+ border-top-color: #2A6310;
 }
 .port-style1 .port-box {
- border-left: 3px solid #0B66C3;
+ border-left: 3px solid #2A6310;
 }
 .choseus-tabs .nav li a.active {
-	border-bottom: 2px solid #0B66C3;
+	border-bottom: 2px solid #2A6310;
 }
 .featurd-job-list .job-box-list:hover {
-    border-left: 2px solid #0B66C3;
+    border-left: 2px solid #2A6310;
 }

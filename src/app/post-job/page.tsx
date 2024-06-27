@@ -155,8 +155,8 @@ const Componypostjobs = () => {
     alignItems: "center",
     flexShrink: 0,
     borderRadius: "16px",
-    border: `1px solid ${isHovered || isSelected ? "#0B66C3" : "#000"}`,
-    color: isHovered || isSelected ? "#0B66C3" : "#000",
+    border: `1px solid ${isHovered || isSelected ? "#2A6310" : "#000"}`,
+    color: isHovered || isSelected ? "#2A6310" : "#000",
     background: isHovered || isSelected ? "rgba(11, 102, 195, 0.10)" : "#FFF",
     transition: "color 0.3s, border-color 0.3s",
     margin: "5px",
@@ -727,14 +727,14 @@ const Componypostjobs = () => {
           background: #f1f1f1;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #0b66c3; /* Blue color */
+          background-color: #2A8310; /* Blue color */
           border-radius: 10px;
           border: 3px solid #ffffff;
         }
         /* Firefox scrollbar */
         .custom-scrollbar {
           scrollbar-width: auto;
-          scrollbar-color: #0b66c3 #f1f1f1;
+          scrollbar-color: #2A8310 #f1f1f1;
         }
       `}</style>
     </div>

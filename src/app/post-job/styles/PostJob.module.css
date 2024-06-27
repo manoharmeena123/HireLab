@@ -13,7 +13,7 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #0b66c3; /* Blue color */
+  background-color: #2A8310; /* Blue color */
   border-radius: 10px;
   border: 3px solid #ffffff;
 }
@@ -21,5 +21,5 @@
 /* Firefox scrollbar */
 .custom-scrollbar {
   scrollbar-width: auto;
-  scrollbar-color: #0b66c3 #f1f1f1;
+  scrollbar-color: #2A8310 #f1f1f1;
 }

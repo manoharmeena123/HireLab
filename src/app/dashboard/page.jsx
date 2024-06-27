@@ -117,7 +117,7 @@ function Browsecandidates() {
                       className="membership_class"
                       style={{
                         backgroundColor: subscribe
-                          ? "#0B66C3"
+                          ? "#2A6310"
                           : "rgba(11, 102, 195, 0.60)",
                       }}
                     >
@@ -183,7 +183,7 @@ function Browsecandidates() {
                       className="membership_class"
                       style={{
                         backgroundColor: !subscribe
-                          ? "#0B66C3"
+                          ? "#2A6310"
                           : "rgba(11, 102, 195, 0.60)",
                       }}
                     >
@@ -249,7 +249,7 @@ function Browsecandidates() {
                       className="membership_class"
                       style={{
                         backgroundColor: !subscribe
-                          ? "#0B66C3"
+                          ? "#2A6310"
                           : "rgba(11, 102, 195, 0.60)",
                       }}
                     >
@@ -315,7 +315,7 @@ function Browsecandidates() {
                       className="membership_class"
                       style={{
                         backgroundColor: !subscribe
-                          ? "#0B66C3"
+                          ? "#2A6310"
                           : "rgba(11, 102, 195, 0.60)",
                       }}
                     >

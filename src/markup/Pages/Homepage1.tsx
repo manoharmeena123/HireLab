@@ -166,7 +166,7 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white" }}
+                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -277,7 +277,7 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white" }}
+                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -388,7 +388,7 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white" }}
+                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -499,7 +499,7 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white" }}
+                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>

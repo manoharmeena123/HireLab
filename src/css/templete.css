@@ -11,7 +11,7 @@
 }
 .fullwidth .header-nav .nav > li.active > a,
 .fullwidth .header-nav .nav > li:hover > a {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   color: #fff;
 }
 .extra-nav {
@@ -125,7 +125,7 @@
 .job-categories .icon-bx-wraper {
   padding: 40px 10px;
   margin-bottom: 20px;
-  background: #0b66c3;
+  background: #2A8310;
   border-radius: 10px;
   text-align: center;
   -moz-transition: all 0.5s;
@@ -178,7 +178,7 @@
   height: 0;
 }
 .job-categories .icon-bx-wraper:hover {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   transform: scale(1.05);
   -moz-transform: scale(1.05);
   -webkit-transform: scale(1.05);
@@ -195,7 +195,7 @@
   color: #fff;
 }
 .job-categories .icon-bx-wraper .icon-md i {
-  color: #0b66c3;
+  color: #2A8310;
 }
 /* Head Counter */
 .head-counter h6 {
@@ -529,7 +529,7 @@
 .active .testimonial-5 .testimonial-text {
 }
 .slick-slide.slick-active.slick-current + .slick-active .testimonial-text {
-  background-color: #0b66c3;
+  background-color: #2A8310;
 }
 .slick-slide.slick-active.slick-current + .slick-active .testimonial-text p {
   color: #fff;
@@ -558,7 +558,7 @@
   .testimonial-text:after {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
-  border-top: 15px solid #0b66c3;
+  border-top: 15px solid #2A8310;
 }
 
 /* browse-job */
@@ -649,7 +649,7 @@
   border-radius: 0;
   background-color: transparent;
   border-width: 0 0 2px 0;
-  border-color: #0b66c3;
+  border-color: #2A6310;
 }
 .find-job-bx .form-control {
   padding: 0;
@@ -691,7 +691,7 @@
 .find-job-bx .bootstrap-select .dropdown-toggle:focus,
 .find-job-bx .bootstrap-select .dropdown-toggle:hover {
   border-width: 0 0 2px 0 !important;
-  border-color: #0b66c3 !important;
+  border-color: #2A6310 !important;
   background-color: transparent !important;
   border-radius: 0;
   height: 50px;
@@ -756,7 +756,7 @@
   position: relative;
 }
 .post-job-bx .post-bx:hover {
-  border-color: #0b66c3;
+  border-color: #2A6310;
 }
 .post-job-bx > li,
 .cv-manager > li {
@@ -932,7 +932,7 @@
   -o-transition: all 0.5s;
 }
 .city-bx:hover:after {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   opacity: 0.95;
 }
 .city-info {
@@ -1124,7 +1124,7 @@
   width: 30px;
   height: 30px;
   border-radius: 30px;
-  border: 1px solid #0b66c3;
+  border: 1px solid #2A8310;
   line-height: 30px;
   text-align: center;
   margin-left: 5px;
@@ -1136,7 +1136,7 @@
 .canditate-des {
   position: relative;
   display: inline-block;
-  border: 2px solid #0b66c3;
+  border: 2px solid #2A8310;
   outline-offset: 3px;
   border-radius: 100%;
   width: 150px;
@@ -1152,7 +1152,7 @@
   right: 0;
   box-shadow: 0 0 10px 0 rgba(0, 24, 128, 0.1);
   border-radius: 100%;
-  color: #0b66c3;
+  color: #2A8310;
   overflow: hidden;
 }
 .candidate-info img {
@@ -1182,7 +1182,7 @@
 .candidate-info ul li a:hover,
 .candidate-info ul li a.active {
   background: #e1e7ff;
-  border-left-color: #0b66c3;
+  border-left-color: #2A8310;
 }
 .candidate-info ul li a span {
   transition: all 0.5s;
@@ -1219,7 +1219,7 @@
 .canditate-des::before {
   content: "";
   position: absolute;
-  background-color: #0b66c3;
+  background-color: #2A8310;
   height: 115%;
   width: 2px;
   left: 50%;
@@ -1236,7 +1236,7 @@
   left: -15px;
   top: 50%;
   width: 120%;
-  background-color: #0b66c3;
+  background-color: #2A8310;
   height: 2px;
   z-index: -1;
 }
@@ -1334,7 +1334,7 @@
 /* Jobs Link */
 .job-links .fa-download,
 .job-links .fa-eye {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   color: #fff;
   border: 0;
   border-radius: 5px;
@@ -1349,7 +1349,7 @@
   padding: 7px;
 }
 .pencil .fa-pencil {
-  background-color: #0b66c3;
+  background-color: #2A8310;
   color: #fff;
   border: 0;
   border-radius: 5px;
@@ -1419,7 +1419,7 @@
   padding: 26px 20px;
 }
 .modal-bx-info .modal-footer {
-  border-color: #e0e0e0;
+  border-color: #2A6310;
   background-color: rgba(0, 0, 0, 0.04);
 }
 .job-bx-title .btn-group.bootstrap-select {
@@ -1670,7 +1670,7 @@
   color: #333;
 }
 .feature .custom-control .custom-control-label::before {
-  border: 2px solid #0b66c3;
+  border: 2px solid #2A8310;
 }
 
 /* LIKE BTN ===================== */
@@ -1703,7 +1703,7 @@
   left: 0;
   height: 30px;
   width: 30px;
-  border: 1px solid #0b66c3;
+  border: 1px solid #2A8310;
   border-radius: 20px;
 }
 .like-btn input:checked ~ .checkmark {
@@ -1717,7 +1717,7 @@
 .like-btn input:checked ~ .checkmark:before {
   width: 100%;
   height: 100%;
-  background-color: #0b66c3;
+  background-color: #2A8310;
   left: 0;
   top: 0;
   border-radius: 20px;
@@ -1737,7 +1737,7 @@
   position: absolute;
   font-size: 16px;
   font-weight: normal;
-  color: #0b66c3;
+  color: #2A8310;
 }
 .comment-reply-link:hover {
   color: #333 !important;
@@ -2069,7 +2069,7 @@
 }
 
 .site-header.border-bottom .main-bar-wraper {
-  border-bottom: 2px solid #0b66c3;
+  border-bottom: 2px solid #2A8310;
 }
 
 /* Company logo wg  */
@@ -2303,10 +2303,10 @@
   border-radius: 0;
   background-color: transparent;
   border-width: 0 0 2px 0;
-  border-color: #0b66c3;
+  border-color: #2A6310;
 }
 
 .site-filters.style1 .nav-item .nav-link.active {
   background-color: transparent;
-  color: #0b66c3;
+  color: #2A8310;
 }
