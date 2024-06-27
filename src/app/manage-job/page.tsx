@@ -7,6 +7,7 @@ import axios from 'axios';
 import { CHECK_CREDENTIALS, IMAGE_URL, MANAGE_JOBS } from '@/lib/apiEndPoints';
 import Image from 'next/image';
 import { toast } from "react-toastify";
+import useAuthToken from "@/hooks/useAuthToken";
 interface Job {
   job_title: string;
   job_type: string;
@@ -21,6 +22,8 @@ interface User {
 const Loading = () => <div>Loading...</div>;
 
 const CompanyManage: React.FC = () => {
+  const { token } = useAuthToken();
+
   const [company, setCompany] = useState(false);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [user, setUser] = useState<User>({});
