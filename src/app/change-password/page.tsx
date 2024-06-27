@@ -10,14 +10,12 @@ import {
 import { navigateSource } from "@/lib/action";
 import axios from "axios";
 import "react-toastify/ReactToastify.min.css";
-import { useSession } from "next-auth/react";
 
 import { ToastContainer, toast } from "react-toastify";
 import useAuthToken from "@/hooks/useAuthToken";
 
 function Changepasswordpage() {
   const { token } = useAuthToken();
-  const { data } = useSession();
   const [user, setUser] = useState({});
   const [errors, setErrors] = useState({
     old_password: "",

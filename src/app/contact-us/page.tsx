@@ -148,7 +148,7 @@ const Contact = () => {
                           <div className="input-group">
                             <textarea
                               name="dzMessage"
-                              rows="4"
+                            //   rows="4"
                               className="form-control"
                               required
                               placeholder="Your Message..."
@@ -192,13 +192,13 @@ const Contact = () => {
                 </div>
               </div>
               <div className="col-lg-4 col-md-12 d-lg-flex m-b30">
-                <GoogleMaps
+                {/* <GoogleMaps
                   apiKey={"AIzaSyBPDjB2qkV4Yxn9h0tGSk2X5uH6NKmssXw"}
                   style={{ height: "500px", width: "100%", border: "0" }}
                   zoom={6}
                   center={{ lat: 37.4224764, lng: -122.0842499 }}
                   markers={{ lat: 37.4224764, lng: -122.0842499 }} //optional
-                />
+                /> */}
               </div>
             </div>
           </div>

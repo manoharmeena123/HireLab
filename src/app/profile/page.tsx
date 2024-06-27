@@ -11,16 +11,11 @@ import {
 } from "@/lib/apiEndPoints";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useSession } from "next-auth/react";
 import Loading from "@/components/Loading";
 import useAuthToken from "@/hooks/useAuthToken";
 
 const CompanyProfile = () => {
   const { token, user } = useAuthToken();
-
-  const { data } = useSession();
-
-  console.log("data***", data);
 
   const [profileData, setProfileData] = useState({
     company_name: "",

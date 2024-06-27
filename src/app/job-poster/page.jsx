@@ -3,14 +3,9 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
-// import { useSession } from "next-auth/react";
-// import { useRouter } from 'next/navigation';
+
 
 const Companyprofile = () => {
-  // const router = useRouter();
-  // const { data: session, status } = useSession();
-
-//  console.log('session', session,status)
   const [profileData, setProfileData] = useState({
     company_name: "",
     email: "",

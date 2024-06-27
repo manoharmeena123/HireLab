@@ -3,21 +3,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Profilesidebar from "../Profilesidebar";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react'
 
 const JobSeeker = () => {
-	// const router = useRouter();
-	// const { data: session, status } = useSession();
 
-	// useEffect(() => {
-	// 	// Redirect to login page if no session exists and user is authenticated
-	// 	if (!session) {
-	// 	  router.push('/login');
-	// 	}
-	//   }, [session, status, router]);
-	
   return (
     <>
       <div className="page-content bg-white">

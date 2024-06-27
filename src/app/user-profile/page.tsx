@@ -9,21 +9,14 @@ import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
 import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 // import { useRouter } from "next/navigation";
-// import { useSession } from "next-auth/react";
+
 
 export const ProfileDropdown = ({ sessionUser } : any) => {  
   // console.log('profi;e',sessionUser);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 	// const router = useRouter();
-	// const { data: session, status } = useSession();
 
-	// useEffect(() => {
-	// 	// Redirect to login page if no session exists and user is authenticated
-	// 	if (!session) {
-	// 	  router.push('/login');
-	// 	}
-	//   }, [session, status, router]);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
