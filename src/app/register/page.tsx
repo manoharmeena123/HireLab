@@ -27,7 +27,7 @@ const Register2 = () => {
       const res = await register(authState).unwrap();
       if (res.code === 200) {
         toast.success(res?.message, { theme: "colored" });
-        navigateSource('/login');
+        navigateSource('/send-otp');
       } else if (res.code === 404 && res.data) {
         dispatch(setErrors(res.data.error));
       }

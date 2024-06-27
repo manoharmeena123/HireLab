@@ -13,6 +13,7 @@ import {
   setVerifyOtpErrors,
 } from "@/app/send-otp/store/send-otp.slice";
 import { selectLoginState } from "@/app/login/store/login.selectors";
+import { selectRegisterState } from '@/app/register/store/register.selectors'
 import { toast } from "react-toastify";
 import styles from "./styles/SendOtp.module.css";
 import useAuthToken from "@/hooks/useAuthToken";
@@ -28,7 +29,7 @@ function Register2() {
   const errors = useSelector(selectVerifyOtpErrors);
   const { saveToken } = useAuthToken();
   const loginState = useSelector(selectLoginState);
-
+  const registerState = useSelector(selectRegisterState);
   console.log('loginState', loginState)
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,7 +40,7 @@ function Register2() {
     event.preventDefault();
     const payload = {
       ...verifyOtpState,
-      mobile_number: loginState?.mobile_number, // Extract mobile_number from login state
+      mobile_number: loginState?.mobile_number  || registerState?.mobile_number,
     };
     try {
       const res = await verifyOtp(payload as VerifyOtp).unwrap();
@@ -51,7 +52,7 @@ function Register2() {
         }
         await signIn("credentials", {
           otp: {...verifyOtpState},
-          mobile_number: loginState?.mobile_number,
+          mobile_number: loginState?.mobile_number || registerState?.mobile_number,
           redirect: true,
           callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
         });
@@ -86,7 +87,7 @@ function Register2() {
               <div className="login-form style-2" style={{ width: "100%" }}>
                 <div className="logo-header text-center p-tb30">
                   <Link href={"./"}>
-                    <img src={require("./../../images/logo.png")} alt="" />
+                    <img src={require("./../../images/Hire Labs_Final logo.png")} alt="" />
                   </Link>
                 </div>
                 <div className="clearfix"></div>
@@ -97,16 +98,12 @@ function Register2() {
                       onSubmit={handleSubmit}
                     >
                       <div>
-                        <div className="mb-3">
+                        {/* <div className="mb-3">
                           <img
-                            src="/images/logo1__2_-removebg-preview.png"
+                            src="./../../images/Hire Labs_Final logo.png"
                             alt="Logo 1"
                           />
-                          <img
-                            src="/images/logo2__2_-removebg-preview.png"
-                            alt="Logo 2"
-                          />
-                        </div>
+                        </div> */}
                       </div>
                       <h3
                         style={{ fontWeight: "600" }}
@@ -126,7 +123,7 @@ function Register2() {
                           type="number"
                           name="otp"
                           onChange={handleInputChange}
-                          className={`form-control w-full ${styles["lato-font"]}`}
+                          className={`form-control ${styles["lato-font"]}`}
                           placeholder="Enter OTP"
                         />
                         <span className="text-red-500 text-danger">
@@ -138,7 +135,7 @@ function Register2() {
                       >
                         <button
                           type="submit"
-                          className={`site-button button-md text-white ${styles["lato-font"]}`}
+                          className={`site-button button-md text-white ${styles["lato-fonts"]}`}
                           disabled={isLoading}
                         >
                           {isLoading ? "Verifying..." : "Verify OTP"}

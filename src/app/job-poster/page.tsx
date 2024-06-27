@@ -3,9 +3,12 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
-
+import useAuthToken from "@/hooks/useAuthToken";
+import { useRouter } from "next/navigation";
 
 const Companyprofile = () => {
+  const { token, user } = useAuthToken();
+  const router = useRouter();
   const [profileData, setProfileData] = useState({
     company_name: "",
     email: "",
@@ -24,22 +27,20 @@ const Companyprofile = () => {
     linkedin: "",
   });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     event.preventDefault();
     console.log(profileData);
-  }
+  };
 
-  // useEffect(() => {
-  //   // Redirect to login page if no session exists and user is authenticated
-  //   if (!session) {
-  //     router.push('/login');
-  //   }
-  // }, [session, status, router]);
+  useEffect(() => {
+    // Redirect to login page if no session exists and user is authenticated
+    if (!token) {
+      router.push("/login");
+    }
+  }, [token, user, router]);
 
-  
   return (
     <>
-      ss
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">

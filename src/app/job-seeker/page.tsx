@@ -1,12 +1,21 @@
-'use client'
+"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Profilesidebar from "../Profilesidebar";
 import { useRouter } from "next/navigation";
-import { useEffect } from 'react'
+import { useEffect } from "react";
+import useAuthToken from "./../../hooks/useAuthToken";
 
 const JobSeeker = () => {
+  const { token, user } = useAuthToken();
+  const router = useRouter();
+  useEffect(() => {
+    // Redirect to login page if no session exists and user is authenticated
+    if (!token) {
+      router.push("/login");
+    }
+  }, [token, user, router]);
 
   return (
     <>

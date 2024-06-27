@@ -1,17 +1,22 @@
 .width-form {
-    width: 180%;
+    width: 100% !important;
   }
-  .otp-button-center {
-    margin-left: 50%;
+  /* .otp-button-center {
+    margin-left: 50% !important;
   }
   .account-button-center {
-    margin-left: 30%;
-  }
+    margin-left: 30% !important;
+  } */
   .rubik-font {
     font-family: "Rubik", sans-serif !important;
   }
   .lato-font {
     font-family: "Lato", sans-serif !important;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.02em !important;
+  }
+  
+  .lato-fonts {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.02em !important;
   }
   
