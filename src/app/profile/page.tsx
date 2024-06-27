@@ -410,7 +410,7 @@ const CompanyProfile = () => {
                               }
                               name="description"
                               value={profileData?.description}
-                              // rows="4"
+                              rows={4}
                             >
                               {profileData?.description}
                             </textarea>

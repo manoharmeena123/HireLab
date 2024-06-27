@@ -234,7 +234,7 @@ const Companyprofile = () => {
                                 })
                               }
                               name="description"
-                              rows="4"
+                              rows={4}
                             ></textarea>
                           </div>
                         </div>
