@@ -748,7 +748,7 @@ function Homepage() {
           <LatestDiscussions />
         </div>
 
-        <Featureblog />
+        {/* <Featureblog /> */}
         <Jobsection />
         <div
           className="section-full p-tb70 overlay-black-dark text-white text-center bg-img-fix"
