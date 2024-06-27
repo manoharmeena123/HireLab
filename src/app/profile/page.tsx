@@ -411,7 +411,6 @@ const CompanyProfile = () => {
                               value={profileData?.description}
                               rows={4}
                             >
-                              {profileData?.description}
                             </textarea>
                           </div>
                         </div>
