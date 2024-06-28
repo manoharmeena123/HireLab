@@ -1,0 +1,98 @@
+/* ProfileDropdown.module.css */
+.profile-dropdown {
+    position: relative !important;
+  }
+  
+  .profile-header {
+    display: flex !important;
+    align-items: center !important;
+    cursor: pointer !important;
+  }
+  
+  .profile-image {
+    border-radius: 50% !important;
+    margin-right: 10px !important;
+  }
+  
+  .profile-name {
+    color: #000 !important;
+    font-family: Lato !important;
+    font-size: 14px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 21px !important;
+    text-transform: uppercase !important;
+    margin-right: 10px !important;
+    margin-left: 10px !important;
+  }
+  
+  .profile-name-tab {
+    margin-top: 19px !important;
+  }
+  
+  .dropdown-arrow {
+    display: flex !important;
+    align-items: center !important;
+  }
+  
+  .profile-sidebar {
+    position: absolute !important;
+    top: 100% !important;
+    left: -50px !important;
+    background: white !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    z-index: 10 !important;
+    width: 250px !important;
+    padding: 20px !important;
+  }
+  
+  .profile-details {
+    text-align: center !important;
+  }
+  
+  .profile-image-large {
+    width: 80px !important;
+    height: 80px !important;
+    border-radius: 50% !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .profile-menu {
+    display: block !important;
+    justify-content: center !important;
+    list-style: none !important;
+    margin-top: 26px !important;
+    padding: 0 !important;
+    text-align: center !important;
+  }
+  
+  .profile-menu li {
+    margin-left: 40px !important;
+    padding: 10px 0 !important;
+  }
+  
+  .menu-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: start !important;
+    gap: 10px !important;
+    color: #232323 !important;
+    font-family: Lato !important;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 24px !important;
+    text-decoration: none !important;
+  }
+  
+  .menu-item:hover {
+    background-color: #f0f0f0 !important;
+  }
+  
+  .profile-menu hr {
+    margin: 5px 0 !important;
+    border: none !important;
+    border-top: 1px solid #ddd !important;
+    width: 100% !important;
+  }
+  
