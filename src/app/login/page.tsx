@@ -24,9 +24,6 @@ const Login = () => {
   const authState = useSelector(selectLoginState);
   const errors = useSelector(selectLoginErrors);
   const [loading, setLoading] = useState(false);
-
-  const { saveToken } = useAuthToken();
-
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -42,11 +39,11 @@ const Login = () => {
         // Redirect to /send-otp page
         router.push('/send-otp');
 
-        await signIn("credentials", {
-          mobile_number: res.data.mobile_number,
-          redirect: false,
-          // callbackUrl:"http://localhost:3000/send-otp",
-        });
+        // await signIn("credentials", {
+        //   mobile_number: res.data.mobile_number,
+        //   redirect: false,
+        //   // callbackUrl:"http://localhost:3000/send-otp",
+        // });
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {

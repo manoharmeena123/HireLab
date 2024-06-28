@@ -1,6 +1,6 @@
 // src/app/send-otp/Register2.tsx
 "use client";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent, FormEvent,useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useVerifyOtpMutation } from "../send-otp/store/send-otp.query";
@@ -13,7 +13,7 @@ import {
   setVerifyOtpErrors,
 } from "@/app/send-otp/store/send-otp.slice";
 import { selectLoginState } from "@/app/login/store/login.selectors";
-import { selectRegisterState } from '@/app/register/store/register.selectors'
+import { selectRegisterState } from "@/app/register/store/register.selectors";
 import { toast } from "react-toastify";
 import styles from "./styles/SendOtp.module.css";
 import useAuthToken from "@/hooks/useAuthToken";
@@ -22,7 +22,12 @@ import { signIn } from "next-auth/react";
 import Env from "@/lib/Env";
 const bnr = require("./../../images/background/bg6.jpg");
 
-function Register2() {
+
+interface RegisterData {
+  mobile_number: string;
+}
+
+const OtpVefication = () => {
   const dispatch = useDispatch();
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
   const verifyOtpState = useSelector(selectVerifyOtpState);
@@ -30,7 +35,22 @@ function Register2() {
   const { saveToken } = useAuthToken();
   const loginState = useSelector(selectLoginState);
   const registerState = useSelector(selectRegisterState);
-  console.log('loginState', loginState)
+  // Local state to store the parsed data
+  const [parsedData, setParsedData] = useState<RegisterData | null>(null);
+ // Parse localStorage data
+ useEffect(() => {
+  const data = localStorage.getItem('registerData');
+  if (data) {
+    try {
+      const parsedData = JSON.parse(data);
+      setParsedData(parsedData);
+      console.log('Parsed Data:', parsedData?.mobile_number);
+    } catch (error) {
+      console.error('Error parsing register data from localStorage', error);
+    }
+  }
+}, []);
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(setVerifyOtpState({ [name]: value }));
@@ -40,19 +60,21 @@ function Register2() {
     event.preventDefault();
     const payload = {
       ...verifyOtpState,
-      mobile_number: loginState?.mobile_number  || registerState?.mobile_number,
+      mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
     };
+    console.log("payload", payload);
     try {
       const res = await verifyOtp(payload as VerifyOtp).unwrap();
       if (res?.code === 200 && res?.data) {
-        toast.success(res?.message, { theme: "colored" });
+        toast.success("Otp verified successFull", { theme: "colored" });
 
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
         await signIn("credentials", {
-          otp: {...verifyOtpState},
-          mobile_number: loginState?.mobile_number || registerState?.mobile_number,
+          otp: { ...verifyOtpState },
+          mobile_number:
+            loginState?.mobile_number || parsedData?.mobile_number,
           redirect: true,
           callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
         });
@@ -60,10 +82,12 @@ function Register2() {
       } else if (res.code === 401) {
         toast.error("Invalid OTP!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
-        dispatch(setVerifyOtpErrors({
-          otp: res.data.error.otp || [],
-          mobile_number: res.data.error.mobile_number || [],
-        }));
+        dispatch(
+          setVerifyOtpErrors({
+            otp: res.data.error.otp || [],
+            mobile_number: res.data.error.mobile_number || [],
+          })
+        );
       }
     } catch (err) {
       console.error("Verify OTP failed:", err);
@@ -87,7 +111,10 @@ function Register2() {
               <div className="login-form style-2" style={{ width: "100%" }}>
                 <div className="logo-header text-center p-tb30">
                   <Link href={"./"}>
-                    <img src={require("./../../images/Hire Labs_Final logo.png")} alt="" />
+                    <img
+                      src={require("./../../images/Hire Labs_Final logo.png")}
+                      alt=""
+                    />
                   </Link>
                 </div>
                 <div className="clearfix"></div>
@@ -109,7 +136,7 @@ function Register2() {
                         style={{ fontWeight: "600" }}
                         className="form-title m-t0"
                       >
-                      Verify OTP
+                        Verify OTP
                       </h3>
                       <div className="dez-separator-outer m-b5">
                         <div className="dez-separator bg-primary style-liner"></div>
@@ -159,6 +186,6 @@ function Register2() {
       </div>
     </div>
   );
-}
+};
 
-export default Register2;
+export default OtpVefication;

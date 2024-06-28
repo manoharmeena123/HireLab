@@ -11,6 +11,14 @@ const registerApiSlice = hirelabEnhancedSlice.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation<RegisterResponse, RegisterArgs>({
       query: (credentials) => queries.register.query(credentials),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          console.log('register', data);
+        } catch (error) {
+          console.error('register failed:', error);
+        }
+      },
       invalidatesTags: ['Register'],
     }),
   }),

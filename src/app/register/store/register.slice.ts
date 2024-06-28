@@ -1,6 +1,6 @@
 // src/modules/register/store/register.slice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RegisterState } from '../types';
+import { RegisterState,RegisterData } from '../types';
 
 const initialState: RegisterState = {
   name: '',
@@ -30,8 +30,14 @@ const registerSlice = createSlice({
         mobile_number: [],
       };
     },
+    saveRegisterData: (state, action: PayloadAction<RegisterData>) => {
+      const { name, email, mobile_number } = action.payload;
+      if (name !== undefined) state.name = name;
+      if (email !== undefined) state.email = email;
+      if (mobile_number !== undefined) state.mobile_number = mobile_number;
+    },
   },
 });
 
-export const { setAuthState, setErrors, clearErrors } = registerSlice.actions;
+export const { setAuthState, setErrors, clearErrors, saveRegisterData } = registerSlice.actions;
 export const registerReducer = registerSlice.reducer;

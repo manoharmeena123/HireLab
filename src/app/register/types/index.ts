@@ -10,6 +10,13 @@ export interface RegisterState {
     };
   }
   
+export interface RegisterData {
+  name: string;
+  email: string;
+  mobile_number: string;
+
+}
+
   export interface RegisterResponse {
     code: number;
     message:string;
