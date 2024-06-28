@@ -3,7 +3,7 @@ import { createSelector } from '@reduxjs/toolkit';
 import { BlogsState } from '@/types/blog';
 
 // Select the entire blogs state
-export const selectBlogsState = (state: RootState): BlogsState => state.blogs;
+export const selectBlogsState = (state: RootState): BlogsState => state.global;
 
 // Select the blogs array from the blogs state
 export const selectBlogs = createSelector(

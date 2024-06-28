@@ -1,42 +1,64 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BlogResponse,BlogsState } from '@/types/blog';
+import { BlogsState, BlogResponse, EventsState, EventResponse, Blog, Event } from '@/types/blog';
 
-// Define the initial state
-const initialState: BlogsState = {
+// Define initial states for both blogs and events
+const initialBlogsState: BlogsState = {
   blogs: [],
   loading: false,
   error: null,
 };
 
-// Create a slice for managing blogs state
-const blogsSlice = createSlice({
-  name: 'blogs',
-  initialState,
+const initialEventsState: EventsState = {
+  events: [],
+  loading: false,
+  error: null,
+};
+
+// Create a combined slice for managing both blogs and events state
+const globalSlice = createSlice({
+  name: 'blogEvent',
+  initialState: {
+    ...initialBlogsState,
+    ...initialEventsState,
+  },
   reducers: {
-    // Reducer for starting the fetch process
+    // Reducers for managing blogs state
     fetchBlogsStart: (state) => {
       state.loading = true;
       state.error = null;
     },
-    // Reducer for successful fetch of blogs
-    fetchBlogsSuccess: (state, action: PayloadAction<BlogResponse[]>) => {
-      state.blogs = action.payload;
+    fetchBlogsSuccess: (state, action: PayloadAction<BlogResponse>) => {
+      state.blogs = action.payload.data; 
       state.loading = false;
     },
-    // Reducer for failed fetch of blogs
     fetchBlogsFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
+    // Reducers for managing events state
+    fetchEventsStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchEventsSuccess: (state, action: PayloadAction<EventResponse[]>) => {
+      state.events = action.payload.flatMap(response => response.data);
+      state.loading = false;
+    },
+    fetchEventsFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-// Extract action creators from the slice
 export const {
   fetchBlogsStart,
   fetchBlogsSuccess,
   fetchBlogsFailure,
-} = blogsSlice.actions;
+  fetchEventsStart,
+  fetchEventsSuccess,
+  fetchEventsFailure,
+} = globalSlice.actions;
 
-// Export the reducer function
-export const blogsReducer =  blogsSlice.reducer;
+export const globalEventReducer = globalSlice.reducer;

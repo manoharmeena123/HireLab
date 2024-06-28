@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import Homepage from './Pages/Homepage1';
+import Homepage from './Pages/Homepage';
 import Homepage2 from './Pages/Homepage2';
 
 import Jobprofile from './Pages/Jobprofile';
@@ -42,7 +42,7 @@ import Portfoliogrid2 from './Pages/Portfoliogrid2';
 //import Loginpage2 from './Pages/Loginpage2';
 //import Loginpage3 from './Pages/Loginpage3';
 
-import Register1 from './Pages/Register1';
+// import Register1 from './Pages/r';
 import Register2 from './Pages/Register2';
 import Error404 from './Pages/Error404';
 
@@ -105,7 +105,7 @@ const Markup= () => {
 					<Route path='/login-2' exact component={Loginpage1} />
 					<Route path='/login-3' exact component={Loginpage3} /> */}
 					
-					 <Route path='/register' exact component={Register1} />
+					 {/* <Route path='/register' exact component={Register1} /> */}
 					<Route path='/register-2' exact component={Register2} />
 					<Route path='/error-404' exact component={Error404} />
 					

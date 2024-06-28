@@ -16,6 +16,8 @@ import {
   selectLoginState,
   selectLoginErrors,
 } from "@/app/login/store/login.selectors";
+import UpComingMeetings from './UpComingMeetings'
+
 //Images
 var bnr2 = require("./../../images/background/bg4.jpg");
 var bnr3 = require("./../../images/lines.png");
@@ -23,23 +25,6 @@ var bnr7 = require("./../../images/background/plans.png");
 var bnr9 = require("./../../images/background/bg-9-new.jpeg");
 
 function Homepage() {
-  const [isClicked1, setIsClicked1] = useState(false);
-  const [isClicked2, setIsClicked2] = useState(false);
-  const [isClicked3, setIsClicked3] = useState(false);
-  const [isClicked4, setIsClicked4] = useState(false);
-
-  const handleIconClick1 = () => {
-    setIsClicked1(!isClicked1);
-  };
-  const handleIconClick2 = () => {
-    setIsClicked2(!isClicked2);
-  };
-  const handleIconClick3 = () => {
-    setIsClicked3(!isClicked3);
-  };
-  const handleIconClick4 = () => {
-    setIsClicked4(!isClicked4);
-  };
   const authState = useSelector(selectLoginState);
   console.log("authState", authState);
 
@@ -166,7 +151,10 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
+                            style={{
+                              border: "1px solid white",
+                              backgroundColor: "#2A6310",
+                            }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -277,7 +265,10 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
+                            style={{
+                              border: "1px solid white",
+                              backgroundColor: "#2A6310",
+                            }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -388,7 +379,10 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
+                            style={{
+                              border: "1px solid white",
+                              backgroundColor: "#2A6310",
+                            }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -499,7 +493,10 @@ function Homepage() {
                           <Link
                             href={"/register"}
                             className="site-button radius-xl white-hover"
-                            style={{ border: "1px solid white", backgroundColor:"#2A6310" }}
+                            style={{
+                              border: "1px solid white",
+                              backgroundColor: "#2A6310",
+                            }}
                           >
                             <span className="p-lr30">Sign Up</span>
                           </Link>
@@ -512,238 +509,9 @@ function Homepage() {
             </div>
           </div>
         </div>
-
         <div className="section-full content-inner bg-white">
-          <div className="container">
-            <div className="row">
-              <div className="col-lg-12 section-head text-center">
-                <h2 style={{ fontWeight: "600" }} className="m-b5">
-                  Upcoming Meetups
-                </h2>
-              </div>
-            </div>
-            <ul className="post-job-bx browse-job-grid row">
-              <li className="col-lg-6 col-md-6">
-                <div className="post-bx">
-                  <div className="d-flex">
-                    <div className="job-post-info">
-                      <div className="d-flex justify-content-between w-100">
-                        <h5>
-                          <Link style={{ fontWeight: "600" }} href="/">
-                            Banglore Meetup
-                          </Link>
-                        </h5>
-                        <div className="d-flex justify-content-end">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 10 13"
-                            fill="none"
-                            style={{
-                              fontSize: "16px",
-                              fontWeight: 400,
-                              marginLeft: "8px",
-                              cursor: "pointer",
-                              width: "20px",
-                              height: "20px",
-                            }}
-                            onClick={handleIconClick1}
-                          >
-                            <path
-                              d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked1 ? "#2A6310" : "#fff"}
-                              stroke="#2A6310"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <ul
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          marginTop: "20px",
-                          color:"#2A6310 !important"
-                        }}
-                      >
-                        <li className="mr-4">
-                          <i
-                            className="fa fa-map-marker"
-                            style={{ fontSize: "large", color:"#2A6310" }}
-                          ></i>
-                          Whitefield, Banglore
-                        </li>
-                        <li className="mr-4">21 March 2023</li>
-                        <li className="mr-4">10:00 Am onwards</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="col-lg-6 col-md-6">
-                <div className="post-bx">
-                  <div className="d-flex">
-                    <div className="job-post-info">
-                      <div className="d-flex justify-content-between w-100">
-                        <h5>
-                          <Link style={{ fontWeight: "600" }} href="/">
-                            Banglore Meetup
-                          </Link>
-                        </h5>
-                        <div className="d-flex justify-content-end">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 10 13"
-                            fill="none"
-                            style={{
-                              fontSize: "16px",
-                              fontWeight: 400,
-                              marginLeft: "8px",
-                              cursor: "pointer",
-                              width: "20px",
-                              height: "20px",
-                            }}
-                            onClick={handleIconClick2}
-                          >
-                            <path
-                              d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked2 ? "#2A6310" : "#fff"}
-                              stroke="#2A6310"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <ul
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          marginTop: "20px",
-                        }}
-                      >
-                        <li className="mr-4">
-                          <i
-                            className="fa fa-map-marker"
-                            style={{ fontSize: "large", color:"#2A6310" }}
-                          ></i>
-                          Whitefield, Banglore
-                        </li>
-                        <li className="mr-4">21 March 2023</li>
-                        <li className="mr-4">10:00 Am onwards</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="col-lg-6 col-md-6">
-                <div className="post-bx">
-                  <div className="d-flex">
-                    <div className="job-post-info">
-                      <div className="d-flex justify-content-between w-100">
-                        <h5>
-                          <Link style={{ fontWeight: "600" }} href="/">
-                            Banglore Meetup
-                          </Link>
-                        </h5>
-                        <div className="d-flex justify-content-end">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 10 13"
-                            fill="none"
-                            style={{
-                              fontSize: "16px",
-                              fontWeight: 400,
-                              marginLeft: "8px",
-                              cursor: "pointer",
-                              width: "20px",
-                              height: "20px",
-                            }}
-                            onClick={handleIconClick3}
-                          >
-                            <path
-                              d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked3 ? "#2A6310" : "#fff"}
-                              stroke="#2A6310"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <ul
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          marginTop: "20px",
-                        }}
-                      >
-                        <li className="mr-4">
-                          <i
-                            className="fa fa-map-marker"
-                            style={{ fontSize: "large", color:"#2A6310" }}
-                          ></i>
-                          Whitefield, Banglore
-                        </li>
-                        <li className="mr-4">21 March 2023</li>
-                        <li className="mr-4">10:00 Am onwards</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <li className="col-lg-6 col-md-6">
-                <div className="post-bx">
-                  <div className="d-flex">
-                    <div className="job-post-info">
-                      <div className="d-flex justify-content-between w-100">
-                        <h5>
-                          <Link style={{ fontWeight: "600" }} href="/">
-                            Banglore Meetup
-                          </Link>
-                        </h5>
-                        <div className="d-flex justify-content-end">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 10 13"
-                            fill="none"
-                            style={{
-                              fontSize: "16px",
-                              fontWeight: 400,
-                              marginLeft: "8px",
-                              cursor: "pointer",
-                              width: "20px",
-                              height: "20px",
-                            }}
-                            onClick={handleIconClick4}
-                          >
-                            <path
-                              d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                              fill={isClicked4 ? "#2A6310" : "#fff"}
-                              stroke="#2A6310"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <ul
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-around",
-                          marginTop: "20px",
-                        }}
-                      >
-                        <li className="mr-4">
-                          <i
-                            className="fa fa-map-marker"
-                            style={{ fontSize: "large", color:"#2A6310" }}
-                          ></i>
-                          Whitefield, Banglore
-                        </li>
-                        <li className="mr-4">21 March 2023</li>
-                        <li className="mr-4">10:00 Am onwards</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <UpComingMeetings />
         </div>
-
         <div className="section-full job-categories content-inner-2 bg-white">
           <LatestDiscussions />
         </div>
@@ -771,7 +539,7 @@ function Homepage() {
           border-radius: 20px;
         }
         .member-ship-div:hover {
-          background-color: #2A6310 !important;
+          background-color: #2a6310 !important;
           color: white !important;
         }
         .member-ship-div:hover .site-button {

@@ -13,12 +13,37 @@ export interface Blog {
 
 export interface BlogResponse {
   code: number;
-  success: string;
+  success: boolean;
   message: string;
   data: Blog[];
 }
+
 export interface BlogsState {
-  blogs: BlogResponse[];
+  blogs: Blog[];
+  loading: boolean;
+  error: string | null;
+}
+
+export interface Event {
+  id: number;
+  title: string;
+  location: string;
+  date: string;
+  time: string;
+  created_at: string;
+  updated_at: string;
+  status: string;
+}
+
+export interface EventResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: Event[];
+}
+
+export interface EventsState {
+  events: Event[];
   loading: boolean;
   error: string | null;
 }

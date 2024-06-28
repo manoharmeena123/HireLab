@@ -13,4 +13,10 @@ export const queries = {
       method: "GET",
     }),
   },
+  getEvents :{
+    query :()=>({
+      url : "api/get-events",
+      method : "GET"
+    })
+  }
 };

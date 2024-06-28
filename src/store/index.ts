@@ -5,7 +5,7 @@ import { registerReducer } from "@/app/register/store/register.slice";
 import { loginReducer } from "@/app/login/store/login.slice";
 import { postJobReducer } from "@/app/post-job/store/post-job.slice";
 import { verifyOtpReducer } from "@/app/send-otp/store/send-otp.slice";
-import { blogsReducer } from "@/store/global-store/global.slice";
+import { globalEventReducer } from "@/store/global-store/global.slice";
 import { manageJobReducer } from "@/app/manage-job/store/manage-job.slice";
 
 // Combine all reducers into a single root reducer
@@ -15,7 +15,7 @@ const appReducer = combineReducers({
   login: loginReducer,
   postJob: postJobReducer,
   verifyOtp: verifyOtpReducer,
-  blogs: blogsReducer,
+  global: globalEventReducer,
   manageJob: manageJobReducer,
 });
 

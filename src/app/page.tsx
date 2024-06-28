@@ -1,4 +1,4 @@
-import HomePage from '../markup/Pages/Homepage1'
+import HomePage from '../markup/Pages/Homepage'
 export default function Home() {
   return (
     <HomePage />
