@@ -85,8 +85,47 @@ function Homepage() {
                         >
                           WIZARD
                         </h4>
+                        <p className="text-center my-2">
+                          {" "}
+                          Lorem ipsum is a placeholder In and graphic
+                        </p>
                       </div>
-                      <ul style={{ marginTop: "40px" }}>
+
+                      <div className="m-t10 price-wrap">
+                        <h3
+                          className="font-weight-300 m-t10 m-b0"
+                          style={{
+                            // fontWeight: "bold",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            fontWeight: "700",
+                          }}
+                        >
+                          Price
+                        </h3>
+                        <ul className="mb-0">
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <b>699/-</b>for 1 month
+                          </li>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <del className="text-red">2100/-</del> <b>1799/-</b>{" "}
+                            for 3 months
+                          </li>
+                        </ul>
+                      </div>
+                      <ul style={{ marginTop: "40px" }} className="mp-cards">
                         <li
                           style={{
                             color: "black",
@@ -115,50 +154,22 @@ function Homepage() {
                           Connect with recruiter over chat
                         </li>
                       </ul>
-                      <div className="m-t20">
-                        <h3
-                          className="font-weight-300 m-t10 m-b0"
+                      <div className="text-center">
+                        <Link
+                          href={"/register"}
+                          className="site-button radius-xl white-hover"
                           style={{
-                            // fontWeight: "bold",
-                            fontSize: "20px",
-                            textAlign: "center",
-                            fontWeight: "700",
+                            border: "1px solid white",
+                            backgroundColor: "#2A6310",
                           }}
                         >
-                          Price
-                        </h3>
-                        <ul>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
+                          <span
+                            className="p-lr30"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
-                            699/-for 1 month
-                          </li>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            1799/-for 3 months
-                          </li>
-                        </ul>
-                        <div className="text-center">
-                          <Link
-                            href={"/register"}
-                            className="site-button radius-xl white-hover"
-                            style={{
-                              border: "1px solid white",
-                              backgroundColor: "#2A6310",
-                            }}
-                          >
-                            <span className="p-lr30">Sign Up</span>
-                          </Link>
-                        </div>
+                            Get Started
+                          </span>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -199,8 +210,45 @@ function Homepage() {
                         >
                           TITANS
                         </h4>
+                        <p className="text-center my-2">
+                          {" "}
+                          Lorem ipsum is a placeholder In and graphic
+                        </p>
                       </div>
-                      <ul style={{ marginTop: "40px" }}>
+                      <div className="m-t10 price-wrap">
+                        <h3
+                          className="font-weight-300 m-t10 m-b0"
+                          style={{
+                            // fontWeight: "bold",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            fontWeight: "700",
+                          }}
+                        >
+                          Price
+                        </h3>
+                        <ul>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <b>599/-</b> for 1 month
+                          </li>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <del className="text-red">1800/</del><b>1699/-</b> for 3 months
+                          </li>
+                        </ul>
+                      </div>
+                      <ul style={{ marginTop: "40px" }} className="mp-cards">
                         <li
                           style={{
                             color: "black",
@@ -229,50 +277,23 @@ function Homepage() {
                           Connect with recruiter over chat
                         </li>
                       </ul>
-                      <div className="m-t20">
-                        <h3
-                          className="font-weight-300 m-t10 m-b0"
+
+                      <div className="text-center">
+                        <Link
+                          href={"/register"}
+                          className="site-button radius-xl white-hover"
                           style={{
-                            // fontWeight: "bold",
-                            fontSize: "20px",
-                            textAlign: "center",
-                            fontWeight: "700",
+                            border: "1px solid white",
+                            backgroundColor: "#2A6310",
                           }}
                         >
-                          Price
-                        </h3>
-                        <ul>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
+                          <span
+                            className="p-lr30"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
-                            599/-for 1 month
-                          </li>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            1699/-for 3 months
-                          </li>
-                        </ul>
-                        <div className="text-center">
-                          <Link
-                            href={"/register"}
-                            className="site-button radius-xl white-hover"
-                            style={{
-                              border: "1px solid white",
-                              backgroundColor: "#2A6310",
-                            }}
-                          >
-                            <span className="p-lr30">Sign Up</span>
-                          </Link>
-                        </div>
+                            Get Started
+                          </span>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -313,8 +334,45 @@ function Homepage() {
                         >
                           PRODIGIES
                         </h4>
+                        <p className="text-center my-2">
+                          {" "}
+                          Lorem ipsum is a placeholder In and graphic
+                        </p>
                       </div>
-                      <ul style={{ marginTop: "40px" }}>
+                      <div className="m-t10 price-wrap">
+                        <h3
+                          className="font-weight-300 m-t10 m-b0"
+                          style={{
+                            // fontWeight: "bold",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            fontWeight: "700",
+                          }}
+                        >
+                          Price
+                        </h3>
+                        <ul>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <b>499/-</b> for 1 month
+                          </li>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <del className="text-red">1500/</del> <b>1399/-</b> for 3 months
+                          </li>
+                        </ul>
+                      </div>
+                      <ul style={{ marginTop: "40px" }} className="mp-cards">
                         <li
                           style={{
                             color: "black",
@@ -343,50 +401,23 @@ function Homepage() {
                           Connect with recruiter over chat
                         </li>
                       </ul>
-                      <div className="m-t20">
-                        <h3
-                          className="font-weight-300 m-t10 m-b0"
+
+                      <div className="text-center">
+                        <Link
+                          href={"/register"}
+                          className="site-button radius-xl white-hover"
                           style={{
-                            // fontWeight: "bold",
-                            fontSize: "20px",
-                            textAlign: "center",
-                            fontWeight: "700",
+                            border: "1px solid white",
+                            backgroundColor: "#2A6310",
                           }}
                         >
-                          Price
-                        </h3>
-                        <ul>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
+                          <span
+                            className="p-lr30"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
-                            499/-for 1 month
-                          </li>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            1399/-for 3 months
-                          </li>
-                        </ul>
-                        <div className="text-center">
-                          <Link
-                            href={"/register"}
-                            className="site-button radius-xl white-hover"
-                            style={{
-                              border: "1px solid white",
-                              backgroundColor: "#2A6310",
-                            }}
-                          >
-                            <span className="p-lr30">Sign Up</span>
-                          </Link>
-                        </div>
+                            Get Started
+                          </span>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -427,8 +458,45 @@ function Homepage() {
                         >
                           CHAMPS
                         </h4>
+                        <p className="text-center my-2">
+                          {" "}
+                          Lorem ipsum is a placeholder In and graphic
+                        </p>
                       </div>
-                      <ul style={{ marginTop: "40px" }}>
+                      <div className="m-t10 price-wrap">
+                        <h3
+                          className="font-weight-300 m-t10 m-b0"
+                          style={{
+                            // fontWeight: "bold",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            fontWeight: "700",
+                          }}
+                        >
+                          Price
+                        </h3>
+                        <ul>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <b>399/-</b> for 1 month
+                          </li>
+                          <li
+                            style={{
+                              color: "black",
+                              margin: "5px 0px",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <del className="text-red">1200/</del> <b>1099/-</b> for 3 months
+                          </li>
+                        </ul>
+                      </div>
+                      <ul style={{ marginTop: "40px" }} className="mp-cards">
                         <li
                           style={{
                             color: "black",
@@ -457,50 +525,23 @@ function Homepage() {
                           Connect with recruiter over chat
                         </li>
                       </ul>
-                      <div className="m-t20">
-                        <h3
-                          className="font-weight-300 m-t10 m-b0"
+
+                      <div className="text-center">
+                        <Link
+                          href={"/register"}
+                          className="site-button radius-xl white-hover"
                           style={{
-                            // fontWeight: "bold",
-                            fontSize: "20px",
-                            textAlign: "center",
-                            fontWeight: "700",
+                            border: "1px solid white",
+                            backgroundColor: "#2A6310",
                           }}
                         >
-                          Price
-                        </h3>
-                        <ul>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
+                          <span
+                            className="p-lr30"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
-                            399/-for 1 month
-                          </li>
-                          <li
-                            style={{
-                              color: "black",
-                              margin: "5px 0px",
-                              fontSize: "18px",
-                            }}
-                          >
-                            1099/-for 3 months
-                          </li>
-                        </ul>
-                        <div className="text-center">
-                          <Link
-                            href={"/register"}
-                            className="site-button radius-xl white-hover"
-                            style={{
-                              border: "1px solid white",
-                              backgroundColor: "#2A6310",
-                            }}
-                          >
-                            <span className="p-lr30">Sign Up</span>
-                          </Link>
-                        </div>
+                            Get Started
+                          </span>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -516,7 +557,7 @@ function Homepage() {
           <LatestDiscussions />
         </div>
 
-        {/* <Featureblog /> */}
+        <Featureblog />
         <RecentJobsection />
         <div
           className="section-full p-tb70 overlay-black-dark text-white text-center bg-img-fix"
