@@ -8,7 +8,7 @@ import CountUp from "react-countup";
 import IndexBanner from "../Element/IndexBanner";
 import Jobcategories from "../Element/Jobcategories";
 import Featureblog from "../Element/Featureblog";
-import Jobsection from "../Element/Jobsection";
+import RecentJobsection from "../Element/RecentJobsection";
 import Owltestimonial from "../Element/Owlblog1";
 import LatestDiscussions from "../Element/LatestDiscussions";
 import { useDispatch, useSelector } from "react-redux";
@@ -517,7 +517,7 @@ function Homepage() {
         </div>
 
         {/* <Featureblog /> */}
-        <Jobsection />
+        <RecentJobsection />
         <div
           className="section-full p-tb70 overlay-black-dark text-white text-center bg-img-fix"
           style={{ backgroundImage: "url(" + bnr9.default.src + ")" }}

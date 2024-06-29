@@ -18,5 +18,17 @@ export const queries = {
       url : "api/get-events",
       method : "GET"
     })
+  },
+  getSector :{
+    query : ()=>({
+      url : "api/get-sector",
+      method : "GET"
+    })
+  },
+  getRecentJobs :{
+    query : ()=>({
+      url : "api/recent-jobs",
+      method : "GET"
+    })
   }
 };

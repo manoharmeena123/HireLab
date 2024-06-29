@@ -1,10 +1,10 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { BlogResponse, EventResponse } from "@/types/blog";
+import { BlogResponse, EventResponse,SectorResponse,WritableRecentJobResponse } from "@/types/index";
+
 import { hirelabApiSlice } from "@/rtk/base-query";
 import { queries } from "./global.api";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
-  addTagTypes: ["Blogs", "Events"],
+  addTagTypes: ["Blogs", "Events",'Sector','RecentJobs'],
 });
 
 const globalApi = hirelabEnhancedSlice.injectEndpoints({
@@ -21,6 +21,14 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getEvents.query,
       providesTags: ["Events"],
     }),
+    getSector : builder.query<SectorResponse, void>({
+      query:queries.getSector.query,
+      providesTags: ["Sector"],
+    }),
+    getRecentJobs :builder.query<WritableRecentJobResponse,void>({
+      query: queries.getRecentJobs.query,
+      providesTags: ["RecentJobs"],
+    })
   }),
   overrideExisting: true,
 });
@@ -29,5 +37,7 @@ export const {
   useGetBlogsDataQuery,
   useGetBlogsDataByIdQuery,
   useGetEventsQuery,
+  useGetSectorQuery,
+  useGetRecentJobsQuery
 } = globalApi;
 export default globalApi;

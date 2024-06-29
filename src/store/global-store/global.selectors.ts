@@ -1,24 +1,106 @@
 import { RootState } from '@/store'; // Adjust the path as per your project structure
 import { createSelector } from '@reduxjs/toolkit';
-import { BlogsState } from '@/types/blog';
+import { BlogsState, EventsState, SectorState, RecentJobsState } from '@/types/index';
 
-// Select the entire blogs state
-export const selectBlogsState = (state: RootState): BlogsState => state.global;
+// Select the entire global state
+export const selectGlobalState = (state: RootState) => state.global;
 
-// Select the blogs array from the blogs state
+// Blog Selectors
+export const selectBlogsState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    blogs: globalState.blogs,
+    loading: globalState.loading,
+    error: globalState.error,
+  })
+);
+
 export const selectBlogs = createSelector(
   selectBlogsState,
   (blogsState) => blogsState.blogs
 );
 
-// Select the loading state from the blogs state
 export const selectBlogsLoading = createSelector(
   selectBlogsState,
   (blogsState) => blogsState.loading
 );
 
-// Select the error state from the blogs state
 export const selectBlogsError = createSelector(
   selectBlogsState,
   (blogsState) => blogsState.error
+);
+
+// Event Selectors
+export const selectEventsState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    events: globalState.events,
+    loading: globalState.loading,
+    error: globalState.error,
+  })
+);
+
+export const selectEvents = createSelector(
+  selectEventsState,
+  (eventsState) => eventsState.events
+);
+
+export const selectEventsLoading = createSelector(
+  selectEventsState,
+  (eventsState) => eventsState.loading
+);
+
+export const selectEventsError = createSelector(
+  selectEventsState,
+  (eventsState) => eventsState.error
+);
+
+// Sector Selectors
+export const selectSectorsState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    sector: globalState.sector,
+    loading: globalState.sectorloading,
+    error: globalState.sectorerror,
+  })
+);
+
+export const selectSectors = createSelector(
+  selectSectorsState,
+  (sectorsState) => sectorsState.sector
+);
+
+export const selectSectorsLoading = createSelector(
+  selectSectorsState,
+  (sectorsState) => sectorsState.loading
+);
+
+export const selectSectorsError = createSelector(
+  selectSectorsState,
+  (sectorsState) => sectorsState.error
+);
+
+// Recent Jobs Selectors
+export const selectRecentJobsState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    recent: globalState.recent,
+    loading: globalState.recentloading,
+    error: globalState.recenterror,
+  })
+);
+
+export const selectRecentJobs = createSelector(
+  selectRecentJobsState,
+  (recentJobsState) => recentJobsState.recent
+);
+
+export const selectRecentJobsLoading = createSelector(
+  selectRecentJobsState,
+  (recentJobsState) => recentJobsState.loading
+);
+
+export const selectRecentJobsError = createSelector(
+  selectRecentJobsState,
+  (recentJobsState) => recentJobsState.error
 );

@@ -38,7 +38,7 @@ const UpComingMeetings = () => {
       </div>
       <ul className="post-job-bx browse-job-grid row">
         {eventsData &&
-          eventsData.data[0].map((event: Event, index: number) => (
+          eventsData?.data[0]?.map((event: Event, index: number) => (
             <li className="col-lg-6 col-md-6" key={index}>
               <div className="post-bx">
                 <div className="d-flex">

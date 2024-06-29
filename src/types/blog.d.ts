@@ -24,6 +24,19 @@ export interface BlogsState {
   error: string | null;
 }
 
+export interface SectorState {
+  sector: Sector[];
+  sectorloading: boolean;
+  sectorerror: string | null;
+}
+
+export interface RecentJobsState {
+  recent: RecentJobResponse[];
+  recentloading: boolean;
+  recenterror: string | null;
+}
+
+
 export interface Event {
   id: number;
   title: string;
@@ -47,3 +60,24 @@ export interface EventsState {
   loading: boolean;
   error: string | null;
 }
+
+
+
+
+interface Sector {
+  id: number;
+  name: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface SectorResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: Sector[];
+}
+
+
+

@@ -2,8 +2,11 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { postBlog, JobPost } from "@/data/jobsection";
+import { useGetRecentJobsQuery } from "@/store/global-store/global.query";
 
-const Jobsection: React.FC = () => {
+const RecentJobsection = () => {
+  const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
+  console.log("recentJob", recentJob);
   return (
     <div className="section-full bg-white content-inner-2">
       <div className="container">
@@ -23,7 +26,7 @@ const Jobsection: React.FC = () => {
         <div className="row">
           <div className="col-lg-9">
             <ul className="post-job-bx browse-job">
-              {postBlog.map((item: JobPost, index: number) => (
+              {recentJob?.data?.map((item: JobPost, index: number) => (
                 <li key={index}>
                   <div className="post-bx">
                     <div className="d-flex m-b30">
@@ -126,4 +129,4 @@ const Jobsection: React.FC = () => {
   );
 };
 
-export default Jobsection;
+export default RecentJobsection;
