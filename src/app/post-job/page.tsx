@@ -84,6 +84,7 @@ const Componypostjobs = () => {
     );
   };
 
+  // Updated handleToggleSelect function to correctly dispatch the selected index for job_type
   const handleToggleSelect = (
     index: number,
     field: string,
@@ -93,6 +94,7 @@ const Componypostjobs = () => {
     selectedState: number | null | number[],
     isMultiSelect = false
   ) => {
+    console.log('index ', field ,index)
     if (isMultiSelect) {
       let newSelected: number[] = Array.isArray(selectedState)
         ? [...selectedState]
@@ -107,10 +109,17 @@ const Componypostjobs = () => {
       );
       dispatch(setPostJobData({ [field]: newSelected.join(",") }));
     } else {
-      (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
-        index === selectedState ? null : index
-      );
       const valueToDispatch = index === selectedState ? null : index;
+      {console.log('valueToDispatch', valueToDispatch)}
+      (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
+        valueToDispatch
+      );
+      // Changed: Dispatching the index directly instead of converting to string
+      // dispatch(
+      //   setPostJobData({
+      //     [field]: valueToDispatch !== null ? valueToDispatch : "",
+      //   })
+      // );
       dispatch(
         setPostJobData({
           [field]: valueToDispatch !== null ? valueToDispatch.toString() : "",
@@ -344,6 +353,7 @@ const Componypostjobs = () => {
                                     handleMouseLeave(index, setIsJobTypeHovered)
                                   }
                                   onClick={() =>
+                                    // Changed: Calling handleToggleSelect with index + 1 for job_type
                                     handleToggleSelect(
                                       index + 1,
                                       "job_type",
@@ -357,6 +367,7 @@ const Componypostjobs = () => {
                               )
                             )}
                           </div>
+
                           <span className="text-red-500 text-danger">
                             {errors?.job_type?.[0]}
                           </span>
@@ -727,14 +738,14 @@ const Componypostjobs = () => {
           background: #f1f1f1;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #2A8310; /* Blue color */
+          background-color: #2a8310; /* Blue color */
           border-radius: 10px;
           border: 3px solid #ffffff;
         }
         /* Firefox scrollbar */
         .custom-scrollbar {
           scrollbar-width: auto;
-          scrollbar-color: #2A8310 #f1f1f1;
+          scrollbar-color: #2a8310 #f1f1f1;
         }
       `}</style>
     </div>

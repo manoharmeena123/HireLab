@@ -10,7 +10,7 @@ import {
 var bnr = require('./../../images/background/bg6.jpg');
 
 
-function Register2(props) {
+const  Register2 = (props) => {
 	const [email, setEmail] = useState('');
     let errorsObj = { email: '', password: '' };
     const [errors, setErrors] = useState(errorsObj);
@@ -115,6 +115,8 @@ function Register2(props) {
 		</div>
 	)
 }
+export default Register2
+
 const mapStateToProps = (state) => {
     return {
         errorMessage: state.auth.errorMessage,

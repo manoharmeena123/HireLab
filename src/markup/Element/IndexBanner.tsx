@@ -2,10 +2,13 @@
 import React, { useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
-
+import { useGetSectorQuery } from "@/store/global-store/global.query";
 const bnr1 = require("./../../images/main-slider/slide2.jpg");
 
 const IndexBanner: React.FC = () => {
+  const { data: sectorData, isLoading, isError } = useGetSectorQuery();
+  // console.log("sectorData", sectorData);
+  
   const handleFocus = useCallback((event: FocusEvent) => {
     const target = event.target as HTMLInputElement;
     target.parentElement?.parentElement?.classList.add("focused");
@@ -94,17 +97,9 @@ const IndexBanner: React.FC = () => {
                   <div className="form-group">
                     <Form.Control as="select" className="select-btn">
                       <option>Select Sector</option>
-                      <option>Construction</option>
-                      <option>Coordinator</option>
-                      <option>Employer</option>
-                      <option>Financial Career</option>
-                      <option>Information Technology</option>
-                      <option>Marketing</option>
-                      <option>Quality check</option>
-                      <option>Real Estate</option>
-                      <option>Sales</option>
-                      <option>Supporting</option>
-                      <option>Teaching</option>
+                      {sectorData?.data?.map((sector: { id: number, name: string }) => (
+                        <option key={sector.id} value={sector.name}>{sector.name}</option>
+                      ))}
                     </Form.Control>
                   </div>
                 </div>
