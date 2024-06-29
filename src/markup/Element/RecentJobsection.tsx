@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { postBlog, JobPost } from "@/data/jobsection";
 import { useGetRecentJobsQuery } from "@/store/global-store/global.query";
+import { RecentJobData } from "@/types/index";
+import { formaterDate } from "@/utils/formateDate";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
-  console.log("recentJob", recentJob);
+
+  const [likedJobs, setLikedJobs] = useState<number[]>([]);
+
+  // console.log("recentJob", recentJob);
+
+  // if (isLoading) return <div>Loading...</div>;
+  // if (isError) return <div>Error fetching data</div>;
+
+  // Function to toggle like state
+  const handleLikeToggle = (jobId: number) => {
+    console.log("jobId", jobId);
+    if (likedJobs.includes(jobId)) {
+      setLikedJobs(likedJobs.filter((id) => id !== jobId));
+    } else {
+      setLikedJobs([...likedJobs, jobId]);
+    }
+  };
+
   return (
     <div className="section-full bg-white content-inner-2">
       <div className="container">
@@ -26,49 +44,57 @@ const RecentJobsection = () => {
         <div className="row">
           <div className="col-lg-9">
             <ul className="post-job-bx browse-job">
-              {recentJob?.data?.map((item: JobPost, index: number) => (
+              {recentJob?.data?.map((item: RecentJobData, index: number) => (
                 <li key={index}>
-                  <div className="post-bx">
-                    <div className="d-flex m-b30">
-                      <div className="job-post-company">
-                        <span>
-                          <Image alt="" src={item.image} />
-                        </span>
+                  {item && (
+                    <div className="post-bx">
+                      <div className="d-flex m-b30">
+                        <div className="job-post-company">
+                          <span>
+                            <Image alt="image" src={""} />
+                          </span>
+                        </div>
+                        <div className="job-post-info">
+                          <h4>
+                            <Link href="/job-detail">{item?.job_title}</Link>
+                          </h4>
+                          <ul>
+                            <li>
+                              <i className="fa fa-map-marker"></i>
+                              {item?.address}
+                            </li>
+                            <li>
+                              <i className="fa fa-bookmark-o"></i>
+                              {item?.location?.title}
+                            </li>
+                            <li>
+                              <i className="fa fa-clock-o"></i> Published{" "}
+                              {formaterDate(item?.created_at)}
+                            </li>
+                          </ul>
+                        </div>
                       </div>
-                      <div className="job-post-info">
-                        <h4>
-                          <Link href="/job-detail">{item.title}</Link>
-                        </h4>
-                        <ul>
-                          <li>
-                            <i className="fa fa-map-marker"></i> Sacramento,
-                            California
-                          </li>
-                          <li>
-                            <i className="fa fa-bookmark-o"></i> Full Time
-                          </li>
-                          <li>
-                            <i className="fa fa-clock-o"></i> Published 11
-                            months ago
-                          </li>
-                        </ul>
+                      <div className="d-flex">
+                        <div className="job-time mr-auto">
+                          <Link href="">
+                            <span>{item?.location?.title}</span>
+                          </Link>
+                        </div>
+                        <div className="salary-bx">
+                          <span>$1200 - $ 2500</span>
+                        </div>
                       </div>
+                      <label
+                        className={`like-btn ${
+                          likedJobs.includes(item.id) ? "liked" : ""
+                        }`}
+                        onClick={() => handleLikeToggle(item.id)}
+                      >
+                        <input type="checkbox" />
+                        <span className="checkmark"></span>
+                      </label>
                     </div>
-                    <div className="d-flex">
-                      <div className="job-time mr-auto">
-                        <Link href="">
-                          <span>Full Time</span>
-                        </Link>
-                      </div>
-                      <div className="salary-bx">
-                        <span>$1200 - $ 2500</span>
-                      </div>
-                    </div>
-                    <label className="like-btn">
-                      <input type="checkbox" />
-                      <span className="checkmark"></span>
-                    </label>
-                  </div>
+                  )}
                 </li>
               ))}
             </ul>

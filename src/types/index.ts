@@ -1,2 +1,5 @@
 export * from './blog'
 export * from './recent'
+export * from './college'
+export * from './ctc'
+export * from './industry'

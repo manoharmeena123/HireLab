@@ -77,7 +77,7 @@ interface User {
 }
 
 // Represents an individual job entry
-interface JobData {
+export interface RecentJobData {
     id: number;
     company_name: string;
     job_type: string | null;
@@ -89,7 +89,7 @@ interface JobData {
     updated_at: string;
     user_id: number;
     job_title: string;
-    address: string;
+    address: string | null;
     compensation: Compensation;
     additional_perk: AdditionalPerk | null;
     joining_fee: string;
@@ -105,7 +105,8 @@ interface RecentJobResponse {
     code: number;
     success: boolean;
     message: string;
-    data: JobData[];
+    data: RecentJobData[];
 }
 
+// Define a writable version of RecentJobResponse using WritableDraft
 export type WritableRecentJobResponse = WritableDraft<RecentJobResponse>;
