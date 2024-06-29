@@ -1,4 +1,4 @@
-import { BlogResponse } from "@/types/blog";
+import {ApplyJobData } from "@/types/index";
 
 export const queries = {
   getBlogs: {
@@ -33,7 +33,7 @@ export const queries = {
   },
   getAppliedJobs: {
     query: () => ({
-      url: "api/get-industry",
+      url: "api/get-applied-job",
       method: "GET",
     }),
   },
@@ -53,6 +53,28 @@ export const queries = {
     query: () => ({
       url: "api/get-industry",
       method: "GET",
+    }),
+  },
+  getDiscussion: {
+    query: () => ({
+      url: "api/get-discussions",
+      method: "GET",
+    }),
+  },
+  getJobs: {
+    query: () => ({
+      url: "api/get-jobs",
+      method: "GET",
+    }),
+  },
+
+  //Post
+
+  postApplyJob: {
+    query: (id: ApplyJobData) => ({
+      url: "api/apply-job",
+      method: "POST",
+      body: id,
     }),
   },
 };

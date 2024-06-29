@@ -36,8 +36,15 @@ export interface RecentJobsState {
   recenterror: string | null;
 }
 
+export interface GetJobsState {
+  jobs: RecentJobResponse[];
+  jobsloading: boolean;
+  jobserror: string | null;
+}
+
 
 export interface Event {
+  map(arg0: (event: Event, index: number) => import("react").JSX.Element): import("react").ReactNode;
   id: number;
   title: string;
   location: string;

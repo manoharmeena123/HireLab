@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, RecentJobsState, WritableRecentJobResponse, SectorResponse } from '@/types/index';
+import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, RecentJobsState,GetJobsState,
+   WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse } from '@/types/index';
 
 // Define initial states for both blogs and events
 const initialBlogsState: BlogsState = {
@@ -26,6 +27,17 @@ const initialRecentJobsState: RecentJobsState = {
   recenterror: null,
 };
 
+const initialGetJobsState: GetJobsState = {
+  jobs: [],
+  jobsloading: false,
+  jobserror: null,
+};
+
+const initialApplyJobState: ApplyJobState = {
+  applyJob: [],
+  applyJobLoading: false,
+  applyJobError: null,
+};
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -33,6 +45,8 @@ const globalSlice = createSlice({
     ...initialEventsState,
     ...initialSectorState,
     ...initialRecentJobsState,
+    ...initialGetJobsState,
+    ...initialApplyJobState
   },
   reducers: {
     // Reducers for managing blogs state
@@ -90,6 +104,34 @@ const globalSlice = createSlice({
       state.recentloading = false;
       state.recenterror = action.payload;
     },
+
+    // get jobs state
+    fetchGetJobsStart: (state) => {
+      state.recentloading = true;
+      state.recenterror = null;
+    },
+    fetchGetJobsSuccess: (state, action: PayloadAction<WritableRecentJobResponse>) => {
+      state.recent = action.payload.data;
+      state.recentloading = false;
+    },
+    fetchGetJobsFailure: (state, action: PayloadAction<string>) => {
+      state.recentloading = false;
+      state.recenterror = action.payload;
+    },
+
+     // Reducers for managing applyJob state
+     fetchApplyJobStart: (state) => {
+      state.applyJobLoading = true;
+      state.applyJobError = null;
+    },
+    fetchApplyJobSuccess: (state, action: PayloadAction<ApplyJobResponse>) => {
+      state.applyJob = action.payload.data;
+      state.applyJobLoading = false;
+    },
+    fetchApplyJobFailure: (state, action: PayloadAction<string>) => {
+      state.applyJobLoading = false;
+      state.applyJobError = action.payload;
+    },
   },
 });
 
@@ -106,6 +148,9 @@ export const {
   fetchRecentJobsStart,
   fetchRecentJobsSuccess,
   fetchRecentJobsFailure,
+  fetchGetJobsStart,
+  fetchGetJobsSuccess,
+  fetchGetJobsFailure
 } = globalSlice.actions;
 
 export const globalEventReducer = globalSlice.reducer;

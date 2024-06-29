@@ -104,3 +104,56 @@ export const selectRecentJobsError = createSelector(
   selectRecentJobsState,
   (recentJobsState) => recentJobsState.error
 );
+
+// Get Jobs
+export const selectJobsState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    jobs: globalState.jobs,
+    loading: globalState.jobsloading,
+    error: globalState.jobserror,
+  })
+);
+
+export const selectJobs = createSelector(
+  selectJobsState,
+  (jobsState) => jobsState.jobs
+);
+
+export const selectJobsLoading = createSelector(
+  selectJobsState,
+  (jobsState) => jobsState.loading
+);
+
+export const selectJobsError = createSelector(
+  selectJobsState,
+  (jobsState) => jobsState.error
+);
+
+
+//apply job
+
+// Apply Job Selectors
+export const selectApplyJobState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    applyJob: globalState.applyJob,
+    loading: globalState.applyJobLoading,
+    error: globalState.applyJobError,
+  })
+);
+
+export const selectApplyJob = createSelector(
+  selectApplyJobState,
+  (applyJobState) => applyJobState.applyJob
+);
+
+export const selectApplyJobLoading = createSelector(
+  selectApplyJobState,
+  (applyJobState) => applyJobState.loading
+);
+
+export const selectApplyJobError = createSelector(
+  selectApplyJobState,
+  (applyJobState) => applyJobState.error
+);

@@ -3,7 +3,10 @@ import {
   EventResponse,
   SectorResponse,
   WritableRecentJobResponse,
-  WritableCollegeResponse
+  WritableCollegeResponse,
+  WritableIndustryResponse,
+  WritableDiscussionResponse,
+  ApplyJobData
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -18,7 +21,11 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "RecentJobs",
     "AppliedJobs",
     "CTCData",
-    "Collage"
+    "Collage",
+    "Industry",
+    "Discussion",
+    "Jobs",
+    "ApplyJobs"
   ],
 });
 
@@ -52,10 +59,26 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getCtcData.query,
       providesTags: ["CTCData"],
     }),
-    getCollage : builder.query<WritableCollegeResponse, void>({
+    getCollage: builder.query<WritableCollegeResponse, void>({
       query: queries.getCollage.query,
       providesTags: ["Collage"],
-    })
+    }),
+    getIndustry: builder.query<WritableIndustryResponse, void>({
+      query: queries.getIndustry.query,
+      providesTags: ["Industry"],
+    }),
+    getDiscussion: builder.query<WritableDiscussionResponse, void>({
+      query: queries.getDiscussion.query,
+      providesTags: ["Discussion"],
+    }),
+    getJobs: builder.query<WritableRecentJobResponse, void>({
+      query: queries.getJobs.query,
+      providesTags: ["Jobs"],
+    }),
+    postApplyJob: builder.mutation<any, ApplyJobData>({ 
+      query: (id) => queries.postApplyJob.query(id),
+      invalidatesTags: ["ApplyJobs"]
+    }),
   }),
   overrideExisting: true,
 });
@@ -68,6 +91,10 @@ export const {
   useGetRecentJobsQuery,
   useGetAppliedJobsQuery,
   useGetCtcDataQuery,
-  useGetCollageQuery
+  useGetCollageQuery,
+  useGetIndustryQuery,
+  useGetDiscussionQuery,
+  useGetJobsQuery,
+  usePostApplyJobMutation,
 } = globalApi;
 export default globalApi;
