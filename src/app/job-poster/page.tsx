@@ -32,12 +32,12 @@ const Companyprofile = () => {
     console.log(profileData);
   };
 
-  useEffect(() => {
-    // Redirect to login page if no session exists and user is authenticated
-    if (!token) {
-      router.push("/login");
-    }
-  }, [token, user, router]);
+  // useEffect(() => {
+  //   // Redirect to login page if no session exists and user is authenticated
+  //   if (!token) {
+  //     router.push("/login");
+  //   }
+  // }, [token, user, router]);
 
   return (
     <>

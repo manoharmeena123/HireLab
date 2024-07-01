@@ -1,29 +1,60 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Swal from "sweetalert2";
 import { useGetRecentJobsQuery } from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
+import { usePostSaveJobMutation } from "@/store/global-store/global.query";
+import { useDispatch } from "react-redux";
+import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
-
-  const [likedJobs, setLikedJobs] = useState<number[]>([]);
-
-  // console.log("recentJob", recentJob);
-
-  // if (isLoading) return <div>Loading...</div>;
-  // if (isError) return <div>Error fetching data</div>;
+  const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
+  const [likedJobs, setLikedJobs] = useState<string[]>([]);
+  const dispatch = useDispatch();
 
   // Function to toggle like state
-  const handleLikeToggle = (jobId: number) => {
-    console.log("jobId", jobId);
+  const handleLikeToggle = async (jobId: string) => {
+    // Toggle liked state
     if (likedJobs.includes(jobId)) {
       setLikedJobs(likedJobs.filter((id) => id !== jobId));
     } else {
       setLikedJobs([...likedJobs, jobId]);
     }
+
+    try {
+      // Call API to save job if liked
+      if (!likedJobs.includes(jobId)) {
+        const res = await saveJob({ job_id: jobId });
+        dispatch(fetchRecentJobsStart());
+
+        // Show success sweet alert on successful save
+        Swal.fire({
+          icon: "success",
+          title: "Job Saved Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    } catch (error: any) {
+      console.error("Error saving job:", error);
+      // Show error sweet alert on error
+      Swal.fire({
+        icon: "error",
+        title: "Error Saving Job",
+        text: error?.message || "Something went wrong.",
+        confirmButtonText: "OK",
+      });
+    }
   };
+
+  // // Render loading state if data is still loading
+  // if (isLoading) return <div>Loading...</div>;
+
+  // // Render error message if there's an error fetching data
+  // if (isError) return <div>Error fetching data</div>;
 
   return (
     <div className="section-full bg-white content-inner-2">
@@ -86,9 +117,9 @@ const RecentJobsection = () => {
                       </div>
                       <label
                         className={`like-btn ${
-                          likedJobs.includes(item.id) ? "liked" : ""
+                          likedJobs.includes(item.id.toString()) ? "liked" : ""
                         }`}
-                        onClick={() => handleLikeToggle(item.id)}
+                        onClick={() => handleLikeToggle(item.id.toString())}
                       >
                         <input type="checkbox" />
                         <span className="checkmark"></span>

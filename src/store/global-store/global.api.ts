@@ -1,4 +1,4 @@
-import {ApplyJobData } from "@/types/index";
+import { ApplyJobData, SaveJobData } from "@/types/index";
 
 export const queries = {
   getBlogs: {
@@ -67,12 +67,30 @@ export const queries = {
       method: "GET",
     }),
   },
+  getTestimonials: {
+    query: () => ({
+      url: "api/get-testimonials",
+      method: "GET",
+    }),
+  },
+  getSavedJob: {
+    query: () => ({
+      url: "api/get-saved-job",
+      method: "GET",
+    }),
+  },
 
   //Post
-
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",
+      method: "POST",
+      body: id,
+    }),
+  },
+  postSaveJob: {
+    query: (id: SaveJobData) => ({
+      url: "api/saved-job",
       method: "POST",
       body: id,
     }),

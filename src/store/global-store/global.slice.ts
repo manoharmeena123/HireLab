@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, RecentJobsState,GetJobsState,
-   WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse } from '@/types/index';
+   WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse,SaveJobDataState,SaveJobDataResponse } from '@/types/index';
 
 // Define initial states for both blogs and events
 const initialBlogsState: BlogsState = {
@@ -38,6 +38,11 @@ const initialApplyJobState: ApplyJobState = {
   applyJobLoading: false,
   applyJobError: null,
 };
+const initialSaveJobState: SaveJobDataState = {
+  saveJob: [],
+  saveJobLoading: false,
+  saveJobError: null,
+};
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -46,7 +51,8 @@ const globalSlice = createSlice({
     ...initialSectorState,
     ...initialRecentJobsState,
     ...initialGetJobsState,
-    ...initialApplyJobState
+    ...initialApplyJobState,
+    ...initialSaveJobState
   },
   reducers: {
     // Reducers for managing blogs state
@@ -132,6 +138,20 @@ const globalSlice = createSlice({
       state.applyJobLoading = false;
       state.applyJobError = action.payload;
     },
+
+     // Reducers for  saveJob state
+     fetchSaveJobStart: (state) => {
+      state.saveJobLoading = true;
+      state.saveJobError = null;
+    },
+    fetchSaveJobSuccess: (state, action: PayloadAction<SaveJobDataResponse>) => {
+      state.saveJob = action.payload.data;
+      state.saveJobLoading = false;
+    },
+    fetchSaveJobFailure: (state, action: PayloadAction<string>) => {
+      state.saveJobLoading = false;
+      state.saveJobError = action.payload;
+    },
   },
 });
 
@@ -150,7 +170,10 @@ export const {
   fetchRecentJobsFailure,
   fetchGetJobsStart,
   fetchGetJobsSuccess,
-  fetchGetJobsFailure
+  fetchGetJobsFailure,
+  fetchSaveJobStart,
+  fetchSaveJobSuccess,
+  fetchSaveJobFailure
 } = globalSlice.actions;
 
 export const globalEventReducer = globalSlice.reducer;

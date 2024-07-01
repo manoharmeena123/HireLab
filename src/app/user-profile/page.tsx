@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
-import { CustomSession } from "@/app/api/auth/[...nextauth]/authOptions";
 // import { useRouter } from "next/navigation";
 
 

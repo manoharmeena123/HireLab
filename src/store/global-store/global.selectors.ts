@@ -157,3 +157,29 @@ export const selectApplyJobError = createSelector(
   selectApplyJobState,
   (applyJobState) => applyJobState.error
 );
+
+
+// Save Job Selectors
+export const selectSaveJobState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    saveJob: globalState.saveJob,
+    loading: globalState.saveJobLoading,
+    error: globalState.saveJobError,
+  })
+);
+
+export const selectSaveJob = createSelector(
+  selectSaveJobState,
+  (saveJobState) => saveJobState.saveJob
+);
+
+export const selectSaveJobLoading = createSelector(
+  selectSaveJobState,
+  (saveJobState) => saveJobState.loading
+);
+
+export const selectSaveJobError = createSelector(
+  selectSaveJobState,
+  (saveJobState) => saveJobState.error
+);

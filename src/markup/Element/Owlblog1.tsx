@@ -3,8 +3,12 @@ import React from 'react';
 import Slider from "react-slick";
 import Image from 'next/image';
 import { postBlog, PostBlogItem } from '@/data/testimonialData';
+import { useGetTestimonialsQuery }  from '@/store/global-store/global.query'
+import { Testimonial }  from '@/types/index'
 
-const Owltestimonial: React.FC = () => {
+const Owltestimonial  = () => {
+  const { data :testimonialData, isError, isLoading } = useGetTestimonialsQuery()
+  console.log('testimonialData', testimonialData)
   const settings = {
     slidesToShow: 3,
     arrows: false,
