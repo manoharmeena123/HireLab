@@ -2,51 +2,73 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";
-import { useGetRecentJobsQuery } from "@/store/global-store/global.query";
+import {
+  useGetRecentJobsQuery,
+  usePostSaveJobMutation,
+  useDeleteSavedJobMutation,
+} from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
-import { usePostSaveJobMutation } from "@/store/global-store/global.query";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
+  const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
   const dispatch = useDispatch();
 
   // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
-    // Toggle liked state
-    if (likedJobs.includes(jobId)) {
-      setLikedJobs(likedJobs.filter((id) => id !== jobId));
-    } else {
-      setLikedJobs([...likedJobs, jobId]);
+    // Check if already liking or unliking
+    if (isSaving || isDeleting) {
+      return; // If already saving or deleting, do nothing
     }
 
-    try {
-      // Call API to save job if liked
-      if (!likedJobs.includes(jobId)) {
-        const res = await saveJob({ job_id: jobId });
+    // Toggle liked state
+    if (likedJobs.includes(jobId)) {
+      // Unlike job
+      try {
+        await deleteJob(jobId);
+        setLikedJobs(likedJobs.filter((id) => id !== jobId));
         dispatch(fetchRecentJobsStart());
-
-        // Show success sweet alert on successful save
+        Swal.fire({
+          icon: "success",
+          title: "Job Deleted Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        console.error("Error deleting job:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error in Deleted Job",
+          text: "Failed to deleting job.",
+          confirmButtonText: "OK",
+        });
+      }
+    } else {
+      // Like job
+      try {
+        await saveJob({ job_id: jobId });
+        setLikedJobs([...likedJobs, jobId]);
+        dispatch(fetchRecentJobsStart());
         Swal.fire({
           icon: "success",
           title: "Job Saved Successfully!",
           showConfirmButton: false,
           timer: 1500,
         });
+      } catch (error) {
+        console.error("Error liking job:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error in Saving Job",
+          text: "Failed to saving job.",
+          confirmButtonText: "OK",
+        });
       }
-    } catch (error: any) {
-      console.error("Error saving job:", error);
-      // Show error sweet alert on error
-      Swal.fire({
-        icon: "error",
-        title: "Error Saving Job",
-        text: error?.message || "Something went wrong.",
-        confirmButtonText: "OK",
-      });
     }
   };
 
