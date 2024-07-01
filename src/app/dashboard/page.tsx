@@ -20,7 +20,7 @@ const Dashboard = () => {
                 <div className="col-xl-8 col-lg-8">
                   <h3 className="text-center">Recent Jobs</h3>
                   <ul className="post-job-bx">
-                    {postBox.map((item, index) => (
+                    {postBox?.map((item, index) => (
                       <li key={index}>
                         <div className="post-bx">
                           <div className="d-flex m-b30">

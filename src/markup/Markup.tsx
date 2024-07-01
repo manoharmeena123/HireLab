@@ -99,7 +99,7 @@ const Markup= () => {
 					<Route path='/category-location-jobs' exact component={Categorylocationjobs} />
 					<Route path='/category-skill-jobs' exact component={Categoryskilljobs} />
 					
-<Route path='/portfolio-grid-2' exact component={Portfoliogrid2} /> 
+                    <Route path='/portfolio-grid-2' exact component={Portfoliogrid2} /> 
 					
 					{/* <Route path='/login' exact component={Loginpage2 } />
 					<Route path='/login-2' exact component={Loginpage1} />

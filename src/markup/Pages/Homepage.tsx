@@ -16,7 +16,7 @@ import {
   selectLoginState,
   selectLoginErrors,
 } from "@/app/login/store/login.selectors";
-import UpComingMeetings from './UpComingMeetings'
+import UpComingMeetings from "./UpComingMeetings";
 
 //Images
 var bnr2 = require("./../../images/background/bg4.jpg");
@@ -24,9 +24,8 @@ var bnr3 = require("./../../images/lines.png");
 var bnr7 = require("./../../images/background/plans.png");
 var bnr9 = require("./../../images/background/bg-9-new.jpeg");
 
-function Homepage() {
+const Homepage = () => {
   const authState = useSelector(selectLoginState);
-  console.log("authState", authState);
 
   return (
     <div className="page-wraper">
@@ -244,7 +243,8 @@ function Homepage() {
                               fontSize: "18px",
                             }}
                           >
-                            <del className="text-red">1800/</del><b>1699/-</b> for 3 months
+                            <del className="text-red">1800/</del>
+                            <b>1699/-</b> for 3 months
                           </li>
                         </ul>
                       </div>
@@ -368,7 +368,8 @@ function Homepage() {
                               fontSize: "18px",
                             }}
                           >
-                            <del className="text-red">1500/</del> <b>1399/-</b> for 3 months
+                            <del className="text-red">1500/</del> <b>1399/-</b>{" "}
+                            for 3 months
                           </li>
                         </ul>
                       </div>
@@ -492,7 +493,8 @@ function Homepage() {
                               fontSize: "18px",
                             }}
                           >
-                            <del className="text-red">1200/</del> <b>1099/-</b> for 3 months
+                            <del className="text-red">1200/</del> <b>1099/-</b>{" "}
+                            for 3 months
                           </li>
                         </ul>
                       </div>
@@ -627,5 +629,5 @@ function Homepage() {
       `}</style>
     </div>
   );
-}
+};
 export default Homepage;

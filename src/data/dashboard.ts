@@ -18,7 +18,7 @@ export const postBox :postBoxType[] = [
       title: "Junior UX Designer",
     },
     {
-      image: require("./../../images/logo/Untitled picture4.png"),
+      image: require("../images/logo/Untitled picture4.png"),
       title: "Senior UX Designer",
     },
     {
