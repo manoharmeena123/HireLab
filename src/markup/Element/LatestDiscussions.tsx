@@ -13,7 +13,6 @@ const LatestDiscussions = () => {
   const [initialAnimationDone, setInitialAnimationDone] = useState(false);
 
   const { data: discussionData } = useGetDiscussionQuery();
-  console.log("discussions", discussionData);
 
   useEffect(() => {
     // Function to randomly increase or decrease the count
