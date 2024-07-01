@@ -51,3 +51,26 @@ export const formatDateAgo = (createdAt :string):string => {
     return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
   }
 }
+
+
+
+//Tue Jun 2024 | 8:08 pm
+
+export const formatDateTime = (dateString: string): string => {
+  const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  const date = new Date(dateString);
+
+  const dayOfWeek = daysOfWeek[date.getDay()];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const formattedHours = hours % 12 || 12; // Convert to 12-hour format
+  const amPm = hours >= 12 ? "pm" : "am";
+  const formattedMinutes = minutes.toString().padStart(2, '0'); // Ensure two-digit minutes
+
+  return `${dayOfWeek} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${amPm}`;
+};
