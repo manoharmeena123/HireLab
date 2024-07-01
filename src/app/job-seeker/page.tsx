@@ -6,10 +6,13 @@ import Profilesidebar from "../Profilesidebar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useAuthToken from "./../../hooks/useAuthToken";
+import { useGetCollageQuery } from '@/store/global-store/global.query'
 
 const JobSeeker = () => {
   const { token, user } = useAuthToken();
   const router = useRouter();
+  const { data: collageData } = useGetCollageQuery();
+  console.log('collageData', collageData)
   // useEffect(() => {
   //   // Redirect to login page if no session exists and user is authenticated
   //   if (!token) {

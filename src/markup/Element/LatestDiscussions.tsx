@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import styles from "@/styles/LatestDiscussions.module.css";
-import { discussions } from "@/data/latestDiscussions";
+// import { discussions } from "@/data/latestDiscussions";
+import { useGetDiscussionQuery } from "@/store/global-store/global.query";
+import { formatDateTime } from "@/utils/formateDate";
 
 const LatestDiscussions = () => {
   // State for dynamic counters
@@ -9,6 +11,9 @@ const LatestDiscussions = () => {
   const [answersGiven, setAnswersGiven] = useState(1789);
   const [totalForum, setTotalForum] = useState(1801);
   const [initialAnimationDone, setInitialAnimationDone] = useState(false);
+
+  const { data: discussionData } = useGetDiscussionQuery();
+  console.log("discussions", discussionData);
 
   useEffect(() => {
     // Function to randomly increase or decrease the count
@@ -80,27 +85,36 @@ const LatestDiscussions = () => {
       <div className="row align-items-center mb-4">
         <div className="col"></div>
         <div className="col text-right">
-          <button className="site-button button-md" style={{ backgroundColor:"#2A6310", color:"#fff", borderColor:"#2A8310"}}>View All</button>
+          <button
+            className="site-button button-md"
+            style={{
+              backgroundColor: "#2A6310",
+              color: "#fff",
+              borderColor: "#2A8310",
+            }}
+          >
+            View All
+          </button>
         </div>
       </div>
       <div className="row">
-        {discussions?.map((discussion) => (
-          <div key={discussion.id} className="col-lg-4 col-md-6 mb-4">
+        {discussionData?.data?.map((discussion:any, index: number) => (
+          <div key={index} className="col-lg-4 col-md-6 mb-4">
             <div className={`card ${styles.discussionCard}`}>
               <div className="card-body">
                 <p className="text-muted mb-2">
-                  {discussion.date} | {discussion.time}
+                {formatDateTime(discussion?.created_at)}
                 </p>
-                <h5 className="card-title">{discussion.title}</h5>
-                <p className="card-text">{discussion.description}</p>
+                <h5 className="card-title">{discussion?.question}</h5>
+                <p className="card-text">{discussion?.description}</p>
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <div className="d-flex align-items-center">
-                    <span className="ml-2">by {discussion.author}</span>
+                    <span className="ml-2">by {discussion?.author}</span>
                   </div>
                   <div className="d-flex">
-                    <span className="mr-3">❤️ {discussion.likes}</span>
-                    <span className="mr-3">💬 {discussion.comments}</span>
-                    <span>👀 {discussion.views}</span>
+                    <span className="mr-3">❤️ {discussion?.likes}</span>
+                    <span className="mr-3">💬 {discussion?.comments}</span>
+                    <span>👀 {discussion?.views}</span>
                   </div>
                 </div>
               </div>
