@@ -79,6 +79,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  deleteSavedJob:{
+    query :(id :string) => ({
+      url: `api/delete-saved-job/${id}`,
+      method: "GET",
+    })
+  },
 
   //Post
   postApplyJob: {

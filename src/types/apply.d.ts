@@ -20,6 +20,7 @@ export type SaveJobData = {
   job_id: string;
 };
 
+
 interface SaveJobDataResponse {
   code: number;
   success: boolean;

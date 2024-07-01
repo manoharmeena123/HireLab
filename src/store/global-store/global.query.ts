@@ -11,7 +11,7 @@ import {
   SaveJobData,
   SaveJobDataResponse,
   ApplyJobResponse,
-  WritableGetSaveJobResponse
+  WritableGetSaveJobResponse,
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -33,7 +33,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "ApplyJobs",
     "Testimonials",
     "SaveJobs",
-    "GetSaveJobs"
+    "GetSaveJobs",
+    "DeleteSaveJobs",
   ],
 });
 
@@ -95,10 +96,14 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (id) => queries.postSaveJob.query(id),
       invalidatesTags: ["SaveJobs"],
     }),
-    getSavedJob : builder.query<WritableGetSaveJobResponse, void>({
+    getSavedJob: builder.query<WritableGetSaveJobResponse, void>({
       query: queries.getSavedJob.query,
       providesTags: ["GetSaveJobs"],
-    })
+    }),
+    deleteSavedJob: builder.mutation<WritableGetSaveJobResponse, string>({
+      query: (id) => queries.deleteSavedJob.query(id),
+      invalidatesTags: ["DeleteSaveJobs"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -118,6 +123,7 @@ export const {
   usePostApplyJobMutation,
   useGetTestimonialsQuery,
   usePostSaveJobMutation,
-  useGetSavedJobQuery
+  useGetSavedJobQuery,
+  useDeleteSavedJobMutation
 } = globalApi;
 export default globalApi;
