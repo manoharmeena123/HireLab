@@ -1,24 +1,25 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import Profilesidebar from "../Profilesidebar";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import useAuthToken from "./../../hooks/useAuthToken";
-import { useGetCollageQuery } from '@/store/global-store/global.query'
+import { useGetCollageQuery } from "@/store/global-store/global.query";
 
 const JobSeeker = () => {
   const { token, user } = useAuthToken();
   const router = useRouter();
   const { data: collageData } = useGetCollageQuery();
-  console.log('collageData', collageData)
-  // useEffect(() => {
-  //   // Redirect to login page if no session exists and user is authenticated
-  //   if (!token) {
-  //     router.push("/login");
-  //   }
-  // }, [token, user, router]);
+  const [selectedCollege, setSelectedCollege] = useState("");
+
+  console.log("selectedCollege", selectedCollege);
+  const handleCollegeChange = (e: any) => {
+    setSelectedCollege(e.target.value);
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -41,7 +42,7 @@ const JobSeeker = () => {
                         Back
                       </Link>
                     </div>
-                    <form>
+                    <form onSubmit={handleSubmit}>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
@@ -76,11 +77,21 @@ const JobSeeker = () => {
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>College:</label>
-                            <input
-                              type="text"
+                            <select
                               className="form-control"
-                              placeholder="32 Year"
-                            />
+                              value={selectedCollege}
+                              onChange={handleCollegeChange}
+                            >
+                              <option value="">Select College</option>
+                              {collageData &&
+                                collageData?.data?.map(
+                                  (college: any, index: number) => (
+                                    <option key={index} value={college.title}>
+                                      {college.title}
+                                    </option>
+                                  )
+                                )}
+                            </select>
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
@@ -89,7 +100,7 @@ const JobSeeker = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="write about Designation"
+                              placeholder="Current Designation"
                             />
                           </div>
                         </div>
@@ -99,7 +110,7 @@ const JobSeeker = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="company"
+                              placeholder="Company"
                             />
                           </div>
                         </div>
@@ -112,7 +123,7 @@ const JobSeeker = () => {
                               <option>3</option>
                               <option>4</option>
                               <option>5</option>
-                              <option>more then 5</option>
+                              <option>more than 5</option>
                             </select>
                           </div>
                         </div>
@@ -134,17 +145,19 @@ const JobSeeker = () => {
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Location Preference(if any):</label>
+                            <label>Location Preference (if any):</label>
                             <input
                               type="text"
-                              placeholder="Banglore"
+                              placeholder="Location"
                               className="form-control"
                             />
                           </div>
                         </div>
                       </div>
 
-                      <button className="site-button m-b30">Submit Form</button>
+                      <button type="submit" className="site-button m-b30">
+                        Submit Form
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -156,4 +169,5 @@ const JobSeeker = () => {
     </>
   );
 };
+
 export default JobSeeker;
