@@ -6,7 +6,12 @@ import {
   WritableCollegeResponse,
   WritableIndustryResponse,
   WritableDiscussionResponse,
-  ApplyJobData
+  ApplyJobData,
+  WritableTestimonialResponse,
+  SaveJobData,
+  SaveJobDataResponse,
+  ApplyJobResponse,
+  WritableGetSaveJobResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -25,7 +30,10 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Industry",
     "Discussion",
     "Jobs",
-    "ApplyJobs"
+    "ApplyJobs",
+    "Testimonials",
+    "SaveJobs",
+    "GetSaveJobs"
   ],
 });
 
@@ -75,10 +83,22 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getJobs.query,
       providesTags: ["Jobs"],
     }),
-    postApplyJob: builder.mutation<any, ApplyJobData>({ 
+    postApplyJob: builder.mutation<ApplyJobResponse, ApplyJobData>({
       query: (id) => queries.postApplyJob.query(id),
-      invalidatesTags: ["ApplyJobs"]
+      invalidatesTags: ["ApplyJobs"],
     }),
+    getTestimonials: builder.query<WritableTestimonialResponse, void>({
+      query: queries.getTestimonials.query,
+      providesTags: ["Testimonials"],
+    }),
+    postSaveJob: builder.mutation<SaveJobDataResponse, SaveJobData>({
+      query: (id) => queries.postSaveJob.query(id),
+      invalidatesTags: ["SaveJobs"],
+    }),
+    getSavedJob : builder.query<WritableGetSaveJobResponse, void>({
+      query: queries.getSavedJob.query,
+      providesTags: ["GetSaveJobs"],
+    })
   }),
   overrideExisting: true,
 });
@@ -96,5 +116,8 @@ export const {
   useGetDiscussionQuery,
   useGetJobsQuery,
   usePostApplyJobMutation,
+  useGetTestimonialsQuery,
+  usePostSaveJobMutation,
+  useGetSavedJobQuery
 } = globalApi;
 export default globalApi;

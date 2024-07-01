@@ -219,7 +219,7 @@ const Componypostjobs = () => {
                     </div>
                     <ul>
                       <li>
-                        <Link href="/profile">
+                        <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
                           <span>Satya Profile</span>
                         </Link>

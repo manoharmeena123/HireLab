@@ -5,36 +5,10 @@ import Link from "next/link";
 import Jobfindbox from "../Jobfindbox";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
-
+import { postBox } from "@/data/dashboard";
 var bnr = require("./../../images/banner/bnr1.jpg");
-const postBox = [
-  {
-    image: require("./../../images/logo/Untitled picture1.png"),
-    title: "Digital Marketing Executive",
-  },
-  {
-    image: require("./../../images/logo/Untitled picture2.png"),
-    title: "Principal UX Designer",
-  },
-  {
-    image: require("./../../images/logo/Untitled picture3.png"),
-    title: "Junior UX Designer",
-  },
-  {
-    image: require("./../../images/logo/Untitled picture4.png"),
-    title: "Senior UX Designer",
-  },
-  {
-    image: require("./../../images/logo/Untitled picture5.png"),
-    title: "Digital Marketing Executive",
-  },
-  {
-    image: require("./../../images/logo/icon1.png"),
-    title: "Freelance UI Designer",
-  },
-];
 
-function Browsecandidates() {
+const Dashboard = () => {
   const [subscribe, setSubscribe] = useState(true);
   return (
     <>
@@ -53,7 +27,7 @@ function Browsecandidates() {
                             <div className="job-post-company">
                               <Link href={""}>
                                 <span>
-                                  <Image src={item.image} />
+                                  <Image src={item?.image} alt="image" />
                                 </span>
                               </Link>
                             </div>
@@ -498,5 +472,5 @@ function Browsecandidates() {
       </div>
     </>
   );
-}
-export default Browsecandidates;
+};
+export default Dashboard;
