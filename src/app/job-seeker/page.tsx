@@ -82,7 +82,7 @@ const JobSeeker = () => {
                               value={selectedCollege}
                               onChange={handleCollegeChange}
                             >
-                              <option value="">Select College</option>
+                               <option value="" disabled selected>Select College</option>
                               {collageData &&
                                 collageData?.data?.map(
                                   (college: any, index: number) => (
