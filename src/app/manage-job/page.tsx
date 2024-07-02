@@ -1,14 +1,17 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import {
   useGetManageJobQuery,
   useDeleteManageJobMutation,
+  useUpdateManageJobMutation,
 } from "./store/manage-job.query";
 import { JobData } from "./types";
 import { formatDate } from '@/utils/formateDate'
+import ModalPopup from '../../components/ModalPopup'
+import { usePostJobMutation } from "../post-job/store/post-job.query";
 interface User {
   image?: string;
 }
@@ -21,10 +24,15 @@ const ManageJobs = () => {
   } = useGetManageJobQuery();
   console.log('jobsData', jobsData)
   const [deleteManageJob] = useDeleteManageJobMutation();
+  const [updatePostJob] = useUpdateManageJobMutation();
 
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [user, setUser] = useState<User>({});
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   // Placeholder to simulate fetching user data
   useEffect(() => {
@@ -45,7 +53,33 @@ const ManageJobs = () => {
   // Flatten the data array
   const flattenedJobsData = jobsData?.data.flat() || []; // Default to empty array if data is undefined
   console.log('flattenedJobsData', flattenedJobsData)
+  const [postJob, { isLoading }] = usePostJobMutation();
 
+  const handleEditJob = async (selectedJob) => {
+    
+    console.log("Edited Job Data:", selectedJob);
+    console.log("id", selectedJob?.id);
+    try {
+      // Ensure profileData has the correct types for each field before sending
+      const response = await updatePostJob({ id: selectedJob.id, data: selectedJob }).unwrap();
+      if (response.code === 200) {
+        toast.success("Post Job Edit successfully!", { theme: "colored" });
+        // router.push("/manage-job");
+      } else if (response.code === 401) {
+        toast.error(response.message, { theme: "colored" });
+      } else if (response.code === 404) {
+        // dispatch(setPostJobErrors(response.errors));
+        console.log('error');
+        
+      } else {
+        console.error("Unexpected error format:", response);
+      }
+    } catch (err) {
+      console.error("Error posting job:", err);
+    }
+    // Close the modal after successful edit (optional)
+    setShow(false);
+  };
   return (
     <>
       <div className="page-content bg-white">
@@ -120,7 +154,13 @@ const ManageJobs = () => {
                     </div>
                   </div>
                 </div>
-
+                <ModalPopup 
+                show={show}
+                handleClose={handleClose}
+                title="Edit Job" // Added title for edit modal
+                onSubmit={handleEditJob} // Pass handleEditJob function as onSubmit prop
+                selectedJob={selectedJob} // Pass selectedJob data as prop
+                />
                 {/* Main content area */}
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
@@ -216,6 +256,13 @@ const ManageJobs = () => {
                               {formatDate(job.created_at)}
                             </td>
                             <td className="job-links">
+                            <div
+                                className="nav-link"
+                                // onClick={() => handleDeleteJob(job.id)}
+                                onClick={() => { setSelectedJob(job); setShow(true);}}
+                              >
+                                <i className="fa fa-edit"></i>
+                              </div>
                               <div
                                 className="nav-link"
                                 onClick={() => handleDeleteJob(job.id)}
