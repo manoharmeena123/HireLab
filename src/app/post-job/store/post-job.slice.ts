@@ -17,7 +17,9 @@ const initialState: PostJobState = {
   maximum_education: '',
   total_experience: '',
   job_description: '',
-  errors: {}
+  errors: {},
+  salary: '',
+  tags: ''
 };
 
 const postJobSlice = createSlice({

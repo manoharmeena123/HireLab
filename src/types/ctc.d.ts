@@ -15,4 +15,6 @@ interface CTCResponse {
   data: CTC[];
 }
 
+
+
 type WritableCTCResponse = WritableDraft<CTCResponse>;

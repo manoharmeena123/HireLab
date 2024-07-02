@@ -12,6 +12,13 @@ import {
   SaveJobDataResponse,
   ApplyJobResponse,
   WritableGetSaveJobResponse,
+  WritableEducationResponse,
+  WritableLocationResponse,
+  WritableTagResponse,
+  WritableJobTypeResponse,
+  WritableCompensationResponse,
+  WritableMembershipResponse,
+  WritableAdditionalPerkResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -35,6 +42,13 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SaveJobs",
     "GetSaveJobs",
     "DeleteSaveJobs",
+    "Locations",
+    "Educations",
+    "Tags",
+    "JobType",
+    "Compensations",
+    "Membership",
+    "AdditionalPerk"
   ],
 });
 
@@ -104,6 +118,34 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (id) => queries.deleteSavedJob.query(id),
       invalidatesTags: ["DeleteSaveJobs"],
     }),
+    getLocations : builder.query<WritableLocationResponse, void>({
+      query: queries.getLocations.query,
+      providesTags: ["Locations"]
+    }),
+    getEducations : builder.query<WritableEducationResponse, void>({
+      query: queries.getEducations.query,
+      providesTags: ["Educations"]
+    }),
+    getTags : builder.query<WritableTagResponse, void>({
+      query: queries.getTags.query,
+      providesTags: ["Tags"]
+    }),
+    getJobType : builder.query<WritableJobTypeResponse, void>({
+      query: queries.getJobType.query,
+      providesTags: ["JobType"]
+    }),
+    getCompensations : builder.query <WritableCompensationResponse, void>({
+      query: queries.getCompensations.query,
+      providesTags: ["Compensations"]
+    }),
+    getMembership : builder.query<WritableMembershipResponse, void>({
+      query: queries.getMembership.query,
+      providesTags: ["Membership"]
+    }),
+    getAdditionalPerk : builder.query<WritableAdditionalPerkResponse,void>({
+      query :queries.getAdditionalPerk.query,
+      providesTags: ["AdditionalPerk"]
+    })
   }),
   overrideExisting: true,
 });
@@ -124,6 +166,13 @@ export const {
   useGetTestimonialsQuery,
   usePostSaveJobMutation,
   useGetSavedJobQuery,
-  useDeleteSavedJobMutation
+  useDeleteSavedJobMutation,
+  useGetLocationsQuery,
+  useGetEducationsQuery,
+  useGetTagsQuery,
+  useGetJobTypeQuery,
+  useGetCompensationsQuery,
+  useGetMembershipQuery,
+  useGetAdditionalPerkQuery
 } = globalApi;
 export default globalApi;
