@@ -1,41 +1,43 @@
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import styles from "@/styles/LatestDiscussions.module.css";
-// import { discussions } from "@/data/latestDiscussions";
 import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 
 const LatestDiscussions = () => {
-  // State for dynamic counters
   const [questionsPosted, setQuestionsPosted] = useState(1800);
   const [answersGiven, setAnswersGiven] = useState(1789);
   const [totalForum, setTotalForum] = useState(1801);
   const [initialAnimationDone, setInitialAnimationDone] = useState(false);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Track which description is expanded
 
   const { data: discussionData } = useGetDiscussionQuery();
 
   useEffect(() => {
-    // Function to randomly increase or decrease the count
     const updateCounts = () => {
       setQuestionsPosted((prev) => prev + 1);
       setAnswersGiven((prev) => prev + 1);
-      setTotalForum((prev) => prev + 1); // Total forum count always increases
+      setTotalForum((prev) => prev + 1);
 
-      // Ensure answers given is never more than questions posted
       if (answersGiven > questionsPosted) {
         setAnswersGiven(questionsPosted);
       }
     };
 
-    // Update the counts every 2 seconds
     const interval = setInterval(updateCounts, 2000);
 
-    // Mark initial animation as done after the first update
     setTimeout(() => setInitialAnimationDone(true), 2000);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, [questionsPosted, answersGiven]);
+
+  const toggleDescription = (index: number) => {
+    if (expandedIndex === index) {
+      setExpandedIndex(null); // Collapse if clicked again
+    } else {
+      setExpandedIndex(index); // Expand clicked description
+    }
+  };
 
   return (
     <div className="container">
@@ -97,18 +99,36 @@ const LatestDiscussions = () => {
         </div>
       </div>
       <div className="row">
-        {discussionData?.data?.map((discussion:any, index: number) => (
+        {discussionData?.data?.map((discussion: any, index: number) => (
           <div key={index} className="col-lg-4 col-md-6 mb-4">
             <div className={`card ${styles.discussionCard}`}>
               <div className="card-body">
                 <p className="text-muted mb-2">
-                {formatDateTime(discussion?.created_at)}
+                  {formatDateTime(discussion?.created_at)}
                 </p>
                 <h5 className="card-title">{discussion?.question}</h5>
-                <p className="card-text">{discussion?.description}</p>
+                <div
+                  className={`card-text ${styles.description} ${
+                    expandedIndex === index ? styles.expanded : ""
+                  }`}
+                  style={{
+                    maxHeight: expandedIndex === index ? "none" : "100px",
+                    overflow: "hidden",
+                  }}
+                >
+                  {discussion?.description}
+                </div>
+                {discussion?.description.length > 80 && (
+                  <button
+                    className="btn btn-link text-primary"
+                    onClick={() => toggleDescription(index)}
+                  >
+                    {expandedIndex === index ? "Read Less" : "Read More"}
+                  </button>
+                )}
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <div className="d-flex align-items-center">
-                    <span className="ml-2">by {discussion?.author}</span>
+                    <span className="ml-2">by {discussion?.user?.name}</span>
                   </div>
                   <div className="d-flex">
                     <span className="mr-3">❤️ {discussion?.likes}</span>

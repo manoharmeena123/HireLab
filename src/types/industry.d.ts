@@ -11,7 +11,7 @@ interface IndustryResponse {
   code: number;
   success: boolean;
   message: string;
-  data: Industry;
+  data: Industry[];
 }
 
 type WritableIndustryResponse = WritableDraft<IndustryResponse>;

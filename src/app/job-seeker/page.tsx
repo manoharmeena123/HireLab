@@ -4,17 +4,24 @@ import Link from "next/link";
 import Profilesidebar from "../Profilesidebar";
 import { useRouter } from "next/navigation";
 import useAuthToken from "./../../hooks/useAuthToken";
-import { useGetCollageQuery } from "@/store/global-store/global.query";
+import {
+  useGetCollageQuery,
+  useGetIndustryQuery,
+} from "@/store/global-store/global.query";
 
 const JobSeeker = () => {
   const { token, user } = useAuthToken();
   const router = useRouter();
   const { data: collageData } = useGetCollageQuery();
+  const { data: industryData } = useGetIndustryQuery();
   const [selectedCollege, setSelectedCollege] = useState("");
+  const [selectedIndustry, setSelectedIndustry] = useState("");
 
-  console.log("selectedCollege", selectedCollege);
   const handleCollegeChange = (e: any) => {
     setSelectedCollege(e.target.value);
+  };
+  const handleIndusrtyChange = (e: any) => {
+    setSelectedIndustry(e.target.value);
   };
 
   const handleSubmit = (e: any) => {
@@ -82,7 +89,9 @@ const JobSeeker = () => {
                               value={selectedCollege}
                               onChange={handleCollegeChange}
                             >
-                               <option value="" disabled selected>Select College</option>
+                              <option value="" disabled selected>
+                                Select College
+                              </option>
                               {collageData &&
                                 collageData?.data?.map(
                                   (college: any, index: number) => (
@@ -151,6 +160,28 @@ const JobSeeker = () => {
                               placeholder="Location"
                               className="form-control"
                             />
+                          </div>
+                        </div>
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Industry:</label>
+                            <select
+                              className="form-control"
+                              value={selectedIndustry}
+                              onChange={handleIndusrtyChange}
+                            >
+                              <option value="" disabled selected>
+                                Select Industry
+                              </option>
+                              {industryData &&
+                                industryData?.data?.map(
+                                  (industry: any, index: number) => (
+                                    <option key={index} value={industry?.title}>
+                                      {industry?.title}
+                                    </option>
+                                  )
+                                )}
+                            </select>
                           </div>
                         </div>
                       </div>
