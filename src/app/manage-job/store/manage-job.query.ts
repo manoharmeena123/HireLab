@@ -13,8 +13,8 @@ const manageJobApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getManageJob.query,
       providesTags: ['ManageJob'],
     }),
-    updateManageJob: builder.mutation<ManageResponse, { id: string; data: Partial<JobData> }>({
-      query: ({ id, data }) => queries.updateManageJob.query(id, data),
+    updateManageJob: builder.mutation<ManageResponse, {  data: Partial<JobData> }>({
+      query: ({  data }) => queries.updateManageJob.query( data),
       invalidatesTags: ['UpdateManageJob'],
     }),
     deleteManageJob: builder.mutation<{ success: boolean; id: string }, string>({

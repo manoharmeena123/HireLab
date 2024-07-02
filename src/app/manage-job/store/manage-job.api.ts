@@ -7,9 +7,9 @@ export const queries = {
     }),
   },
   updateManageJob: {
-    query: (id: string, data: any) => ({
-      url: `api/manage-jobs/${id}`,
-      method: "PATCH",
+    query: ( data: any) => ({
+      url: `api/update-job`,
+      method: "POST",
       body: data,
     }),
   },

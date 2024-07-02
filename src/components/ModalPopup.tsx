@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Modal, Form } from "react-bootstrap";
 import Link from "next/link";
-import { Form } from "react-bootstrap";
 import Image from "next/image";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { toast } from "react-toastify";
@@ -16,12 +16,54 @@ import {
   selectPostJobErrors,
 } from "@/app/post-job/store/post-job.selectors";
 import { usePostJobMutation } from "@/app/post-job/store/post-job.query";
-import styles from "./styles/PostJob.module.css"; // Assuming you have a CSS module file
+import styles from "./styles/PostJob.module.css";
 
-const Componypostjobs = () => {
-  const router = useRouter();
+interface JobData {
+  company_name?: string;
+  job_title?: string;
+  experience?: string;
+  job_type?: string;
+  location?: string;
+  address?: string;
+  compensation?: string;
+  additional_perk?: string[];
+  joining_fee?: string;
+  candidate_requirement?: string;
+  maximum_education?: string;
+  total_experience?: string | number;
+  job_description?: string;
+  [key: string]: any;
+}
+
+interface ModalPopupProps {
+  show: boolean;
+  handleClose: () => void;
+  title: string;
+  onSubmit: (data: JobData) => void;
+  selectedJob?: JobData;
+}
+
+const ModalPopup: React.FC<ModalPopupProps> = ({
+  show,
+  handleClose,
+  title,
+  onSubmit,
+  selectedJob,
+}) => {
+  const [jobDatas, setJobDatas] = useState<JobData>(selectedJob || {});
+  const { id = null, ...jobData } = selectedJob || {};
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setJobDatas((prevData) => ({ ...prevData, [name]: value }));
+    dispatch(setPostJobData({ [name]: value }));
+  };
+
+  // useEffect(()=>{
+
+  // }.[])
+
   const dispatch = useDispatch();
-  const profileData = useSelector(selectPostJobState);
 
   const errors = useSelector(selectPostJobErrors);
   const [postJob, { isLoading }] = usePostJobMutation();
@@ -94,7 +136,10 @@ const Componypostjobs = () => {
     selectedState: number | null | number[],
     isMultiSelect = false
   ) => {
-    console.log('index ', field ,index)
+    console.log('index ', field ,index);
+    
+    let valueToDispatch: string | number | null;
+  
     if (isMultiSelect) {
       let newSelected: number[] = Array.isArray(selectedState)
         ? [...selectedState]
@@ -107,53 +152,32 @@ const Componypostjobs = () => {
       (setSelectedState as React.Dispatch<React.SetStateAction<number[]>>)(
         newSelected
       );
-      dispatch(setPostJobData({ [field]: newSelected.join(",") }));
+      valueToDispatch = newSelected.join(",");
     } else {
-      const valueToDispatch = index === selectedState ? null : index;
-      {console.log('valueToDispatch', valueToDispatch)}
+      valueToDispatch = index === selectedState ? null : index;
+      console.log('valueToDispatch', valueToDispatch);
       (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
         valueToDispatch
       );
-      // Changed: Dispatching the index directly instead of converting to string
-      // dispatch(
-      //   setPostJobData({
-      //     [field]: valueToDispatch !== null ? valueToDispatch : "",
-      //   })
-      // );
-      dispatch(
-        setPostJobData({
-          [field]: valueToDispatch !== null ? valueToDispatch.toString() : "",
-        })
-      );
+      valueToDispatch = valueToDispatch !== null ? valueToDispatch.toString() : "";
     }
+  
+    // Update the jobDatas state
+    setJobDatas((prevData) => ({ ...prevData, [field]: valueToDispatch }));
+    
+    // Dispatch the updated state to Redux
+    dispatch(setPostJobData({ [field]: valueToDispatch }));
   };
+  
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    dispatch(setPostJobData({ [name]: value }));
-  };
+  // const handleInputChange = (
+  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  // ) => {
+  //   const { name, value } = e.target;
+  //   setJobDatas({ ...jobData, [event.target.name]: event.target.value });
+  //   dispatch(setPostJobData({ [name]: value }));
+  // };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    try {
-      // Ensure profileData has the correct types for each field before sending
-      const response = await postJob(profileData).unwrap();
-      if (response.code === 200) {
-        toast.success("Post Job successfully!", { theme: "colored" });
-        router.push("/manage-job");
-      } else if (response.code === 401) {
-        toast.error(response.message, { theme: "colored" });
-      } else if (response.code === 404) {
-        dispatch(setPostJobErrors(response.errors));
-      } else {
-        console.error("Unexpected error format:", response);
-      }
-    } catch (err) {
-      console.error("Error posting job:", err);
-    }
-  };
 
   const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
@@ -183,104 +207,50 @@ const Componypostjobs = () => {
   };
 
   return (
-    <div className="page-content bg-white">
-      <div className="content-block">
-        <div className="section-full bg-white p-t50 p-b20">
-          <div className="container">
-            <div className="row">
-              <div className="col-xl-3 col-lg-4 m-b30">
-                <div className="sticky-top">
-                  <div className="candidate-info company-info">
-                    <div className="candidate-detail text-center">
-                      <div className="canditate-des">
-                        <Link href={"#"}>
-                          <Image
-                            src={`${IMAGE_URL}`}
-                            alt="Company Logo"
-                            width={300}
-                            height={300}
-                          />
-                        </Link>
-                        <div
-                          className="upload-link"
-                          title="update"
-                          data-toggle="tooltip"
-                          data-placement="right"
-                        >
-                          <input type="file" className="update-flie" />
-                          <i className="fa fa-pencil"></i>
-                        </div>
-                      </div>
-                      <div className="candidate-title">
-                        <h4 className="m-b5">
-                          <Link href={"#"}>@COMPANY</Link>
-                        </h4>
-                      </div>
-                    </div>
-                    <ul>
-                      <li>
-                        <Link href="/job-poster">
-                          <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span>Satya Profile</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className="active" href="/post-job">
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
-                          <span>Post A job</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/credit-earned">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Credit Earned</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/manage-job">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Manage Jobs</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/change-password">
-                          <i className="fa fa-key" aria-hidden="true"></i>
-                          <span>Change Password</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/">
-                          <i className="fa fa-sign-out" aria-hidden="true"></i>
-                          <span>Log Out</span>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+    <Modal show={show} onHide={handleClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {/* {Object.keys(jobData).length > 0 && (
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              const editedData = { ...jobDatas, id };
+              onSubmit(editedData);
+            }}
+          >
+            {Object.entries(jobData).map(([key, value]) => (
+              <div key={key} className="form-group">
+                <label htmlFor={key}>{key.toUpperCase()}</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id={key}
+                  name={key}
+                  defaultValue={value}
+                  onChange={handleInputChange}
+                />
               </div>
-              <div className="col-xl-9 col-lg-8 m-b30">
-                <div className="job-bx submit-resume">
-                  <div className="job-bx-title clearfix">
-                    <h5 className="font-weight-700 pull-left text-uppercase">
-                      Post A Job
-                    </h5>
-                    <Link
-                      href={"/company-profile"}
-                      className="site-button right-arrow button-sm float-right"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      Back
-                    </Link>
-                  </div>
-                  <form
-                    method="post"
-                    onSubmit={handleSubmit}
-                    className={styles.customScrollbar}
-                  >
-                    <div className="row">
+            ))}
+            <input type="hidden" name="id" value={id} />
+            <button type="submit" className="btn btn-primary">
+              Save Changes
+            </button>
+          </form>
+        )} */}
+        <div className="col-xl-9 col-lg-8 m-b30">
+          <div className="job-bx submit-resume">
+            <form
+              method="post"
+              onSubmit={(event) => {
+                event.preventDefault();
+                const editedData = { ...jobDatas, id };
+                onSubmit(editedData);
+              }}
+              // className={styles.customScrollbar}
+            >
+              <div className="row">
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Company you are hiring for</label>
@@ -290,6 +260,7 @@ const Componypostjobs = () => {
                             name="company_name"
                             onChange={handleInputChange}
                             placeholder="Enter Company Name"
+                            // value={jobData.company_name || ""}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
@@ -726,45 +697,19 @@ const Componypostjobs = () => {
                         </span>
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="site-button m-b30"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      {isLoading ? "Loading..." : "Upload"}
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
+              <button
+                type="submit"
+                className="site-button m-b30"
+                style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+              >
+                Upload
+              </button>
+            </form>
           </div>
         </div>
-      </div>
-      <style jsx>{`
-        .custom-scrollbar {
-          overflow: scroll;
-          height: 700px;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 12px;
-          height: 12px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #2a8310; /* Blue color */
-          border-radius: 10px;
-          border: 3px solid #ffffff;
-        }
-        /* Firefox scrollbar */
-        .custom-scrollbar {
-          scrollbar-width: auto;
-          scrollbar-color: #2a8310 #f1f1f1;
-        }
-      `}</style>
-    </div>
+      </Modal.Body>
+    </Modal>
   );
 };
 
-export default Componypostjobs;
+export default ModalPopup;
