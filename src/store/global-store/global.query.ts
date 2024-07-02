@@ -18,7 +18,8 @@ import {
   WritableJobTypeResponse,
   WritableCompensationResponse,
   WritableMembershipResponse,
-  WritableAdditionalPerkResponse
+  WritableAdditionalPerkResponse,
+  WritableCtcApiResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -78,7 +79,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getAppliedJobs.query,
       providesTags: ["AppliedJobs"],
     }),
-    getCtcData: builder.query<any, void>({
+    getCtcData: builder.query<WritableCtcApiResponse, void>({
       query: queries.getCtcData.query,
       providesTags: ["CTCData"],
     }),

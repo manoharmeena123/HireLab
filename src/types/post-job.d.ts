@@ -86,6 +86,14 @@ interface CompensationResponse {
 }
 
 // Define the interface for individual membership data
+interface MembershipInfo {
+  id: number;
+  membership_id: number;
+  content: string;
+  created_at: string;
+  updated_at: string;
+}
+
 interface Membership {
   id: number;
   title: string;
@@ -94,12 +102,13 @@ interface Membership {
   created_at: string | null;
   updated_at: string | null;
   status: string;
+  discount_price: string;
+  info: MembershipInfo[];
 }
 
-// Define the interface for the membership API response
 interface MembershipResponse {
   code: number;
-  success: string;
+  success: boolean;
   message: string;
   data: Membership[];
 }
@@ -121,6 +130,24 @@ interface AdditionalPerkResponse {
 }
 
 
+
+//ctc
+interface CtcData {
+  id: number;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CtcApiResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: CtcData[];
+}
+
+
 type WritableAdditionalPerkResponse = WritableDraft<AdditionalPerkResponse>;
 type WritableMembershipResponse = WritableDraft<MembershipResponse>;
 type WritableLocationResponse = WritableDraft<LocationResponse>;
@@ -128,6 +155,7 @@ type WritableTagResponse = WritableDraft<TagResponse>;
 type WritableJobTypeResponse = WritableDraft<JobTypeResponse>;
 type WritableEducationResponse = WritableDraft<EducationResponse>;
 type WritableCompensationResponse = WritableDraft<CompensationResponse>;
+type WritableCtcApiResponse = WritableDraft<CtcApiResponse>;
 
 // Export all types
 export {
@@ -137,5 +165,6 @@ export {
   WritableJobTypeResponse,
   WritableCompensationResponse,
   WritableMembershipResponse,
-  WritableAdditionalPerkResponse
+  WritableAdditionalPerkResponse,
+  WritableCtcApiResponse
 };
