@@ -85,6 +85,41 @@ export const queries = {
       method: "GET",
     })
   },
+  getEducations :{
+    query : () =>({
+      url :'api/get-educations',
+      method:"GET"
+    })
+  },
+  getLocations :{
+    query :()=>({
+      url :"api/get-educations"
+    })
+  },
+  getTags :{
+    query :()=>({
+      url :"api/get-tags",
+      method:"GET"
+    })
+  },
+  getJobType :{
+    query :()=>({
+      url :"api/get-job-types",
+      method :"GET"
+    })
+  },
+  getCompensations :{
+    query :()=>({
+      url : "api/get-compensations",
+      method :"GET"
+    })
+  },
+  getMembership :{
+    query : ()=>({
+      url :"api/get-membership-plan",
+      method :"GET"
+    })
+  },
 
   //Post
   postApplyJob: {

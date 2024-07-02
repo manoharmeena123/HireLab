@@ -35,6 +35,9 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SaveJobs",
     "GetSaveJobs",
     "DeleteSaveJobs",
+    "Locations",
+    "Educations",
+    "Tags"
   ],
 });
 
@@ -104,6 +107,18 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (id) => queries.deleteSavedJob.query(id),
       invalidatesTags: ["DeleteSaveJobs"],
     }),
+    getLocations : builder.query<any, void>({
+      query: queries.getLocations.query,
+      providesTags: ["Locations"]
+    }),
+    getEducations : builder.query<any, void>({
+      query: queries.getEducations.query,
+      providesTags: ["Educations"]
+    }),
+    getTags : builder.query<any, void>({
+      query: queries.getTags.query,
+      providesTags: ["Tags"]
+    })
   }),
   overrideExisting: true,
 });
