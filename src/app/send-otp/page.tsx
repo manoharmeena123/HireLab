@@ -36,19 +36,29 @@ const OtpVefication = () => {
   const registerState = useSelector(selectRegisterState);
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
+  const [parsedDatas, setParsedDatas] = useState<RegisterData | null>(null);
+
   // Parse localStorage data
   useEffect(() => {
     const data = localStorage.getItem("registerData");
+    const logindata = localStorage.getItem("logindata");
+    console.log("logindata", logindata);
+
+    if (logindata) {
+      const parsedDatas = JSON.parse(logindata);
+      setParsedDatas(parsedDatas);
+    }
     if (data) {
       try {
         const parsedData = JSON.parse(data);
+
         setParsedData(parsedData);
-        console.log("Parsed Data:", parsedData?.mobile_number);
+        console.log("Parsed Data:", parsedDatas?.mobile_number);
       } catch (error) {
         console.error("Error parsing register data from localStorage", error);
       }
     }
-  }, []);
+  }, [loginState,parsedData,parsedDatas]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,7 +69,10 @@ const OtpVefication = () => {
     event.preventDefault();
     const payload = {
       ...verifyOtpState,
-      mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
+      mobile_number:
+        loginState?.mobile_number ||
+        parsedData?.mobile_number ||
+        parsedDatas?.mobile_number,
     };
     console.log("payload", payload);
     try {

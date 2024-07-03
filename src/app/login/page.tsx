@@ -29,6 +29,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await login(authState).unwrap();
+      localStorage.setItem('logindata', JSON.stringify(authState));
       setLoading(false);
       console.log("login response", res);
 
