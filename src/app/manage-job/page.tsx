@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, Modal } from "react-bootstrap";
@@ -9,8 +9,8 @@ import {
   useUpdateManageJobMutation,
 } from "./store/manage-job.query";
 import { JobData } from "./types";
-import { formatDate } from '@/utils/formateDate'
-import ModalPopup from '../../components/ModalPopup'
+import { formatDate } from "@/utils/formateDate";
+import ModalPopup from "../../components/ModalPopup";
 import { usePostJobMutation } from "../post-job/store/post-job.query";
 interface User {
   image?: string;
@@ -22,7 +22,7 @@ const ManageJobs = () => {
     error: jobsError,
     isLoading: jobsLoading,
   } = useGetManageJobQuery();
-  console.log('jobsData', jobsData)
+  console.log("jobsData", jobsData);
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
 
@@ -41,27 +41,22 @@ const ManageJobs = () => {
   }, []);
 
   const handleDeleteJob = async (jobId: number) => {
-    console.log('jobId', jobId)
     try {
-      await deleteManageJob(jobId.toString()).unwrap(); 
+      await deleteManageJob(jobId.toString()).unwrap();
       toast.success("Job deleted successfully");
     } catch (error) {
       toast.error("Failed to delete job");
     }
   };
-  
+
   // Flatten the data array
-  const flattenedJobsData = jobsData?.data.flat() || []; // Default to empty array if data is undefined
-  console.log('flattenedJobsData', flattenedJobsData)
+  const flattenedJobsData = jobsData?.data.flat() || [];
   const [postJob, { isLoading }] = usePostJobMutation();
 
-  const handleEditJob = async (selectedJob) => {
-    
-    console.log("Edited Job Data:", selectedJob);
-    console.log("id", selectedJob?.id);
+  const handleEditJob = async (selectedJob: any) => {
     try {
       // Ensure profileData has the correct types for each field before sending
-      const response = await updatePostJob({ id: selectedJob.id, data: selectedJob }).unwrap();
+      const response = await updatePostJob({ data: selectedJob }).unwrap();
       if (response.code === 200) {
         toast.success("Post Job Edit successfully!", { theme: "colored" });
         // router.push("/manage-job");
@@ -69,8 +64,7 @@ const ManageJobs = () => {
         toast.error(response.message, { theme: "colored" });
       } else if (response.code === 404) {
         // dispatch(setPostJobErrors(response.errors));
-        console.log('error');
-        
+        console.log("error");
       } else {
         console.error("Unexpected error format:", response);
       }
@@ -105,7 +99,10 @@ const ManageJobs = () => {
                         <li>
                           <Link href="/profile">
                             <div className="nav-link">
-                              <i className="fa fa-user-o" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-user-o"
+                                aria-hidden="true"
+                              ></i>
                               <span>Satya Profile</span>
                             </div>
                           </Link>
@@ -113,7 +110,10 @@ const ManageJobs = () => {
                         <li>
                           <Link href="/post-job">
                             <div className="nav-link">
-                              <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-file-text-o"
+                                aria-hidden="true"
+                              ></i>
                               <span>Post A job</span>
                             </div>
                           </Link>
@@ -121,7 +121,10 @@ const ManageJobs = () => {
                         <li>
                           <Link href="/credit-earned">
                             <div className="nav-link">
-                              <i className="fa fa-heart-o" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-heart-o"
+                                aria-hidden="true"
+                              ></i>
                               <span>Credit Earned</span>
                             </div>
                           </Link>
@@ -129,7 +132,10 @@ const ManageJobs = () => {
                         <li>
                           <Link href="/manage-job">
                             <div className="nav-link active">
-                              <i className="fa fa-heart-o" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-heart-o"
+                                aria-hidden="true"
+                              ></i>
                               <span>Manage Jobs</span>
                             </div>
                           </Link>
@@ -145,7 +151,10 @@ const ManageJobs = () => {
                         <li>
                           <Link href="/">
                             <div className="nav-link">
-                              <i className="fa fa-sign-out" aria-hidden="true"></i>
+                              <i
+                                className="fa fa-sign-out"
+                                aria-hidden="true"
+                              ></i>
                               <span>Log Out</span>
                             </div>
                           </Link>
@@ -154,12 +163,12 @@ const ManageJobs = () => {
                     </div>
                   </div>
                 </div>
-                <ModalPopup 
-                show={show}
-                handleClose={handleClose}
-                title="Edit Job" // Added title for edit modal
-                onSubmit={handleEditJob} // Pass handleEditJob function as onSubmit prop
-                selectedJob={selectedJob} // Pass selectedJob data as prop
+                <ModalPopup
+                  show={show}
+                  handleClose={handleClose}
+                  title="Edit Job"
+                  onSubmit={handleEditJob}
+                  selectedJob={selectedJob || null}
                 />
                 {/* Main content area */}
                 <div className="col-xl-9 col-lg-8 m-b30">
@@ -256,10 +265,13 @@ const ManageJobs = () => {
                               {formatDate(job.created_at)}
                             </td>
                             <td className="job-links">
-                            <div
+                              <div
                                 className="nav-link"
                                 // onClick={() => handleDeleteJob(job.id)}
-                                onClick={() => { setSelectedJob(job); setShow(true);}}
+                                onClick={() => {
+                                  setSelectedJob(job);
+                                  setShow(true);
+                                }}
                               >
                                 <i className="fa fa-edit"></i>
                               </div>
@@ -344,7 +356,7 @@ const ManageJobs = () => {
                               </li>
                               <li>
                                 <strong>Experience :</strong>
-                                <p>{selectedJob?.user.experience} Years</p>
+                                <p>{selectedJob?.user?.experience} Years</p>
                               </li>
                               <li>
                                 <strong>Description :</strong>

@@ -6,7 +6,7 @@ import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/Hire Labs_Final logo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname } from "next/navigation";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 const Header = () => {
   const { token, user } = useAuthToken();
@@ -21,10 +21,18 @@ const Header = () => {
     !isRegisterPage &&
     !token && (
       <>
-        <Link href="/login" className="site-button" style={{backgroundColor:"#2A6310"}}>
+        <Link
+          href="/login"
+          className="site-button"
+          style={{ backgroundColor: "#2A6310" }}
+        >
           LOGIN
         </Link>
-        <Link href="/register" className="site-button" style={{backgroundColor:"#2A6310"}}>
+        <Link
+          href="/register"
+          className="site-button"
+          style={{ backgroundColor: "#2A6310" }}
+        >
           REGISTER
         </Link>
       </>

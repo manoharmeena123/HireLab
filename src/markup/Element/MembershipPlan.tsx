@@ -6,7 +6,6 @@ const bnr7 = require("./../../images/background/plans.png");
 
 const MembershipPlans = () => {
   const { data: membershipData } = useGetMembershipQuery();
-  console.log("membershipData", membershipData);
   return (
     <div className="section-content box-sort-in button-example m-t80">
       <div className="pricingtable-row">

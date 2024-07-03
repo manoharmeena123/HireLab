@@ -1,6 +1,6 @@
 // src/app/send-otp/Register2.tsx
 "use client";
-import React, { ChangeEvent, FormEvent,useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useVerifyOtpMutation } from "../send-otp/store/send-otp.query";
@@ -16,12 +16,11 @@ import { selectLoginState } from "@/app/login/store/login.selectors";
 import { selectRegisterState } from "@/app/register/store/register.selectors";
 import { toast } from "react-toastify";
 import styles from "./styles/SendOtp.module.css";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 import { VerifyOtp } from "./types";
 import { signIn } from "next-auth/react";
 import Env from "@/lib/Env";
 const bnr = require("./../../images/background/bg6.jpg");
-
 
 interface RegisterData {
   mobile_number: string;
@@ -37,19 +36,19 @@ const OtpVefication = () => {
   const registerState = useSelector(selectRegisterState);
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
- // Parse localStorage data
- useEffect(() => {
-  const data = localStorage.getItem('registerData');
-  if (data) {
-    try {
-      const parsedData = JSON.parse(data);
-      setParsedData(parsedData);
-      console.log('Parsed Data:', parsedData?.mobile_number);
-    } catch (error) {
-      console.error('Error parsing register data from localStorage', error);
+  // Parse localStorage data
+  useEffect(() => {
+    const data = localStorage.getItem("registerData");
+    if (data) {
+      try {
+        const parsedData = JSON.parse(data);
+        setParsedData(parsedData);
+        console.log("Parsed Data:", parsedData?.mobile_number);
+      } catch (error) {
+        console.error("Error parsing register data from localStorage", error);
+      }
     }
-  }
-}, []);
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,8 +72,7 @@ const OtpVefication = () => {
         }
         await signIn("credentials", {
           otp: { ...verifyOtpState },
-          mobile_number:
-            loginState?.mobile_number || parsedData?.mobile_number,
+          mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
           redirect: true,
           callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
         });

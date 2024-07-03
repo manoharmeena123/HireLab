@@ -1,16 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import Profilesidebar from "../Profilesidebar";
+import Profilesidebar from "@/markup/Element/Profilesidebar";
 import { useRouter } from "next/navigation";
-import useAuthToken from "./../../hooks/useAuthToken";
+import { useAuthToken } from "./../../hooks/useAuthToken";
 import Select, { SingleValue } from "react-select";
 import {
   useGetCollageQuery,
   useGetIndustryQuery,
   useGetDesignationQuery,
 } from "@/store/global-store/global.query";
-
 interface OptionType {
   value: string;
   label: string;
@@ -22,9 +21,12 @@ const JobSeeker: React.FC = () => {
   const { data: collageData } = useGetCollageQuery();
   const { data: industryData } = useGetIndustryQuery();
   const { data: designationData } = useGetDesignationQuery();
-  const [selectedCollege, setSelectedCollege] = useState<SingleValue<OptionType>>(null);
-  const [selectedIndustry, setSelectedIndustry] = useState<SingleValue<OptionType>>(null);
-  const [selectedDesignation, setSelectedDesignation] = useState<SingleValue<OptionType>>(null);
+  const [selectedCollege, setSelectedCollege] =
+    useState<SingleValue<OptionType>>(null);
+  const [selectedIndustry, setSelectedIndustry] =
+    useState<SingleValue<OptionType>>(null);
+  const [selectedDesignation, setSelectedDesignation] =
+    useState<SingleValue<OptionType>>(null);
 
   const handleCollegeChange = (selectedOption: SingleValue<OptionType>) => {
     setSelectedCollege(selectedOption);
@@ -194,7 +196,7 @@ const JobSeeker: React.FC = () => {
                         <div className="form-group">
                           <label>Industry:</label>
                           <Select
-                             menuPlacement="top"
+                            menuPlacement="top"
                             styles={customStyles}
                             value={selectedIndustry}
                             onChange={handleIndustryChange}
