@@ -1,9 +1,15 @@
+/* Header.module.css */
+
 .containerFluid {
   padding-left: 12rem !important;
 }
 
 .logoHeader {
-  padding-right: 2rem;
+  padding-right: 2rem !important;
+}
+
+.logo {
+  left:-100px
 }
 
 @media (max-width: 1200px) {
@@ -16,4 +22,22 @@
   .containerFluid {
     padding-left: 1rem !important;
   }
+}
+
+.close-btn {
+  background: none !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 1.5rem !important;
+  color: #333 !important;
+  margin-left: 10px !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: 10px !important;
+  transform: translateY(-50%) !important;
+  z-index: 2 !important; 
+}
+
+.close-btn:hover {
+  color: #f00 !important; 
 }
