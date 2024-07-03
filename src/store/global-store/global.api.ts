@@ -1,4 +1,5 @@
 import { ApplyJobData, SaveJobData } from "@/types/index";
+import { getEnabledCategories } from "trace_events";
 
 export const queries = {
   getBlogs: {
@@ -125,6 +126,30 @@ export const queries = {
       url: "api/get-additonal-perks",
       method: "GET",
     }),
+  },
+  getTier :{
+    query :()=>({
+      url :"api/get-tiers",
+      method :"GET"
+    }),
+  },
+  getDesignation :{
+    query :()=>({
+      url :"api/get-designations",
+      method :"GET"
+    }),
+  },
+  getSetting :{
+    query :()=>({
+      url :"api/get-setting",
+      method :"GET"
+    }),
+  },
+  getCategories :{
+    query :()=>({
+      url :"api/get-categories",
+      method :"GET"
+    })
   },
 
   //Post

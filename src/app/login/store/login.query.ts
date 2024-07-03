@@ -1,10 +1,10 @@
-import { hirelabApiSlice } from '@/rtk/base-query';
-import { queries } from './login.api';
-import { setAuthToken, setAuthState } from './login.slice';
-import { LoginArgs, LoginResponse } from '../types';
+import { hirelabApiSlice } from "@/rtk/base-query";
+import { queries } from "./login.api";
+import { setAuthToken, setAuthState } from "./login.slice";
+import { LoginArgs, LoginResponse, WritableLoggedUserResponse,WritableLogoutResponse } from "../types";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
-  addTagTypes: ['Login'],
+  addTagTypes: ["Login", "LogOut", "LoggedInUser"],
 });
 
 const loginApiSlice = hirelabEnhancedSlice.injectEndpoints({
@@ -14,15 +14,23 @@ const loginApiSlice = hirelabEnhancedSlice.injectEndpoints({
       async onQueryStarted(arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log('logindata', data);
+          console.log("logindata", data);
         } catch (error) {
-          console.error('Login failed:', error);
+          console.error("Login failed:", error);
         }
       },
-      invalidatesTags: ['Login'],
+      invalidatesTags: ["Login"],
+    }),
+    getlogout: builder.query<WritableLogoutResponse, void>({
+      query: queries.getlogout.query,
+      providesTags: ["LogOut"],
+    }),
+    getLoggedInUser: builder.query<WritableLoggedUserResponse, void>({
+      query: queries.getLoggedInUser.query,
+      providesTags: ["LoggedInUser"],
     }),
   }),
 });
 
-export const { useLoginMutation } = loginApiSlice;
+export const { useLoginMutation, useGetlogoutQuery,useGetLoggedInUserQuery } = loginApiSlice;
 export default loginApiSlice;
