@@ -11,7 +11,7 @@ import {
 } from "@/app/login/store/login.selectors";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 import styles from "./styles/Login.module.css";
 import { useRouter } from "next/navigation";
 
@@ -29,15 +29,16 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await login(authState).unwrap();
+      localStorage.setItem('logindata', JSON.stringify(authState));
       setLoading(false);
       console.log("login response", res);
 
       if (res.code === 200 && res?.data) {
-        console.log('res', res)
+        console.log("res", res);
         toast.success(res?.message, { theme: "colored" });
-        
+
         // Redirect to /send-otp page
-        router.push('/send-otp');
+        router.push("/send-otp");
 
         // await signIn("credentials", {
         //   mobile_number: res.data.mobile_number,

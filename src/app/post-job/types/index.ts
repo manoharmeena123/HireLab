@@ -14,6 +14,8 @@ export interface PostJobType {
   maximum_education: string;
   total_experience: string;
   job_description: string;
+  salary: string;
+  tags: string;
 }
 
 export interface PostJobResponse {
@@ -37,9 +39,11 @@ export interface PostJobResponse {
     job_description: string;
     updated_at: string;
     created_at: string;
+    salary: string;
+    tags: string;
     id: number;
   }>;
-  errors: Partial<Record<keyof Omit<PostJobType, 'errors'>, string[]>>;
+  errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
 
 export interface PostJobState {
@@ -56,5 +60,7 @@ export interface PostJobState {
   maximum_education: string;
   total_experience: string;
   job_description: string;
-  errors: Partial<Record<keyof Omit<PostJobType, 'errors'>, string[]>>;
+  salary: string;
+  tags: string;
+  errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }

@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { toast } from "react-toastify";
 import Loading from "@/components/Loading";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 const CompanyProfile = () => {
   const { token, user } = useAuthToken();
@@ -100,12 +100,12 @@ const CompanyProfile = () => {
     }
   }, [token]);
 
-  const handleFileChange = (e:any) => {
+  const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     setProfileData({ ...profileData, image: file });
   };
 
-  const handleSubmit = (event: { preventDefault: () => void; }) => {
+  const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
     // Custom validation for URLs
@@ -410,8 +410,7 @@ const CompanyProfile = () => {
                               }
                               value={profileData?.description}
                               rows={4}
-                            >
-                            </textarea>
+                            ></textarea>
                           </div>
                         </div>
                       </div>

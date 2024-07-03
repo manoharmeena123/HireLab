@@ -1,12 +1,16 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/Hire Labs_Final logo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname } from "next/navigation";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
+
+// Import Font Awesome icons
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const { token, user } = useAuthToken();
@@ -14,17 +18,32 @@ const Header = () => {
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
 
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
     <ProfileDropdown sessionUser={user} />
   );
+
   const renderLoginRegisterButtons = !isLoginPage &&
     !isRegisterPage &&
     !token && (
       <>
-        <Link href="/login" className="site-button" style={{backgroundColor:"#2A6310"}}>
+        <Link
+          href="/login"
+          className="site-button"
+          style={{ backgroundColor: "#2A6310" }}
+        >
           LOGIN
         </Link>
-        <Link href="/register" className="site-button" style={{backgroundColor:"#2A6310"}}>
+        <Link
+          href="/register"
+          className="site-button"
+          style={{ backgroundColor: "#2A6310" }}
+        >
           REGISTER
         </Link>
       </>
@@ -42,19 +61,18 @@ const Header = () => {
                   className="logo"
                   alt="img"
                   fill
-                  style={{ objectFit: "contain" }}
+                  style={{ objectFit: "contain", fontSize: "1.5rem" }}
                 />
               </Link>
             </div>
             <button
               className="navbar-toggler collapsed navicon justify-content-end"
               type="button"
-              data-toggle="collapse"
-              data-target="#navbarNavDropdown"
-              aria-controls="navbarNavDropdown"
-              aria-expanded="false"
+              onClick={toggleMenu}
               aria-label="Toggle navigation"
-            ></button>
+            >
+              <FontAwesomeIcon icon={faBars} style={{ fontSize: "1.2rem" }} />
+            </button>
             <div className="extra-nav">
               <div className="extra-cell">
                 {renderProfileDropdown}
@@ -62,14 +80,50 @@ const Header = () => {
               </div>
             </div>
             <div
-              className="header-nav navbar-collapse collapse myNavbar justify-content-start"
+              className={`header-nav navbar-collapse collapse myNavbar justify-content-start ${
+                menuOpen ? "show" : ""
+              }`}
               id="navbarNavDropdown"
+              style={{  paddingRight :"2rem"}}
             >
-              <div className="logo-header mostion d-md-block d-lg-none">
-                <Link href="/">
-                  <Image src={logo2} className="logo" alt="img" />
-                </Link>
-              </div>
+              {menuOpen && (
+                <div className={`logo-header mostion ${styles.logo}`}>
+                  <Link href="/">
+                    <Image
+                      src={logo2}
+                      className="logo"
+                      alt="img"
+                      fill
+                      style={{ objectFit: "contain" }}
+                    />
+                  </Link>
+                </div>
+              )}
+              {menuOpen && (
+                <button
+                  className="close-btn d-block"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1.5rem",
+                    color: "#333",
+                    marginLeft: "10px",
+                    position: "absolute",
+                    top: "6%",
+                    right: "10px",
+                    transform: "translateY(-50%)",
+                    zIndex: 2,
+                  }}
+                  onClick={toggleMenu}
+                  aria-label="Close navigation"
+                >
+                  <FontAwesomeIcon
+                    icon={faTimes}
+                    style={{ fontSize: "1.5rem" }}
+                  />
+                </button>
+              )}
               <ul className="nav navbar-nav">
                 <li className="">
                   <Link href="/">Home</Link>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 import { useRouter } from "next/navigation";
 
 const Companyprofile = () => {

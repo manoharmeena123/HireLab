@@ -1,0 +1,95 @@
+.memberShipDiv {
+    min-height: 500px !important;
+    border-radius: 20px !important;
+    position: relative !important;
+  }
+  
+  .memberShipDiv:hover {
+    background-color: #2a6310 !important;
+    color: white !important;
+  }
+  
+  .memberShipDiv:hover .siteButton {
+    background-color: #fff !important; /* Changes the button background color to white */
+    color: #000 !important; /* Changes the button text color to black */
+  }
+  
+  .memberShipDiv:hover h4 {
+    color: white !important;
+    border-color: white !important;
+  }
+  
+  .memberShipDiv:hover ul li {
+    color: white !important;
+  }
+  
+  .whiteHover {
+    border: 1px solid white !important;
+  }
+  
+  .memberShipDiv:hover h3 {
+    color: white !important;
+  }
+  
+  .displayProperty {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+  }
+  
+  .paginationBx .pagination {
+    width: 300px !important;
+    margin-left: 0px !important;
+  }
+  
+  .displayItemCenter {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .pricingtablePrice h4 {
+    font-weight: bold !important;
+    font-size: 28px !important;
+    border: 1.5px solid black !important;
+    border-radius: 20px !important;
+    padding: 5px !important;
+  }
+  
+  .pricingtablePrice p {
+    text-align: center !important;
+    margin: 10px 0 !important;
+  }
+  
+  .priceWrap h3 {
+    font-size: 20px !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+  }
+  
+  .priceWrap ul li {
+    color: black !important;
+    margin: 5px 0 !important;
+    font-size: 18px !important;
+  }
+  
+  .mpCards {
+    margin-top: 20px !important;
+  }
+  
+  .textCenter {
+    text-align: center !important;
+  }
+  
+  @media (max-width: 1042px) {
+    .displayProperty {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .displayProperty {
+      grid-template-columns: repeat(1, 1fr) !important;
+    }
+  }
+  

@@ -12,7 +12,7 @@ import axios from "axios";
 import "react-toastify/ReactToastify.min.css";
 
 import { ToastContainer, toast } from "react-toastify";
-import useAuthToken from "@/hooks/useAuthToken";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 function Changepasswordpage() {
   const { token } = useAuthToken();
@@ -36,61 +36,61 @@ function Changepasswordpage() {
   //       setUser(data.data.user);
   //       });
   //   },[]);
-//   useEffect(() => {
-//     if (userSession?.user?.data?.token) {
-//       axios
-//         .get(CHECK_CREDENTIALS, {
-//           headers: {
-//             Authorization: `Bearer ${userSession.user.data.token}`,
-//           },
-//         })
-//         .then((data) => {
-//           setUser(data.data.user);
-//         })
-//         .catch((error) => {
-//           console.error("Error fetching data", error);
-//         });
-//     }
-//   }, [userSession]);
+  //   useEffect(() => {
+  //     if (userSession?.user?.data?.token) {
+  //       axios
+  //         .get(CHECK_CREDENTIALS, {
+  //           headers: {
+  //             Authorization: `Bearer ${userSession.user.data.token}`,
+  //           },
+  //         })
+  //         .then((data) => {
+  //           setUser(data.data.user);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error fetching data", error);
+  //         });
+  //     }
+  //   }, [userSession]);
   const [loading, setLoading] = useState(false);
-	function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-		throw new Error("Function not implemented.");
-	}
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    throw new Error("Function not implemented.");
+  }
 
   //console.log(CHANGE_PASSWORD_URL);
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
+  //   const handleSubmit = (event) => {
+  //     event.preventDefault();
 
-//     axios
-//       .post(CHANGE_PASSWORD_URL, passwordData, {
-//         headers: {
-//           Authorization: `Bearer ${userSession?.user.data.token}`,
-//           Accept: "application/json",
-//         },
-//       })
-//       .then((res) => {
-//         const response = res.data;
-//         setLoading(false);
-//         console.log(response);
-//         if (response?.code == 200) {
-//           navigateSource("/manage-job");
-//           <ToastContainer />;
-//           toast.success("Change Password Updated successfully!", {
-//             theme: "colored",
-//           });
-//         } else if (response?.code == 401) {
-//           toast.error(response?.message, { theme: "colored" });
-//         } else if (response?.code == 404) {
-//           // setLoading(false);
-//           toast.warning("Danger", { autoClose: 10000 });
-//           setErrors(response?.data?.error);
-//         }
-//       })
-//       .catch((err) => {
-//         setLoading(false);
-//         // setErrors(err?.response?.data?.errors);
-//       });
-//   };
+  //     axios
+  //       .post(CHANGE_PASSWORD_URL, passwordData, {
+  //         headers: {
+  //           Authorization: `Bearer ${userSession?.user.data.token}`,
+  //           Accept: "application/json",
+  //         },
+  //       })
+  //       .then((res) => {
+  //         const response = res.data;
+  //         setLoading(false);
+  //         console.log(response);
+  //         if (response?.code == 200) {
+  //           navigateSource("/manage-job");
+  //           <ToastContainer />;
+  //           toast.success("Change Password Updated successfully!", {
+  //             theme: "colored",
+  //           });
+  //         } else if (response?.code == 401) {
+  //           toast.error(response?.message, { theme: "colored" });
+  //         } else if (response?.code == 404) {
+  //           // setLoading(false);
+  //           toast.warning("Danger", { autoClose: 10000 });
+  //           setErrors(response?.data?.error);
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         setLoading(false);
+  //         // setErrors(err?.response?.data?.errors);
+  //       });
+  //   };
   return (
     <>
       <div className="page-content bg-white">

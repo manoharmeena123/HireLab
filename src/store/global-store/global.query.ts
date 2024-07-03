@@ -12,6 +12,18 @@ import {
   SaveJobDataResponse,
   ApplyJobResponse,
   WritableGetSaveJobResponse,
+  WritableEducationResponse,
+  WritableLocationResponse,
+  WritableTagResponse,
+  WritableJobTypeResponse,
+  WritableCompensationResponse,
+  WritableMembershipResponse,
+  WritableAdditionalPerkResponse,
+  WritableCtcApiResponse,
+  WritableTiersResponse,
+  WritableDesignationsResponse,
+  WritableSettingResponse,
+  WritableCategoriesResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -21,6 +33,7 @@ import { AnyNaptrRecord } from "dns";
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
   addTagTypes: [
     "Blogs",
+    "BlogsbyId",
     "Events",
     "Sector",
     "RecentJobs",
@@ -35,6 +48,17 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SaveJobs",
     "GetSaveJobs",
     "DeleteSaveJobs",
+    "Locations",
+    "Educations",
+    "Tags",
+    "JobType",
+    "Compensations",
+    "Membership",
+    "AdditionalPerk",
+    "Tier",
+    "Designation",
+    "Setting",
+    "Categories"
   ],
 });
 
@@ -44,9 +68,9 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getBlogs.query,
       providesTags: ["Blogs"],
     }),
-    getBlogsDataById: builder.query<BlogResponse, string>({
+    getBlogsDataById: builder.mutation<BlogResponse, string>({
       query: (id) => queries.getBlogsById.query(id),
-      providesTags: ["Blogs"],
+      invalidatesTags: ["BlogsbyId"],
     }),
     getEvents: builder.query<EventResponse, void>({
       query: queries.getEvents.query,
@@ -64,7 +88,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getAppliedJobs.query,
       providesTags: ["AppliedJobs"],
     }),
-    getCtcData: builder.query<any, void>({
+    getCtcData: builder.query<WritableCtcApiResponse, void>({
       query: queries.getCtcData.query,
       providesTags: ["CTCData"],
     }),
@@ -104,13 +128,57 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (id) => queries.deleteSavedJob.query(id),
       invalidatesTags: ["DeleteSaveJobs"],
     }),
+    getLocations : builder.query<WritableLocationResponse, void>({
+      query: queries.getLocations.query,
+      providesTags: ["Locations"]
+    }),
+    getEducations : builder.query<WritableEducationResponse, void>({
+      query: queries.getEducations.query,
+      providesTags: ["Educations"]
+    }),
+    getTags : builder.query<WritableTagResponse, void>({
+      query: queries.getTags.query,
+      providesTags: ["Tags"]
+    }),
+    getJobType : builder.query<WritableJobTypeResponse, void>({
+      query: queries.getJobType.query,
+      providesTags: ["JobType"]
+    }),
+    getCompensations : builder.query <WritableCompensationResponse, void>({
+      query: queries.getCompensations.query,
+      providesTags: ["Compensations"]
+    }),
+    getMembership : builder.query<WritableMembershipResponse, void>({
+      query: queries.getMembership.query,
+      providesTags: ["Membership"]
+    }),
+    getAdditionalPerk : builder.query<WritableAdditionalPerkResponse,void>({
+      query :queries.getAdditionalPerk.query,
+      providesTags: ["AdditionalPerk"]
+    }),
+    getTier : builder.query<WritableTiersResponse, void>({
+      query :queries.getTier.query,
+      providesTags: ["Tier"]
+    }),
+    getDesignation : builder.query<WritableDesignationsResponse, void>({
+      query :  queries.getDesignation.query,
+      providesTags: ["Designation"]
+    }),
+    getSetting : builder.query<WritableSettingResponse, void>({
+      query : queries.getSetting.query,
+      providesTags: ["Setting"]
+    }),
+    getCategories : builder.query<WritableCategoriesResponse, void>({
+      query : queries.getCategories.query,
+      providesTags: ["Categories"]
+    })
   }),
   overrideExisting: true,
 });
 
 export const {
   useGetBlogsDataQuery,
-  useGetBlogsDataByIdQuery,
+  useGetBlogsDataByIdMutation,
   useGetEventsQuery,
   useGetSectorQuery,
   useGetRecentJobsQuery,
@@ -124,6 +192,17 @@ export const {
   useGetTestimonialsQuery,
   usePostSaveJobMutation,
   useGetSavedJobQuery,
-  useDeleteSavedJobMutation
+  useDeleteSavedJobMutation,
+  useGetLocationsQuery,
+  useGetEducationsQuery,
+  useGetTagsQuery,
+  useGetJobTypeQuery,
+  useGetCompensationsQuery,
+  useGetMembershipQuery,
+  useGetAdditionalPerkQuery,
+  useGetTierQuery,
+  useGetDesignationQuery,
+  useGetSettingQuery,
+  useGetCategoriesQuery
 } = globalApi;
 export default globalApi;

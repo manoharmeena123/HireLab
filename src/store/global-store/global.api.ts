@@ -1,4 +1,5 @@
 import { ApplyJobData, SaveJobData } from "@/types/index";
+import { getEnabledCategories } from "trace_events";
 
 export const queries = {
   getBlogs: {
@@ -79,10 +80,75 @@ export const queries = {
       method: "GET",
     }),
   },
-  deleteSavedJob:{
-    query :(id :string) => ({
+  deleteSavedJob: {
+    query: (id: string) => ({
       url: `api/delete-saved-job/${id}`,
       method: "GET",
+    }),
+  },
+  getEducations: {
+    query: () => ({
+      url: "api/get-educations",
+      method: "GET",
+    }),
+  },
+  getLocations: {
+    query: () => ({
+      url: "api/get-locations",
+    }),
+  },
+  getTags: {
+    query: () => ({
+      url: "api/get-tags",
+      method: "GET",
+    }),
+  },
+  getJobType: {
+    query: () => ({
+      url: "api/get-job-types",
+      method: "GET",
+    }),
+  },
+  getCompensations: {
+    query: () => ({
+      url: "api/get-compensations",
+      method: "GET",
+    }),
+  },
+  getMembership: {
+    query: () => ({
+      url: "api/get-membership-plan",
+      method: "GET",
+    }),
+  },
+  getAdditionalPerk: {
+    query: () => ({
+      url: "api/get-additonal-perks",
+      method: "GET",
+    }),
+  },
+  getTier :{
+    query :()=>({
+      url :"api/get-tiers",
+      method :"GET"
+    }),
+  },
+  getDesignation :{
+    query :()=>({
+      url :"api/get-designations",
+      method :"GET"
+    }),
+  },
+  getSetting :{
+    query :()=>({
+      url :"api/get-setting",
+      method :"GET"
+    }),
+  },
+  getCategories :{
+    query :()=>({
+      url :"api/get-categories",
+      method :"GET"
     })
   },
 

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
+import Select, { MultiValue } from "react-select";
 import Image from "next/image";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { toast } from "react-toastify";
@@ -16,15 +17,33 @@ import {
   selectPostJobErrors,
 } from "@/app/post-job/store/post-job.selectors";
 import { usePostJobMutation } from "@/app/post-job/store/post-job.query";
+import {
+  useGetLocationsQuery,
+  useGetEducationsQuery,
+  useGetTagsQuery,
+  useGetJobTypeQuery,
+  useGetCompensationsQuery,
+  useGetAdditionalPerkQuery,
+} from "@/store/global-store/global.query";
 import styles from "./styles/PostJob.module.css"; // Assuming you have a CSS module file
 
 const Componypostjobs = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const profileData = useSelector(selectPostJobState);
-
+  const [selectedTags, setSelectedTags] = useState<
+    MultiValue<{ value: string; label: string }>
+  >([]);
   const errors = useSelector(selectPostJobErrors);
+
+  // queries
   const [postJob, { isLoading }] = usePostJobMutation();
+  const { data: educationData } = useGetEducationsQuery();
+  const { data: locationData } = useGetLocationsQuery();
+  const { data: tagsData } = useGetTagsQuery();
+  const { data: jobtTypeData } = useGetJobTypeQuery();
+  const { data: compensationData } = useGetCompensationsQuery();
+  const { data: additionalPerkData } = useGetAdditionalPerkQuery();
 
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -47,6 +66,7 @@ const Componypostjobs = () => {
   const [isTotalExperienceHovered, setIsTotalExperienceHovered] = useState(
     Array(3).fill(false)
   );
+  const [isTagHovered, setIsTagHovered] = useState(Array(10).fill(false));
 
   const [selectedJobType, setSelectedJobType] = useState<number | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
@@ -84,7 +104,6 @@ const Componypostjobs = () => {
     );
   };
 
-  // Updated handleToggleSelect function to correctly dispatch the selected index for job_type
   const handleToggleSelect = (
     index: number,
     field: string,
@@ -94,7 +113,6 @@ const Componypostjobs = () => {
     selectedState: number | null | number[],
     isMultiSelect = false
   ) => {
-    console.log('index ', field ,index)
     if (isMultiSelect) {
       let newSelected: number[] = Array.isArray(selectedState)
         ? [...selectedState]
@@ -110,16 +128,9 @@ const Componypostjobs = () => {
       dispatch(setPostJobData({ [field]: newSelected.join(",") }));
     } else {
       const valueToDispatch = index === selectedState ? null : index;
-      {console.log('valueToDispatch', valueToDispatch)}
       (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
         valueToDispatch
       );
-      // Changed: Dispatching the index directly instead of converting to string
-      // dispatch(
-      //   setPostJobData({
-      //     [field]: valueToDispatch !== null ? valueToDispatch : "",
-      //   })
-      // );
       dispatch(
         setPostJobData({
           [field]: valueToDispatch !== null ? valueToDispatch.toString() : "",
@@ -138,7 +149,6 @@ const Componypostjobs = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      // Ensure profileData has the correct types for each field before sending
       const response = await postJob(profileData).unwrap();
       if (response.code === 200) {
         toast.success("Post Job successfully!", { theme: "colored" });
@@ -154,6 +164,19 @@ const Componypostjobs = () => {
       console.error("Error posting job:", err);
     }
   };
+
+  const handleTagChange = (
+    selectedOptions: MultiValue<{ value: string; label: string }>
+  ) => {
+    setSelectedTags(selectedOptions);
+    const tagValues = selectedOptions.map((option) => option.value).join(",");
+    dispatch(setPostJobData({ tags: tagValues }));
+  };
+
+  const tagOptions = tagsData?.data?.map((tag) => ({
+    value: tag.id.toString(), // Ensure tag value is a string
+    label: tag.title,
+  }));
 
   const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
@@ -335,58 +358,60 @@ const Componypostjobs = () => {
                         <div className="form-group">
                           <label>Job Type</label>
                           <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem", marginBottom: "26px" }}
+                            className="job-time d-flex flex-wrap mr-auto"
+                            style={{ gap: "1rem" }}
                           >
-                            {["Full Time", "Part Time", "Contract"].map(
-                              (text, index) => (
-                                <span
-                                  key={index}
-                                  style={spanStyles(
-                                    isJobTypeHovered[index],
-                                    selectedJobType === index + 1
-                                  )}
-                                  onMouseEnter={() =>
-                                    handleMouseEnter(index, setIsJobTypeHovered)
-                                  }
-                                  onMouseLeave={() =>
-                                    handleMouseLeave(index, setIsJobTypeHovered)
-                                  }
-                                  onClick={() =>
-                                    // Changed: Calling handleToggleSelect with index + 1 for job_type
-                                    handleToggleSelect(
-                                      index + 1,
-                                      "job_type",
-                                      setSelectedJobType,
-                                      selectedJobType
-                                    )
-                                  }
-                                >
-                                  {text}
-                                </span>
-                              )
-                            )}
-                          </div>
-
-                          <span className="text-red-500 text-danger">
-                            {errors?.job_type?.[0]}
-                          </span>
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="check1"
-                              name="job_type"
-                              onChange={(e) => handleInputChange(e as any)}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="check1"
-                            >
-                              This is night shift job
-                            </label>
+                            {jobtTypeData?.data?.map((jobType, index) => (
+                              <div
+                                key={jobType.id}
+                                onClick={() =>
+                                  handleToggleSelect(
+                                    index,
+                                    "jobType",
+                                    setSelectedJobType,
+                                    selectedJobType
+                                  )
+                                }
+                                onMouseEnter={() =>
+                                  handleMouseEnter(index, setIsJobTypeHovered)
+                                }
+                                onMouseLeave={() =>
+                                  handleMouseLeave(index, setIsJobTypeHovered)
+                                }
+                                style={spanStyles(
+                                  isJobTypeHovered[index],
+                                  selectedJobType === jobType.id
+                                )}
+                              >
+                                {jobType?.title}
+                              </div>
+                            ))}
                           </div>
                         </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.job_type?.[0]}
+                        </span>
+                      </div>
+
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>Tags</label>
+                          <div
+                            className="job-time d-flex flex-wrap mr-auto"
+                            style={{ gap: "1rem" }}
+                          >
+                            <Select
+                              isMulti
+                              options={tagOptions}
+                              value={selectedTags}
+                              onChange={handleTagChange}
+                              placeholder="Select tags"
+                            />
+                          </div>
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.tags?.[0]}
+                        </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
@@ -395,11 +420,7 @@ const Componypostjobs = () => {
                             className="job-time d-flex gap-3 mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {[
-                              "Work From Office",
-                              "Work From Home",
-                              "Both Full Time & Part Time",
-                            ].map((text, index) => (
+                            {locationData?.data?.map((text, index) => (
                               <span
                                 key={index}
                                 style={spanStyles(
@@ -421,7 +442,7 @@ const Componypostjobs = () => {
                                   )
                                 }
                               >
-                                {text}
+                                {text?.title}
                               </span>
                             ))}
                           </div>
@@ -452,39 +473,37 @@ const Componypostjobs = () => {
                             className="job-time d-flex gap-3 mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {["Fixed Only", "Fixed + Incentive"].map(
-                              (text, index) => (
-                                <span
-                                  key={index}
-                                  style={spanStyles(
-                                    isCompensationHovered[index],
-                                    selectedCompensation === index + 1
-                                  )}
-                                  onMouseEnter={() =>
-                                    handleMouseEnter(
-                                      index,
-                                      setIsCompensationHovered
-                                    )
-                                  }
-                                  onMouseLeave={() =>
-                                    handleMouseLeave(
-                                      index,
-                                      setIsCompensationHovered
-                                    )
-                                  }
-                                  onClick={() =>
-                                    handleToggleSelect(
-                                      index + 1,
-                                      "compensation",
-                                      setSelectedCompensation,
-                                      selectedCompensation
-                                    )
-                                  }
-                                >
-                                  {text}
-                                </span>
-                              )
-                            )}
+                            {compensationData?.data?.map((text, index) => (
+                              <span
+                                key={index}
+                                style={spanStyles(
+                                  isCompensationHovered[index],
+                                  selectedCompensation === index + 1
+                                )}
+                                onMouseEnter={() =>
+                                  handleMouseEnter(
+                                    index,
+                                    setIsCompensationHovered
+                                  )
+                                }
+                                onMouseLeave={() =>
+                                  handleMouseLeave(
+                                    index,
+                                    setIsCompensationHovered
+                                  )
+                                }
+                                onClick={() =>
+                                  handleToggleSelect(
+                                    index + 1,
+                                    "compensation",
+                                    setSelectedCompensation,
+                                    selectedCompensation
+                                  )
+                                }
+                              >
+                                {text?.title}
+                              </span>
+                            ))}
                           </div>
                           <span className="text-red-500 text-danger">
                             {errors?.compensation?.[0]}
@@ -498,13 +517,7 @@ const Componypostjobs = () => {
                             className="job-time d-flex flex-wrap mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {[
-                              "Flexible Working Hour",
-                              "Weekly Pay",
-                              "Laptop",
-                              "Travel Allowance (TA)",
-                              "Annual Bonus",
-                            ].map((text, index) => (
+                            {additionalPerkData?.data?.map((text, index) => (
                               <span
                                 key={index}
                                 style={spanStyles(
@@ -533,7 +546,7 @@ const Componypostjobs = () => {
                                   )
                                 }
                               >
-                                {text.replace(" +", "")}
+                                {text?.title?.replace(" +", "")}
                                 <span style={plusStyle}>+</span>
                               </span>
                             ))}
@@ -613,7 +626,7 @@ const Componypostjobs = () => {
                             className="job-time d-flex gap-3 mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {["10th", "12th", "Graduate"].map((text, index) => (
+                            {educationData?.data?.map((text, index) => (
                               <span
                                 key={index}
                                 style={spanStyles(
@@ -641,7 +654,7 @@ const Componypostjobs = () => {
                                   )
                                 }
                               >
-                                {text}
+                                {text?.name}
                               </span>
                             ))}
                           </div>
