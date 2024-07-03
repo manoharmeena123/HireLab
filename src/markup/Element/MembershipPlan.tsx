@@ -12,6 +12,7 @@ const MembershipPlans = () => {
         <div className="display-property">
           {membershipData?.data?.map((text, index) => (
             <div
+            key={index}
               className="pricingtable-wrapper style2 bg-white member-ship-div"
               style={{
                 minHeight: "500px",

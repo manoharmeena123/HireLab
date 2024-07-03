@@ -53,9 +53,9 @@ export const ProfileDropdown = ({ sessionUser } : any) => {
         }
       })
       .catch((err) => {
-        // toast.error("Something went wrong.please try again", {
-        //   theme: "colored",
-        // });
+        toast.error("Something went wrong.please try again", {
+          theme: "colored",
+        });
       });
 
     signOut({ redirect: true, callbackUrl: "/login" });
@@ -71,97 +71,7 @@ export const ProfileDropdown = ({ sessionUser } : any) => {
          
         </span>
       </div>
-      {isOpen && (
-        <div className="profile-sidebar">
-          <div className="profile-details">
-            <Image src={profilePic} className="profile-image-large" alt="Profile Image" />
-            <h2 className="profile-name-tab">{sessionUser?.user?.user?.data?.name}</h2>
-            
-          </div>
-          <ul className="profile-menu">
-            <li>
-              <Link href="/dashboard">
-                <div className="menu-item">
-                  {/* <DashboardIcon className="menu-icon" /> */}
-                  <span className="menu-text">Dashboard</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/profile">
-                <div className="menu-item">
-                  {/* <ProfileIcon className="menu-icon" /> */}
-                  <span className="menu-text">Profile</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/my-resume">
-                <div className="menu-item">
-                  {/* <ResumeIcon className="menu-icon" /> */}
-                  <span className="menu-text">My Resume</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/saved-jobs">
-                <div className="menu-item">
-                  {/* <SavedJobsIcon className="menu-icon" /> */}
-                  <span className="menu-text">Saved Jobs</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/apply-jobs">
-                <div className="menu-item">
-                  {/* <AppliedJobsIcon className="menu-icon" /> */}
-                  <span className="menu-text">Applied Jobs</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/job-alert">
-                <div className="menu-item">
-                  {/* <JobAlertsIcon className="menu-icon" /> */}
-                  <span className="menu-text">Job Alerts</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/my-resume">
-                <div className="menu-item">
-                  {/* <CVManagerIcon className="menu-icon" /> */}
-                  <span className="menu-text">CV Manager</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              <Link href="/change-password">
-                <div className="menu-item">
-                  {/* <ChangePasswordIcon className="menu-icon" /> */}
-                  <span className="menu-text">Change Password</span>
-                </div>
-              </Link>
-              <hr />
-            </li>
-            <li>
-              {/* <Link href="/logout"> */}
-                <div className="menu-item">
-                  {/* <LogoutIcon className="menu-icon" /> */}
-                  <span onClick={logoutUser} className="menu-text">Logout</span>
-                </div>
-              {/* </Link> */}
-            </li>
-          </ul>
-        </div>
-      )}
+   
       <style jsx>{`
         .profile-dropdown {
           position: relative;
