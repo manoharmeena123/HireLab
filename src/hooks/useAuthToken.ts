@@ -5,7 +5,7 @@ import { setCookie, getCookie, removeCookie } from 'typescript-cookie';
 const TOKEN_KEY = 'cred';
 const USER_KEY = 'user';
 
-const useAuthToken = () => {
+export const useAuthToken = () => {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<any>(null);
 
@@ -44,4 +44,3 @@ const useAuthToken = () => {
   };
 };
 
-export default useAuthToken;

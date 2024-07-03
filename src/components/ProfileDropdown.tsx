@@ -6,8 +6,8 @@ import Image from "next/image";
 import profilePic from "../../../public/images/pic.png"; // Ensure this path is correct
 import { toast } from "react-toastify";
 import { signOut } from "next-auth/react";
-import useAuthToken from "@/hooks/useAuthToken";
-import styles from '@/styles/ProfileDropdown.module.css';
+import { useAuthToken } from "@/hooks/useAuthToken";
+import styles from "@/styles/ProfileDropdown.module.css";
 
 const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +19,10 @@ const ProfileDropdown = () => {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setIsOpen(false);
     }
   };

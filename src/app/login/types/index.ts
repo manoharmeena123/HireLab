@@ -1,6 +1,7 @@
 // src/app/login/types/index.ts
 import { WritableDraft } from "immer";
 export interface LoginState {
+  loggedInUser: any;
   id?: number | null;
   name?: string | null;
   email: string;
