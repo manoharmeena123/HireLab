@@ -148,6 +148,97 @@ interface CtcApiResponse {
 }
 
 
+
+//getTier
+
+interface Tier {
+  id: number;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface TiersResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: Tier[];
+}
+
+
+//get designation
+
+
+interface Designation {
+  id: number;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface DesignationsResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: Designation[];
+}
+
+
+
+//get Setting
+
+interface Setting {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  site_name: string;
+  footer_description: string | null;
+  logo: string | null;
+  twitter: string | null;
+  facebook: string | null;
+  linkedin: string | null;
+  instagram: string | null;
+  api_key: string | null;
+  api_secret: string | null;
+  api_key_for_payment: string | null;
+  api_secret_for_payment: string | null;
+  import_css: string | null;
+  import_js: string | null;
+  address: string;
+  email: string | null;
+  number: string | null;
+}
+
+interface SettingResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: Setting;
+}
+
+
+
+//get categories 
+
+interface Category {
+  id: number;
+  parent_id: number | null;
+  title: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface CategoriesResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: Category[];
+}
+
+
 type WritableAdditionalPerkResponse = WritableDraft<AdditionalPerkResponse>;
 type WritableMembershipResponse = WritableDraft<MembershipResponse>;
 type WritableLocationResponse = WritableDraft<LocationResponse>;
@@ -156,6 +247,11 @@ type WritableJobTypeResponse = WritableDraft<JobTypeResponse>;
 type WritableEducationResponse = WritableDraft<EducationResponse>;
 type WritableCompensationResponse = WritableDraft<CompensationResponse>;
 type WritableCtcApiResponse = WritableDraft<CtcApiResponse>;
+type WritableTiersResponse = WritableDraft<TiersResponse>;
+type WritableDesignationsResponse = WritableDraft<DesignationsResponse>;
+type WritableSettingResponse = WritableDraft<SettingResponse>;
+type WritableCategoriesResponse = WritableDraft<CategoriesResponse>;
+
 
 // Export all types
 export {
@@ -166,5 +262,9 @@ export {
   WritableCompensationResponse,
   WritableMembershipResponse,
   WritableAdditionalPerkResponse,
-  WritableCtcApiResponse
+  WritableCtcApiResponse,
+  WritableTiersResponse,
+  WritableDesignationsResponse,
+  WritableSettingResponse,
+  WritableCategoriesResponse
 };

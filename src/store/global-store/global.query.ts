@@ -19,7 +19,11 @@ import {
   WritableCompensationResponse,
   WritableMembershipResponse,
   WritableAdditionalPerkResponse,
-  WritableCtcApiResponse
+  WritableCtcApiResponse,
+  WritableTiersResponse,
+  WritableDesignationsResponse,
+  WritableSettingResponse,
+  WritableCategoriesResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -29,6 +33,7 @@ import { AnyNaptrRecord } from "dns";
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
   addTagTypes: [
     "Blogs",
+    "BlogsbyId",
     "Events",
     "Sector",
     "RecentJobs",
@@ -49,7 +54,11 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "JobType",
     "Compensations",
     "Membership",
-    "AdditionalPerk"
+    "AdditionalPerk",
+    "Tier",
+    "Designation",
+    "Setting",
+    "Categories"
   ],
 });
 
@@ -59,9 +68,9 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getBlogs.query,
       providesTags: ["Blogs"],
     }),
-    getBlogsDataById: builder.query<BlogResponse, string>({
+    getBlogsDataById: builder.mutation<BlogResponse, string>({
       query: (id) => queries.getBlogsById.query(id),
-      providesTags: ["Blogs"],
+      invalidatesTags: ["BlogsbyId"],
     }),
     getEvents: builder.query<EventResponse, void>({
       query: queries.getEvents.query,
@@ -146,6 +155,22 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getAdditionalPerk : builder.query<WritableAdditionalPerkResponse,void>({
       query :queries.getAdditionalPerk.query,
       providesTags: ["AdditionalPerk"]
+    }),
+    getTier : builder.query<WritableTiersResponse, void>({
+      query :queries.getTier.query,
+      providesTags: ["Tier"]
+    }),
+    getDesignation : builder.query<WritableDesignationsResponse, void>({
+      query :  queries.getDesignation.query,
+      providesTags: ["Designation"]
+    }),
+    getSetting : builder.query<WritableSettingResponse, void>({
+      query : queries.getSetting.query,
+      providesTags: ["Setting"]
+    }),
+    getCategories : builder.query<WritableCategoriesResponse, void>({
+      query : queries.getCategories.query,
+      providesTags: ["Categories"]
     })
   }),
   overrideExisting: true,
@@ -153,7 +178,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
 
 export const {
   useGetBlogsDataQuery,
-  useGetBlogsDataByIdQuery,
+  useGetBlogsDataByIdMutation,
   useGetEventsQuery,
   useGetSectorQuery,
   useGetRecentJobsQuery,
@@ -174,6 +199,10 @@ export const {
   useGetJobTypeQuery,
   useGetCompensationsQuery,
   useGetMembershipQuery,
-  useGetAdditionalPerkQuery
+  useGetAdditionalPerkQuery,
+  useGetTierQuery,
+  useGetDesignationQuery,
+  useGetSettingQuery,
+  useGetCategoriesQuery
 } = globalApi;
 export default globalApi;
