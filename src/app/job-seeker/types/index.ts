@@ -10,10 +10,10 @@ export interface ProfileFormData {
   experience: string | null;
   country: string | null;
   expected_ctc: string | null;
-  resume: File | null;
+  resume: File | string | null;
   location: string | null;
   industry: string | null;
-  image: File | null;
+  image:File | string | null;
 }
 
 type WritableProfileFormData = WritableDraft<ProfileFormData>;
