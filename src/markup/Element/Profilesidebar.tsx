@@ -1,18 +1,54 @@
 // src/components/Profilesidebar.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
 const Profilesidebar = () => {
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
+  const { user } = useLoggedInUser();
+  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
+  useEffect(() => {
+    // Map designation options
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData]);
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      // Only proceed if user and designation_id are not null
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions]);
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap;
+      await logout().unwrap();
       removeToken();
       navigateSource("/");
     } catch (error) {
@@ -42,10 +78,10 @@ const Profilesidebar = () => {
             <div className="candidate-title">
               <div className="">
                 <h4 className="m-b5">
-                  <Link href={"#"}>David Matin</Link>
+                  <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
                 </h4>
                 <p className="m-b0">
-                  <Link href={"#"}>Web developer</Link>
+                  <Link href={"#"}>{designationLabel || "Not available"}</Link>
                 </p>
               </div>
             </div>
@@ -66,7 +102,7 @@ const Profilesidebar = () => {
             </li>
 
             <li>
-              <Link href={"/jobs-saved-jobs"}>
+              <Link href={"/saved-jobs"}>
                 <i className="fa fa-heart-o" aria-hidden="true"></i>
                 <span>Saved Jobs</span>
               </Link>
@@ -93,12 +129,12 @@ const Profilesidebar = () => {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link href={"/jobs-change-password"}>
                 <i className="fa fa-key" aria-hidden="true"></i>
                 <span>Change Password</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href={"./"} onClick={handleLogout}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>

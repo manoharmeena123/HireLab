@@ -1,5 +1,4 @@
 import { ApplyJobData, SaveJobData } from "@/types/index";
-import { getEnabledCategories } from "trace_events";
 
 export const queries = {
   getBlogs: {

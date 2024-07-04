@@ -1,43 +1,93 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { Form } from "react-bootstrap";
 import Image from "next/image";
-import { useAuthToken } from "@/hooks/useAuthToken";
+import Select, { SingleValue } from "react-select";
 import { useRouter } from "next/navigation";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { useUpdateProfileMutation } from "./store/job-poster.query";
+import { useGetCategoriesQuery } from "@/store/global-store/global.query";
+import { WritableProfileData } from "./types/index";
+import { toast } from "react-toastify";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+
+interface OptionType {
+  id: string;
+  value: string;
+  label: string;
+}
 
 const Companyprofile = () => {
-  const { token, user } = useAuthToken();
+  const { token } = useAuthToken();
+   const { user } =useLoggedInUser()
+  console.log("firuserst", user);
   const router = useRouter();
-  const [profileData, setProfileData] = useState({
-    company_name: "",
-    email: "",
-    website: "",
-    founded_date: "",
-    category: "",
-    country: "",
-    description: "",
-    phone: "",
-    city: "",
-    zip: "",
-    address: "",
-    facebook: "",
-    twitter: "",
-    google: "",
-    linkedin: "",
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
+  const { data: categoriesData } = useGetCategoriesQuery();
+
+  const [profileData, setProfileData] = useState<WritableProfileData>({
+    name: null,
+    email: null,
+    website: null,
+    founded_date: null,
+    category_id: null,
+    country: null,
+    description: null,
+    mobile_number: "",
+    city: null,
+    zip: null,
+    address: null,
+    facebook: null,
+    twitter: null,
+    google: null,
+    linkedin: null,
   });
 
-  const handleSubmit = (event: any) => {
+  console.log("profileData", profileData);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(profileData);
+    try {
+      const response = await updateProfile(profileData).unwrap();
+      toast.success("profile successfully updated");
+      console.log("Profile Updated Successfully", response);
+      // Redirect or show success message
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      // Handle error
+    }
   };
 
-  // useEffect(() => {
-  //   // Redirect to login page if no session exists and user is authenticated
-  //   if (!token) {
-  //     router.push("/login");
-  //   }
-  // }, [token, user, router]);
+  const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
+    const selectedCategoryId = (selectedOption as OptionType)?.id || null;
+    setProfileData((prevState) => ({
+      ...prevState,
+      category_id: selectedCategoryId,
+    }));
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setProfileData((prevState) => ({
+      ...prevState,
+      [name]: value === "" ? null : value,
+    }));
+  };
+
+  const categoryOptions = categoriesData?.data?.map((category) => ({
+    id: category.id.toString(),
+    value: category.title,
+    label: category.title,
+  }));
+
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      height: 38,
+      minHeight: 38,
+    }),
+  };
 
   return (
     <>
@@ -57,19 +107,10 @@ const Companyprofile = () => {
                               alt="Company Logo"
                             />
                           </Link>
-                          {/* <div
-                            className="upload-link"
-                            title="update"
-                            data-toggle="tooltip"
-                            data-placement="right"
-                          >
-                            <input type="file" className="update-flie" />
-                            <i className="fa fa-pencil"></i>
-                          </div> */}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>@COMPANY</Link>
+                            <Link href={"#"}>{user?.user?.name}</Link>
                           </h4>
                         </div>
                       </div>
@@ -77,7 +118,7 @@ const Companyprofile = () => {
                         <li>
                           <Link href="/profile" className="active">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Satya Profile</span>
+                            <span>{user?.user?.name} Profile</span>
                           </Link>
                         </li>
                         <li>
@@ -124,7 +165,7 @@ const Companyprofile = () => {
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        SATYA'S Profile
+                        {user?.user?.name}'s Profile
                       </h5>
                       <Link
                         href={"/company-profile"}
@@ -133,22 +174,19 @@ const Companyprofile = () => {
                         Back
                       </Link>
                     </div>
-                    <form method="post" onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit}>
                       <div className="row m-b30">
+                        {/* Company Details */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Company Name</label>
+                            <label>Name</label>
                             <input
                               type="text"
-                              name="company_name"
+                              name="name"
+                              value={profileData.name || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  company_name: e.target.value,
-                                })
-                              }
-                              placeholder="Enter Company Name"
+                              placeholder="Enter Your Name"
                             />
                           </div>
                         </div>
@@ -158,14 +196,10 @@ const Companyprofile = () => {
                             <input
                               type="email"
                               name="email"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  email: e.target.value,
-                                })
-                              }
+                              value={profileData.email || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="info@gmail.com"
+                             placeholder="Enter Your Gmail"
                             />
                           </div>
                         </div>
@@ -175,12 +209,8 @@ const Companyprofile = () => {
                             <input
                               type="text"
                               name="website"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  website: e.target.value,
-                                })
-                              }
+                              value={profileData.website || ""}
+                              onChange={handleChange}
                               className="form-control"
                               placeholder="Website Link"
                             />
@@ -188,17 +218,13 @@ const Companyprofile = () => {
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Founded Date </label>
+                            <label>Founded Date</label>
                             <input
                               type="text"
                               name="founded_date"
+                              value={profileData.founded_date || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  founded_date: e.target.value,
-                                })
-                              }
                               placeholder="17/12/2018"
                             />
                           </div>
@@ -206,40 +232,33 @@ const Companyprofile = () => {
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Category</label>
-                            <Form.Control
-                              as="select"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  category: e.target.value,
-                                })
-                              }
-                              name="category"
-                              className="custom-select"
-                            >
-                              <option>Web Designer</option>
-                              <option>Web Developer</option>
-                            </Form.Control>
+                            <Select
+                              styles={customStyles}
+                              value={categoryOptions?.find(
+                                (option) =>
+                                  option.id === profileData.category_id
+                              )}
+                              onChange={handleCategoryChange}
+                              options={categoryOptions}
+                              placeholder="Select Category"
+                            />
                           </div>
                         </div>
-
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Description:</label>
                             <textarea
                               className="form-control"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  description: e.target.value,
-                                })
-                              }
+                              value={profileData.description || ""}
+                              onChange={handleChange}
                               name="description"
+                              placeholder="write about yourself"
                               rows={4}
                             ></textarea>
                           </div>
                         </div>
                       </div>
+                      {/* Contact Information */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Contact Information
@@ -251,31 +270,22 @@ const Companyprofile = () => {
                             <label>Phone</label>
                             <input
                               type="text"
-                              name="phone"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  phone: e.target.value,
-                                })
-                              }
+                              name="mobile_number"
+                              value={profileData.mobile_number}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="+1 123 456 7890"
+                              placeholder="+91"
                             />
                           </div>
                         </div>
-
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Country</label>
                             <input
                               type="text"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  country: e.target.value,
-                                })
-                              }
                               name="country"
+                              value={profileData.country || ""}
+                              onChange={handleChange}
                               className="form-control"
                               placeholder="India"
                             />
@@ -287,14 +297,10 @@ const Companyprofile = () => {
                             <input
                               type="text"
                               name="city"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  city: e.target.value,
-                                })
-                              }
+                              value={profileData.city || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="Delhi"
+                              placeholder="Enter Your City"
                             />
                           </div>
                         </div>
@@ -304,128 +310,93 @@ const Companyprofile = () => {
                             <input
                               type="text"
                               name="zip"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  zip: e.target.value,
-                                })
-                              }
+                              value={profileData.zip || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="504030"
+                              placeholder="Enter Your Zip code"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-12 col-md-12">
                           <div className="form-group">
-                            <label>Address</label>
+                            <label>Full Address</label>
                             <input
                               type="text"
                               name="address"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  address: e.target.value,
-                                })
-                              }
+                              value={profileData.address || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="New York City"
+                              placeholder="Enter Your Address"
                             />
                           </div>
                         </div>
                       </div>
+                      {/* Social Media Information */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
-                          Map
+                          Social Link
                         </h5>
                       </div>
                       <div className="row m-b30">
-                        {/* <div className="col-lg-12 col-md-12">
-                          <GoogleMaps
-                            apiKey={"AIzaSyBPDjB2qkV4Yxn9h0tGSk2X5uH6NKmssXw"}
-                            style={{ height: "250px", width: "100%", border: "0" }}
-                            zoom={6}
-                            center={{ lat: 37.4224764, lng: -122.0842499 }}
-                            markers={{ lat: 37.4224764, lng: -122.0842499 }} // optional
-                          />
-                        </div> */}
-                      </div>
-                      <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">
-                          Social link
-                        </h5>
-                      </div>
-                      <div className="row">
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-4 col-md-4">
                           <div className="form-group">
                             <label>Facebook</label>
                             <input
                               type="text"
                               name="facebook"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  facebook: e.target.value,
-                                })
-                              }
+                              value={profileData.facebook || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.facebook.com/"
+                              placeholder="https://www.facebook.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-4 col-md-4">
                           <div className="form-group">
                             <label>Twitter</label>
                             <input
                               type="text"
                               name="twitter"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  twitter: e.target.value,
-                                })
-                              }
+                              value={profileData.twitter || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.twitter.com/"
+                              placeholder="https://www.twitter.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-4 col-md-4">
                           <div className="form-group">
                             <label>Google</label>
                             <input
                               type="text"
                               name="google"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  google: e.target.value,
-                                })
-                              }
+                              value={profileData.google || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.google.com/"
+                              placeholder="https://www.google.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
+                        <div className="col-lg-4 col-md-4">
                           <div className="form-group">
                             <label>Linkedin</label>
                             <input
                               type="text"
                               name="linkedin"
-                              onChange={(e) =>
-                                setProfileData({
-                                  ...profileData,
-                                  linkedin: e.target.value,
-                                })
-                              }
+                              value={profileData.linkedin || ""}
+                              onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.linkedin.com/"
+                              placeholder="https://www.linkedin.com"
                             />
                           </div>
                         </div>
                       </div>
-                      <button type="submit" className="site-button m-b30">
-                        Update Setting
+                      <button
+                        type="submit"
+                        className="site-button m-b30"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? "Updating..." : "Update Profile"}
                       </button>
                     </form>
                   </div>
