@@ -23,7 +23,7 @@ interface OptionType {
 
 const JobSeeker = () => {
   const { token } = useAuthToken();
-  const { user } = useLoggedInUser();
+  const { user,refetch } = useLoggedInUser();
   const router = useRouter();
   const { data: collageData } = useGetCollageQuery();
   const { data: industryData } = useGetIndustryQuery();
@@ -136,7 +136,9 @@ const JobSeeker = () => {
     try {
       await postProfile(formData).unwrap();
       toast.success("Profile Posted Successfully");
+      refetch()
     } catch (error) {
+      console.log('error', error)
       toast.error("Error in Profile");
     }
   };
@@ -187,7 +189,7 @@ const JobSeeker = () => {
         <div className="section-full bg-white browse-job p-t50 p-b20">
           <div className="container">
             <div className="row">
-              <Profilesidebar />
+              <Profilesidebar refetch ={refetch} />
               <div className="col-xl-9 col-lg-8 m-b30">
                 <div className="job-bx job-profile">
                   <div className="job-bx-title clearfix">
@@ -384,7 +386,7 @@ const JobSeeker = () => {
                           />
                           {imageName && (
                             <div className="mt-2">
-                              <img src={imageUrl} alt="Profile" className="img-thumbnail" />
+                              <img src={imageUrl} alt="Profile" style={{width:"35%"}} className="img-thumbnail" />
                             </div>
                           )}
                         </div>

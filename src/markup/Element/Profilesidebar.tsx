@@ -8,7 +8,7 @@ import { navigateSource } from "@/lib/action";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
-const Profilesidebar = () => {
+const Profilesidebar = ({refetch}:any) => {
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user } = useLoggedInUser();
@@ -27,7 +27,7 @@ const Profilesidebar = () => {
       }));
       setDesignationOptions(options);
     }
-  }, [designationData]);
+  }, [designationData,refetch]);
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
@@ -44,7 +44,7 @@ const Profilesidebar = () => {
     } else {
       setDesignationLabel("Designation not available");
     }
-  }, [user, designationOptions]);
+  }, [user, designationOptions,refetch]);
 
   const handleLogout = async () => {
     try {
