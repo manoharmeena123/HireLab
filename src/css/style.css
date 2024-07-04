@@ -216,11 +216,11 @@ table {
   float: none;
 }
 ::-moz-selection {
-  background: #2A6310;
+  background: #2a6310;
   color: #fff;
 }
 ::selection {
-  background: #2A6310;
+  background: #2a6310;
   color: #fff;
 }
 .op {
@@ -2413,7 +2413,7 @@ input[type=radio]:checked + label:before {
   color: #c8c8c8;
 }
 .rating-container .rating-stars {
-  color: #2A6310;
+  color: #2a6310;
 }
 /*validation symbol*/
 
@@ -5139,7 +5139,7 @@ blockquote:before {
 }
 .pagination .page-numbers.current,
 .pagination a.page-numbers:hover {
-  background: #2A6310;
+  background: #2a6310;
   color: #fff;
 }
 .pagination i {
@@ -5154,7 +5154,7 @@ blockquote:before {
 .nav-links .nav-previous a,
 .nav-links .nav-next a {
   display: inline-block;
-  color: #2A6310;
+  color: #2a6310;
   font-weight: 600;
   margin-bottom: 20px;
   outline: none !important;
@@ -5607,8 +5607,8 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .comments-area .comment-form p input[type="submit"]:hover,
 .comments-area .comment-form p input[type="submit"]:focus,
 .comments-area .comment-form p input[type="submit"]:active {
-  background-color: #2A6310;
-  border-color: #2A6310;
+  background-color: #2a6310;
+  border-color: #2a6310;
   color: #fff;
 }
 @media only screen and (max-width: 991px) {
@@ -5795,7 +5795,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   position: absolute;
   width: 12px;
   height: 1px;
-  background: #2A8310;
+  background: #2a8310;
   top: 15px;
 }
 .list-2 li:hover:before {
@@ -6052,7 +6052,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   color: #333;
 }
 .widget_rss ul .rss-date {
-  color: #2A6310;
+  color: #2a6310;
 }
 .widget_rss ul .rssSummary {
   padding: 5px 0;
@@ -11206,13 +11206,13 @@ footer h3 a,
 footer h4 a,
 footer h5 a,
 footer h6 a {
-  color: #2A8310;
+  color: #2a8310;
 }
 footer p,
 footer strong,
 footer b,
 footer {
-  color: #2A8310;
+  color: #2a8310;
 }
 footer h1 a,
 footer h2 a,
@@ -11221,20 +11221,20 @@ footer h4 a,
 footer h5 a,
 footer h6 a,
 footer p a {
-  color: #2A8310;
+  color: #2a8310;
 }
 
 footer a,
 footer a:visited {
-  color: #2A8310;
+  color: #2a8310;
 }
 footer p a {
-  color: #2A8310;
+  color: #2a8310;
 }
 footer a:active,
 footer a:focus,
 footer a:hover {
-  color: #2A8310;
+  color: #2a8310;
 }
 /* widget color */
 footer .widget_categories ul li a,
@@ -11245,7 +11245,7 @@ footer .widget_recent_comments ul li a,
 footer .widget_nav_menu li a,
 footer .widget_recent_entries ul li a,
 footer .widget_services ul li a {
-  color: #2A8310;
+  color: #2a8310;
 }
 footer.text-white .widget_categories ul li a,
 footer.text-white .widget_archive ul li a,
@@ -11308,7 +11308,7 @@ footer .widget_services ul li {
 .footer-bottom {
   background-color: #171d36;
   padding: 25px 0;
-  color: #2A8310;
+  color: #2a8310;
   font-size: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
   text-transform: capitalize !important;
@@ -11350,7 +11350,7 @@ footer .widget_services ul li {
 /* Subscribe Form */
 .subscribe-form input {
   background-color: rgba(0, 0, 0, 0);
-  border: 2px solid #2A8310;
+  border: 2px solid #2a8310;
   border-radius: 30px !important;
   height: 50px;
   padding: 10px 20px;
@@ -11359,7 +11359,7 @@ footer .widget_services ul li {
   font-size: 15px;
 }
 .subscribe-form input::-moz-placeholder {
-  color: #2A8310;
+  color: #2a8310;
 }
 .subscribe-form input.radius-no {
   border-radius: 0 !important;
@@ -11511,7 +11511,7 @@ footer.footer-white .footer-bottom a {
   height: 240px;
   width: 370px;
   margin-bottom: 13px;
-  background: #2A6310;
+  background: #2a6310;
 }
 .section-head {
   margin-bottom: 50px;
@@ -13519,27 +13519,95 @@ ol.commentlist li .star-rating {
 }
 .mp-cards li {
   position: relative;
-  padding-left: 1.5em; 
+  padding-left: 1.5em;
 }
 .mp-cards li:before {
-  content: ''; 
+  content: "";
   position: absolute;
-  left: 0; 
+  left: 0;
   width: 1em;
   height: 1em;
   top: 5px;
-  background: url("data:image/svg+xml;utf8,<?xml version='1.0' encoding='utf-8'?><svg width='18' height='18' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1671 566q0 40-28 68l-724 724-136 136q-28 28-68 28t-68-28l-136-136-362-362q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 295 656-657q28-28 68-28t68 28l136 136q28 28 28 68z'/></svg>") no-repeat;
+  background: url("data:image/svg+xml;utf8,<?xml version='1.0' encoding='utf-8'?><svg width='18' height='18' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'><path d='M1671 566q0 40-28 68l-724 724-136 136q-28 28-68 28t-68-28l-136-136-362-362q-28-28-28-68t28-68l136-136q28-28 68-28t68 28l294 295 656-657q28-28 68-28t68 28l136 136q28 28 28 68z'/></svg>")
+    no-repeat;
 }
-.price-wrap{
+.price-wrap {
   display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-left: 24px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-left: 24px;
 }
 /* ctc */
-.ctc-jobs-wrap{
+.ctc-jobs-wrap {
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
+  gap: 1rem;
+  justify-content: center;
+}
+/*  */
+.jd-wrap {
+  background-color: #90c7d726;
+  padding: 1rem;
+  border-left: 4px solid #2A6310;
+  font-family: "__Inter_Fallback_aaf875";
+}
+.jd-header {
+  gap: 1rem;
+}
+.jd-header h4 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.jd-loc-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.jd-wrap .salary-bx {
+  font-size: 16px;
+  font-weight: 600;
+}
+.jd-wrap .like-btn {
+  position: relative;
+  top: 0;
+  right: 0;
+}
+.jd-postby,
+.jd-ft-price {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.jd-btn{
+  background-color: #2A6310;
+  border: none;
+}
+.jd-model-header{
+  background-color: #2A6310;
+}
+.ctc-based-jobs-wrap:hover {
+  background-color: #2a6310 !important;
+  color: white !important;
+}
+.ctc-based-jobs-wrap:hover h4,.ctc-based-jobs-wrap:hover li{
+  background-color: #2a6310 !important;
+  color: white !important;
+}
+.ctc-border{
+  border: 1.5px solid black;
+}
+.ctc-based-jobs-wrap:hover .ctc-border{
+  border: 1.5px solid #ffff;
+
+}
+.modal-open .modal {
+  /* overflow-x: hidden; */
+  overflow-y: auto !important;
+}
+.jd-img{
+  min-width: 60px;
+   min-height: 60px;
+   max-width: 60px;
+   max-height: 60px;
 }

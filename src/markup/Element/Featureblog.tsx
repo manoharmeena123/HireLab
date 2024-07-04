@@ -23,7 +23,7 @@ const Featureblog: React.FC = () => {
           {ctcData?.data?.map((text, index) => (
             <div
               key={index}
-              className="pricingtable-wrapper style2 bg-white member-ship-div"
+              className="pricingtable-wrapper style2 bg-white member-ship-div ctc-based-jobs-wrap"
               style={{
                 minHeight: "270px",
                 borderRadius: "20px",
@@ -48,11 +48,10 @@ const Featureblog: React.FC = () => {
               <div className="">
                 <div className="pricingtable-price">
                   <h4
-                    className="font-weight-900 m-t10 m-b0 text-center"
+                    className="font-weight-900 m-t10 m-b0 text-center ctc-border"
                     style={{
                       fontWeight: "bold",
                       fontSize: "28px",
-                      border: "1.5px solid black",
                       borderRadius: "20px",
                       padding: "5px",
                     }}

@@ -11,12 +11,17 @@ import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
+import JobDetailPopup from "@/components/JobDetailPopup";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const dispatch = useDispatch();
 
   // Function to toggle like state
@@ -96,6 +101,7 @@ const RecentJobsection = () => {
         </div>
         <div className="row">
           <div className="col-lg-9">
+            <JobDetailPopup show={show} handleClose={handleClose}/>
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
                 <li key={index}>
@@ -108,8 +114,9 @@ const RecentJobsection = () => {
                           </span>
                         </div>
                         <div className="job-post-info">
-                          <h4>
-                            <Link href="/job-detail">{item?.job_title}</Link>
+                          <h4 onClick={handleShow} style={{cursor:'pointer'}}>
+                          {item?.job_title}
+                            {/* <Link href=""></Link> */}
                           </h4>
                           <ul>
                             <li>
