@@ -3,20 +3,26 @@ import React, { useState } from "react";
 import Link from "next/link";
 import Profilesidebar from "@/markup/Element/Profilesidebar";
 import { useRouter } from "next/navigation";
-import { useAuthToken } from "./../../hooks/useAuthToken";
+import { useAuthToken } from "../../hooks/useAuthToken";
 import Select, { SingleValue } from "react-select";
+import { usePostProfileMutation } from "./store/job-seeker.query";
 import {
   useGetCollageQuery,
   useGetIndustryQuery,
   useGetDesignationQuery,
 } from "@/store/global-store/global.query";
+import { WritableProfileFormData } from "./types/index";
+import { toast } from "react-toastify";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 interface OptionType {
-  value: string;
-  label: string;
+  value: string; // Display value
+  label: string; // Display label
+  id: string; // Internal id as a number
 }
 
 const JobSeeker: React.FC = () => {
-  const { token, user } = useAuthToken();
+  const { token } = useAuthToken();
+  const { user } = useLoggedInUser();
   const router = useRouter();
   const { data: collageData } = useGetCollageQuery();
   const { data: industryData } = useGetIndustryQuery();
@@ -27,21 +33,66 @@ const JobSeeker: React.FC = () => {
     useState<SingleValue<OptionType>>(null);
   const [selectedDesignation, setSelectedDesignation] =
     useState<SingleValue<OptionType>>(null);
+  const [postProfile] = usePostProfileMutation();
 
-  const handleCollegeChange = (selectedOption: SingleValue<OptionType>) => {
-    setSelectedCollege(selectedOption);
+  const [profileForm, setProfileForm] = useState<WritableProfileFormData>({
+    name: null,
+    email: null,
+    mobile_number: null,
+    college: null,
+    designation: null,
+    company_name: null,
+    experience: null,
+    country: null,
+    expected_ctc: null,
+    resume: null,
+    location: null,
+    industry: null,
+    image: null,
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, files } = e.target;
+    setProfileForm((prevForm) => ({
+      ...prevForm,
+      [name]: files ? files[0] : value,
+    }));
   };
 
-  const handleIndustryChange = (selectedOption: SingleValue<OptionType>) => {
-    setSelectedIndustry(selectedOption);
+  const handleSelectChange = (
+    name: string,
+    selectedOption: SingleValue<OptionType>
+  ) => {
+    setProfileForm((prevForm) => ({
+      ...prevForm,
+      [name]: selectedOption ? String(selectedOption.id) : null, // Convert id to string
+    }));
   };
 
-  const handleDesignationChange = (selectedOption: SingleValue<OptionType>) => {
-    setSelectedDesignation(selectedOption);
+  const handleSelectElementChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setProfileForm((prevForm) => ({
+      ...prevForm,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formData = new FormData();
+    Object.entries(profileForm).forEach(([key, value]) => {
+      if (value !== null) {
+        formData.append(key, value);
+      }
+    });
+    try {
+      await postProfile(formData).unwrap();
+      toast.success("Profile Posted Successfully");
+    } catch (error) {
+      toast.error("Error in Profile");
+    }
   };
 
   const customStyles = {
@@ -52,20 +103,26 @@ const JobSeeker: React.FC = () => {
     }),
   };
 
-  const collegeOptions = collageData?.data?.map((college) => ({
-    value: college.title,
-    label: college.title,
-  }));
+  const collegeOptions =
+    collageData?.data?.map((college) => ({
+      value: college.title,
+      label: college.title,
+      id: college.id.toString(), // Ensure this is the correct id field
+    })) || [];
 
-  const industryOptions = industryData?.data?.map((industry) => ({
-    value: industry.title,
-    label: industry.title,
-  }));
+  const industryOptions =
+    industryData?.data?.map((industry) => ({
+      value: industry.title,
+      label: industry.title,
+      id: industry.id.toString(), // Ensure this is the correct id field
+    })) || [];
 
-  const designationOptions = designationData?.data?.map((designation) => ({
-    value: designation.title,
-    label: designation.title,
-  }));
+  const designationOptions =
+    designationData?.data?.map((designation) => ({
+      value: designation.title,
+      label: designation.title,
+      id: designation.id.toString(), // Ensure this is the correct id field
+    })) || [];
 
   return (
     <div className="page-content bg-white">
@@ -95,7 +152,10 @@ const JobSeeker: React.FC = () => {
                           <input
                             type="text"
                             className="form-control"
-                            placeholder="Alexander Weir"
+                            placeholder="Enter Your Name"
+                            name="name"
+                            value={profileForm.name || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
@@ -105,7 +165,10 @@ const JobSeeker: React.FC = () => {
                           <input
                             type="email"
                             className="form-control"
-                            placeholder="Web Designer"
+                            placeholder="Enter Your Email"
+                            name="email"
+                            value={profileForm.email || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
@@ -115,7 +178,10 @@ const JobSeeker: React.FC = () => {
                           <input
                             type="number"
                             className="form-control"
-                            placeholder="12323232342"
+                            placeholder="Enter Your Mobile Number"
+                            name="mobile_number"
+                            value={profileForm.mobile_number || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
@@ -124,8 +190,13 @@ const JobSeeker: React.FC = () => {
                           <label>College:</label>
                           <Select
                             styles={customStyles}
-                            value={selectedCollege}
-                            onChange={handleCollegeChange}
+                            value={collegeOptions.find(
+                              (option) =>
+                                option.id === selectedCollege?.id.toString()
+                            )}
+                            onChange={(option) =>
+                              handleSelectChange("college", option)
+                            }
                             options={collegeOptions}
                             placeholder="Select College"
                           />
@@ -136,8 +207,13 @@ const JobSeeker: React.FC = () => {
                           <label>Current Designation:</label>
                           <Select
                             styles={customStyles}
-                            value={selectedDesignation}
-                            onChange={handleDesignationChange}
+                            value={designationOptions.find(
+                              (option) =>
+                                option.id === selectedDesignation?.id.toString()
+                            )}
+                            onChange={(option) =>
+                              handleSelectChange("designation", option)
+                            }
                             options={designationOptions}
                             placeholder="Current Designation"
                           />
@@ -150,19 +226,28 @@ const JobSeeker: React.FC = () => {
                             type="text"
                             className="form-control"
                             placeholder="Company"
+                            name="company_name"
+                            value={profileForm.company_name || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="form-group">
                           <label>Year Of Experience:</label>
-                          <select className="form-control">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                            <option>more than 5</option>
+                          <select
+                            className="form-control"
+                            name="experience"
+                            value={profileForm.experience || ""}
+                            onChange={handleSelectElementChange}
+                          >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="more than 5">more than 5</option>
                           </select>
                         </div>
                       </div>
@@ -173,13 +258,21 @@ const JobSeeker: React.FC = () => {
                             type="text"
                             className="form-control"
                             placeholder="2500$"
+                            name="expected_ctc"
+                            value={profileForm.expected_ctc || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="form-group">
                           <label>Resume Upload:</label>
-                          <input type="file" className="form-control" />
+                          <input
+                            type="file"
+                            className="form-control"
+                            name="resume"
+                            onChange={handleInputChange}
+                          />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
@@ -189,6 +282,9 @@ const JobSeeker: React.FC = () => {
                             type="text"
                             placeholder="Location"
                             className="form-control"
+                            name="location"
+                            value={profileForm.location || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
@@ -198,16 +294,45 @@ const JobSeeker: React.FC = () => {
                           <Select
                             menuPlacement="top"
                             styles={customStyles}
-                            value={selectedIndustry}
-                            onChange={handleIndustryChange}
+                            value={industryOptions.find(
+                              (option) =>
+                                option.id === selectedIndustry?.id.toString()
+                            )}
+                            onChange={(option) =>
+                              handleSelectChange("industry", option)
+                            }
                             options={industryOptions}
-                            placeholder="Select Industry"
+                            placeholder="Industry"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group">
+                          <label>Upload Image:</label>
+                          <input
+                            type="file"
+                            className="form-control"
+                            name="image"
+                            onChange={handleInputChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-6">
+                        <div className="form-group">
+                          <label>Country:</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Country"
+                            name="country"
+                            value={profileForm.country || ""}
+                            onChange={handleInputChange}
                           />
                         </div>
                       </div>
                     </div>
                     <button type="submit" className="site-button m-b30">
-                      Submit Form
+                      Save Setting
                     </button>
                   </form>
                 </div>

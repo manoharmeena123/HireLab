@@ -66,7 +66,7 @@ const Profilesidebar = () => {
             </li>
 
             <li>
-              <Link href={"/jobs-saved-jobs"}>
+              <Link href={"/saved-jobs"}>
                 <i className="fa fa-heart-o" aria-hidden="true"></i>
                 <span>Saved Jobs</span>
               </Link>
@@ -93,12 +93,12 @@ const Profilesidebar = () => {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link href={"/jobs-change-password"}>
                 <i className="fa fa-key" aria-hidden="true"></i>
                 <span>Change Password</span>
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link href={"./"} onClick={handleLogout}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>
