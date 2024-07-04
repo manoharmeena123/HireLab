@@ -13541,7 +13541,7 @@ ol.commentlist li .star-rating {
 /* ctc */
 .ctc-jobs-wrap {
   display: flex;
-  gap: 3rem;
+  gap: 1rem;
   justify-content: center;
 }
 /*  */
