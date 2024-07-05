@@ -85,7 +85,7 @@ const Featureblog: React.FC = () => {
                       className="p-lr30"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
-                      Get Started
+                      View Jobs
                     </span>
                   </Link>
                 </div>

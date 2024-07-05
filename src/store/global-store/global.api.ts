@@ -150,6 +150,18 @@ export const queries = {
       method :"GET"
     })
   },
+  getSingleEventByTitle :{
+    query :(title:string) =>({
+      url :`api/event/${title}`,
+      method :"GET"
+    })
+  },
+  getSingleDiscussionByTitle :{
+    query :(title:string) =>({
+      url :`api/discussion/${title}`,
+      method :"GET"
+    })
+  },
 
   //Post
   postApplyJob: {

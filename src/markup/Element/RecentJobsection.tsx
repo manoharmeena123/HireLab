@@ -19,7 +19,6 @@ const RecentJobsection = () => {
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
@@ -91,7 +90,7 @@ const RecentJobsection = () => {
             <h2 style={{ fontWeight: "501" }} className="m-b5">
               Recent Jobs
             </h2>
-            <h6 className="fw4 m-b0">20+ Recently Added Jobs</h6>
+            <h6 className="fw4 m-b0">{recentJob?.data?.length}+ Recently Added Jobs</h6>
           </div>
           <div className="align-self-end">
             <Link href="/browse-job-list" className="site-button button-sm">
@@ -101,18 +100,18 @@ const RecentJobsection = () => {
         </div>
         <div className="row">
           <div className="col-lg-9">
-            <JobDetailPopup show={show} handleClose={handleClose}/>
+            <JobDetailPopup show={show} handleClose={handleClose} item={recentJob?.data} />
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
                 <li key={index}>
                   {item && (
                     <div className="post-bx">
                       <div className="d-flex m-b30">
-                        <div className="job-post-company">
+                        {/* <div className="job-post-company">
                           <span>
                             <Image alt="image" src={""} />
                           </span>
-                        </div>
+                        </div> */}
                         <div className="job-post-info">
                           <h4 onClick={handleShow} style={{cursor:'pointer'}}>
                           {item?.job_title}
@@ -141,7 +140,7 @@ const RecentJobsection = () => {
                           </Link>
                         </div>
                         <div className="salary-bx">
-                          <span>$1200 - $ 2500</span>
+                          <span>42000 - 55000</span>
                         </div>
                       </div>
                       <label

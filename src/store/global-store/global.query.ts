@@ -58,7 +58,9 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Tier",
     "Designation",
     "Setting",
-    "Categories"
+    "Categories",
+    "SingleEventByTitle",
+    "SingleDiscussionByTitle"
   ],
 });
 
@@ -171,6 +173,14 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getCategories : builder.query<WritableCategoriesResponse, void>({
       query : queries.getCategories.query,
       providesTags: ["Categories"]
+    }),
+    getSingleEventByTitle : builder.mutation<any, string>({
+      query: (title) => queries.getSingleEventByTitle.query(title),
+      invalidatesTags: ["SingleEventByTitle"]
+    }),
+    getSingleDiscussionByTitle :builder.mutation<any, string>({
+    query : (title) => queries.getSingleDiscussionByTitle.query(title),
+    invalidatesTags :["SingleDiscussionByTitle"]
     })
   }),
   overrideExisting: true,
@@ -203,6 +213,9 @@ export const {
   useGetTierQuery,
   useGetDesignationQuery,
   useGetSettingQuery,
-  useGetCategoriesQuery
+  useGetCategoriesQuery,
+  useGetSingleDiscussionByTitleMutation,
+  useGetSingleEventByTitleMutation
+
 } = globalApi;
 export default globalApi;
