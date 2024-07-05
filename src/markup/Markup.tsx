@@ -63,9 +63,8 @@ const Markup= () => {
 			<div className="page-wraper">
 				<Switch>
 					<Route path='/' exact component={Homepage} />
-						 <Route path='/home' exact component={Homepage} />
+					<Route path='/home' exact component={Homepage} />
 					<Route path='/index-2' exact component={Homepage2} />
-					
 					<Route path='/jobs-profile' exact component={Jobprofile} />
 					<Route path='/jobs-my-resume' exact component={Jobmyresume} />
 					<Route path='/jobs-applied-job' exact component={Jobsappliedjob} />
