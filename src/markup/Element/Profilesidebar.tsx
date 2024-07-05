@@ -70,15 +70,7 @@ const Profilesidebar = ({ refetch }: any) => {
                   height={300}
                 />
               </Link>
-              <div
-                className="upload-link"
-                title="update"
-                data-toggle="tooltip"
-                data-placement="right"
-              >
-                <input type="file" className="update-flie" />
-                <i className="fa fa-camera"></i>
-              </div>
+           
             </div>
             <div className="candidate-title">
               <div className="">
