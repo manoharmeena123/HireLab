@@ -140,47 +140,6 @@ const LatestDiscussions = () => {
             </div>
           </div>
         ))}
-        {discussionData?.data?.map((discussion: any, index: number) => (
-          <div key={index} className="col-lg-4 col-md-6 mb-4">
-            <div className={`card ${styles.discussionCard}`}>
-              <div className="card-body">
-                <p className="text-muted mb-2">
-                  {formatDateTime(discussion?.created_at)}
-                </p>
-                <h5 className="card-title">{discussion?.question}</h5>
-                <div
-                  className={`card-text ${styles.description} ${
-                    expandedIndex === index ? styles.expanded : ""
-                  }`}
-                  style={{
-                    maxHeight: expandedIndex === index ? "none" : "100px",
-                    overflow: "hidden",
-                  }}
-                >
-                  {discussion?.description}
-                </div>
-                {discussion?.description.length > 80 && (
-                  <button
-                    className="btn btn-link text-primary"
-                    onClick={() => toggleDescription(index)}
-                  >
-                    {expandedIndex === index ? "Read Less" : "Read More"}
-                  </button>
-                )}
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                  <div className="d-flex align-items-center">
-                    <span className="ml-2">by {discussion?.user?.name}</span>
-                  </div>
-                  <div className="d-flex">
-                    <span className="mr-3">❤️ {discussion?.likes}</span>
-                    <span className="mr-3">💬 {discussion?.comments}</span>
-                    <span>👀 {discussion?.views}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
