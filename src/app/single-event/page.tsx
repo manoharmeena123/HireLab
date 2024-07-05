@@ -75,11 +75,6 @@ const SingleEvent = () => {
       </>
     );
   }
-
-  if (isError) {
-    return <div>Error fetching event details: {error.message}</div>;
-  }
-
   return null;
 };
 
