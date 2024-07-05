@@ -193,7 +193,7 @@ function singleBlog(){
 													</p>
 													<p className="comment-form-comment">
 														<label htmlFor="comment">Comment</label>
-														<textarea rows="8" name="comment" placeholder="Comment" id="comment"></textarea>
+														<textarea rows={8} name="comment" placeholder="Comment" id="comment"></textarea>
 													</p>
 													<p className="form-submit">
 														<input type="submit" defaultValue="Post Comment" className="submit site-button" id="submit" name="submit" />
