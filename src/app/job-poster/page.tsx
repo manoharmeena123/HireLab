@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Select, { SingleValue } from "react-select";
@@ -19,8 +19,8 @@ interface OptionType {
 
 const Companyprofile = () => {
   const { token } = useAuthToken();
-   const { user } =useLoggedInUser()
-  console.log("firuserst", user);
+  const { user, refetch } = useLoggedInUser();
+  console.log("first", user);
   const router = useRouter();
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const { data: categoriesData } = useGetCategoriesQuery();
@@ -43,12 +43,34 @@ const Companyprofile = () => {
     linkedin: null,
   });
 
-  console.log("profileData", profileData);
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        name: user?.user?.name || null,
+        email: user?.user?.email || null,
+        website: user?.user?.website || null,
+        founded_date: user?.user?.founded_date || null,
+        category_id: user?.user?.category_id?.toString() || null,
+        country: user?.user?.country || null,
+        description: user?.user?.description || null,
+        mobile_number: user?.user?.mobile_number || "",
+        city: user?.user?.city || null,
+        zip: user?.user?.zip || null,
+        address: user?.user?.address || null,
+        facebook: user?.user?.facebook || null,
+        twitter: user?.user?.twitter || null,
+        google: user?.user?.google || null,
+        linkedin: user?.user?.linkedin || null,
+      });
+    }
+  }, [user]);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const response = await updateProfile(profileData).unwrap();
-      toast.success("profile successfully updated");
+      toast.success("Profile successfully updated");
+      refetch()
       console.log("Profile Updated Successfully", response);
       // Redirect or show success message
     } catch (error) {
@@ -112,6 +134,9 @@ const Companyprofile = () => {
                           <h4 className="m-b5">
                             <Link href={"#"}>{user?.user?.name}</Link>
                           </h4>
+                          {/* <p className="m-b0">
+                            <Link href={"#"}>{user?.user?.name}</Link>
+                          </p> */}
                         </div>
                       </div>
                       <ul>
@@ -193,7 +218,7 @@ const Companyprofile = () => {
                               value={profileData.email || ""}
                               onChange={handleChange}
                               className="form-control"
-                             placeholder="Enter Your Gmail"
+                              placeholder="Enter Your Gmail"
                             />
                           </div>
                         </div>
@@ -268,7 +293,7 @@ const Companyprofile = () => {
                               value={profileData.mobile_number}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="+91"
+                              placeholder="Contact Number"
                             />
                           </div>
                         </div>
@@ -281,7 +306,7 @@ const Companyprofile = () => {
                               value={profileData.country || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="India"
+                              placeholder="Country"
                             />
                           </div>
                         </div>
@@ -294,20 +319,20 @@ const Companyprofile = () => {
                               value={profileData.city || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="Enter Your City"
+                              placeholder="Enter City"
                             />
                           </div>
                         </div>
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Zip</label>
+                            <label>Zip Code</label>
                             <input
                               type="text"
                               name="zip"
                               value={profileData.zip || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="Enter Your Zip code"
+                              placeholder="Enter Zip code"
                             />
                           </div>
                         </div>
@@ -325,14 +350,14 @@ const Companyprofile = () => {
                           </div>
                         </div>
                       </div>
-                      {/* Social Media Information */}
+                      {/* Social Link */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Social Link
                         </h5>
                       </div>
                       <div className="row m-b30">
-                        <div className="col-lg-4 col-md-4">
+                        <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Facebook</label>
                             <input
@@ -341,11 +366,11 @@ const Companyprofile = () => {
                               value={profileData.facebook || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.facebook.com"
+                              placeholder="www.facebook.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-4 col-md-4">
+                        <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Twitter</label>
                             <input
@@ -354,11 +379,11 @@ const Companyprofile = () => {
                               value={profileData.twitter || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.twitter.com"
+                              placeholder="www.twitter.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-4 col-md-4">
+                        <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Google</label>
                             <input
@@ -367,11 +392,11 @@ const Companyprofile = () => {
                               value={profileData.google || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.google.com"
+                              placeholder="www.google.com"
                             />
                           </div>
                         </div>
-                        <div className="col-lg-4 col-md-4">
+                        <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Linkedin</label>
                             <input
@@ -380,21 +405,18 @@ const Companyprofile = () => {
                               value={profileData.linkedin || ""}
                               onChange={handleChange}
                               className="form-control"
-                              placeholder="https://www.linkedin.com"
+                              placeholder="www.linkedin.com"
                             />
                           </div>
                         </div>
                       </div>
-                      <button
-                        type="submit"
-                        className="site-button m-b30"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? "Updating..." : "Update Profile"}
+                      <button type="submit" className="site-button m-b30">
+                        Save Details
                       </button>
                     </form>
                   </div>
                 </div>
+                {/* Modal */}
               </div>
             </div>
           </div>
