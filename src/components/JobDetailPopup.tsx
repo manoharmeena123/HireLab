@@ -13,7 +13,13 @@ import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 
-const JobDetailPopup: React.FC = ({ show, handleClose, item }) => {
+type JobDetailPopupType = {
+  show: boolean;
+  handleClose: () => void;
+  item: RecentJobData;
+};
+
+const JobDetailPopup = ({ show, handleClose, item }: JobDetailPopupType) => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
@@ -111,14 +117,16 @@ const JobDetailPopup: React.FC = ({ show, handleClose, item }) => {
               <span>Full Time</span>
             </div>
             <div className="salary-bx">
-              <span style={{fontFamily:'__Inter_aaf875',fontSize:'20px'}}>$1200 - $ 2500</span>
+              <span style={{ fontFamily: "__Inter_aaf875", fontSize: "20px" }}>
+                $1200 - $ 2500
+              </span>
             </div>
           </div>
           <div className="d-flex jd-header mb-3" style={{ maxWidth: "300px" }}>
             <Button className="jd-btn">Apply Now</Button>
             <label
               className={`like-btn ${
-                likedJobs.includes(item?.id.toString()) ? "liked" : ""
+                likedJobs.includes(item?.id?.toString()) ? "liked" : ""
               }`}
               onClick={() => handleLikeToggle(item?.id.toString())}
             >
@@ -138,18 +146,28 @@ const JobDetailPopup: React.FC = ({ show, handleClose, item }) => {
           </div>
           <Button className="mb-3 jd-btn">Connect Now</Button>
           <div>
-          <h4>Location</h4>
-          <div className="jd-postby mb-3">
+            <h4>Location</h4>
+            <div className="jd-postby mb-3">
               {" "}
               <i className="fa fa-map-marker"></i>
               <span>Sacramanto,California</span>
             </div>
           </div>
           <div>
-          <h4>Full Job Description</h4>
-          <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</p>
+            <h4>Full Job Description</h4>
+            <p>
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry's standard dummy text
+              ever since the 1500s, when an unknown printer took a galley of
+              type and scrambled it to make a type specimen book. It has
+              survived not only five centuries, but also the leap into
+              electronic typesetting, remaining essentially unchanged. It was
+              popularised in the 1960s with the release of Letraset sheets
+              containing Lorem Ipsum passages, and more recently with desktop
+              publishing software like Aldus PageMaker including versions of
+              Lorem Ipsum
+            </p>
           </div>
-
         </div>
       </Modal.Body>
     </Modal>

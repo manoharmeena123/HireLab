@@ -10,6 +10,7 @@ import { useGetCategoriesQuery } from "@/store/global-store/global.query";
 import { WritableProfileData } from "./types/index";
 import { toast } from "react-toastify";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
 interface OptionType {
   id: string;
@@ -70,7 +71,7 @@ const Companyprofile = () => {
     try {
       const response = await updateProfile(profileData).unwrap();
       toast.success("Profile successfully updated");
-      refetch()
+      refetch();
       console.log("Profile Updated Successfully", response);
       // Redirect or show success message
     } catch (error) {
@@ -111,6 +112,39 @@ const Companyprofile = () => {
     }),
   };
 
+  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
+  useEffect(() => {
+    // Map designation options
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData, refetch]);
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      // Only proceed if user and designation_id are not null
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions, refetch]);
   return (
     <>
       <div className="page-content bg-white">
@@ -124,19 +158,25 @@ const Companyprofile = () => {
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
                           <Link href={"#"}>
-                            <Image
-                              src={require("../../images/logo/icon3.jpg")}
-                              alt="Company Logo"
-                            />
-                          </Link>
+                          <Image
+                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                            alt="Company Logo"
+                            width={300}
+                            height={300}
+                          />
+                        </Link>
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>{user?.user?.name}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
                           </h4>
-                          {/* <p className="m-b0">
-                            <Link href={"#"}>{user?.user?.name}</Link>
-                          </p> */}
+                          <p className="m-b0">
+                            <Link href={"#"}>
+                              {designationLabel || "Not available"}
+                            </Link>
+                          </p>
                         </div>
                       </div>
                       <ul>

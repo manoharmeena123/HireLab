@@ -8,7 +8,7 @@ import { navigateSource } from "@/lib/action";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
-const Profilesidebar = ({refetch}:any) => {
+const Profilesidebar = ({ refetch }: any) => {
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user } = useLoggedInUser();
@@ -27,7 +27,7 @@ const Profilesidebar = ({refetch}:any) => {
       }));
       setDesignationOptions(options);
     }
-  }, [designationData,refetch]);
+  }, [designationData, refetch]);
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
@@ -44,7 +44,7 @@ const Profilesidebar = ({refetch}:any) => {
     } else {
       setDesignationLabel("Designation not available");
     }
-  }, [user, designationOptions,refetch]);
+  }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
     try {
@@ -62,8 +62,13 @@ const Profilesidebar = ({refetch}:any) => {
         <div className="candidate-info">
           <div className="candidate-detail text-center">
             <div className="canditate-des">
-              <Link href={""}>
-                <Image alt="" src={require("./../../images/team/pic1.jpg")} />
+              <Link href={"#"}>
+                <Image
+                  src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                  alt="Company Logo"
+                  width={300}
+                  height={300}
+                />
               </Link>
               <div
                 className="upload-link"
@@ -109,7 +114,7 @@ const Profilesidebar = ({refetch}:any) => {
             </li>
 
             <li>
-              <Link href={"/jobs-applied-job"}>
+              <Link href={"/applied-job"}>
                 <i className="fa fa-briefcase" aria-hidden="true"></i>
                 <span>Applied Jobs</span>
               </Link>
