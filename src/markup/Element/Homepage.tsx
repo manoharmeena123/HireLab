@@ -1,17 +1,13 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-// import {Link} from 'react-router-dom';
-import Header from "@/app/layouts/Header";
-import Footer from "@/app/layouts/Footer";
-import CountUp from "react-countup";
-import IndexBanner from "../Element/IndexBanner";
-import Jobcategories from "../Element/Jobcategories";
-import Featureblog from "../Element/Featureblog";
-import RecentJobsection from "../Element/RecentJobsection";
-import Owltestimonial from "../Element/Owlblog1";
-import LatestDiscussions from "../Element/LatestDiscussions";
-import MembershipPlans from '../Element/MembershipPlan'
+import IndexBanner from "./IndexBanner";
+import Jobcategories from "./Jobcategories";
+import Featureblog from "./Featureblog";
+import RecentJobsection from "./RecentJobsection";
+import Owltestimonial from "./Owlblog1";
+import LatestDiscussions from "./LatestDiscussions";
+import MembershipPlans from './MembershipPlan'
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectLoginState,
