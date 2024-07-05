@@ -39,3 +39,14 @@
 .card:hover {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
+
+
+.link {
+  color: blue !important; /* Change to desired color */
+  text-decoration: underline !important; /* Makes it look like a hyperlink */
+}
+
+.link:hover {
+  cursor: pointer !important; 
+  color: darkblue !important /* Optional: change color on hover */
+} 
