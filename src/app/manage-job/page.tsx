@@ -130,21 +130,13 @@ const ManageJobs = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/manage-job">
+                          <Link href="/manage-job" className="active">
                             <div className="nav-link active">
                               <i
                                 className="fa fa-heart-o"
                                 aria-hidden="true"
                               ></i>
                               <span>Manage Jobs</span>
-                            </div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/change-password">
-                            <div className="nav-link">
-                              <i className="fa fa-key" aria-hidden="true"></i>
-                              <span>Change Password</span>
                             </div>
                           </Link>
                         </li>

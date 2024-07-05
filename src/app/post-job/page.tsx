@@ -269,12 +269,6 @@ const Componypostjobs = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/change-password">
-                          <i className="fa fa-key" aria-hidden="true"></i>
-                          <span>Change Password</span>
-                        </Link>
-                      </li>
-                      <li>
                         <Link href="/">
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
