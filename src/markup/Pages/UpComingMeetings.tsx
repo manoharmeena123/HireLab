@@ -45,66 +45,6 @@ const UpComingMeetings = () => {
                   <div className="job-post-info">
                     <div className="d-flex justify-content-between w-100">
                       <h5>
-                        <Link href={`single-event?query=${event?.title}`} style={{ fontWeight: "600" }}>
-                          {event?.title}
-                        </Link>
-                      </h5>
-                      <div className="d-flex justify-content-end">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 10 13"
-                          fill="none"
-                          style={{
-                            fontSize: "16px",
-                            fontWeight: 400,
-                            marginLeft: "8px",
-                            cursor: "pointer",
-                            width: "20px",
-                            height: "20px",
-                          }}
-                          onClick={() => handleIconClick(index)}
-                        >
-                          <path
-                            d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                            fill={clickedIndexes.includes(index) ? "#2A6310" : "#fff"}
-                            stroke="#2A6310"
-                          />
-                        </svg>
-                      </div>
-                    </div>
-                    <ul
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        marginTop: "20px",
-                        color: "#2A6310 !important",
-                      }}
-                    >
-                      <li className="mr-4">
-                        <i
-                          className="fa fa-map-marker"
-                          style={{ fontSize: "large", color: "#2A6310" }}
-                        ></i>
-                        {event.location}
-                      </li>
-                      <li className="mr-4">{event.date}</li>
-                      <li className="mr-4">{event.time}</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </li>
-          ))}
-      </ul>
-      <ul className="post-job-bx browse-job-grid row">
-        {eventsData &&
-          eventsData?.data?.map((event: Event, index: number) => (
-            <li className="col-lg-6 col-md-6" key={index}>
-              <div className="post-bx">
-                <div className="d-flex">
-                  <div className="job-post-info">
-                    <div className="d-flex justify-content-between w-100">
-                      <h5>
                         <Link style={{ fontWeight: "600" }} href="/">
                           {event.title}
                         </Link>

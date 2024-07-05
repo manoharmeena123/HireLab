@@ -4,6 +4,7 @@ import Sidebar from '../../markup/Element/Sidebar'
 import Image  from 'next/image';
 import Link from 'next/link'
 var bnr = require('./../../images/banner/bnr1.jpg');
+import { useGetSingleDiscussionByTitleMutation }  from '@/store/global-store/global.query'
 
 function singleBlog(){
 	return(
@@ -41,42 +42,17 @@ function singleBlog(){
 										<Link href={"#"}><img src={require("../../images/blog/default/thum1.jpg") }  alt="" /></Link> 
 									</div>
 									<div className="dez-post-text">
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy 
-											text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.Lorem Ipsum 
-											is simply dummy text of the printing and typesetting  printer a galley Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-											Lorem Ipsum has been the industry's standard text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to 
-											make a type specimen  It has urvived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-											It was popularised in 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop 
+										<p>Loremed in 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop 
 											publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard text 
-											ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen  
-											It has urvived not only five centuries, but also the leap into electronic typesetting.</p>
-										<blockquote>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Has been the industry's standard text ever since 
-											the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimencenturies.</blockquote>
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard text 
-											ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen  
-											It has urvived not only five centuries, but also the leap into electronic typesetting.</p>
+										<p>Lorem , but also the leap into electronic typesetting.</p>
+										<blockquote>Loremrambled it to make a type specimencenturies.</blockquote>
+										<p>Lorem Ieap into electronic typesetting.</p>
 										<h5>Completely Responsive</h5>
 										<img className="alignleft blog-side-img" src={require("./../../images/blog/grid/pic4.jpg")} alt="" />
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text 
-											ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only                                 
-											five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-											of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like 
-											Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum 
-											has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-											type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-											It was popularised in the 1960s with the releasefive centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-											It was popularised in the 1960s with the release</p>
+										<p>Lorem h the release</p>
 										<div className="dez-divider bg-gray-dark"></div>
 										<Image className="alignright blog-side-img" src={require("../../images/blog/default/thum1.jpg") } alt="" />
-										<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text 
-											ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only                                 
-											five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release
-											of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like 
-											Aldus PageMaker including versions of Lorem Ipsum.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum 
-											has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-											type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-											It was popularised in the 1960s with the release</p>
+										<p>Lorem elease</p>
 									</div>
 									<div className="dez-post-tags clear">
 										<div className="post-tags">
@@ -111,8 +87,7 @@ function singleBlog(){
 															<Image  className="avatar photo" src={require("../../images/testimonials/pic1.jpg")} alt="" /> 	<cite className="fn">Stacy poe</cite> <span className="says">says:</span> 
 														</div>
 														<div className="comment-meta"> <Link href={"#"}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neqnsectetur adipiscing elit. Nam viae neqnsectetur adipiscing elit.
-															Nam vitae neque vitae sapien malesuada aliquet. </p>
+														<p>Lorem e neque vitae sapien malesuada aliquet. </p>
 														<div className="reply"> <Link href={"#"} className="comment-reply-link">Reply</Link> </div>
 													</div>
 													<ol className="children">
@@ -120,9 +95,7 @@ function singleBlog(){
 															<div className="comment-body">
 																<div className="comment-author vcard"> <Image  className="avatar photo" src={require("../../images/testimonials/pic2.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
 																<div className="comment-meta"> <Link href={"#"}>October 6, 2015 at 7:15 am</Link> </div>
-																<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-																	In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-																	ac elementum ligula blandit ac.</p>
+																<p>Lorem ementum ligula blandit ac.</p>
 																<div className="reply"> <Link href={"#"} className="comment-reply-link">Reply</Link> </div>
 															</div>
 															<ol className="children">
@@ -157,9 +130,7 @@ function singleBlog(){
 														<div className="comment-author vcard"> 
 														<Image  className="avatar photo" src={require("../../images/testimonials/pic2.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
 														<div className="comment-meta"> <Link href={"#"}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-															In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-															ac elementum ligula blandit ac.</p>
+														<p>Lorem ipsumt ac.</p>
 														<div className="reply"> <Link href={"#"} className="comment-reply-link">Reply</Link> </div>
 													</div>
 												</li>
@@ -168,9 +139,7 @@ function singleBlog(){
 														<div className="comment-author vcard"> 
 														<Image  className="avatar photo" src={require("../../images/testimonials/pic3.jpg")} alt="" /> <cite className="fn">Stacy poe</cite> <span className="says">says:</span> </div>
 														<div className="comment-meta"> <Link href={"#"}>October 6, 2015 at 7:15 am</Link> </div>
-														<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae neque vitae sapien malesuada aliquet. 
-															In viverra dictum justo in vehicula. Fusce et massa eu ante ornare molestie. Sed vestibulum sem felis, 
-															ac elementum ligula blandit ac.</p>
+														<p>Lorem  ac.</p>
 														<div className="reply"> <Link href={"#"} className="comment-reply-link">Reply</Link> </div>
 													</div>
 												</li>
@@ -193,7 +162,7 @@ function singleBlog(){
 													</p>
 													<p className="comment-form-comment">
 														<label htmlFor="comment">Comment</label>
-														<textarea rows={8} name="comment" placeholder="Comment" id="comment"></textarea>
+														<textarea rows="8" name="comment" placeholder="Comment" id="comment"></textarea>
 													</p>
 													<p className="form-submit">
 														<input type="submit" defaultValue="Post Comment" className="submit site-button" id="submit" name="submit" />
