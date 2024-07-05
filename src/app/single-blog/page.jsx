@@ -4,7 +4,6 @@ import Sidebar from '../../markup/Element/Sidebar'
 import Image  from 'next/image';
 import Link from 'next/link'
 var bnr = require('./../../images/banner/bnr1.jpg');
-import { useGetSingleDiscussionByTitleMutation }  from '@/store/global-store/global.query'
 
 function singleBlog(){
 	return(
