@@ -4186,7 +4186,7 @@ blockquote:before {
   height: 450px;
 }
 .dez-bnr-inr {
-  height: 300px;
+  height: 150px;
   background-size: cover;
   background-position: center center;
   display: table;
@@ -13610,4 +13610,13 @@ ol.commentlist li .star-rating {
    min-height: 60px;
    max-width: 60px;
    max-height: 60px;
+}
+.salary-bx{
+  text-align: end;
+}
+.salary-bx .view-job{
+  font-family: '__Inter_aaf875';
+  color: blue;
+  cursor: pointer;
+  font-size: 15px;
 }

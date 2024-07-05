@@ -6,12 +6,14 @@ import {
   useGetRecentJobsQuery,
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
+  useGetJobsQuery,
 } from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import JobDetailPopup from "@/components/JobDetailPopup";
+import { redirect, useRouter } from "next/navigation";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
@@ -23,6 +25,7 @@ const RecentJobsection = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
+  const { push } = useRouter();
 
   // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
@@ -76,13 +79,17 @@ const RecentJobsection = () => {
       }
     }
   };
-
+  const { data: JobDetails, refetch } = useGetJobsQuery();
   // // Render loading state if data is still loading
   // if (isLoading) return <div>Loading...</div>;
 
   // // Render error message if there's an error fetching data
   // if (isError) return <div>Error fetching data</div>;
-
+const viewJobHandler = (id:number) => {
+  console.log(id);
+  
+  push(`/job-detail?jobId=${id}`)
+}
   return (
     <div className="section-full bg-white content-inner-2">
       <div className="container">
@@ -140,8 +147,13 @@ const RecentJobsection = () => {
                             <span>{item?.location?.title}</span>
                           </Link>
                         </div>
+                      
                         <div className="salary-bx">
-                          <span>$1200 - $ 2500</span>
+                          <span>$1200 - $ 2500</span><br />
+                          <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
+                            View Job
+                          </span>
+                          
                         </div>
                       </div>
                       <label
