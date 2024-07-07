@@ -26,7 +26,7 @@ const ManageJobs = () => {
     error: jobsError,
     isLoading: jobsLoading,
   } = useGetManageJobQuery();
-  console.log("jobsData", jobsData);
+  
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
   const { user, refetch } = useLoggedInUser();
@@ -292,12 +292,12 @@ const ManageJobs = () => {
                             </td>
                             <td className="job-links">
                               <div
-                                className="nav-link"
-                                // onClick={() => handleDeleteJob(job.id)}
+                                className="nav-link mn-icon"
                                 onClick={() => {
                                   setSelectedJob(job);
                                   setShow(true);
                                 }}
+                                
                               >
                                 <i className="fa fa-edit"></i>
                               </div>

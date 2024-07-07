@@ -85,8 +85,7 @@ const RecentJobsection = () => {
   // // Render error message if there's an error fetching data
   // if (isError) return <div>Error fetching data</div>;
 const viewJobHandler = (id:number) => {
-  console.log(id);
-  
+
   push(`/job-detail?jobId=${id}`)
 }
   return (
@@ -120,7 +119,7 @@ const viewJobHandler = (id:number) => {
                           </span>
                         </div> */}
                         <div className="job-post-info">
-                          <h4 onClick={handleShow} style={{cursor:'pointer'}}>
+                          <h4 style={{cursor:'pointer'}} className="text-secondry">
                           {item?.job_title}
                             {/* <Link href=""></Link> */}
                           </h4>
@@ -148,7 +147,10 @@ const viewJobHandler = (id:number) => {
                         </div>
                       
                         <div className="salary-bx">
-                          <span>42000 - 55000</span>
+                          <span>42000 - 55000</span><br />
+                          <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
+                            View Job
+                          </span>
                         </div>
                       </div>
                       <label

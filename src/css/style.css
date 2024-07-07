@@ -4774,14 +4774,14 @@ blockquote:before {
 .dez-post-meta ul li strong {
   font-weight: 500;
 }
-.dez-post-meta li:after {
+/* .dez-post-meta li:after {
   content: "|";
   display: inline-block;
   font-weight: normal;
   margin-left: 5px;
   opacity: 0.5;
   margin-right: 5px;
-}
+} */
 .dez-post-meta li:last-child:after {
   display: none;
 }
@@ -10936,13 +10936,13 @@ ul[class*="list-"] {
 .dez-info[class*="border-"] {
   border-color: #eee;
 }
-.dez-info.border-1,
+/* .dez-info.border-1,
 .dez-info.border-2,
 .dez-info.border-3,
 .dez-info.border-4,
 .dez-info.border-5 {
   border-top: none;
-}
+} */
 /*== before & after for line css ==*/
 
 .left-border,
@@ -13601,10 +13601,6 @@ ol.commentlist li .star-rating {
   border: 1.5px solid #ffff;
 
 }
-.modal-open .modal {
-  /* overflow-x: hidden; */
-  overflow-y: auto !important;
-}
 .jd-img{
   min-width: 60px;
    min-height: 60px;
@@ -13619,4 +13615,21 @@ ol.commentlist li .star-rating {
   color: blue;
   cursor: pointer;
   font-size: 15px;
+}
+.mn-icon{
+  cursor: pointer;
+}
+.text-secondry{
+  text-transform: capitalize;
+}
+.modal-backdrop{
+  position: relative;
+}
+.jd-recent-add{
+  display: flex !important;
+  gap: 5px;
+}
+.rc-lp{
+  position: relative;
+    top: 3px;
 }

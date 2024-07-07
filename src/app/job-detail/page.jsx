@@ -7,12 +7,14 @@ import {
   useGetJobByIdQuery,
   useGetJobsByIdMutation,
   useGetJobsMutation,
+  useGetRecentJobsQuery,
 } from "@/store/global-store/global.query";
 import Link from "next/link";
 import Image from "next/image";
 import PageTitle from "../../markup/Layout/PageTitle";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/Loading";
+import { formaterDate } from "@/utils/formateDate";
 
 var bnr = require("./../../images/banner/bnr1.jpg");
 
@@ -35,7 +37,8 @@ function Jobdetail() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
   const [getJobs, { data: job, error, isLoading }] = useGetJobByIdMutation();
-
+  const { data: recentJob } = useGetRecentJobsQuery();
+console.log(recentJob);
   useEffect(() => {
     if (jobId) {
       console.log("Fetching job details for jobId:", jobId); // Debug log
@@ -70,16 +73,16 @@ function Jobdetail() {
                 <div className="col-lg-4">
                   <div className="sticky-top">
                     <div className="row">
-                      <div className="col-lg-12 col-md-6">
+                      {/* <div className="col-lg-12 col-md-6">
                         <div className="m-b30">
                           <Image
                             src={require("../../images/blog/grid/pic1.jpg")}
                             alt=""
                           />
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-lg-12 col-md-6">
-                        <div className="widget bg-white p-lr20 p-t20  widget_getintuch radius-sm">
+                        <div className="widget bg-white p-lr20 p-t20  widget_getintuch radius-sm shadow">
                           <h4 className="text-black font-weight-700 p-t10 m-b15">
                             Job Details
                           </h4>
@@ -107,7 +110,8 @@ function Jobdetail() {
                               <strong className="font-weight-700 text-black">
                                 Experience
                               </strong>
-                              6 Year Experience
+                              {job?.data?.total_experience}
+
                             </li>
                           </ul>
                         </div>
@@ -124,14 +128,17 @@ function Jobdetail() {
                     </h3>
                     <ul className="job-info">
                       <li>
-                        <strong>Education</strong> Web Designer
+                        <strong>Education</strong>                         {job?.data?.education?.name}
+
                       </li>
                       <li>
                         <strong>Deadline:</strong> 25th January 2018
                       </li>
                       <li>
                         <i className="ti-location-pin text-black m-r5"></i>{" "}
-                        NewYark{" "}
+                        {/* NewYark{" "} */}
+                        {job?.data?.location?.title}
+
                       </li>
                     </ul>
                     <p className="p-t20">
@@ -192,49 +199,65 @@ function Jobdetail() {
           <div className="section-full content-inner">
             <div className="container">
               <div className="row">
-                {blogGrid.map((item, index) => (
+                {recentJob?.data?.slice(0,4).map((item, index) => (
                   <div className="col-xl-3 col-lg-6 col-md-6" key={index}>
                     <div className="m-b30 blog-grid">
-                      <div className="dez-post-media dez-img-effect ">
+                      {/* <div className="dez-post-media dez-img-effect ">
                         {" "}
                         <Link href={"/blog-details"}>
                           <Image src={item.image} alt="" />
                         </Link>{" "}
-                      </div>
-                      <div className="dez-info p-a20 border-1">
+                      </div> */}
+                      <div className="dez-info p-a20 border-1 shadow bg-white" style={{borderRadius:'10px'}}>
                         <div className="dez-post-title ">
                           <h5 className="post-title">
                             <Link href={"/blog-details"}>
-                              Title of blog post
+                              {item.job_title}
                             </Link>
                           </h5>
                         </div>
                         <div className="dez-post-meta ">
                           <ul>
-                            <li className="post-date">
+                            <li className="post-date jd-recent-add">
                               {" "}
-                              <i className="ti-location-pin"></i> London{" "}
+                              <i className="ti-location-pin rc-lp"></i> <span>{item.address}{" "}</span>
                             </li>
                             <li className="post-author">
-                              <i className="ti-user"></i>By{" "}
-                              <Link href={"#"}>Jone</Link>{" "}
+                              <i className="ti-user"></i>
+                              <Link href={"#"}>{item?.user?.company_name || 'company name'}</Link>{" "}
                             </li>
                           </ul>
                         </div>
                         <div className="dez-post-text">
-                          <p>
-                            All the Lorem Ipsum generators on the Internet tend
-                            to repeat predefined chunks.
-                          </p>
+                        <div>
+                              <strong className="font-weight-700 text-black">
+                                Job Type
+                              </strong>{" "} : 
+                               {item?.location?.title}
+                            </div>
+                          <div>
+                              <strong className="font-weight-700 text-black">
+                                Salary
+                              </strong>{" "} : 
+                              &#8377; {item?.salary}{" "}
+                              Monthy
+                            </div>
+                            <div>
+                              <strong className="font-weight-700 text-black">
+                                Published :
+                              </strong>{" "}
+                                                             {formaterDate(item?.created_at)}
+                              
+                            </div>
                         </div>
                         <div className="dez-post-readmore">
                           <Link
-                            href={"/blog-details"}
+                            href={`/job-detail?jobId=${item.id}`}
                             title="READ MORE"
                             rel="bookmark"
                             className="site-button-link"
                           >
-                            <span className="fw6">READ MORE</span>
+                            <span className="fw6">View Job</span>
                           </Link>
                         </div>
                       </div>
