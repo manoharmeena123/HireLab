@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Image from "next/image";
 import {
   useGetManageJobQuery,
   useDeleteManageJobMutation,
@@ -12,6 +13,9 @@ import { JobData } from "./types";
 import { formatDate } from "@/utils/formateDate";
 import ModalPopup from "../../components/ModalPopup";
 import { usePostJobMutation } from "../post-job/store/post-job.query";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useGetDesignationQuery } from "@/store/global-store/global.query";
+
 interface User {
   image?: string;
 }
@@ -25,21 +29,15 @@ const ManageJobs = () => {
   console.log("jobsData", jobsData);
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
-
+  const { user, refetch } = useLoggedInUser();
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
-  const [user, setUser] = useState<User>({});
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // Placeholder to simulate fetching user data
-  useEffect(() => {
-    // Simulate fetching user data
-    setUser({ image: "user-image-url" });
-  }, []);
-
+ 
   const handleDeleteJob = async (jobId: number) => {
     try {
       await deleteManageJob(jobId.toString()).unwrap();
@@ -74,6 +72,41 @@ const ManageJobs = () => {
     // Close the modal after successful edit (optional)
     setShow(false);
   };
+
+
+  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
+  useEffect(() => {
+    // Map designation options
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData, refetch]);
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      // Only proceed if user and designation_id are not null
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions, refetch]);
   return (
     <>
       <div className="page-content bg-white">
@@ -88,75 +121,68 @@ const ManageJobs = () => {
                       <div className="candidate-detail text-center">
                         {/* User image placeholder */}
                         <div className="canditate-des">
-                          <img src={user?.image} alt="User Image" />
+                        <Link href={"#"}>
+                          <Image
+                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                            alt="Company Logo"
+                            width={300}
+                            height={300}
+                          />
+                        </Link>
                         </div>
                         <div className="candidate-title">
-                          <h4 className="m-b5">@COMPANY</h4>
+                          <h4 className="m-b5">
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
+                          </h4>
+                          <p className="m-b0">
+                            <Link href={"#"}>
+                              {designationLabel || "Not available"}
+                            </Link>
+                          </p>
                         </div>
                       </div>
                       {/* Navigation links */}
                       <ul>
                         <li>
                           <Link href="/profile">
-                            <div className="nav-link">
-                              <i
-                                className="fa fa-user-o"
-                                aria-hidden="true"
-                              ></i>
-                              <span>Satya Profile</span>
-                            </div>
+                            <i className="fa fa-user-o" aria-hidden="true"></i>
+                            <span>{user?.user?.name} Profile</span>
                           </Link>
                         </li>
+
                         <li>
                           <Link href="/post-job">
-                            <div className="nav-link">
-                              <i
-                                className="fa fa-file-text-o"
-                                aria-hidden="true"
-                              ></i>
-                              <span>Post A job</span>
-                            </div>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Post A job</span>
                           </Link>
                         </li>
+
                         <li>
                           <Link href="/credit-earned">
-                            <div className="nav-link">
-                              <i
-                                className="fa fa-heart-o"
-                                aria-hidden="true"
-                              ></i>
-                              <span>Credit Earned</span>
-                            </div>
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Credit Earned</span>
                           </Link>
                         </li>
+
                         <li>
-                          <Link href="/manage-job">
-                            <div className="nav-link active">
-                              <i
-                                className="fa fa-heart-o"
-                                aria-hidden="true"
-                              ></i>
-                              <span>Manage Jobs</span>
-                            </div>
+                          <Link href="/manage-job" className="active">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Manage Jobs</span>
                           </Link>
                         </li>
-                        <li>
-                          <Link href="/change-password">
-                            <div className="nav-link">
-                              <i className="fa fa-key" aria-hidden="true"></i>
-                              <span>Change Password</span>
-                            </div>
-                          </Link>
-                        </li>
+
                         <li>
                           <Link href="/">
-                            <div className="nav-link">
-                              <i
-                                className="fa fa-sign-out"
-                                aria-hidden="true"
-                              ></i>
-                              <span>Log Out</span>
-                            </div>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Log Out</span>
                           </Link>
                         </li>
                       </ul>

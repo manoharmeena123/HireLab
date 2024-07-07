@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Select, { MultiValue } from "react-select";
@@ -26,6 +26,8 @@ import {
   useGetAdditionalPerkQuery,
 } from "@/store/global-store/global.query";
 import styles from "./styles/PostJob.module.css"; // Assuming you have a CSS module file
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
 const Componypostjobs = () => {
   const router = useRouter();
@@ -35,6 +37,7 @@ const Componypostjobs = () => {
     MultiValue<{ value: string; label: string }>
   >([]);
   const errors = useSelector(selectPostJobErrors);
+  const { user, refetch } = useLoggedInUser();
 
   // queries
   const [postJob, { isLoading }] = usePostJobMutation();
@@ -205,6 +208,39 @@ const Componypostjobs = () => {
     fontWeight: "bold",
   };
 
+  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
+  useEffect(() => {
+    // Map designation options
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData, refetch]);
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      // Only proceed if user and designation_id are not null
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions, refetch]);
   return (
     <div className="page-content bg-white">
       <div className="content-block">
@@ -218,33 +254,31 @@ const Componypostjobs = () => {
                       <div className="canditate-des">
                         <Link href={"#"}>
                           <Image
-                            src={`${IMAGE_URL}`}
+                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
                             alt="Company Logo"
                             width={300}
                             height={300}
                           />
                         </Link>
-                        <div
-                          className="upload-link"
-                          title="update"
-                          data-toggle="tooltip"
-                          data-placement="right"
-                        >
-                          <input type="file" className="update-flie" />
-                          <i className="fa fa-pencil"></i>
-                        </div>
                       </div>
                       <div className="candidate-title">
                         <h4 className="m-b5">
-                          <Link href={"#"}>@COMPANY</Link>
+                          <Link href={"#"}>
+                            {user?.user?.name || "User Name"}
+                          </Link>
                         </h4>
+                        <p className="m-b0">
+                          <Link href={"#"}>
+                            {designationLabel || "Not available"}
+                          </Link>
+                        </p>
                       </div>
                     </div>
                     <ul>
                       <li>
                         <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span>Satya Profile</span>
+                          <span>{user?.user?.name} Profile</span>
                         </Link>
                       </li>
                       <li>
@@ -266,12 +300,6 @@ const Componypostjobs = () => {
                         <Link href="/manage-job">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
                           <span>Manage Jobs</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/change-password">
-                          <i className="fa fa-key" aria-hidden="true"></i>
-                          <span>Change Password</span>
                         </Link>
                       </li>
                       <li>

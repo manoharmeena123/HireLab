@@ -3,6 +3,7 @@ import CountUp from "react-countup";
 import styles from "@/styles/LatestDiscussions.module.css";
 import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
+import Link from "next/link";
 
 const LatestDiscussions = () => {
   const [questionsPosted, setQuestionsPosted] = useState(1800);
@@ -106,7 +107,10 @@ const LatestDiscussions = () => {
                 <p className="text-muted mb-2">
                   {formatDateTime(discussion?.created_at)}
                 </p>
-                <h5 className="card-title">{discussion?.question}</h5>
+                <Link href={`/single-discussion?query=${discussion?.question}`}>
+                  <h5  className={styles.link}>{discussion?.question}</h5>
+                </Link>
+
                 <div
                   className={`card-text ${styles.description} ${
                     expandedIndex === index ? styles.expanded : ""
@@ -140,6 +144,7 @@ const LatestDiscussions = () => {
             </div>
           </div>
         ))}
+       
       </div>
     </div>
   );

@@ -18,75 +18,12 @@ interface Job {
   image?: string;
 }
 
-const jobAlert: Job[] = [
-  {
-    id: 1,
-    title: "Social Media Expert",
-    company: "@company-name",
-    date: "December 15,2018",
-  },
-  {
-    id: 2,
-    title: "Web Designer",
-    company: "@company-name",
-    date: "November 10,2018",
-  },
-  {
-    id: 3,
-    title: "Finance Accountant",
-    company: "@company-name",
-    date: "October 5,2018",
-  },
-  {
-    id: 4,
-    title: "Social Media Expert",
-    company: "@company-name",
-    date: "December 15,2018",
-  },
-  {
-    id: 5,
-    title: "Web Designer",
-    company: "@company-name",
-    date: "November 10,2018",
-  },
-  {
-    id: 6,
-    title: "Finance Accountant",
-    company: "@company-name",
-    date: "October 5,2018",
-  },
-  {
-    id: 7,
-    title: "Social Media Expert",
-    company: "@company-name",
-    date: "December 15,2018",
-  },
-  {
-    id: 8,
-    title: "Web Designer",
-    company: "@company-name",
-    date: "November 10,2018",
-  },
-  {
-    id: 9,
-    title: "Finance Accountant",
-    company: "@company-name",
-    date: "October 5,2018",
-  },
-  {
-    id: 10,
-    title: "Social Media Expert",
-    company: "@company-name",
-    date: "December 15,2018",
-  },
-];
-
 const SavedJobs = () => {
   const { data: savedJob, refetch } = useGetSavedJobQuery();
   const [deleteSavedJob, { isLoading, isSuccess, isError }] =
     useDeleteSavedJobMutation();
   const [postModal, setPostModal] = useState(false);
-  const [contacts, setContacts] = useState<Job[]>(jobAlert);
+  const [contacts, setContacts] = useState<any>();
   const [addFormData, setAddFormData] = useState<Job>({
     id: "",
     title: "",
@@ -165,7 +102,7 @@ const SavedJobs = () => {
         date: addFormData.date,
         image: addFormData.image,
       };
-      setContacts((prevContacts) => [...prevContacts, newContact]);
+      setContacts((prevContacts :any) => [...prevContacts, newContact]);
       setPostModal(false);
       //   swal("Good job!", "Successfully Added", "success");
       setAddFormData({ id: "", title: "", company: "", date: "", image: "" });
@@ -210,7 +147,7 @@ const SavedJobs = () => {
       date: editFormData.date,
       image: editFormData.image,
     };
-    const newContacts = contacts.map((contact) =>
+    const newContacts = contacts?.map((contact: any) =>
       contact.id === editContactId ? editedContact : contact
     );
     setContacts(newContacts);
@@ -223,50 +160,33 @@ const SavedJobs = () => {
       <div className="job-bx save-job browse-job table-job-bx clearfix">
         <div className="job-bx-title clearfix">
           <h5 className="font-weight-700 pull-left text-uppercase">
-            269 Saved Jobs
+            {savedJob?.data.length} Saved Jobs
           </h5>
           <div className="float-right">
-            <span className="select-title">Sort by freshness</span>
-            {/* <select className="custom-btn">
-							<option>Last 2 Months</option>
-							<option>Last Months</option>
-							<option>Last Weeks</option>
-							<option>Last 3 Days</option>
-						</select> */}
-            <Link
-              href={"#"}
-              className="btn site-button"
-              onClick={() => setPostModal(true)}
-            >
-              + Add Job
-            </Link>
+            <input
+              type="search"
+              className="form-control"
+              placeholder="Search..."
+            />
           </div>
         </div>
         <table>
           <thead>
             <tr>
-              <th></th>
-              <th>Premium jobs</th>
+              <th>jobs</th>
               <th>Company</th>
               <th>Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {savedJob?.data?.map((contact, index) => (
+            {savedJob?.data?.map((contact: any, index: number) => (
               <tr key={index}>
-                <td className="job-post-company">
-                  <Link href={"#"}>
-                    <span>
-                      <img alt="" src={require("../images/logo/icon2.png")} />
-                    </span>
-                  </Link>
-                </td>
                 <td className="job-name">
                   <Link href={"/job-detail"}>{contact?.job_title}</Link>
                 </td>
                 <td className="criterias text-primary">
-                  <Link href={"/company-profile"}>{contact?.company_name}</Link>
+                  {contact?.company_name}
                 </td>
                 <td className="date">{formaterDate(contact?.created_at)}</td>
                 <td className="job-links pencil">
@@ -276,7 +196,7 @@ const SavedJobs = () => {
                       event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
                     ) => handleEditClick(event, contact)}
                   >
-                    <i className="fa fa-pencil"></i>
+                    <i className="fa fa-eye"></i>
                   </Link>
                   <Link
                     href={"#"}

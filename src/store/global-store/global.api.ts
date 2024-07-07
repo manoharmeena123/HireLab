@@ -1,5 +1,4 @@
 import { ApplyJobData, SaveJobData } from "@/types/index";
-import { getEnabledCategories } from "trace_events";
 
 export const queries = {
   getBlogs: {
@@ -154,6 +153,18 @@ export const queries = {
   getCategories :{
     query :()=>({
       url :"api/get-categories",
+      method :"GET"
+    })
+  },
+  getSingleEventByTitle :{
+    query :(title:string) =>({
+      url :`api/event/${title}`,
+      method :"GET"
+    })
+  },
+  getSingleDiscussionByTitle :{
+    query :(title:string) =>({
+      url :`api/discussion/${title}`,
       method :"GET"
     })
   },

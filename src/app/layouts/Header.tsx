@@ -25,7 +25,9 @@ const Header = () => {
   };
 
   const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
-    <ProfileDropdown sessionUser={user} />
+    <Link href="/job-seeker">
+      <ProfileDropdown sessionUser={user} />
+    </Link>
   );
 
   const renderLoginRegisterButtons = !isLoginPage &&
@@ -84,7 +86,7 @@ const Header = () => {
                 menuOpen ? "show" : ""
               }`}
               id="navbarNavDropdown"
-              style={{  paddingRight :"2rem"}}
+              style={{ paddingRight: "2rem" }}
             >
               {menuOpen && (
                 <div className={`logo-header mostion ${styles.logo}`}>
