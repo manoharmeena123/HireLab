@@ -1,14 +1,14 @@
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import Loading from "@/components/Loading";
 
-const SingleEvent = dynamic(() => import('@/markup/Element/SingleEvent'), {
+const SingleEvent = dynamic(() => import("@/markup/Element/SingleEvent"), {
   ssr: false,
 });
 
 const SingleEventPage = () => {
   return (
-    <Suspense fallback={<div><Loading/></div>}>
+    <Suspense fallback={<Loading />}>
       <SingleEvent />
     </Suspense>
   );
