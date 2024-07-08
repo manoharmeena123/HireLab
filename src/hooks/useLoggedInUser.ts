@@ -1,3 +1,4 @@
+"use client"
 // src/hooks/useLoggedInUser.ts
 import { useGetLoggedInUserQuery } from "@/app/login/store/login.query";
 
