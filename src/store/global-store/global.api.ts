@@ -177,7 +177,7 @@ export const queries = {
   
       return {
         url: `api/filter-jobs?${new URLSearchParams(stringifiedParams).toString()}`,
-        method: "POST",
+        method: "GET",
       };
     },
   },
