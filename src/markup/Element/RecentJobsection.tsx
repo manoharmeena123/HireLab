@@ -99,7 +99,7 @@ const viewJobHandler = (id:number) => {
             <h6 className="fw4 m-b0">{recentJob?.data?.length}+ Recently Added Jobs</h6>
           </div>
           <div className="align-self-end">
-            <Link href="/browse-job-list" className="site-button button-sm">
+            <Link href="/browse-jobs" className="site-button button-sm">
               Browse All Jobs <i className="fa fa-long-arrow-right"></i>
             </Link>
           </div>
@@ -109,15 +109,10 @@ const viewJobHandler = (id:number) => {
             <JobDetailPopup show={show} handleClose={handleClose} item={recentJob?.data} />
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
-                <li key={index}>
+                <li key={index} onClick={()=>viewJobHandler(item.id)}>
                   {item && (
                     <div className="post-bx">
                       <div className="d-flex m-b30">
-                        {/* <div className="job-post-company">
-                          <span>
-                            <Image alt="image" src={""} />
-                          </span>
-                        </div> */}
                         <div className="job-post-info">
                           <h4 style={{cursor:'pointer'}} className="text-secondry">
                           {item?.job_title}
@@ -148,9 +143,9 @@ const viewJobHandler = (id:number) => {
                       
                         <div className="salary-bx">
                           <span>42000 - 55000</span><br />
-                          <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
+                          {/* <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
                             View Job
-                          </span>
+                          </span> */}
                         </div>
                       </div>
                       <label

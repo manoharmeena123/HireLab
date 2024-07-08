@@ -1,14 +1,20 @@
 import React, { useEffect, FocusEvent } from "react";
 import { Form } from "react-bootstrap";
+import { useGetSectorQuery } from "@/store/global-store/global.query";
 
-const Jobfindbox: React.FC = () => {
+const Jobfindbox = () => {
+  const { data: sectorData, isLoading, isError } = useGetSectorQuery();
   useEffect(() => {
-    const handleFocus = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleFocus = (
+      event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       const target = event.target as HTMLInputElement;
       target.parentElement?.parentElement?.classList.add("focused");
     };
 
-    const handleBlur = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleBlur = (
+      event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
       const target = event.target as HTMLInputElement;
       const inputValue = target.value;
       if (inputValue === "") {
@@ -19,7 +25,9 @@ const Jobfindbox: React.FC = () => {
       }
     };
 
-    const inputSelector = document.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea");
+    const inputSelector = document.querySelectorAll<
+      HTMLInputElement | HTMLTextAreaElement
+    >("input, textarea");
 
     inputSelector.forEach((input) => {
       input.addEventListener("focus", handleFocus as unknown as EventListener);
@@ -28,8 +36,14 @@ const Jobfindbox: React.FC = () => {
 
     return () => {
       inputSelector.forEach((input) => {
-        input.removeEventListener("focus", handleFocus as unknown as EventListener);
-        input.removeEventListener("blur", handleBlur as unknown as EventListener);
+        input.removeEventListener(
+          "focus",
+          handleFocus as unknown as EventListener
+        );
+        input.removeEventListener(
+          "blur",
+          handleBlur as unknown as EventListener
+        );
       });
     };
   }, []);
@@ -78,17 +92,13 @@ const Jobfindbox: React.FC = () => {
                 <div className="form-group">
                   <Form.Control as="select" className="select-btn">
                     <option>Select Sector</option>
-                    <option>Construction</option>
-                    <option>Coordinator</option>
-                    <option>Employer</option>
-                    <option>Financial Career</option>
-                    <option>Information Technology</option>
-                    <option>Marketing</option>
-                    <option>Quality check</option>
-                    <option>Real Estate</option>
-                    <option>Sales</option>
-                    <option>Supporting</option>
-                    <option>Teaching</option>
+                    {sectorData?.data?.map(
+                      (sector: { id: number; name: string }) => (
+                        <option key={sector.id} value={sector.name}>
+                          {sector.name}
+                        </option>
+                      )
+                    )}
                   </Form.Control>
                 </div>
               </div>

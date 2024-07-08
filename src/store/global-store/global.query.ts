@@ -60,7 +60,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Setting",
     "Categories",
     "SingleEventByTitle",
-    "SingleDiscussionByTitle"
+    "SingleDiscussionByTitle",
+    "JobById"
   ],
 });
 
@@ -112,7 +113,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     }),
     getJobById: builder.mutation<WritableRecentJobResponse, string>({
       query: (id) => queries.getJobById.query(id),
-      providesTags: ["JobById"],
+      invalidatesTags: ["JobById"],
     }),
     postApplyJob: builder.mutation<ApplyJobResponse, ApplyJobData>({
       query: (id) => queries.postApplyJob.query(id),
