@@ -84,10 +84,9 @@ const RecentJobsection = () => {
 
   // // Render error message if there's an error fetching data
   // if (isError) return <div>Error fetching data</div>;
-const viewJobHandler = (id:number) => {
-
-  push(`/job-detail?jobId=${id}`)
-}
+  const viewJobHandler = (id: number) => {
+    push(`/job-detail?jobId=${id}`);
+  };
   return (
     <div className="section-full bg-white content-inner-2">
       <div className="container">
@@ -96,7 +95,9 @@ const viewJobHandler = (id:number) => {
             <h2 style={{ fontWeight: "501" }} className="m-b5">
               Recent Jobs
             </h2>
-            <h6 className="fw4 m-b0">{recentJob?.data?.length}+ Recently Added Jobs</h6>
+            <h6 className="fw4 m-b0">
+              {recentJob?.data?.length}+ Recently Added Jobs
+            </h6>
           </div>
           <div className="align-self-end">
             <Link href="/browse-jobs" className="site-button button-sm">
@@ -106,19 +107,29 @@ const viewJobHandler = (id:number) => {
         </div>
         <div className="row">
           <div className="col-lg-9">
-            <JobDetailPopup show={show} handleClose={handleClose} item={recentJob?.data} />
+            <JobDetailPopup
+              show={show}
+              handleClose={handleClose}
+              item={recentJob?.data}
+            />
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
-                <li key={index} >
+                <li key={index}>
                   {item && (
                     <div className="post-bx">
                       <div className="d-flex m-b30">
                         <div className="job-post-info">
-                          <h4 style={{cursor:'pointer'}} className="text-secondry">
-                          <Link href={"/job-detail"} onClick={() => viewJobHandler(item.id)}>
-                                {" "}
-                                {item?.job_title}
-                              </Link>
+                          <h4
+                            style={{ cursor: "pointer" }}
+                            className="text-secondry" 
+                             onClick={() => viewJobHandler(item.id)}
+                          >
+                            <Link
+                              href=""
+                            
+                            >
+                              {item?.job_title}
+                            </Link>
                           </h4>
                           <ul>
                             <li>
@@ -142,9 +153,10 @@ const viewJobHandler = (id:number) => {
                             <span>{item?.location?.title}</span>
                           </Link>
                         </div>
-                      
+
                         <div className="salary-bx">
-                          <span>42000 - 55000</span><br />
+                          <span>42000 - 55000</span>
+                          <br />
                           {/* <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
                             View Job
                           </span> */}

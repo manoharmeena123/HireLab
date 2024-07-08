@@ -86,12 +86,15 @@ function Browsejobfilterlist() {
                 </div>
                 <ul className="post-job-bx">
                   {jobsData?.data?.map((item, index) => (
-                    <li key={index} >
+                    <li key={index}>
                       <div className="post-bx">
                         <div className="d-flex m-b30">
                           <div className="job-post-info">
-                            <h4>
-                              <Link href={"/job-detail"} onClick={() => viewJobHandler(item.id)}>
+                            <h4
+                              style={{ cursor: "pointer" }}
+                              onClick={() => viewJobHandler(item.id)}
+                            >
+                              <Link href={"/job-detail"}>
                                 {" "}
                                 {item?.job_title}
                               </Link>
@@ -144,6 +147,7 @@ function Browsejobfilterlist() {
                     </li>
                   ))}
                 </ul>
+
                 <div className="pagination-bx float-right m-t30">
                   <ul className="pagination">
                     <li className="previous">
