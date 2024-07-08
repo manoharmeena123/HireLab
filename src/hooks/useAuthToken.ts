@@ -1,3 +1,4 @@
+"use client"
 // src/hooks/useAuthToken.ts
 import { useState, useEffect } from 'react';
 import { setCookie, getCookie, removeCookie } from 'typescript-cookie';
