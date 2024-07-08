@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
   useGetJobByIdMutation,
-  useGetJobByIdQuery,
-  useGetJobsByIdMutation,
-  useGetJobsMutation,
   useGetRecentJobsQuery,
 } from "@/store/global-store/global.query";
 import Link from "next/link";
@@ -18,47 +15,29 @@ import { formaterDate } from "@/utils/formateDate";
 
 var bnr = require("./../../images/banner/bnr1.jpg");
 
-const blogGrid = [
-  {
-    image: require("../../images/blog/grid/pic1.jpg"),
-  },
-  {
-    image: require("../../images/blog/grid/pic2.jpg"),
-  },
-  {
-    image: require("../../images/blog/grid/pic3.jpg"),
-  },
-  {
-    image: require("../../images/blog/grid/pic4.jpg"),
-  },
-];
-
 function Jobdetail() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
   const [getJobs, { data: job, error, isLoading }] = useGetJobByIdMutation();
   const { data: recentJob } = useGetRecentJobsQuery();
-console.log(recentJob);
+  console.log(recentJob);
   useEffect(() => {
     if (jobId) {
-      console.log("Fetching job details for jobId:", jobId); // Debug log
+      console.log("Fetching job details for jobId:", jobId); 
       getJobs(jobId)
         .unwrap()
         .then((response) => {
-          console.log("Job details response:", response); // Debug log
+          console.log("Job details response:", response); 
         })
         .catch((error) => {
-          console.error("Error fetching job details:", error); // Debug log
+          console.error("Error fetching job details:", error); 
         });
     }
   }, [jobId, getJobs]);
 
-
   return (
     <>
-	{
-		isLoading && <Loading />
-	}
+      {isLoading && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -102,8 +81,7 @@ console.log(recentJob);
                               <strong className="font-weight-700 text-black">
                                 Salary
                               </strong>{" "}
-                              &#8377; {job?.data?.salary}{" "}
-                              Monthy
+                              &#8377; {job?.data?.salary} Monthy
                             </li>
                             <li>
                               <i className="ti-shield"></i>
@@ -111,7 +89,6 @@ console.log(recentJob);
                                 Experience
                               </strong>
                               {job?.data?.total_experience}
-
                             </li>
                           </ul>
                         </div>
@@ -128,8 +105,7 @@ console.log(recentJob);
                     </h3>
                     <ul className="job-info">
                       <li>
-                        <strong>Education</strong>                         {job?.data?.education?.name}
-
+                        <strong>Education</strong> {job?.data?.education?.name}
                       </li>
                       <li>
                         <strong>Deadline:</strong> 25th January 2018
@@ -138,7 +114,6 @@ console.log(recentJob);
                         <i className="ti-location-pin text-black m-r5"></i>{" "}
                         {/* NewYark{" "} */}
                         {job?.data?.location?.title}
-
                       </li>
                     </ul>
                     <p className="p-t20">
@@ -199,7 +174,7 @@ console.log(recentJob);
           <div className="section-full content-inner">
             <div className="container">
               <div className="row">
-                {recentJob?.data?.slice(0,4).map((item, index) => (
+                {recentJob?.data?.slice(0, 4).map((item, index) => (
                   <div className="col-xl-3 col-lg-6 col-md-6" key={index}>
                     <div className="m-b30 blog-grid">
                       {/* <div className="dez-post-media dez-img-effect ">
@@ -208,47 +183,49 @@ console.log(recentJob);
                           <Image src={item.image} alt="" />
                         </Link>{" "}
                       </div> */}
-                      <div className="dez-info p-a20 border-1 shadow bg-white" style={{borderRadius:'10px'}}>
+                      <div
+                        className="dez-info p-a20 border-1 shadow bg-white"
+                        style={{ borderRadius: "10px" }}
+                      >
                         <div className="dez-post-title ">
                           <h5 className="post-title">
-                            <Link href={"/blog-details"}>
-                              {item.job_title}
-                            </Link>
+                            <Link href={"/blog-details"}>{item.job_title}</Link>
                           </h5>
                         </div>
                         <div className="dez-post-meta ">
                           <ul>
                             <li className="post-date jd-recent-add">
                               {" "}
-                              <i className="ti-location-pin rc-lp"></i> <span>{item.address}{" "}</span>
+                              <i className="ti-location-pin rc-lp"></i>{" "}
+                              <span>{item.address} </span>
                             </li>
                             <li className="post-author">
                               <i className="ti-user"></i>
-                              <Link href={"#"}>{item?.user?.company_name || 'company name'}</Link>{" "}
+                              <Link href={"#"}>
+                                {item?.user?.company_name || "company name"}
+                              </Link>{" "}
                             </li>
                           </ul>
                         </div>
                         <div className="dez-post-text">
-                        <div>
-                              <strong className="font-weight-700 text-black">
-                                Job Type
-                              </strong>{" "} : 
-                               {item?.location?.title}
-                            </div>
                           <div>
-                              <strong className="font-weight-700 text-black">
-                                Salary
-                              </strong>{" "} : 
-                              &#8377; {item?.salary}{" "}
-                              Monthy
-                            </div>
-                            <div>
-                              <strong className="font-weight-700 text-black">
-                                Published :
-                              </strong>{" "}
-                                                             {formaterDate(item?.created_at)}
-                              
-                            </div>
+                            <strong className="font-weight-700 text-black">
+                              Job Type
+                            </strong>{" "}
+                            :{item?.location?.title}
+                          </div>
+                          <div>
+                            <strong className="font-weight-700 text-black">
+                              Salary
+                            </strong>{" "}
+                            : &#8377; {item?.salary} Monthy
+                          </div>
+                          <div>
+                            <strong className="font-weight-700 text-black">
+                              Published :
+                            </strong>{" "}
+                            {formaterDate(item?.created_at)}
+                          </div>
                         </div>
                         <div className="dez-post-readmore">
                           <Link
