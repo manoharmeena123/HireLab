@@ -14,8 +14,12 @@ import { redirect, useRouter } from "next/navigation";
 
 const Browsejobgrid = () => {
   const { push } = useRouter();
-  const { data: getAlljobs, isLoading :getAlljobsLoading } = useGetJobsQuery();
-  const { data: sectorData, isError, isLoading: sectorLoading } = useGetSectorQuery();
+  const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
+  const {
+    data: sectorData,
+    isError,
+    isLoading: sectorLoading,
+  } = useGetSectorQuery();
 
   console.log("getAlljobs", getAlljobs);
   const viewJobHandler = (id: number) => {
@@ -23,7 +27,7 @@ const Browsejobgrid = () => {
   };
   return (
     <>
-      {(getAlljobsLoading || sectorLoading) ? (
+      {getAlljobsLoading || sectorLoading ? (
         <Loading />
       ) : (
         <div className="page-content bg-white">
@@ -42,15 +46,20 @@ const Browsejobgrid = () => {
                     {getAlljobs?.data?.length} Jobs Found
                   </h5>
                   <div className="float-right">
-                    <span className="select-title">Sort by freshness</span>
-                    <select className="cushrefm-btn">
-                      <option>Last 2 Months</option>
-                      <option>Last Months</option>
-                      <option>Last Weeks</option>
-                      <option>Last 3 Days</option>
-                    </select>
+                    <div className="form-group">
+                      <label htmlFor="sortBy" className="select-title mr-2">
+                        Sort by freshness
+                      </label>
+                      <select id="sortBy" className="form-control">
+                        <option value="last2Months">Last 2 Months</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="lastWeeks">Last Weeks</option>
+                        <option value="last3Days">Last 3 Days</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
+
                 <ul className="post-job-bx browse-job-grid row">
                   {getAlljobs?.data?.map((item, index) => (
                     <li
