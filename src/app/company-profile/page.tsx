@@ -3,8 +3,26 @@ import Link from "next/link";
 import { Form } from "react-bootstrap";
 // import GoogleMaps from "simple-react-google-maps";
 import Image from "next/image";
+import { useLogoutMutation } from "@/app/login/store/login.query";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
 
 const Companyprofile = () => {
+
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
+
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <>
       <div className="page-content bg-white">
@@ -71,7 +89,7 @@ const Companyprofile = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/">
+                          <Link href="/" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

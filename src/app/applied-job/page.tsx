@@ -8,13 +8,17 @@ import { useGetAppliedJobsQuery } from "@/store/global-store/global.query";
 import { formatDateAgo } from "@/utils/formateDate";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useLogoutMutation } from "@/app/login/store/login.query";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
 
 const Jobsappliedjob = () => {
   const { data: appliedJob, isLoading } = useGetAppliedJobsQuery();
   console.log("appliedJob", appliedJob);
   const { user, refetch } = useLoggedInUser();
   const { data: designationData } = useGetDesignationQuery(); 
-
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
@@ -46,6 +50,17 @@ const Jobsappliedjob = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className="page-content bg-white">
       <div className="content-block">
@@ -131,7 +146,7 @@ const Jobsappliedjob = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href={"./"}>
+                        <Link href={"./"} onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
                         </Link>

@@ -28,6 +28,9 @@ import {
 import styles from "./styles/PostJob.module.css"; // Assuming you have a CSS module file
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
+import { useLogoutMutation } from "@/app/login/store/login.query";
 
 const Componypostjobs = () => {
   const router = useRouter();
@@ -38,6 +41,7 @@ const Componypostjobs = () => {
   >([]);
   const errors = useSelector(selectPostJobErrors);
   const { user, refetch } = useLoggedInUser();
+  const [logout] = useLogoutMutation();
 
   // queries
   const [postJob, { isLoading }] = usePostJobMutation();
@@ -47,7 +51,7 @@ const Componypostjobs = () => {
   const { data: jobtTypeData } = useGetJobTypeQuery();
   const { data: compensationData } = useGetCompensationsQuery();
   const { data: additionalPerkData } = useGetAdditionalPerkQuery();
-
+  const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
   );
@@ -241,6 +245,17 @@ const Componypostjobs = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className="page-content bg-white">
       <div className="content-block">
@@ -303,7 +318,7 @@ const Componypostjobs = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/">
+                        <Link href="/" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
                         </Link>
