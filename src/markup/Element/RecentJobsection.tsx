@@ -109,14 +109,16 @@ const viewJobHandler = (id:number) => {
             <JobDetailPopup show={show} handleClose={handleClose} item={recentJob?.data} />
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
-                <li key={index} onClick={()=>viewJobHandler(item.id)}>
+                <li key={index} >
                   {item && (
                     <div className="post-bx">
                       <div className="d-flex m-b30">
                         <div className="job-post-info">
                           <h4 style={{cursor:'pointer'}} className="text-secondry">
-                          {item?.job_title}
-                            {/* <Link href=""></Link> */}
+                          <Link href={"/job-detail"} onClick={() => viewJobHandler(item.id)}>
+                                {" "}
+                                {item?.job_title}
+                              </Link>
                           </h4>
                           <ul>
                             <li>
