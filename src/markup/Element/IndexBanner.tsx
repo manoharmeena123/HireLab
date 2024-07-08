@@ -1,8 +1,12 @@
 "use client";
 import React, { useEffect, useCallback, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Form } from "react-bootstrap";
-import { useGetSectorQuery, useGetFilterJobMutation } from "@/store/global-store/global.query";
+import {
+  useGetSectorQuery,
+  useGetFilterJobMutation,
+} from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 const bnr1 = require("./../../images/main-slider/slide2.jpg");
 
@@ -13,10 +17,11 @@ interface Filters {
   [key: string]: string; // Index signature for string properties
 }
 
-
 const IndexBanner: React.FC = () => {
+  const { push } = useRouter();
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
-  const [getFilterJob, { isLoading: isFilterLoading }] = useGetFilterJobMutation();
+  const [getFilterJob, { isLoading: isFilterLoading }] =
+    useGetFilterJobMutation();
 
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
@@ -65,7 +70,8 @@ const IndexBanner: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await getFilterJob(filters);
+      const query = new URLSearchParams(filters as any).toString();
+      push(`/browse-job-filter?${query}`);
     } catch (error) {
       console.error("Error filtering jobs:", error);
     }
@@ -76,11 +82,18 @@ const IndexBanner: React.FC = () => {
   }
 
   return (
-    <div className="dez-bnr-inr dez-bnr-inr-md" style={{ backgroundImage: `url(${bnr1.default.src})` }}>
+    <div
+      className="dez-bnr-inr dez-bnr-inr-md"
+      style={{ backgroundImage: `url(${bnr1.default.src})` }}
+    >
       <div className="container">
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
-            <Link href="/browse-job" className="site-button button-sm" style={{ backgroundColor: "#2A6310" }}>
+            <Link
+              href="/browse-job"
+              className="site-button button-sm"
+              style={{ backgroundColor: "#2A6310" }}
+            >
               Find Jobs, Employment & Career Opportunities
             </Link>
             <h2>
@@ -139,11 +152,13 @@ const IndexBanner: React.FC = () => {
                       className="select-btn"
                     >
                       <option>Select Sector</option>
-                      {sectorData?.data?.map((sector: { id: number; name: string }) => (
-                        <option key={sector.id} value={sector.name}>
-                          {sector.name}
-                        </option>
-                      ))}
+                      {sectorData?.data?.map(
+                        (sector: { id: number; name: string }) => (
+                          <option key={sector.id} value={sector.name}>
+                            {sector.name}
+                          </option>
+                        )
+                      )}
                     </Form.Control>
                   </div>
                 </div>
