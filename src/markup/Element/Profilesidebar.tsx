@@ -1,3 +1,4 @@
+"use client"
 // src/components/Profilesidebar.tsx
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
