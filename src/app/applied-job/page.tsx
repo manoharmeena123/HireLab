@@ -128,7 +128,7 @@ const Jobsappliedjob = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href={"/jobs-applied-job"} className="active">
+                        <Link href={"/applied-job"} className="active">
                           <i className="fa fa-briefcase" aria-hidden="true"></i>
                           <span>Applied Jobs</span>
                         </Link>
