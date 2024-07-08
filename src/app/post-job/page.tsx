@@ -389,13 +389,13 @@ const Componypostjobs = () => {
                             className="job-time d-flex flex-wrap mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {jobtTypeData?.data?.map((jobType, index) => (
+                            {jobtTypeData?.data?.map((job_type, index) => (
                               <div
-                                key={jobType.id}
+                                key={job_type.id}
                                 onClick={() =>
                                   handleToggleSelect(
                                     index,
-                                    "jobType",
+                                    "job_type",
                                     setSelectedJobType,
                                     selectedJobType
                                   )
@@ -408,10 +408,10 @@ const Componypostjobs = () => {
                                 }
                                 style={spanStyles(
                                   isJobTypeHovered[index],
-                                  selectedJobType === jobType.id
+                                  selectedJobType === job_type.id
                                 )}
                               >
-                                {jobType?.title}
+                                {job_type?.title}
                               </div>
                             ))}
                           </div>
