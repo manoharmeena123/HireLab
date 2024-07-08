@@ -67,6 +67,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  getJobById: {
+    query: (id:string) => ({
+      url: `api/job/${id}`,
+      method: "GET",
+    }),
+  },
   getTestimonials: {
     query: () => ({
       url: "api/get-testimonials",

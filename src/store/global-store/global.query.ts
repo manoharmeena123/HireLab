@@ -110,6 +110,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getJobs.query,
       providesTags: ["Jobs"],
     }),
+    getJobById: builder.mutation<WritableRecentJobResponse, string>({
+      query: (id) => queries.getJobById.query(id),
+      providesTags: ["JobById"],
+    }),
     postApplyJob: builder.mutation<ApplyJobResponse, ApplyJobData>({
       query: (id) => queries.postApplyJob.query(id),
       invalidatesTags: ["ApplyJobs"],
@@ -198,6 +202,7 @@ export const {
   useGetIndustryQuery,
   useGetDiscussionQuery,
   useGetJobsQuery,
+  useGetJobByIdMutation,
   usePostApplyJobMutation,
   useGetTestimonialsQuery,
   usePostSaveJobMutation,
