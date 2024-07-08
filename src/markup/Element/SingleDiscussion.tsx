@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import bnr from "../../images/banner/bnr1.jpg";
 import { useGetSingleDiscussionByTitleMutation } from "@/store/global-store/global.query";
+import Loading from "@/components/Loading";
 
 const SingleDiscussion = () => {
   const searchParams = useSearchParams();
@@ -23,9 +24,8 @@ const SingleDiscussion = () => {
   }, [getSingleDiscussionByTitle, query]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
-
   if (isSuccess && singleDiscussion) {
     const { created_at, question, description, user, likes, comments, views } =
       singleDiscussion.data;

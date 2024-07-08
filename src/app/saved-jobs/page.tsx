@@ -6,13 +6,18 @@ import Image from "next/image";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 var teamImg = require("../../images/team/pic1.jpg");
+import { useLogoutMutation } from "@/app/login/store/login.query";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
 
 const Jobsavedjobs = () => {
   const { user, refetch } = useLoggedInUser();
   const { data: designationData } = useGetDesignationQuery();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
-
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
+  
   useEffect(() => {
     // Map designation options
     if (designationData?.data) {
@@ -41,6 +46,17 @@ const Jobsavedjobs = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <>
       <div className="page-content bg-white">
@@ -116,7 +132,7 @@ const Jobsavedjobs = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/">
+                          <Link href="/" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

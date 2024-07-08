@@ -23,7 +23,8 @@ import {
   WritableTiersResponse,
   WritableDesignationsResponse,
   WritableSettingResponse,
-  WritableCategoriesResponse
+  WritableCategoriesResponse,
+  Filters,
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -60,7 +61,9 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Setting",
     "Categories",
     "SingleEventByTitle",
-    "SingleDiscussionByTitle"
+    "SingleDiscussionByTitle",
+    "JobById",
+    "GetFilterJob",
   ],
 });
 
@@ -112,7 +115,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     }),
     getJobById: builder.mutation<WritableRecentJobResponse, string>({
       query: (id) => queries.getJobById.query(id),
-      providesTags: ["JobById"],
+      invalidatesTags: ["JobById"],
     }),
     postApplyJob: builder.mutation<ApplyJobResponse, ApplyJobData>({
       query: (id) => queries.postApplyJob.query(id),
@@ -134,58 +137,65 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (id) => queries.deleteSavedJob.query(id),
       invalidatesTags: ["DeleteSaveJobs"],
     }),
-    getLocations : builder.query<WritableLocationResponse, void>({
+    getLocations: builder.query<WritableLocationResponse, void>({
       query: queries.getLocations.query,
-      providesTags: ["Locations"]
+      providesTags: ["Locations"],
     }),
-    getEducations : builder.query<WritableEducationResponse, void>({
+    getEducations: builder.query<WritableEducationResponse, void>({
       query: queries.getEducations.query,
-      providesTags: ["Educations"]
+      providesTags: ["Educations"],
     }),
-    getTags : builder.query<WritableTagResponse, void>({
+    getTags: builder.query<WritableTagResponse, void>({
       query: queries.getTags.query,
-      providesTags: ["Tags"]
+      providesTags: ["Tags"],
     }),
-    getJobType : builder.query<WritableJobTypeResponse, void>({
+    getJobType: builder.query<WritableJobTypeResponse, void>({
       query: queries.getJobType.query,
-      providesTags: ["JobType"]
+      providesTags: ["JobType"],
     }),
-    getCompensations : builder.query <WritableCompensationResponse, void>({
+    getCompensations: builder.query<WritableCompensationResponse, void>({
       query: queries.getCompensations.query,
-      providesTags: ["Compensations"]
+      providesTags: ["Compensations"],
     }),
-    getMembership : builder.query<WritableMembershipResponse, void>({
+    getMembership: builder.query<WritableMembershipResponse, void>({
       query: queries.getMembership.query,
-      providesTags: ["Membership"]
+      providesTags: ["Membership"],
     }),
-    getAdditionalPerk : builder.query<WritableAdditionalPerkResponse,void>({
-      query :queries.getAdditionalPerk.query,
-      providesTags: ["AdditionalPerk"]
+    getAdditionalPerk: builder.query<WritableAdditionalPerkResponse, void>({
+      query: queries.getAdditionalPerk.query,
+      providesTags: ["AdditionalPerk"],
     }),
-    getTier : builder.query<WritableTiersResponse, void>({
-      query :queries.getTier.query,
-      providesTags: ["Tier"]
+    getTier: builder.query<WritableTiersResponse, void>({
+      query: queries.getTier.query,
+      providesTags: ["Tier"],
     }),
-    getDesignation : builder.query<WritableDesignationsResponse, void>({
-      query :  queries.getDesignation.query,
-      providesTags: ["Designation"]
+    getDesignation: builder.query<WritableDesignationsResponse, void>({
+      query: queries.getDesignation.query,
+      providesTags: ["Designation"],
     }),
-    getSetting : builder.query<WritableSettingResponse, void>({
-      query : queries.getSetting.query,
-      providesTags: ["Setting"]
+    getSetting: builder.query<WritableSettingResponse, void>({
+      query: queries.getSetting.query,
+      providesTags: ["Setting"],
     }),
-    getCategories : builder.query<WritableCategoriesResponse, void>({
-      query : queries.getCategories.query,
-      providesTags: ["Categories"]
+    getCategories: builder.query<WritableCategoriesResponse, void>({
+      query: queries.getCategories.query,
+      providesTags: ["Categories"],
     }),
-    getSingleEventByTitle : builder.mutation<any, string>({
+    getSingleEventByTitle: builder.mutation<any, string>({
       query: (title) => queries.getSingleEventByTitle.query(title),
-      invalidatesTags: ["SingleEventByTitle"]
+      invalidatesTags: ["SingleEventByTitle"],
     }),
-    getSingleDiscussionByTitle :builder.mutation<any, string>({
-    query : (title) => queries.getSingleDiscussionByTitle.query(title),
-    invalidatesTags :["SingleDiscussionByTitle"]
-    })
+    getSingleDiscussionByTitle: builder.mutation<any, string>({
+      query: (title) => queries.getSingleDiscussionByTitle.query(title),
+      invalidatesTags: ["SingleDiscussionByTitle"],
+    }),
+    getFilterJob: builder.mutation<
+      SaveJobDataResponse,
+      Filters
+    >({
+      query: (queryParams) => queries.getFilterJob.query(queryParams),
+      invalidatesTags: ["GetFilterJob"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -220,7 +230,7 @@ export const {
   useGetSettingQuery,
   useGetCategoriesQuery,
   useGetSingleDiscussionByTitleMutation,
-  useGetSingleEventByTitleMutation
-
+  useGetSingleEventByTitleMutation,
+  useGetFilterJobMutation,
 } = globalApi;
 export default globalApi;

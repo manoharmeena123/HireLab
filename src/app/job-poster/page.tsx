@@ -11,7 +11,8 @@ import { WritableProfileData } from "./types/index";
 import { toast } from "react-toastify";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
-
+import { useLogoutMutation } from "@/app/login/store/login.query";
+import { navigateSource } from "@/lib/action";
 interface OptionType {
   id: string;
   value: string;
@@ -21,10 +22,22 @@ interface OptionType {
 const Companyprofile = () => {
   const { token } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
-  console.log("first", user);
   const router = useRouter();
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const { data: categoriesData } = useGetCategoriesQuery();
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
+
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const [profileData, setProfileData] = useState<WritableProfileData>({
     name: null,
@@ -208,7 +221,7 @@ const Companyprofile = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/">
+                          <Link href="/" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

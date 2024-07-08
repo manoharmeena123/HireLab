@@ -1,4 +1,4 @@
-import { ApplyJobData, SaveJobData } from "@/types/index";
+import { ApplyJobData, Filters, SaveJobData } from "@/types/index";
 
 export const queries = {
   getBlogs: {
@@ -168,6 +168,20 @@ export const queries = {
       method :"GET"
     })
   },
+  getFilterJob: {
+    query: (queryParams: Filters) => {
+      const stringifiedParams = Object.keys(queryParams).reduce((acc, key) => {
+        acc[key] = String(queryParams[key]);
+        return acc;
+      }, {} as Record<string, string>);
+  
+      return {
+        url: `api/filter-jobs?${new URLSearchParams(stringifiedParams).toString()}`,
+        method: "POST",
+      };
+    },
+  },
+  
 
   //Post
   postApplyJob: {

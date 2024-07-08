@@ -15,7 +15,9 @@ import ModalPopup from "../../components/ModalPopup";
 import { usePostJobMutation } from "../post-job/store/post-job.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
-
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
+import { useLogoutMutation } from "../login/store/login.query";
 interface User {
   image?: string;
 }
@@ -26,7 +28,8 @@ const ManageJobs = () => {
     error: jobsError,
     isLoading: jobsLoading,
   } = useGetManageJobQuery();
-  
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
   const { user, refetch } = useLoggedInUser();
@@ -107,6 +110,15 @@ const ManageJobs = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <>
       <div className="page-content bg-white">
@@ -146,7 +158,7 @@ const ManageJobs = () => {
                       {/* Navigation links */}
                       <ul>
                         <li>
-                          <Link href="/profile">
+                          <Link href="/job-poster">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>{user?.user?.name} Profile</span>
                           </Link>
@@ -177,7 +189,7 @@ const ManageJobs = () => {
                         </li>
 
                         <li>
-                          <Link href="/">
+                          <Link href="/" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

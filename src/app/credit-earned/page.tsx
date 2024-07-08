@@ -5,12 +5,16 @@ import { Modal } from "react-bootstrap";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import { useLogoutMutation } from "@/app/login/store/login.query";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
 
 const CreditEarned = () => {
   const { user, refetch } = useLoggedInUser();
+  const { removeToken } = useAuthToken();
   const [company, setCompany] = useState<boolean>(false);
   const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
-
+  const [logout] = useLogoutMutation();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
@@ -42,6 +46,16 @@ const CreditEarned = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
+  const handleLogout = async () => {
+    try {
+      await logout().unwrap();
+      removeToken();
+      navigateSource("/");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
   return (
     <>
       <div className="page-content bg-white">
@@ -78,7 +92,7 @@ const CreditEarned = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/profile">
+                          <Link href="/job-poster">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>{user?.user?.name} Profile</span>
                           </Link>
@@ -109,7 +123,7 @@ const CreditEarned = () => {
                         </li>
 
                         <li>
-                          <Link href="/">
+                          <Link href="/" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

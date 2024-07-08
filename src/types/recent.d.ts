@@ -108,5 +108,14 @@ interface RecentJobResponse {
     data: RecentJobData[];
 }
 
+
+// getFilter job
+export interface Filters {
+    job_title: string;
+    city: string;
+    sector: string;
+    [key: string]: string; // Index signature for string properties
+  }
+  
 // Define a writable version of RecentJobResponse using WritableDraft
 export type WritableRecentJobResponse = WritableDraft<RecentJobResponse>;
