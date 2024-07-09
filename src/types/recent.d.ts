@@ -74,6 +74,7 @@ interface User {
     country: string | null;
     description: string | null;
     city: string | null;
+
 }
 
 // Represents an individual job entry
@@ -98,6 +99,7 @@ export interface RecentJobData {
     total_experience: string;
     education: Education | null;
     user: User | null;
+    tags: string
 }
 
 // Represents the response from the API
