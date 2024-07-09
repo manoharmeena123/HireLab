@@ -20,6 +20,7 @@ import { useAuthToken } from "@/hooks/useAuthToken";
 import { VerifyOtp } from "./types";
 import { signIn } from "next-auth/react";
 import Env from "@/lib/Env";
+import { navigateSource } from "@/lib/action";
 const bnr = require("./../../images/background/bg6.jpg");
 
 interface RegisterData {
@@ -56,7 +57,7 @@ const OtpVefication = () => {
         console.error("Error parsing register data from localStorage", error);
       }
     }
-  }, [loginState,parsedData,parsedDatas]);
+  }, []);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -81,12 +82,13 @@ const OtpVefication = () => {
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
-        await signIn("credentials", {
-          otp: { ...verifyOtpState },
-          mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
-          redirect: true,
-          callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
-        });
+        navigateSource("/dashboard-section")
+        // await signIn("credentials", {
+        //   otp: { ...verifyOtpState },
+        //   mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
+        //   redirect: true,
+        //   callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
+        // });
         // Handle success logic here
       } else if (res.code === 401) {
         toast.error("Invalid OTP!", { theme: "colored" });
