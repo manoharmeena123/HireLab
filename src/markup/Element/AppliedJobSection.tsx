@@ -74,7 +74,7 @@ const AppliedJobSection = () => {
                       <div className="canditate-des">
                         <Link href={"#"}>
                           <Image
-                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                            src={`http://thinkdream.in/hirelab/images/${user?.user?.image}`}
                             alt="Company Logo"
                             width={300}
                             height={300}

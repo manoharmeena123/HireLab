@@ -42,11 +42,10 @@
 
 
 .link {
-  color: blue !important; /* Change to desired color */
-  text-decoration: underline !important; /* Makes it look like a hyperlink */
+  font-weight: 600 !important;
 }
 
 .link:hover {
   cursor: pointer !important; 
-  color: darkblue !important /* Optional: change color on hover */
+  text-decoration: underline !important;
 } 

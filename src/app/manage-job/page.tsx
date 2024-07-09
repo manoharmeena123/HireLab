@@ -27,6 +27,7 @@ const ManageJobs = () => {
     data: jobsData,
     error: jobsError,
     isLoading: jobsLoading,
+    refetch :manageRefetch
   } = useGetManageJobQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
@@ -43,8 +44,11 @@ const ManageJobs = () => {
  
   const handleDeleteJob = async (jobId: number) => {
     try {
-      await deleteManageJob(jobId.toString()).unwrap();
-      toast.success("Job deleted successfully");
+       const res :any = await deleteManageJob(jobId.toString()).unwrap();
+       if (res.code === 200) {
+        manageRefetch();
+        toast.success(res?.message, { theme: "colored" });
+      }
     } catch (error) {
       toast.error("Failed to delete job");
     }
@@ -135,7 +139,7 @@ const ManageJobs = () => {
                         <div className="canditate-des">
                         <Link href={"#"}>
                           <Image
-                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                            src={`http://thinkdream.in/hirelab/images/${user?.user?.image}`}
                             alt="Company Logo"
                             width={300}
                             height={300}
