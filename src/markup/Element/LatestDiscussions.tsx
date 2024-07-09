@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import CountUp from "react-countup";
+import { useRouter } from "next/navigation";
 import styles from "@/styles/LatestDiscussions.module.css";
 import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 
 const LatestDiscussions = () => {
+  const { push } = useRouter();
   const [questionsPosted, setQuestionsPosted] = useState(1800);
   const [answersGiven, setAnswersGiven] = useState(1789);
   const [totalForum, setTotalForum] = useState(1801);
@@ -38,6 +40,10 @@ const LatestDiscussions = () => {
     } else {
       setExpandedIndex(index); // Expand clicked description
     }
+  };
+  const viewJobHandler = (title: any) => {
+    const encodedTitle = encodeURIComponent(title).replace(/%20/g, "+");
+    push(`/single-discussion?query=${encodedTitle}`);
   };
 
   return (
@@ -107,9 +113,12 @@ const LatestDiscussions = () => {
                 <p className="text-muted mb-2">
                   {formatDateTime(discussion?.created_at)}
                 </p>
-                <Link href={`/single-discussion?query=${discussion?.question}`}>
-                  <h5  className={styles.link}>{discussion?.question}</h5>
-                </Link>
+                <h5
+                  onClick={() => viewJobHandler(discussion?.question)}
+                  className={styles.link}
+                >
+                  <Link href={""}> {discussion?.question}</Link>
+                </h5>
 
                 <div
                   className={`card-text ${styles.description} ${
@@ -144,7 +153,6 @@ const LatestDiscussions = () => {
             </div>
           </div>
         ))}
-       
       </div>
     </div>
   );

@@ -3,8 +3,10 @@ import Link from "next/link";
 import { useGetEventsQuery } from "@/store/global-store/global.query";
 import { Event } from "@/types/blog";
 import Loading from "@/components/Loading";
+import { useRouter } from "next/navigation";
 
 const UpComingMeetings = () => {
+  const { push } = useRouter();
   const { data: eventsData, isLoading, isError } = useGetEventsQuery();
 
   const [clickedIndexes, setClickedIndexes] = useState<number[]>([]);
@@ -28,6 +30,10 @@ const UpComingMeetings = () => {
     return <p>Error fetching data...</p>;
   }
 
+  const viewJobHandler = (title: any) => {
+    const encodedTitle = encodeURIComponent(title).replace(/%20/g, '+');
+    push(`/single-event?query=${encodedTitle}`);
+  };
   return (
     <div className="container">
       <div className="row">
@@ -49,9 +55,9 @@ const UpComingMeetings = () => {
                     <div className="d-flex">
                       <div className="job-post-info">
                         <div className="d-flex justify-content-between w-100">
-                          <h5>
+                          <h5 onClick={() => viewJobHandler(event?.title)}>
                             <Link
-                              href={`/single-event?query=${event.title}`}
+                              href={""}
                               style={{ fontWeight: "600" }}
                             >
                               {event.title}
