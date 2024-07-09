@@ -49,7 +49,7 @@ const LatestDiscussions = () => {
   return (
     <div className="container">
       <div className="section-head d-flex justify-content-between align-items-center mb-4">
-        <div className="mr-auto">
+        <div className="me-sm-auto">
           <h2 style={{ fontWeight: "600" }} className="mb-2">
             Latest discussion
           </h2>
