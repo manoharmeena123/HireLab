@@ -8,7 +8,7 @@ import {
 } from "@/store/global-store/global.query";
 import Link from "next/link";
 import Image from "next/image";
-import PageTitle from "../../markup/Layout/PageTitle";
+import PageTitle from "@/markup/Layout/PageTitle";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/Loading";
 import { formaterDate } from "@/utils/formateDate";
@@ -20,7 +20,6 @@ function Jobdetail() {
   const jobId = searchParams.get("jobId");
   const [getJobs, { data: job, error, isLoading }] = useGetJobByIdMutation();
 
-  console.log('getJobs', job)
   const { data: recentJob } = useGetRecentJobsQuery();
   console.log(recentJob);
   useEffect(() => {

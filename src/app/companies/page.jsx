@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import PageTitle from '../../markup/Layout/PageTitle'
+import PageTitle from '@/markup/Layout/PageTitle'
 import Tab2 from '../../markup/Element/Tab2';
 var bnr = require('./../../images/banner/bnr1.jpg');
 

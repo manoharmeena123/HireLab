@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import PageTitle from '../PageTitle';
+import PageTitle from '@/markup/Layout/PageTitle';
 import Link from 'next/link'
 import Jobfindbox from '@/markup/Element/Jobfindbox';
 import {Form} from 'react-bootstrap';

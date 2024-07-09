@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import PageTitle from "../PageTitle";
+import PageTitle from "@/markup/Layout/PageTitle";
 import bnr from "../../../src/images/banner/bnr1.jpg";
 
 const Contact = () => {

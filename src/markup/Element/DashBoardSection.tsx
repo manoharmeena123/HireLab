@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import PageTitle from "../PageTitle";
+import PageTitle from "@/markup/Layout/PageTitle";
 import Link from "next/link";
 import Jobfindbox from "@/markup/Element/Jobfindbox";
 import { Form } from "react-bootstrap";
@@ -8,7 +8,7 @@ import Image from "next/image";
 import { postBox } from "@/data/dashboard";
 var bnr = require("./../../images/banner/bnr1.jpg");
 
-const Dashboard = () => {
+const DashboardSection = () => {
   const [subscribe, setSubscribe] = useState(true);
   return (
     <>
@@ -473,4 +473,4 @@ const Dashboard = () => {
     </>
   );
 };
-export default Dashboard;
+export default DashboardSection;

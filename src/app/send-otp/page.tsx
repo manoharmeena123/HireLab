@@ -42,8 +42,6 @@ const OtpVefication = () => {
   useEffect(() => {
     const data = localStorage.getItem("registerData");
     const logindata = localStorage.getItem("logindata");
-    console.log("logindata", logindata);
-
     if (logindata) {
       const parsedDatas = JSON.parse(logindata);
       setParsedDatas(parsedDatas);
