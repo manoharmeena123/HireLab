@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Select, { MultiValue } from "react-select";
+import { SingleValue } from "react-select";
 import Image from "next/image";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { toast } from "react-toastify";
@@ -17,6 +18,11 @@ import {
   selectPostJobErrors,
 } from "@/app/post-job/store/post-job.selectors";
 import { usePostJobMutation } from "@/app/post-job/store/post-job.query";
+import styles from "@/styles/PostJob.module.css";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { useAuthToken } from "@/hooks/useAuthToken";
+import { navigateSource } from "@/lib/action";
+import { useLogoutMutation } from "@/app/login/store/login.query";
 import {
   useGetLocationsQuery,
   useGetEducationsQuery,
@@ -25,21 +31,17 @@ import {
   useGetCompensationsQuery,
   useGetAdditionalPerkQuery,
   useGetCtcDataQuery,
+  useGetDesignationQuery,
 } from "@/store/global-store/global.query";
-import styles from "@/styles/PostJob.module.css";
-import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
-import { useAuthToken } from "@/hooks/useAuthToken";
-import { navigateSource } from "@/lib/action";
-import { useLogoutMutation } from "@/app/login/store/login.query";
+import ReactTagInput from '@pathofdev/react-tag-input';
+import '@pathofdev/react-tag-input/build/index.css'; 
+
 
 const PostJobSection = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const profileData = useSelector(selectPostJobState);
-  const [selectedTags, setSelectedTags] = useState<
-    MultiValue<{ value: string; label: string }>
-  >([]);
+
   const errors = useSelector(selectPostJobErrors);
   const { user, refetch } = useLoggedInUser();
   const [logout] = useLogoutMutation();
@@ -52,10 +54,9 @@ const PostJobSection = () => {
   const { data: jobtTypeData } = useGetJobTypeQuery();
   const { data: compensationData } = useGetCompensationsQuery();
   const { data: additionalPerkData } = useGetAdditionalPerkQuery();
+  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
   const { data: getCtcData } = useGetCtcDataQuery();
 
-  console.log("getCtcData", getCtcData);
-  
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -97,6 +98,8 @@ const PostJobSection = () => {
   const [selectedAdditionalPerks, setSelectedAdditionalPerks] = useState<
     number[]
   >([]);
+  const [selectedSalary, setSelectedSalary] =
+    useState<SingleValue<OptionType>>(null);
 
   const handleMouseEnter = (
     index: number,
@@ -151,13 +154,6 @@ const PostJobSection = () => {
     }
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    dispatch(setPostJobData({ [name]: value }));
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -177,18 +173,52 @@ const PostJobSection = () => {
     }
   };
 
-  const handleTagChange = (
-    selectedOptions: MultiValue<{ value: string; label: string }>
+  // const handleTagChange = (
+  //   selectedOptions: MultiValue<{ value: string; label: string }>
+  // ) => {
+  //   const selectedTagValues = selectedOptions.map((option) => option.value);
+
+  //   // Ensure we are not duplicating tags
+  //   const uniqueSelectedTagValues = [...new Set(selectedTagValues)];
+
+  //   setSelectedTags(uniqueSelectedTagValues);
+
+  //   // Convert to comma-separated string if needed
+  //   const tagValues = uniqueSelectedTagValues.join(",");
+  //   dispatch(setPostJobData({ tags: tagValues }));
+  // };
+
+  const [inputValue, setInputValue] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
+
+  const handleInputSelectChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setSelectedTags(selectedOptions);
-    const tagValues = selectedOptions.map((option) => option.value).join(",");
+    setInputValue(e.target.value);
+    const tagValues = tags.join(",");
     dispatch(setPostJobData({ tags: tagValues }));
   };
 
-  const tagOptions = tagsData?.data?.map((tag) => ({
-    value: tag.id.toString(), // Ensure tag value is a string
-    label: tag.title,
-  }));
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    console.log("first", e.target);
+    const { name, value } = e.target;
+    const tagValues = tags.join(",");
+    dispatch(setPostJobData({ tags: tagValues }));
+    dispatch(setPostJobData({ [name]: value }));
+  };
+
+  const handleAddTag = (tag: string) => {
+    setTags([...tags, tag]);
+    setInputValue('');
+  };
+
+  const handleRemoveTag = (index: number) => {
+    const updatedTags = tags.filter((_, i) => i !== index);
+    setTags(updatedTags);
+  };
+
 
   const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
@@ -216,8 +246,13 @@ const PostJobSection = () => {
     height: "21px",
     fontWeight: "bold",
   };
-
-  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      height: 38,
+      minHeight: 38,
+    }),
+  };
 
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
@@ -259,6 +294,24 @@ const PostJobSection = () => {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+
+  interface OptionType {
+    value: string;
+    label: string;
+    id: string;
+  }
+
+  const ctcOptions: OptionType[] =
+    getCtcData?.data?.map((ctc) => ({
+      value: ctc.title,
+      label: ctc.title,
+      id: ctc.id.toString(),
+    })) || [];
+
+  const handleSelectChange = (option: any) => {
+    setSelectedSalary(option);
+    dispatch(setPostJobData({ ctc: option?.id }));
   };
 
   return (
@@ -391,6 +444,8 @@ const PostJobSection = () => {
                             onChange={(e) => handleInputChange(e as any)}
                             className="custom-select"
                           >
+                            <option selected>select experience</option>
+                            <option value="0">0 Years</option>
                             <option value="1">1 Years</option>
                             <option value="2">2 Years</option>
                             <option value="3">3 Years</option>
@@ -440,7 +495,6 @@ const PostJobSection = () => {
                           {errors?.job_type?.[0]}
                         </span>
                       </div>
-
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Tags</label>
@@ -448,18 +502,31 @@ const PostJobSection = () => {
                             className="job-time d-flex flex-wrap mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            <Select
-                              isMulti
-                              options={tagOptions}
-                              value={selectedTags}
-                              onChange={handleTagChange}
-                              placeholder="Select tags"
-                            />
+                            <div className="tags-container">
+                              <ReactTagInput
+                                tags={tags}
+                                onChange={(newTags :any) => setTags(newTags)}
+                                placeholder="Type tags and press Enter"
+                              />
+                              {/* <input
+                                type="text"
+                                className="form-control"
+                                value={inputValue}
+                                onChange={handleInputSelectChange}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    handleAddTag(inputValue.trim());
+                                  }
+                                }}
+                                placeholder="Type tags and press Enter"
+                              /> */}
+                            </div>
                           </div>
+                          <span className="text-red-500 text-danger">
+                            {/* Replace with your error handling */}
+                            {errors?.tags?.[0]}
+                          </span>
                         </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.tags?.[0]}
-                        </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
@@ -759,12 +826,26 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
+                          <label>Ctc</label>
+                          <Select
+                            value={selectedSalary}
+                            onChange={handleSelectChange}
+                            options={ctcOptions}
+                            placeholder="Select Salary"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.salary?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
                           <label>Salary</label>
                           <input
                             type="number"
                             className="form-control"
                             name="salary"
-                            placeholder="Salary"
+                            placeholder="Enter salary in rupee"
                             onChange={handleInputChange}
                           />
                         </div>

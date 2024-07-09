@@ -129,13 +129,12 @@ interface AdditionalPerkResponse {
   data: AdditionalPerk[];
 }
 
-
-
 //ctc
 interface CtcData {
   id: number;
   title: string;
   status: string;
+  jobs_count: string | number;
   created_at: string;
   updated_at: string;
 }
@@ -146,8 +145,6 @@ interface CtcApiResponse {
   message: string;
   data: CtcData[];
 }
-
-
 
 //getTier
 
@@ -166,9 +163,7 @@ interface TiersResponse {
   data: Tier[];
 }
 
-
 //get designation
-
 
 interface Designation {
   id: number;
@@ -184,8 +179,6 @@ interface DesignationsResponse {
   message: string;
   data: Designation[];
 }
-
-
 
 //get Setting
 
@@ -218,9 +211,7 @@ interface SettingResponse {
   data: Setting;
 }
 
-
-
-//get categories 
+//get categories
 
 interface Category {
   id: number;
@@ -238,7 +229,6 @@ interface CategoriesResponse {
   data: Category[];
 }
 
-
 type WritableAdditionalPerkResponse = WritableDraft<AdditionalPerkResponse>;
 type WritableMembershipResponse = WritableDraft<MembershipResponse>;
 type WritableLocationResponse = WritableDraft<LocationResponse>;
@@ -251,7 +241,6 @@ type WritableTiersResponse = WritableDraft<TiersResponse>;
 type WritableDesignationsResponse = WritableDraft<DesignationsResponse>;
 type WritableSettingResponse = WritableDraft<SettingResponse>;
 type WritableCategoriesResponse = WritableDraft<CategoriesResponse>;
-
 
 // Export all types
 export {
@@ -266,5 +255,5 @@ export {
   WritableTiersResponse,
   WritableDesignationsResponse,
   WritableSettingResponse,
-  WritableCategoriesResponse
+  WritableCategoriesResponse,
 };

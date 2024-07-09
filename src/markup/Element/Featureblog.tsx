@@ -69,7 +69,7 @@ const Featureblog: React.FC = () => {
                   >
                     <b>{text?.title}</b>
                     <br />
-                    <p>120 Jobs</p>
+                    <p>{text?.jobs_count} Jobs</p>
                   </li>
                 </ul>
                 <div className="text-center">

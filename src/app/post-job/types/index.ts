@@ -15,6 +15,7 @@ export interface PostJobType {
   total_experience: string;
   job_description: string;
   salary: string;
+  ctc: string;
   tags: string;
 }
 
@@ -40,6 +41,7 @@ export interface PostJobResponse {
     updated_at: string;
     created_at: string;
     salary: string;
+    ctc: string;
     tags: string;
     id: number;
   }>;
@@ -61,6 +63,7 @@ export interface PostJobState {
   total_experience: string;
   job_description: string;
   salary: string;
+  ctc: string;
   tags: string;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }

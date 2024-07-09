@@ -19,7 +19,8 @@ const initialState: PostJobState = {
   job_description: '',
   errors: {},
   salary: '',
-  tags: ''
+  tags: '',
+  ctc :''
 };
 
 const postJobSlice = createSlice({

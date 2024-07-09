@@ -12,7 +12,6 @@ import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
-import JobDetailPopup from "@/components/JobDetailPopup";
 import { redirect, useRouter } from "next/navigation";
 
 const RecentJobsection = () => {
@@ -107,11 +106,6 @@ const RecentJobsection = () => {
         </div>
         <div className="row">
           <div className="col-lg-9">
-            <JobDetailPopup
-              show={show}
-              handleClose={handleClose}
-              item={recentJob?.data}
-            />
             <ul className="post-job-bx browse-job">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
                 <li key={index}>
@@ -121,15 +115,10 @@ const RecentJobsection = () => {
                         <div className="job-post-info">
                           <h4
                             style={{ cursor: "pointer" }}
-                            className="text-secondry" 
-                             onClick={() => viewJobHandler(item.id)}
+                            className="text-secondry"
+                            onClick={() => viewJobHandler(item.id)}
                           >
-                            <Link
-                              href=""
-                            
-                            >
-                              {item?.job_title}
-                            </Link>
+                            <Link href="">{item?.job_title}</Link>
                           </h4>
                           <ul>
                             <li>
@@ -147,6 +136,15 @@ const RecentJobsection = () => {
                           </ul>
                         </div>
                       </div>
+                      <div className="job-time m-t15 m-b10">
+                        {item.tags &&
+                          item.tags.split(",").map((tag, index) => (
+                            <Link key={index} href="#" className="mr-1">
+                              <span>{tag.trim()}</span>
+                            </Link>
+                          ))}
+                      </div>
+
                       <div className="d-flex">
                         <div className="job-time mr-auto">
                           <Link href="">
@@ -157,9 +155,6 @@ const RecentJobsection = () => {
                         <div className="salary-bx">
                           <span>42000 - 55000</span>
                           <br />
-                          {/* <span className="view-job" onClick={()=>viewJobHandler(item.id)}>
-                            View Job
-                          </span> */}
                         </div>
                       </div>
                       <label
