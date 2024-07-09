@@ -2,7 +2,7 @@
 import React from 'react';
 import PageTitle from '../PageTitle';
 import Link from 'next/link'
-import Jobfindbox from '../Jobfindbox';
+import Jobfindbox from '@/markup/Element/Jobfindbox';
 import {Form} from 'react-bootstrap';
 import Image from 'next/image'
 
@@ -39,7 +39,7 @@ function Browsecandidates(){
 													<div className="d-flex m-b30">
 														<div className="job-post-company">
 															<Link href= {''}><span>
-																<Image src={item.image} />
+																<Image src={item.image} alt="" />
 															</span></Link>
 														</div>
 														<div className="job-post-info">
@@ -93,7 +93,7 @@ function Browsecandidates(){
 											<input type="text" className="form-control m-b30" placeholder="Location" />
 											<div className="input-group m-b20">
 												<input type="text" className="form-control" placeholder="120" />
-												<Form.Control as="select" custom className="btn dropdown-toggle text-left btn-default">
+												<Form.Control as="select"  className="btn dropdown-toggle text-left btn-default">
 													<option>Km</option>
 													<option>miles</option>
 												</Form.Control>
@@ -154,7 +154,7 @@ function Browsecandidates(){
 										</div>
 										<div className="clearfix .browse-job">
 											<h5 className="widget-title font-weight-700 text-uppercase">Category</h5>
-											<Form.Control as="select" custom className="btn dropdown-toggle text-left btn-default">
+											<Form.Control as="select" className="btn dropdown-toggle text-left btn-default">
 												<option>Any Category</option>
 												<option>Automotive Jobs</option>
 												<option>Construction Facilities</option>

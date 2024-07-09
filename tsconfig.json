@@ -22,6 +22,6 @@
     },
     "types": ["@fortawesome/react-fontawesome"] 
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/layout.jsx", "src/app/layout.jsx", "src/markup/Element/Jobfindbox.js", "src/markup/Element/Listingsidebar.jsx", "src/app/SavedJobs.tsx", "src/markup/Element/Jobsearchform.js", "src/markup/Element/Accordsidebar.tsx", "src/app/credit-earned/page.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/layout.jsx", "src/app/layout.jsx", "src/markup/Element/Jobfindbox.tsx", "src/markup/Element/Listingsidebar.jsx", "src/app/SavedJobs.tsx", "src/markup/Element/Jobsearchform.js", "src/markup/Element/Accordsidebar.tsx", "src/app/credit-earned/page.jsx"],
   "exclude": ["node_modules"]
 }
