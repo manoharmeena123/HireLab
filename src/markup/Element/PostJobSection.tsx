@@ -24,8 +24,9 @@ import {
   useGetJobTypeQuery,
   useGetCompensationsQuery,
   useGetAdditionalPerkQuery,
+  useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
-import styles from "@/styles/PostJob.module.css"; 
+import styles from "@/styles/PostJob.module.css";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
@@ -51,6 +52,10 @@ const PostJobSection = () => {
   const { data: jobtTypeData } = useGetJobTypeQuery();
   const { data: compensationData } = useGetCompensationsQuery();
   const { data: additionalPerkData } = useGetAdditionalPerkQuery();
+  const { data: getCtcData } = useGetCtcDataQuery();
+
+  console.log("getCtcData", getCtcData);
+  
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
