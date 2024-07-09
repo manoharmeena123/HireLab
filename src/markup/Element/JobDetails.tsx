@@ -19,6 +19,8 @@ function Jobdetail() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
   const [getJobs, { data: job, error, isLoading }] = useGetJobByIdMutation();
+
+  console.log('getJobs', job)
   const { data: recentJob } = useGetRecentJobsQuery();
   console.log(recentJob);
   useEffect(() => {
