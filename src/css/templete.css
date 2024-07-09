@@ -366,7 +366,7 @@
   z-index: 1;
   overflow: hidden;
   vertical-align: middle;
-  font-family: roboto;
+  /* font-family: roboto; */
 }
 
 /* Gallery */
