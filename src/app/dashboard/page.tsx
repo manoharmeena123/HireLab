@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import PageTitle from "../PageTitle";
 import Link from "next/link";
-import Jobfindbox from "../Jobfindbox";
+import Jobfindbox from "@/markup/Element/Jobfindbox";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
 import { postBox } from "@/data/dashboard";
