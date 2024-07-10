@@ -10,6 +10,7 @@ import {
 import { truncateText } from "@/utils/formateDate";
 
 const SingleEvent = () => {
+  const [clickedIndexes, setClickedIndexes] = useState<number[]>([]);
   const [activeButton, setActiveButton] = useState("upcoming");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const searchParams = useSearchParams();
@@ -36,6 +37,19 @@ const SingleEvent = () => {
   const handleToggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
+
+  const handleIconClick = (index: any) => {
+    const updatedIndexes = [...clickedIndexes];
+    const currentIndex = updatedIndexes.indexOf(index);
+    if (currentIndex === -1) {
+      updatedIndexes.push(index);
+    } else {
+      updatedIndexes.splice(currentIndex, 1);
+    }
+    setClickedIndexes(updatedIndexes);
+  };
+  const description = singleEventByTitle?.data?.description;
+  const truncatedDescription = truncateText(description, 30);
 
   const handleBuyPass = async () => {
     const result = await Swal.fire({
@@ -71,8 +85,7 @@ const SingleEvent = () => {
     }
   };
 
-  const description = singleEventByTitle?.data?.description;
-  const truncatedDescription = truncateText(description, 30);
+
 
   return (
     <>
@@ -107,10 +120,15 @@ const SingleEvent = () => {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 10 13"
                   fill="none"
+                  onClick={() => handleIconClick(singleEventByTitle?.data?.id)}
                 >
                   <path
                     d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                    fill="#fff"
+                    fill={
+                      clickedIndexes.includes(singleEventByTitle?.data?.id)
+                        ? "#2A6310"
+                        : "#fff"
+                    }
                     stroke="#2A6310"
                   ></path>
                 </svg>
