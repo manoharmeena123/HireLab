@@ -9,9 +9,9 @@ import SingleEvent from "@/markup/Element/SingleEvent";
 
 const SingleEventPage = () => {
   return (
-    // <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading />}>
       <SingleEvent />
-    // </Suspense>
+    </Suspense>
   );
 };
 
