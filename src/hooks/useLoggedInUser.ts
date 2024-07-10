@@ -21,22 +21,22 @@ export const useLoggedInUser = () => {
     }
   }, [data, error, isLoading]);
 
-  const refetchUser = async () => {
-    setLoading(true);
-    setFetchError(null);
-    try {
-      await refetch();
-    } catch (error) {
-      setFetchError(error as Error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const refetchUser = async () => {
+  //   setLoading(true);
+  //   setFetchError(null);
+  //   try {
+  //     await refetch();
+  //   } catch (error) {
+  //     setFetchError(error as Error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return {
     user,
     error: fetchError,
     isLoading: loading,
-    refetch: refetchUser
+    refetch
   };
 };

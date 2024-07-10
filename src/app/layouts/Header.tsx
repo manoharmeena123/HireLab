@@ -1,11 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/Hire Labs_Final logo.png";
 import styles from "@/styles/Header.module.css";
-import { usePathname } from "next/navigation";
+import { usePathname , useRouter} from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
 
 // Import Font Awesome icons
@@ -14,7 +14,8 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
-  const { token, user } = useAuthToken();
+  const router = useRouter()
+  const { token } = useAuthToken();
   const pathname = usePathname();
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
@@ -25,9 +26,10 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+
   const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
     <Link href="/job-seeker">
-      <ProfileDropdown sessionUser={user} />
+      <ProfileDropdown />
     </Link>
   );
 
