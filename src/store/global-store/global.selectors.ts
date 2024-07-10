@@ -1,6 +1,6 @@
 import { RootState } from '@/store'; // Adjust the path as per your project structure
 import { createSelector } from '@reduxjs/toolkit';
-import { BlogsState, EventsState, SectorState, RecentJobsState } from '@/types/index';
+import { BlogsState, EventsState, SectorState, RecentJobsState,WritableBuyPassState } from '@/types/index';
 
 // Select the entire global state
 export const selectGlobalState = (state: RootState) => state.global;
@@ -182,4 +182,33 @@ export const selectSaveJobLoading = createSelector(
 export const selectSaveJobError = createSelector(
   selectSaveJobState,
   (saveJobState) => saveJobState.error
+);
+
+
+
+// bupass state 
+
+// Buy Pass Selectors
+export const selectBuyPassState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    buyPass: globalState.buyPass,
+    loading: globalState.buyPassLoading,
+    error: globalState.buyPassError,
+  })
+);
+
+export const selectBuyPass = createSelector(
+  selectBuyPassState,
+  (buyPassState) => buyPassState.buyPass
+);
+
+export const selectBuyPassLoading = createSelector(
+  selectBuyPassState,
+  (buyPassState) => buyPassState.loading
+);
+
+export const selectBuyPassError = createSelector(
+  selectBuyPassState,
+  (buyPassState) => buyPassState.error
 );

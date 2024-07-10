@@ -2,76 +2,39 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import profilePic from "../../../public/images/pic.png" // Update the path to the profile picture
+import profilePic from "../../../public/images/pic.png"; // Update the path to the profile picture
 import { toast } from "react-toastify";
 import axios from "axios";
 import { LOGOUT_URL } from "@/lib/apiEndPoints";
 import { signOut } from "next-auth/react";
 // import { useRouter } from "next/navigation";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 
-
-export const ProfileDropdown = ({ sessionUser } : any) => {  
+export const ProfileDropdown = ({ sessionUser }: any) => {
   // console.log('profi;e',sessionUser);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-	// const router = useRouter();
-
+  // const router = useRouter();
+  const { user } = useLoggedInUser();
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleClickOutside = (event:any) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-    
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const logoutUser = () => {
-    axios
-      .post(
-        LOGOUT_URL,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${sessionUser?.user?.token}`
-          },
-        }
-      )
-      .then((res) => {
-        const response = res.data;
-        if (response?.status === 200) {
-          signOut({ callbackUrl: "/login" });
-          toast.success("Logged out successfully!", { theme: "colored" });
-        }
-      })
-      .catch((err) => {
-        toast.error("Something went wrong.please try again", {
-          theme: "colored",
-        });
-      });
-
-    signOut({ redirect: true, callbackUrl: "/login" });
-  };
-
   return (
-    
     <div className="profile-dropdown" ref={dropdownRef}>
       <div className="profile-header" onClick={toggleDropdown}>
-        <Image src={profilePic} className="profile-image" alt="Profile Image" style={{ width: "41px", height: "41px" }} />
-        <span className="profile-name">PROFILE</span>
-        <span className="dropdown-arrow">
-         
-        </span>
+        <Image
+          src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+          className="profile-image"
+          alt="Profile Image"
+          width={41}
+          height={41}
+          objectFit="cover"
+          style={{ borderRadius:"3rem" }}
+        />
+        <span className="profile-name">{user?.user?.name}</span>
       </div>
-   
+
       <style jsx>{`
         .profile-dropdown {
           position: relative;
