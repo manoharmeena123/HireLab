@@ -4,22 +4,34 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useLogoutMutation } from "@/app/login/store/login.query";
-import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import { toast } from "react-toastify";
+import Loading from "@/components/Loading";
+import { useRouter } from "next/navigation";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 const Profilesidebar = ({ refetch }: any) => {
-  const [logout] = useLogoutMutation();
-  const { removeToken } = useAuthToken();
-  const { user } = useLoggedInUser();
-  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+  const router = useRouter();
+  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+  const { removeToken, token } = useAuthToken();
+  const {
+    user,
+    isLoading: userLoading,
+    error: userError,
+    refetch: userrefetch,
+  } = useLoggedInUser();
+  const {
+    data: designationData,
+    isLoading: designationLoading,
+    error: designationError,
+  } = useGetDesignationQuery();
 
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
   useEffect(() => {
-    // Map designation options
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
         value: designation.title,
@@ -32,7 +44,6 @@ const Profilesidebar = ({ refetch }: any) => {
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
-      // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
       const designation = designationOptions.find(
         (option) => option.id === designationId
@@ -50,14 +61,22 @@ const Profilesidebar = ({ refetch }: any) => {
   const handleLogout = async () => {
     try {
       const response = await logout().unwrap();
-      if (response) {
+      if (response?.code === 200) {
         removeToken();
-        navigateSource("/");
+        router.push("/");
+      } else {
+        throw new Error("Logout failed");
       }
-    } catch (error) {
-      console.error("Logout failed:", error);
+    } catch (error: any) {
+      toast.error("Logout failed: " + error.message);
     }
   };
+
+
+
+  if (userLoading || designationLoading || isLoggingOut) {
+    return <Loading />;
+  }
 
   return (
     <div className="col-xl-3 col-lg-4 m-b30">
@@ -71,6 +90,10 @@ const Profilesidebar = ({ refetch }: any) => {
                   alt="profile picture"
                   width={300}
                   height={300}
+                  onError={(e) =>
+                    (e.currentTarget.src = "/default-profile.png")
+                  } // Fallback image
+                  style={{ borderRadius: "50%" }}
                 />
               </Link>
             </div>
@@ -92,48 +115,36 @@ const Profilesidebar = ({ refetch }: any) => {
                 <span>Profile</span>
               </Link>
             </li>
-
             <li>
               <Link href="my-resume">
                 <i className="fa fa-file-text-o" aria-hidden="true"></i>
                 <span>My Resume</span>
               </Link>
             </li>
-
             <li>
               <Link href={"/saved-jobs"}>
                 <i className="fa fa-heart-o" aria-hidden="true"></i>
                 <span>Saved Jobs</span>
               </Link>
             </li>
-
             <li>
               <Link href={"/applied-job"}>
                 <i className="fa fa-briefcase" aria-hidden="true"></i>
                 <span>Applied Jobs</span>
               </Link>
             </li>
-
             <li>
               <Link href={"/jobs-alerts"}>
                 <i className="fa fa-bell-o" aria-hidden="true"></i>
                 <span>Job Alerts</span>
               </Link>
             </li>
-
             <li>
               <Link href={"/jobs-cv-manager"}>
                 <i className="fa fa-id-card-o" aria-hidden="true"></i>
                 <span>CV Manager</span>
               </Link>
             </li>
-
-            {/* <li>
-              <Link href={"/jobs-change-password"}>
-                <i className="fa fa-key" aria-hidden="true"></i>
-                <span>Change Password</span>
-              </Link>
-            </li> */}
             <li>
               <Link href={"./"} onClick={handleLogout}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>
