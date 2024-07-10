@@ -1,4 +1,9 @@
-import { ApplyJobData, Filters, SaveJobData,WritableBuyPassData } from "@/types/index";
+import {
+  ApplyJobData,
+  Filters,
+  SaveJobData,
+  WritableBuyPassData,
+} from "@/types/index";
 
 export const queries = {
   getBlogs: {
@@ -183,6 +188,15 @@ export const queries = {
       };
     },
   },
+  getJobUserById : {
+    query: (id: string) => ({
+      url: `api/get-job-users/${id}`,
+      method: "GET",
+    }),
+  },
+
+  //Post===================================================================================>
+
   buyPassForEvent: {
     query: (data: WritableBuyPassData) => ({
       url: "api/buy-pass",
@@ -191,7 +205,6 @@ export const queries = {
     }),
   },
 
-  //Post
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",
