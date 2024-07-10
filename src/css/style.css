@@ -114,6 +114,9 @@
 /*--------------------------------------------------------------
 1. GENERAL
 ---------------------------------------------------------------*/
+:root {
+  --main-font: "Rubik", sans-serif;
+}
 body,
 html {
   -moz-osx-font-smoothing: grayscale;
@@ -121,7 +124,7 @@ html {
 body {
   background-color: #fff;
   /* font-family: "Lato", sans-serif; */
-  font-family: "Rubik", sans-serif;
+  font-family: var(--main-font);
   font-size: 16px;
   font-weight: 400;
   color: #6f6f6f;
@@ -194,7 +197,7 @@ ol,
 dl,
 dd,
 table {
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 }
 ::selection {
   color: #000;
@@ -242,7 +245,7 @@ h4,
 h5,
 h6 {
   color: #232323;
-  font-family: "Rubik", sans-serif;
+  font-family: var(--main-font);
 }
 h1 a,
 h2 a,
@@ -255,13 +258,13 @@ h6 a {
 h1 {
   font-size: 36px;
   line-height: 45px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   font-weight: 500;
 }
 h2 {
   font-size: 32px;
   line-height: 40px;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   font-weight: 500;
 }
 h3 {
@@ -493,7 +496,7 @@ ol {
 }
 ul,
 ol {
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 }
 ul li,
 ol li {
@@ -3120,7 +3123,6 @@ blockquote:before {
   -moz-transition: all 0.15s linear;
   -o-transition: all 0.15s linear;
   font-weight: 500;
-  /* font-family: "Montserrat", sans-serif; */
 }
 .header-nav .nav > li .sub-menu li a:hover {
   background-color: #f2f2f2;
@@ -9259,7 +9261,7 @@ ul[class*="list-"] {
   padding: 15px;
   position: relative;
   font-size: 15px;
-  font-family: "Montserrat", sans-serif;
+  /* font-family: "Montserrat", sans-serif; */
   font-weight: 400;
 }
 .testimonial-detail {
@@ -9712,13 +9714,11 @@ ul[class*="list-"] {
   font-weight: 600;
   font-size: 13px;
   text-transform: uppercase;
-  /* font-family: "Montserrat", sans-serif; */
   color: #000;
 }
 .testimonial-9 .testimonial-position,
 .testimonial-10 .testimonial-position {
   text-transform: uppercase;
-  font-family: "Montserrat", sans-serif;
   color: #8888;
   font-size: 12px;
   font-style: inherit;

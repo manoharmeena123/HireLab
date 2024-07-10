@@ -206,11 +206,12 @@ const DashboardSection = () => {
                       style={{
                         backgroundColor: subscribe
                           ? "#2A6310"
-                          : "rgba(11, 102, 195, 0.60)",
+                          : "rgb(42 99 16 / 67%)",
+                          padding:'1rem'
                       }}
                     >
                       <div className="quote-info">
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center relative">
                           <h1
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
@@ -218,7 +219,7 @@ const DashboardSection = () => {
                             Wizard
                           </h1>
                           {subscribe && (
-                            <div className="px-2">
+                            <div className="px-2 absolute" style={{right:'0'}}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="46"
@@ -272,11 +273,12 @@ const DashboardSection = () => {
                       style={{
                         backgroundColor: !subscribe
                           ? "#2A6310"
-                          : "rgba(11, 102, 195, 0.60)",
+                          : "rgb(42 99 16 / 67%)",
+                          padding:'1rem'
                       }}
                     >
                       <div className="quote-info">
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center relative">
                           <h1
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
@@ -284,7 +286,7 @@ const DashboardSection = () => {
                             Wizard
                           </h1>
                           {!subscribe && (
-                            <div className="px-2">
+                            <div className="px-2 absolute" style={{right:'0'}}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="46"
@@ -338,11 +340,12 @@ const DashboardSection = () => {
                       style={{
                         backgroundColor: !subscribe
                           ? "#2A6310"
-                          : "rgba(11, 102, 195, 0.60)",
+                          : "rgb(42 99 16 / 67%)",
+                          padding:'1rem'
                       }}
                     >
                       <div className="quote-info">
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center relative">
                           <h1
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
@@ -350,7 +353,7 @@ const DashboardSection = () => {
                             Wizard
                           </h1>
                           {!subscribe && (
-                            <div className="px-2">
+                            <div className="px-2 absolute" style={{right:'0'}}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="46"
@@ -404,11 +407,12 @@ const DashboardSection = () => {
                       style={{
                         backgroundColor: !subscribe
                           ? "#2A6310"
-                          : "rgba(11, 102, 195, 0.60)",
+                          : "rgb(42 99 16 / 67%)",
+                          padding:'1rem'
                       }}
                     >
                       <div className="quote-info">
-                        <div className="d-flex align-items-center">
+                        <div className="d-flex align-items-center relative">
                           <h1
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
@@ -416,7 +420,7 @@ const DashboardSection = () => {
                             Wizard
                           </h1>
                           {!subscribe && (
-                            <div className="px-2">
+                            <div className="px-2 absolute" style={{right:'0'}}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="46"

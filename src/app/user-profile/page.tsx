@@ -46,7 +46,6 @@ export const ProfileDropdown = () => {
         }
         .profile-name {
           color: #000;
-          font-family: Lato;
           font-size: 14px;
           font-style: normal;
           font-weight: 600;
@@ -99,7 +98,6 @@ export const ProfileDropdown = () => {
           justify-content: start;
           gap: 10px;
           color: #232323 !important;
-          font-family: Lato;
           font-size: 16px;
           font-style: normal;
           font-weight: 400;

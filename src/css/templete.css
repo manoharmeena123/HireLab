@@ -2,6 +2,9 @@
 	Custom css
 ==========================*/
 /* Header */
+:root {
+  --main-font: "Rubik", sans-serif;
+}
 .fullwidth .logo-header {
   margin-right: 30px;
 }
@@ -69,7 +72,7 @@
 .job-search-tabs .bootstrap-select .dropdown-toggle {
   border: 2px solid #eeeeee !important;
   font-size: 14px;
-  font-family: Montserrat;
+  font-family: var(--main-font);
   border-radius: 4px;
   font-weight: 400;
   height: 50px;
@@ -80,7 +83,7 @@
   color: #606060;
 }
 .job-search-tabs .site-button {
-  font-family: Montserrat;
+  font-family: var(--main-font);
   font-weight: 500;
   font-size: 16px;
   padding: 13px 20px;
@@ -366,7 +369,7 @@
   z-index: 1;
   overflow: hidden;
   vertical-align: middle;
-  /* font-family: roboto; */
+  /* font-family: var(--main-font); */
 }
 
 /* Gallery */
@@ -453,7 +456,7 @@
 .browse-job .form-control,
 .submit-resume .form-control {
   font-size: 16px;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .job-search-form .input-group-prepend .site-button {
   height: 60px;
@@ -582,7 +585,7 @@
 }
 .job-bx-title .bootstrap-select div.dropdown-menu ul li a {
   font-size: 12px;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .browse-job .btn.dropdown-toggle.btn-default,
 .submit-resume .btn.dropdown-toggle.btn-default {
@@ -667,7 +670,7 @@
   top: 10px;
   left: 0;
   margin: 0;
-  font-family: rubik;
+  font-family: var(--main-font);
   font-weight: 400;
   transition: all 0.5s;
   -o-transition: all 0.5s;
@@ -696,7 +699,7 @@
   border-radius: 0;
   height: 50px;
   padding: 0 0 0 0;
-  font-family: rubik;
+  font-family: var(--main-font);
   color: #000;
   font-size: 15px;
 }
@@ -785,7 +788,7 @@
 }
 .salary-bx span {
   color: #000;
-  font-family: rubik;
+  font-family: var(--main-font);
   font-size: 22px;
 }
 .job-time span {
@@ -797,7 +800,7 @@
   display: inline-block;
   text-align: center;
   transition: all 0.5s;
-  font-family: Lato;
+  font-family: var(--main-font);
   text-transform: capitalize;
 }
 .job-time a:hover span {
@@ -835,13 +838,13 @@
   padding: 0;
 }
 .testimonial-name {
-  font-family: rubik;
+  font-family: var(--main-font);
   font-size: 14px;
   font-weight: 500;
   text-transform: capitalize;
 }
 .testimonial-position {
-  font-family: rubik;
+  font-family: var(--main-font);
   font-size: 14px;
   font-style: inherit;
   text-transform: capitalize;
@@ -1205,7 +1208,7 @@
   border-radius: 5px;
   font-size: 13px;
   text-transform: capitalize;
-  font-family: roboto;
+  font-family: var(--main-font);
   z-index: 99;
 }
 .update-flie {
@@ -1261,11 +1264,11 @@
   font-weight: 600;
   color: #333333;
   font-size: 14px;
-  font-family: "roboto", sans-serif;
+  font-family: var(--main-font);
 }
 .table-job-bx .criterias {
   font-size: 13px;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .table-job-bx .job-links {
   position: relative;
@@ -1379,7 +1382,7 @@
   margin-left: 20px;
   width: 100%;
   font-weight: 700;
-  font-family: nunito;
+  font-family: var(--main-font);
   font-size: 18px;
   align-self: center;
 }
@@ -1395,7 +1398,7 @@
 .modal-bx-info .modal-body li strong {
   color: #333;
   font-size: 16px;
-  font-family: nunito;
+  font-family: var(--main-font);
   font-weight: 600;
   display: flex;
   float: left;
@@ -1433,7 +1436,7 @@
   height: 40px !important;
   float: right;
   border-radius: 5px;
-  font-family: roboto;
+  font-family: var(--main-font);
   font-size: 12px;
   padding: 12px;
 }
@@ -1472,7 +1475,7 @@
 .application,
 .table-job-bx .date {
   font-size: 14px;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .table-job-bx th {
   font-size: 16px;
@@ -1518,7 +1521,7 @@
 }
 .login-2 p,
 .login-2 .site-button-link {
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .login-2 .site-button-link i {
   margin: 0;
@@ -1886,7 +1889,7 @@
   margin-bottom: 15px;
 }
 .lead-form-modal .close {
-  font-family: raleway;
+  font-family: var(--main-font);
   font-size: 45px;
   opacity: 1;
   position: absolute;
@@ -1913,7 +1916,7 @@
   display: flex;
 }
 .list-row .list-line p {
-  font-family: "Lato", sans-serif;
+  font-family: var(--main-font);
 }
 .list-row .list-line {
   list-style: none;
@@ -1968,7 +1971,7 @@
 }
 .profile-edit .candidate-info .candidate-detail {
   box-shadow: unset;
-  font-family: roboto;
+  font-family: var(--main-font);
   font-weight: 400;
   display: flex;
   padding-top: 0;
@@ -2035,7 +2038,7 @@
   color: #ffffff;
   display: block;
   padding: 10px 15px;
-  font-family: roboto;
+  font-family: var(--main-font);
   font-size: 14px;
   font-weight: 400;
   background-color: rgba(25, 31, 35, 0.7);
@@ -2128,7 +2131,7 @@
 }
 .sidebar-filter .custom-control label {
   font-weight: 400;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .sidebar-filter .custom-control label span {
   font-size: 14px;
@@ -2276,7 +2279,7 @@
   height: 40px !important;
   float: right;
   border-radius: 5px;
-  font-family: roboto;
+  font-family: var(--main-font);
   font-size: 12px;
   padding: 12px;
   color: #495057;
