@@ -66,7 +66,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SingleDiscussionByTitle",
     "JobById",
     "GetFilterJob",
-    "BuyPassForEvent"
+    "BuyPassForEvent",
+    "GetJobUserById"
   ],
 });
 
@@ -202,7 +203,11 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     buyPassForEvent : builder.mutation<WritableBuyPassResponse,WritableBuyPassData> ({
       query :(data) => queries.buyPassForEvent.query(data),
       invalidatesTags: ["BuyPassForEvent"],
-    })
+    }),
+    getJobUserById :builder.mutation<any, string>({
+      query : (queryParams) => queries.getJobUserById.query(queryParams),
+      invalidatesTags: ["GetJobUserById"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -239,6 +244,7 @@ export const {
   useGetSingleDiscussionByTitleMutation,
   useGetSingleEventByTitleMutation,
   useGetFilterJobMutation,
-  useBuyPassForEventMutation
+  useBuyPassForEventMutation,
+  useGetJobUserByIdMutation
 } = globalApi;
 export default globalApi;
