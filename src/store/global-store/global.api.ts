@@ -1,4 +1,4 @@
-import { ApplyJobData, Filters, SaveJobData } from "@/types/index";
+import { ApplyJobData, Filters, SaveJobData,WritableBuyPassData } from "@/types/index";
 
 export const queries = {
   getBlogs: {
@@ -68,7 +68,7 @@ export const queries = {
     }),
   },
   getJobById: {
-    query: (id:string) => ({
+    query: (id: string) => ({
       url: `api/job/${id}`,
       method: "GET",
     }),
@@ -132,41 +132,41 @@ export const queries = {
       method: "GET",
     }),
   },
-  getTier :{
-    query :()=>({
-      url :"api/get-tiers",
-      method :"GET"
+  getTier: {
+    query: () => ({
+      url: "api/get-tiers",
+      method: "GET",
     }),
   },
-  getDesignation :{
-    query :()=>({
-      url :"api/get-designations",
-      method :"GET"
+  getDesignation: {
+    query: () => ({
+      url: "api/get-designations",
+      method: "GET",
     }),
   },
-  getSetting :{
-    query :()=>({
-      url :"api/get-setting",
-      method :"GET"
+  getSetting: {
+    query: () => ({
+      url: "api/get-setting",
+      method: "GET",
     }),
   },
-  getCategories :{
-    query :()=>({
-      url :"api/get-categories",
-      method :"GET"
-    })
+  getCategories: {
+    query: () => ({
+      url: "api/get-categories",
+      method: "GET",
+    }),
   },
-  getSingleEventByTitle :{
-    query :(title:string) =>({
-      url :`api/event/${title}`,
-      method :"GET"
-    })
+  getSingleEventByTitle: {
+    query: (title: string) => ({
+      url: `api/event/${title}`,
+      method: "GET",
+    }),
   },
-  getSingleDiscussionByTitle :{
-    query :(title:string) =>({
-      url :`api/discussion/${title}`,
-      method :"GET"
-    })
+  getSingleDiscussionByTitle: {
+    query: (title: string) => ({
+      url: `api/discussion/${title}`,
+      method: "GET",
+    }),
   },
   getFilterJob: {
     query: (queryParams: Filters) => {
@@ -174,14 +174,22 @@ export const queries = {
         acc[key] = String(queryParams[key]);
         return acc;
       }, {} as Record<string, string>);
-  
+
       return {
-        url: `api/filter-jobs?${new URLSearchParams(stringifiedParams).toString()}`,
+        url: `api/filter-jobs?${new URLSearchParams(
+          stringifiedParams
+        ).toString()}`,
         method: "GET",
       };
     },
   },
-  
+  buyPassForEvent: {
+    query: (data: WritableBuyPassData) => ({
+      url: "api/buy-pass",
+      method: "POST",
+      body: data,
+    }),
+  },
 
   //Post
   postApplyJob: {

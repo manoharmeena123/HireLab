@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, RecentJobsState,GetJobsState,
-   WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse,SaveJobDataState,SaveJobDataResponse } from '@/types/index';
+   WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse,SaveJobDataState,SaveJobDataResponse,
+   WritableBuyPassState, 
+   WritableBuyPassResponse} from '@/types/index';
 
 // Define initial states for both blogs and events
 const initialBlogsState: BlogsState = {
@@ -43,6 +45,13 @@ const initialSaveJobState: SaveJobDataState = {
   saveJobLoading: false,
   saveJobError: null,
 };
+
+// Define initial states for buyPass
+const initialBuyPassState: WritableBuyPassState = {
+  buyPass: [],
+  buyPassLoading: false,
+  buyPassError: null,
+};
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -52,7 +61,8 @@ const globalSlice = createSlice({
     ...initialRecentJobsState,
     ...initialGetJobsState,
     ...initialApplyJobState,
-    ...initialSaveJobState
+    ...initialSaveJobState,
+    ...initialBuyPassState,
   },
   reducers: {
     // Reducers for managing blogs state
@@ -152,6 +162,20 @@ const globalSlice = createSlice({
       state.saveJobLoading = false;
       state.saveJobError = action.payload;
     },
+
+     // Reducers for buyPass state
+     fetchBuyPassStart: (state) => {
+      state.buyPassLoading = true;
+      state.buyPassError = null;
+    },
+    fetchBuyPassSuccess: (state, action: PayloadAction<WritableBuyPassResponse>) => {
+      state.buyPass = action.payload.data;
+      state.buyPassLoading = false;
+    },
+    fetchBuyPassFailure: (state, action: PayloadAction<string>) => {
+      state.buyPassLoading = false;
+      state.buyPassError = action.payload;
+    },
   },
 });
 
@@ -173,7 +197,10 @@ export const {
   fetchGetJobsFailure,
   fetchSaveJobStart,
   fetchSaveJobSuccess,
-  fetchSaveJobFailure
+  fetchSaveJobFailure,
+  fetchBuyPassStart,
+  fetchBuyPassSuccess,
+  fetchBuyPassFailure,
 } = globalSlice.actions;
 
 export const globalEventReducer = globalSlice.reducer;

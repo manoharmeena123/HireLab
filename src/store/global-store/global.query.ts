@@ -25,6 +25,8 @@ import {
   WritableSettingResponse,
   WritableCategoriesResponse,
   Filters,
+  WritableBuyPassData,
+  WritableBuyPassResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -64,6 +66,7 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SingleDiscussionByTitle",
     "JobById",
     "GetFilterJob",
+    "BuyPassForEvent"
   ],
 });
 
@@ -196,6 +199,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (queryParams) => queries.getFilterJob.query(queryParams),
       invalidatesTags: ["GetFilterJob"],
     }),
+    buyPassForEvent : builder.mutation<WritableBuyPassResponse,WritableBuyPassData> ({
+      query :(data) => queries.buyPassForEvent.query(data),
+      invalidatesTags: ["BuyPassForEvent"],
+    })
   }),
   overrideExisting: true,
 });
@@ -232,5 +239,6 @@ export const {
   useGetSingleDiscussionByTitleMutation,
   useGetSingleEventByTitleMutation,
   useGetFilterJobMutation,
+  useBuyPassForEventMutation
 } = globalApi;
 export default globalApi;

@@ -74,3 +74,13 @@ export const formatDateTime = (dateString: string): string => {
 
   return `${dayOfWeek} ${month} ${year} | ${formattedHours}:${formattedMinutes} ${amPm}`;
 };
+
+
+export const truncateText = (text: string, wordLimit: number): string => {
+  if (!text) return '';
+  const words = text.split(' ');
+  if (words.length <= wordLimit) {
+    return text;
+  }
+  return words.slice(0, wordLimit).join(' ') + '...';
+};

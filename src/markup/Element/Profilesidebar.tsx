@@ -65,8 +65,8 @@ const Profilesidebar = ({ refetch }: any) => {
             <div className="canditate-des">
               <Link href={"#"}>
                 <Image
-                  src={`http://thinkdream.in/hirelab/images/${user?.user?.image}`}
-                  alt="Company Logo"
+                  src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                  alt="profile picture"
                   width={300}
                   height={300}
                 />
