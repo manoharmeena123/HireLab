@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/LatestDiscussions.module.css";
@@ -8,13 +8,57 @@ import Link from "next/link";
 
 const LatestDiscussions = () => {
   const { push } = useRouter();
-  const [questionsPosted, setQuestionsPosted] = useState(1800);
-  const [answersGiven, setAnswersGiven] = useState(1789);
-  const [totalForum, setTotalForum] = useState(1801);
-  const [initialAnimationDone, setInitialAnimationDone] = useState(false);
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null); // Track which description is expanded
+  const [questionsPosted, setQuestionsPosted] = useState(0);
+  const [answersGiven, setAnswersGiven] = useState(0);
+  const [totalForum, setTotalForum] = useState(0);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [shouldAnimate, setShouldAnimate] = useState(false); // Add state to trigger animation
+
+  const initialQuestionsPosted = 1800;
+  const initialAnswersGiven = 1789;
+  const initialTotalForum = 1801;
 
   const { data: discussionData } = useGetDiscussionQuery();
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setShouldAnimate(true);
+          } else {
+            setShouldAnimate(false);
+          }
+        });
+      },
+      { threshold: 0.1 } // Adjust threshold as needed
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (shouldAnimate) {
+      setQuestionsPosted(0);
+      setAnswersGiven(0);
+      setTotalForum(0);
+
+      setTimeout(() => {
+        setQuestionsPosted(initialQuestionsPosted);
+        setAnswersGiven(initialAnswersGiven);
+        setTotalForum(initialTotalForum);
+      }, 0);
+    }
+  }, [shouldAnimate]);
 
   useEffect(() => {
     const updateCounts = () => {
@@ -29,10 +73,8 @@ const LatestDiscussions = () => {
 
     const interval = setInterval(updateCounts, 2000);
 
-    setTimeout(() => setInitialAnimationDone(true), 2000);
-
     return () => clearInterval(interval);
-  }, [questionsPosted, answersGiven]);
+  }, []);
 
   const toggleDescription = (index: number) => {
     if (expandedIndex === index) {
@@ -41,13 +83,14 @@ const LatestDiscussions = () => {
       setExpandedIndex(index); // Expand clicked description
     }
   };
+
   const viewJobHandler = (title: any) => {
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "+");
     push(`/single-discussion?query=${encodedTitle}`);
   };
 
   return (
-    <div className="container">
+    <div className="container" ref={sectionRef}>
       <div className="section-head d-flex justify-content-between align-items-center mb-4">
         <div className="me-sm-auto">
           <h2 style={{ fontWeight: "600" }} className="mb-2">
@@ -57,34 +100,40 @@ const LatestDiscussions = () => {
         <div className="d-flex">
           <div className="head-counter-bx mr-4">
             <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
-              <CountUp
-                start={questionsPosted}
-                end={questionsPosted}
-                duration={1.5}
-                preserveValue={true}
-              />
+              {shouldAnimate && (
+                <CountUp
+                  start={0}
+                  end={questionsPosted}
+                  duration={2}
+                  preserveValue={true}
+                />
+              )}
             </h2>
             <h6 className="fw3">Questions Posted</h6>
           </div>
           <div className="head-counter-bx mr-4">
             <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
-              <CountUp
-                start={answersGiven}
-                end={answersGiven}
-                duration={1.5}
-                preserveValue={true}
-              />
+              {shouldAnimate && (
+                <CountUp
+                  start={0}
+                  end={answersGiven}
+                  duration={2}
+                  preserveValue={true}
+                />
+              )}
             </h2>
             <h6 className="fw3">Answers Given</h6>
           </div>
           <div className="head-counter-bx">
             <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
-              <CountUp
-                start={totalForum}
-                end={totalForum}
-                duration={1.5}
-                preserveValue={true}
-              />
+              {shouldAnimate && (
+                <CountUp
+                  start={0}
+                  end={totalForum}
+                  duration={2}
+                  preserveValue={true}
+                />
+              )}
             </h2>
             <h6 className="fw3">Total Forum</h6>
           </div>

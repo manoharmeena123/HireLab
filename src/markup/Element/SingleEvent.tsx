@@ -10,7 +10,7 @@ import { Button } from "react-bootstrap";
 const SingleEvent = () => {
   const [activeButton, setActiveButton] = useState('upcoming');
 
-  const handleButtonClick = (buttonType) => {
+  const handleButtonClick = (buttonType :any) => {
     setActiveButton(buttonType);
   };
   const searchParams = useSearchParams();
