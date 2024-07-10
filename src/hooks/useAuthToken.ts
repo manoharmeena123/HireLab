@@ -1,6 +1,7 @@
 "use client"
 // src/hooks/useAuthToken.ts
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { setCookie, getCookie, removeCookie } from 'typescript-cookie';
 
 const TOKEN_KEY = 'cred';
@@ -31,10 +32,15 @@ export const useAuthToken = () => {
   };
 
   const removeToken = () => {
-    setToken(null);
-    setUser(null);
-    removeCookie(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    try {
+      setToken(null);
+      setUser(null);
+      removeCookie(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      toast.success("Logout Successfully")
+    } catch (error:any) {
+      toast.error(error.message)
+    }
   };
 
   return {

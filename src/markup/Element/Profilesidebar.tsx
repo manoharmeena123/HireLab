@@ -1,4 +1,4 @@
-"use client"
+"use client";
 // src/components/Profilesidebar.tsx
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -49,9 +49,11 @@ const Profilesidebar = ({ refetch }: any) => {
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
+      const response = await logout().unwrap();
+      if (response) {
+        removeToken();
+        navigateSource("/");
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -71,7 +73,6 @@ const Profilesidebar = ({ refetch }: any) => {
                   height={300}
                 />
               </Link>
-           
             </div>
             <div className="candidate-title">
               <div className="">
