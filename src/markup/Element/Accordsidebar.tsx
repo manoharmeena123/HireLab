@@ -1,97 +1,82 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import { Accordion, Card } from "react-bootstrap";
+import { Accordion } from "react-bootstrap";
 
-const Accordsidebar = () => {
+interface Filters {
+  experience: string[];
+  location: string[];
+  education: string[];
+  cities: string[];
+  jobTitles: string[];
+}
+
+interface AccordsidebarProps {
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
+}
+
+const Accordsidebar: React.FC<AccordsidebarProps> = ({ filters, setFilters }) => {
+  const handleFilterChange = (type: keyof Filters, value: string) => {
+    const currentValues = filters[type] || [];
+    const newValues = currentValues.includes(value)
+      ? currentValues.filter((v) => v !== value)
+      : [...currentValues, value];
+    setFilters({ ...filters, [type]: newValues });
+  };
+
+  const resetFilters = () => {
+    setFilters({
+      experience: [],
+      location: [],
+      education: [],
+      cities: [],
+      jobTitles: [],
+    });
+  };
+
+  const cities = ["Indore", "Delhi", "Katni", "Surat", "Ahmedabad", "Gandhinagar"];
+
   return (
     <div className="col-xl-3 col-lg-4 col-md-5 m-b30">
       <aside id="accordion1" className="sticky-top sidebar-filter bg-white">
         <Accordion defaultActiveKey="0">
           <h6 className="title">
             <i className="fa fa-sliders m-r5"></i> Refined By{" "}
-            <Link href={"#"} className="font-12 float-right">
+            <Link href={"#"} className="font-12 float-right" onClick={resetFilters}>
               Reset All
             </Link>
           </h6>
 
           <Accordion.Item eventKey="0">
             <Accordion.Header>
-              <h6 className="acod-title">Companies</h6>
+              <h6 className="acod-title">Experience</h6>
             </Accordion.Header>
             <Accordion.Body>
-              <div className="acod-body collapse show">
-                <div className="acod-content">
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="companies1"
-                      type="checkbox"
-                      name="checkbox-companies"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="companies1"
-                    >
-                      Job Mirror Consultancy <span>(50)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="companies2"
-                      type="checkbox"
-                      name="checkbox-companies"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="companies2"
-                    >
-                      Engineering Group <span>(80)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="companies3"
-                      type="checkbox"
-                      name="checkbox-companies"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="companies3"
-                    >
-                      Electric Co. <span>(235)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="companies4"
-                      type="checkbox"
-                      name="checkbox-companies"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="companies4"
-                    >
-                      Telecom industry <span>(568)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-checkbox">
-                    <input
-                      className="custom-control-input"
-                      id="companies5"
-                      type="checkbox"
-                      name="checkbox-companies"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="companies5"
-                    >
-                      Safety/ Health <span>(798)</span>
-                    </label>
-                  </div>
+              <div className="acod-content">
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="fresher"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("experience", "Fresher Only")}
+                    checked={filters?.experience?.includes("Fresher Only")}
+                  />
+                  <label className="custom-control-label" htmlFor="fresher">
+                    Fresher Only
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="experience"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("experience", "Experience Only")}
+                    checked={filters?.experience?.includes("Experience Only")}
+                  />
+                  <label className="custom-control-label" htmlFor="experience">
+                    Experience Only
+                  </label>
                 </div>
               </div>
             </Accordion.Body>
@@ -99,75 +84,33 @@ const Accordsidebar = () => {
 
           <Accordion.Item eventKey="1">
             <Accordion.Header>
-              <h6 className="acod-title">Experience</h6>
+              <h6 className="acod-title">Location</h6>
             </Accordion.Header>
             <Accordion.Body>
-              <div className="acod-body collapse show">
-                <div className="acod-content">
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="one-years"
-                      type="radio"
-                      name="radio-years"
-                    />
-                    <label className="custom-control-label" htmlFor="one-years">
-                      0-1 Years <span>(120)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="two-years"
-                      type="radio"
-                      name="radio-years"
-                    />
-                    <label className="custom-control-label" htmlFor="two-years">
-                      1-2 Years <span>(300)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="three-years"
-                      type="radio"
-                      name="radio-years"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="three-years"
-                    >
-                      2-3 Years <span>(235)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="four-years"
-                      type="radio"
-                      name="radio-years"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="four-years"
-                    >
-                      3-4 Years <span>(568)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="five-years"
-                      type="radio"
-                      name="radio-years"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="five-years"
-                    >
-                      4-5 Years <span>(798)</span>
-                    </label>
-                  </div>
+              <div className="acod-content">
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="workFromHome"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("location", "Work From Home")}
+                    checked={filters?.location?.includes("Work From Home")}
+                  />
+                  <label className="custom-control-label" htmlFor="workFromHome">
+                    Work From Home
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="workFromOffice"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("location", "Work From Office")}
+                    checked={filters?.location?.includes("Work From Office")}
+                  />
+                  <label className="custom-control-label" htmlFor="workFromOffice">
+                    Work From Office
+                  </label>
                 </div>
               </div>
             </Accordion.Body>
@@ -175,81 +118,45 @@ const Accordsidebar = () => {
 
           <Accordion.Item eventKey="2">
             <Accordion.Header>
-              <h6 className="acod-title">Salary</h6>
+              <h6 className="acod-title">Education</h6>
             </Accordion.Header>
             <Accordion.Body>
-              <div className="acod-body collapse show">
-                <div className="acod-content">
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="salary-op1"
-                      type="radio"
-                      name="radio-currency"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="salary-op1"
-                    >
-                      0-1 lacs <span>(120)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="salary-op2"
-                      type="radio"
-                      name="radio-currency"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="salary-op2"
-                    >
-                      1-2 lacs <span>(300)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="salary-op3"
-                      type="radio"
-                      name="radio-currency"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="salary-op3"
-                    >
-                      2-3 lacs <span>(235)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="salary-op4"
-                      type="radio"
-                      name="radio-currency"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="salary-op4"
-                    >
-                      3-4 lacs <span>(568)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="salary-op5"
-                      type="radio"
-                      name="radio-currency"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="salary-op5"
-                    >
-                      4-5 lacs <span>(798)</span>
-                    </label>
-                  </div>
+              <div className="acod-content">
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="education10th"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("education", "10th")}
+                    checked={filters?.education?.includes("10th")}
+                  />
+                  <label className="custom-control-label" htmlFor="education10th">
+                    10th
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="education12th"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("education", "12th")}
+                    checked={filters?.education?.includes("12th")}
+                  />
+                  <label className="custom-control-label" htmlFor="education12th">
+                    12th
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="educationGraduate"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("education", "Graduate")}
+                    checked={filters?.education?.includes("Graduate")}
+                  />
+                  <label className="custom-control-label" htmlFor="educationGraduate">
+                    Graduate
+                  </label>
                 </div>
               </div>
             </Accordion.Body>
@@ -257,81 +164,69 @@ const Accordsidebar = () => {
 
           <Accordion.Item eventKey="3">
             <Accordion.Header>
-              <h6 className="acod-title">Job Function</h6>
+              <h6 className="acod-title">Cities</h6>
             </Accordion.Header>
             <Accordion.Body>
-              <div className="acod-body collapse show">
-                <div className="acod-content">
-                  <div className="custom-control custom-radio">
+              <div className="acod-content">
+                {cities.map((city) => (
+                  <div className="custom-control custom-checkbox" key={city}>
                     <input
                       className="custom-control-input"
-                      id="function-services-1"
-                      type="radio"
-                      name="radio-function"
+                      id={city}
+                      type="checkbox"
+                      onChange={() => handleFilterChange("cities", city)}
+                      checked={filters?.cities?.includes(city)}
                     />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="function-services-1"
-                    >
-                      Production Management <span>(120)</span>
+                    <label className="custom-control-label" htmlFor={city}>
+                      {city}
                     </label>
                   </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="function-services-2"
-                      type="radio"
-                      name="radio-function"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="function-services-2"
-                    >
-                      Design Engineering <span>(300)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="function-services-3"
-                      type="radio"
-                      name="radio-function"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="function-services-3"
-                    >
-                      Safety/ Health <span>(235)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="function-services-4"
-                      type="radio"
-                      name="radio-function"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="function-services-4"
-                    >
-                      Engineering <span>(568)</span>
-                    </label>
-                  </div>
-                  <div className="custom-control custom-radio">
-                    <input
-                      className="custom-control-input"
-                      id="function-services-5"
-                      type="radio"
-                      name="radio-function"
-                    />
-                    <label
-                      className="custom-control-label"
-                      htmlFor="function-services-5"
-                    >
-                      Marketing <span>(798)</span>
-                    </label>
-                  </div>
+                ))}
+              </div>
+            </Accordion.Body>
+          </Accordion.Item>
+
+          <Accordion.Item eventKey="4">
+            <Accordion.Header>
+              <h6 className="acod-title">Job Titles</h6>
+            </Accordion.Header>
+            <Accordion.Body>
+              <div className="acod-content">
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="nodejsDeveloper"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("jobTitles", "Nodejs Developer")}
+                    checked={filters?.jobTitles?.includes("Nodejs Developer")}
+                  />
+                  <label className="custom-control-label" htmlFor="nodejsDeveloper">
+                    Nodejs Developer
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="reactDeveloper"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("jobTitles", "React Developer")}
+                    checked={filters?.jobTitles?.includes("React Developer")}
+                  />
+                  <label className="custom-control-label" htmlFor="reactDeveloper">
+                    React Developer
+                  </label>
+                </div>
+                <div className="custom-control custom-checkbox">
+                  <input
+                    className="custom-control-input"
+                    id="laravelDeveloper"
+                    type="checkbox"
+                    onChange={() => handleFilterChange("jobTitles", "Laravel Developer")}
+                    checked={filters?.jobTitles?.includes("Laravel Developer")}
+                  />
+                  <label className="custom-control-label" htmlFor="laravelDeveloper">
+                    Laravel Developer
+                  </label>
                 </div>
               </div>
             </Accordion.Body>

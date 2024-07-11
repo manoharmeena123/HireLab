@@ -1,0 +1,24 @@
+.view-toggle {
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 1.5rem !important;
+    padding: 0.5rem !important;
+    color: white !important; /* Inactive color */
+  }
+  
+  .view-toggle.active {
+    color: #2a6310 !important; /* Active color matching the theme */
+  }
+  
+  .p-lr5 {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    color: white !important; /* Default color */
+    margin-right: 10px !important;
+  }
+  
+  .p-lr5.active {
+    color: #2a6310 !important; /* Active color matching the theme */
+  }
+  

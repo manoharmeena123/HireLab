@@ -99,7 +99,7 @@ const RecentJobsection = () => {
             </h6>
           </div>
           <div className="align-self-end">
-            <Link href="/browse-jobs" className="site-button button-sm">
+            <Link href="/browse-jobs-grid" className="site-button button-sm">
               Browse All Jobs <i className="fa fa-long-arrow-right"></i>
             </Link>
           </div>

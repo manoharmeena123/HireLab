@@ -142,7 +142,7 @@ const IndexBanner: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-3 col-md-6 mt-2">
+                <div className="col-lg-3 col-md-6">
                   <div className="form-group">
                     <Form.Control
                       as="select"
