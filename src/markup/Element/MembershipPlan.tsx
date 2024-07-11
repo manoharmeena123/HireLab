@@ -163,7 +163,7 @@ const MembershipPlans = () => {
           align-item: center;
           justify-content: center;
         }
-        @media (max-width: 1042px) {
+        @media (max-width: 1200px) {
           .display-property {
             grid-template-columns: repeat(2, 1fr);
           }

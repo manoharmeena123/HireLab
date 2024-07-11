@@ -1,3 +1,6 @@
+:root {
+  --main-font: "Rubik", sans-serif;
+}
 .b-job-info li,
 .gallery-box ul,
 .job-info li,
@@ -69,7 +72,7 @@
 .job-search-tabs .form-control {
   border: 2px solid #eee !important;
   font-size: 14px;
-  font-family: Montserrat;
+  font-family: var(--main-font);
   border-radius: 4px;
   font-weight: 400;
   height: 50px;
@@ -80,7 +83,7 @@
   color: #606060;
 }
 .job-search-tabs .site-button {
-  font-family: Montserrat;
+  font-family: var(--main-font);
   font-weight: 500;
   font-size: 16px;
   padding: 13px 20px;
@@ -427,7 +430,7 @@
 .job-search-form .form-control::-moz-placeholder,
 .submit-resume .form-control {
   font-size: 16px;
-  font-family: roboto;
+  font-family: var(--main-font);
 }
 .job-search-form .input-group-prepend .site-button {
   height: 60px;
@@ -621,7 +624,7 @@
   top: 10px;
   left: 0;
   margin: 0;
-  font-family: rubik;
+  font-family: var(--main-font);
   font-weight: 400;
   transition: all 0.5s;
   -o-transition: all 0.5s;
@@ -651,7 +654,7 @@
   border-radius: 0;
   height: 50px;
   padding: 0;
-  font-family: rubik;
+  font-family: var(--main-font);
   color: #000;
   font-size: 15px;
 }
@@ -719,7 +722,7 @@
 }
 .salary-bx span {
   color: #000;
-  font-family: rubik;
+  font-family: var(--main-font);
   font-size: 22px;
 }
 .job-time span,
@@ -775,7 +778,7 @@
 }
 .testimonial-name,
 .testimonial-position {
-  font-family: rubik;
+  font-family: var(--main-font);
   font-size: 14px;
   text-transform: capitalize;
 }
