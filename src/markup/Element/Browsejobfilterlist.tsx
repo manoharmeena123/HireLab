@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import PageTitle from "@/markup/Layout/PageTitle";
 import Jobfindbox from "@/markup/Element/Jobfindbox";
@@ -12,10 +12,19 @@ import {
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/Loading"; // Ensure you import your Loading component
 import { formaterDate, formatDateAgo } from "@/utils/formateDate";
+import Pagination from "./Pagination";
+import styles from "@/styles/BrowseJobGrid.module.css";
 
 // Images
-import logo from "./../../images/logo/icon1.png";
 const bnr = require("./../../images/banner/bnr1.jpg");
+
+interface Filters {
+  experience: string[];
+  location: string[];
+  education: string[];
+  cities: string[];
+  jobTitles: string[];
+}
 
 function Browsejobfilterlist() {
   const searchParams = useSearchParams();
@@ -40,6 +49,54 @@ function Browsejobfilterlist() {
     }
   }, [getFilterJob, jobTitleQuery, cityQuery, sectorQuery]);
 
+  const [filters, setFilters] = useState<Filters>({
+    experience: [],
+    location: [],
+    education: [],
+    cities: [],
+    jobTitles: [],
+  });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [view, setView] = useState<"list" | "grid">("grid");
+  const itemsPerPage = 10;
+
+  const applyFilters = (jobs: any[]): any[] => {
+    return jobs
+      .filter((job) =>
+        filters.experience.length
+          ? filters.experience.includes(job.experience.title)
+          : true
+      )
+      .filter((job) =>
+        filters.location.length
+          ? filters.location.includes(job.location.title)
+          : true
+      )
+      .filter((job) =>
+        filters.education.length
+          ? filters.education.includes(job.education?.name ?? "")
+          : true
+      )
+      .filter((job) =>
+        filters.cities.length
+          ? filters.cities.some((city) => job.address.includes(city))
+          : true
+      )
+      .filter((job) =>
+        filters.jobTitles.length
+          ? filters.jobTitles.includes(job.job_title)
+          : true
+      );
+  };
+
+  const paginatedJobs = jobsData?.data
+    ? applyFilters(jobsData.data).slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      )
+    : [];
+
   if (isSectorLoading || isFilterLoading) {
     return <Loading />;
   }
@@ -47,6 +104,7 @@ function Browsejobfilterlist() {
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
   };
+
   return (
     <div className="page-content bg-white">
       <div
@@ -60,11 +118,11 @@ function Browsejobfilterlist() {
         <div className="section-full browse-job p-b50">
           <div className="container">
             <div className="row">
-              <Accordsidebar />
+              <Accordsidebar filters={filters} setFilters={setFilters} />
               <div className="col-xl-9 col-lg-8 col-md-7">
                 <div className="job-bx-title clearfix">
                   <h5 className="font-weight-700 pull-left text-uppercase">{`${
-                    jobsData?.data?.length || 0
+                    paginatedJobs.length || 0
                   } Jobs Found`}</h5>
                   <div className="float-right">
                     <span className="select-title">Sort by freshness</span>
@@ -75,102 +133,160 @@ function Browsejobfilterlist() {
                       <option>Last 3 Days</option>
                     </select>
                     <div className="float-right p-tb5 p-r10">
-                      <Link href={"/browse-job-filter-list"} className="p-lr5">
+                      <span
+                        className={`${styles.viewToggle} ${
+                          view === "list" ? styles.active : ""
+                        }`}
+                        onClick={() => setView("list")}
+                        style={{ marginRight: "10px" }}
+                      >
                         <i className="fa fa-th-list"></i>
-                      </Link>
-                      <Link href={"/browse-job-filter-grid"} className="p-lr5">
+                      </span>
+                      <span
+                        className={`${styles.viewToggle} ${
+                          view === "grid" ? styles.active : ""
+                        }`}
+                        onClick={() => setView("grid")}
+                      >
                         <i className="fa fa-th"></i>
-                      </Link>
+                      </span>
                     </div>
                   </div>
                 </div>
-                <ul className="post-job-bx">
-                  {jobsData?.data?.map((item, index) => (
-                    <li key={index}>
-                      <div className="post-bx">
-                        <div className="d-flex m-b30">
-                          <div className="job-post-info">
-                            <h4
-                              style={{ cursor: "pointer" }}
-                              onClick={() => viewJobHandler(item.id)}
-                            >
-                              <Link href={"/job-detail"}>
-                                {" "}
-                                {item?.job_title}
-                              </Link>
-                            </h4>
-                            <ul>
-                              <li>
-                                <i className="fa fa-map-marker"></i>{" "}
-                                {item?.address}
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i>
-                                {item?.location?.title}
-                              </li>
-                              <li>
-                                <i className="fa fa-clock-o"></i> Published{" "}
-                                {formaterDate(item?.created_at)}
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <div className="d-flex">
-                          <div className="job-time mr-auto">
-                            <Link href={""}>
-                              <span>{item?.location?.title}</span>
-                            </Link>
-                          </div>
 
-                          <div className="salary-bx">
-                            <span>42000 - 55000</span>
-                            <br />
-                          </div>
-                        </div>
-                        <div className="posted-info clearfix">
-                          <p className="m-tb0 text-primary float-left">
-                            <span className="text-black m-r10">Posted:</span>{" "}
-                            {formatDateAgo(item?.created_at)}
-                          </p>
-                          {/* <Link
-                              href={"/jobs-my-resume"}
-                              className="site-button button-sm float-right"
-                            >
-                              <i className="fa fa-eye"></i>
-                            </Link> */}
-                        </div>
-                        <label className="like-btn">
-                          <input type="checkbox" />
-                          <span className="checkmark"></span>
-                        </label>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+                {paginatedJobs.length === 0 ? (
+                  <div className="no-jobs-found">
+                    <h3>No jobs found</h3>
+                  </div>
+                ) : (
+                  <>
+                    {view === "list" ? (
+                      <ul className="post-job-bx">
+                        {paginatedJobs.map((item, index) => (
+                          <li key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-info">
+                                  <h4
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => viewJobHandler(item.id)}
+                                  >
+                                    <Link href={"/job-detail"}>
+                                      {" "}
+                                      {item?.job_title}
+                                    </Link>
+                                  </h4>
+                                  <ul>
+                                    <li>
+                                      <i className="fa fa-map-marker"></i>{" "}
+                                      {item?.address}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-bookmark-o"></i>
+                                      {item?.location?.title}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-clock-o"></i> Published{" "}
+                                      {formaterDate(item?.created_at)}
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div className="d-flex">
+                                <div className="job-time mr-auto">
+                                  <Link href={""}>
+                                    <span>{item?.location?.title}</span>
+                                  </Link>
+                                </div>
 
-                <div className="pagination-bx float-right m-t30">
-                  <ul className="pagination">
-                    <li className="previous">
-                      <Link href={"#"}>
-                        <i className="ti-arrow-left"></i> Prev
-                      </Link>
-                    </li>
-                    <li className="active">
-                      <Link href={"#"}>1</Link>
-                    </li>
-                    <li>
-                      <Link href={"#"}>2</Link>
-                    </li>
-                    <li>
-                      <Link href={"#"}>3</Link>
-                    </li>
-                    <li className="next">
-                      <Link href={"#"}>
-                        Next <i className="ti-arrow-right"></i>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                                <div className="salary-bx">
+                                  <span>42000 - 55000</span>
+                                  <br />
+                                </div>
+                              </div>
+                              <div className="posted-info clearfix">
+                                <p className="m-tb0 text-primary float-left">
+                                  <span className="text-black m-r10">Posted:</span>{" "}
+                                  {formatDateAgo(item?.created_at)}
+                                </p>
+                              </div>
+                              <label className="like-btn">
+                                <input type="checkbox" />
+                                <span className="checkmark"></span>
+                              </label>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <ul className="post-job-bx browse-job-grid row">
+                        {paginatedJobs.map((item, index) => (
+                          <li className="col-lg-4 col-md-6" key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-info">
+                                  <h4
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => viewJobHandler(item.id)}
+                                  >
+                                    <Link href={"/job-detail"}>
+                                      {" "}
+                                      {item?.job_title}
+                                    </Link>
+                                  </h4>
+                                  <ul>
+                                    <li>
+                                      <i className="fa fa-map-marker"></i>{" "}
+                                      {item?.address}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-bookmark-o"></i>
+                                      {item?.location?.title}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-clock-o"></i> Published{" "}
+                                      {formaterDate(item?.created_at)}
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                              <div className="d-flex">
+                                <div className="job-time mr-auto">
+                                  <Link href={""}>
+                                    <span>{item?.location?.title}</span>
+                                  </Link>
+                                </div>
+
+                                <div className="salary-bx">
+                                  <span>42000 - 55000</span>
+                                  <br />
+                                </div>
+                              </div>
+                              <div className="posted-info clearfix">
+                                <p className="m-tb0 text-primary float-left">
+                                  <span className="text-black m-r10">Posted:</span>{" "}
+                                  {formatDateAgo(item?.created_at)}
+                                </p>
+                              </div>
+                              <label className="like-btn">
+                                <input type="checkbox" />
+                                <span className="checkmark"></span>
+                              </label>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {paginatedJobs.length > 0 && (
+                      <Pagination
+                        currentPage={currentPage}
+                        itemsPerPage={itemsPerPage}
+                        totalItems={jobsData?.data.length || 0}
+                        onPageChange={setCurrentPage}
+                      />
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
