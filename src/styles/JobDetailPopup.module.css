@@ -91,7 +91,11 @@
   }
   
   .job-description {
-    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    line-height: 1.6;
+    font-size: 14px;
   }
   
   .job-section {
