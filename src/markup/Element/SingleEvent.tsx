@@ -8,6 +8,7 @@ import {
   useBuyPassForEventMutation,
 } from "@/store/global-store/global.query";
 import { truncateText } from "@/utils/formateDate";
+import Loading from "@/components/Loading";
 
 const SingleEvent = () => {
   const [clickedIndexes, setClickedIndexes] = useState<number[]>([]);
@@ -17,7 +18,7 @@ const SingleEvent = () => {
   const query = searchParams.get("query");
   const [
     getSingleEventByTitle,
-    { data: singleEventByTitle, isLoading, isError, isSuccess, error },
+    { data: singleEventByTitle, isLoading :singleEventByTitleLoading, isError, isSuccess, error },
   ] = useGetSingleEventByTitleMutation();
   const [
     buyPassForEvent,
