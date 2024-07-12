@@ -18,16 +18,14 @@ import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
-interface User {
-  image?: string;
-}
+import Loading from "@/components/Loading";
 
 const ManageJobs = () => {
   const {
     data: jobsData,
     error: jobsError,
     isLoading: jobsLoading,
-    refetch :manageRefetch
+    refetch: manageRefetch,
   } = useGetManageJobQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
@@ -41,11 +39,10 @@ const ManageJobs = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
- 
   const handleDeleteJob = async (jobId: number) => {
     try {
-       const res :any = await deleteManageJob(jobId.toString()).unwrap();
-       if (res.code === 200) {
+      const res: any = await deleteManageJob(jobId.toString()).unwrap();
+      if (res.code === 200) {
         manageRefetch();
         toast.success(res?.message, { theme: "colored" });
       }
@@ -54,21 +51,18 @@ const ManageJobs = () => {
     }
   };
 
-  // Flatten the data array
-  const flattenedJobsData = jobsData?.data.flat() || [];
+  const flattenedJobsData = jobsData?.data?.flat() || [];
+
   const [postJob, { isLoading }] = usePostJobMutation();
 
   const handleEditJob = async (selectedJob: any) => {
     try {
-      // Ensure profileData has the correct types for each field before sending
       const response = await updatePostJob({ data: selectedJob }).unwrap();
       if (response.code === 200) {
         toast.success("Post Job Edit successfully!", { theme: "colored" });
-        // router.push("/manage-job");
       } else if (response.code === 401) {
         toast.error(response.message, { theme: "colored" });
       } else if (response.code === 404) {
-        // dispatch(setPostJobErrors(response.errors));
         console.log("error");
       } else {
         console.error("Unexpected error format:", response);
@@ -76,18 +70,15 @@ const ManageJobs = () => {
     } catch (err) {
       console.error("Error posting job:", err);
     }
-    // Close the modal after successful edit (optional)
     setShow(false);
   };
 
-
-  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+  const { data: designationData } = useGetDesignationQuery();
 
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
   useEffect(() => {
-    // Map designation options
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
         value: designation.title,
@@ -100,7 +91,6 @@ const ManageJobs = () => {
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
-      // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
       const designation = designationOptions.find(
         (option) => option.id === designationId
@@ -114,6 +104,7 @@ const ManageJobs = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
   const handleLogout = async () => {
     try {
       await logout().unwrap();
@@ -123,6 +114,11 @@ const ManageJobs = () => {
       console.error("Logout failed:", error);
     }
   };
+
+  if(jobsLoading){
+    <Loading/>
+  }
+
   return (
     <>
       <div className="page-content bg-white">
@@ -130,21 +126,19 @@ const ManageJobs = () => {
           <div className="section-full bg-white p-t50 p-b20">
             <div className="container">
               <div className="row">
-                {/* Left sidebar */}
                 <div className="col-xl-3 col-lg-4 m-b30">
                   <div className="sticky-top">
                     <div className="candidate-info company-info">
                       <div className="candidate-detail text-center">
-                        {/* User image placeholder */}
                         <div className="canditate-des">
-                        <Link href={"#"}>
-                          <Image
-                            src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-                            alt="Company Logo"
-                            width={300}
-                            height={300}
-                          />
-                        </Link>
+                          <Link href={"#"}>
+                            <Image
+                              src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                              alt="Company Logo"
+                              width={300}
+                              height={300}
+                            />
+                          </Link>
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
@@ -159,7 +153,6 @@ const ManageJobs = () => {
                           </p>
                         </div>
                       </div>
-                      {/* Navigation links */}
                       <ul>
                         <li>
                           <Link href="/job-poster">
@@ -212,10 +205,8 @@ const ManageJobs = () => {
                   onSubmit={handleEditJob}
                   selectedJob={selectedJob || null}
                 />
-                {/* Main content area */}
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
-                    {/* Job listing header */}
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         Manage jobs
@@ -233,7 +224,6 @@ const ManageJobs = () => {
                       </div>
                     </div>
 
-                    {/* Job listing table */}
                     <table className="table-job-bx cv-manager company-manage-job">
                       <thead>
                         <tr>
@@ -258,7 +248,6 @@ const ManageJobs = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {/* Mapping through job data */}
                         {flattenedJobsData?.map((job, index) => (
                           <tr key={index}>
                             <td className="feature">
@@ -287,24 +276,24 @@ const ManageJobs = () => {
                                 <ul className="job-post-info">
                                   <li>
                                     <i className="fa fa-map-marker"></i>{" "}
-                                    {job.user.location}
+                                    {job?.user?.location}
                                   </li>
                                   <li>
                                     <i className="fa fa-bookmark-o"></i>{" "}
-                                    {job.job_type}
+                                    {job?.job_type?.title}
                                   </li>
                                   <li>
                                     <i className="fa fa-filter"></i>{" "}
-                                    {job.user.location}
+                                    {job?.user?.location}
                                   </li>
                                 </ul>
                               </div>
                             </td>
                             <td className="application text-primary">
-                              {job.address}
+                              {job?.address}
                             </td>
                             <td className="expired pending">
-                              {formatDate(job.created_at)}
+                              {formatDate(job?.created_at)}
                             </td>
                             <td className="job-links">
                               <div
@@ -313,13 +302,12 @@ const ManageJobs = () => {
                                   setSelectedJob(job);
                                   setShow(true);
                                 }}
-                                
                               >
                                 <i className="fa fa-edit"></i>
                               </div>
                               <div
                                 className="nav-link"
-                                onClick={() => handleDeleteJob(job.id)}
+                                onClick={() => handleDeleteJob(job?.id)}
                               >
                                 <i className="ti-trash"></i>
                               </div>
@@ -329,7 +317,6 @@ const ManageJobs = () => {
                       </tbody>
                     </table>
 
-                    {/* Pagination */}
                     <div className="pagination-bx m-t30 float-right">
                       <ul className="pagination">
                         <li className="previous">
@@ -364,7 +351,6 @@ const ManageJobs = () => {
                       </ul>
                     </div>
 
-                    {/* Job details modal */}
                     <Modal
                       show={company}
                       onHide={() => setCompany(false)}
@@ -402,7 +388,7 @@ const ManageJobs = () => {
                               </li>
                               <li>
                                 <strong>Description :</strong>
-                                <p>{selectedJob?.user.description}</p>
+                                <p>{selectedJob?.user?.description}</p>
                               </li>
                             </ul>
                           </div>
