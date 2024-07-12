@@ -752,7 +752,7 @@
 .post-job-bx .post-bx {
   padding: 25px;
   background-color: #fff;
-  border-left: 5px solid #e1e7ff;
+  border-left: 5px solid #2a63102e;
   border-radius: 4px;
   box-shadow: 0 0 10px 0 rgba(0, 24, 128, 0.1);
   display: block;
@@ -1088,9 +1088,6 @@
     margin-top: 0;
     margin-bottom: 20px;
     line-height: 28px;
-  }
-  .post-job-bx .d-flex {
-    display: block !important;
   }
   .job-post-company {
     margin-right: 0;

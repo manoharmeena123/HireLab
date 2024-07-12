@@ -515,15 +515,15 @@ const DashboardSection = () => {
                 </div>
               </div>
 
-              <div className="row">
+              <div className="row mt-3 justify-content-center" style={{gap:'2rem'}}>
                 <div
-                  className="col-lg-6 col-md-12"
+                  className="col-lg-6 col-md-12 shadow p-4"
                   style={{
                     marginTop: "30px",
-                    boxShadow:
-                      "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
+
                     paddingRight: "-15px",
                     borderRadius: "1rem",
+                    maxWidth: '550px'
                   }}
                 >
                   <h2 style={{ fontWeight: 600, textAlign: "center" }}>
@@ -540,7 +540,7 @@ const DashboardSection = () => {
                         <li key={index}>
                           <div className="post-bx">
                             <div className="d-flex m-b10">
-                              <div className="job-post-info">
+                              <div className="job-post-info w-100">
                                 <div className="d-flex justify-content-between w-100">
                                   <h5>
                                     <Link
@@ -580,9 +580,9 @@ const DashboardSection = () => {
                                 <ul
                                   style={{
                                     display: "flex",
-                                    justifyContent: "space-around",
                                     marginTop: "20px",
                                     color: "#2A6310 !important",
+                                    flexWrap:'wrap'
                                   }}
                                 >
                                   <li className="mr-4">
@@ -604,77 +604,90 @@ const DashboardSection = () => {
                         </li>
                       ))}
                   </ul>
-                  <button
+                  <div
                     style={{
-                      display: "grid",
-                      margin: "32px auto 19px",
-                      marginTop: "32px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
-                    className="btn btn-primary"
+                    className="mt-4 mb-3"
                   >
-                    Browse All
-                  </button>
+                    <button className="btn btn-primary" style={{background:'rgb(42, 99, 16)',border:'none'}}>Browse All</button>
+                  </div>
                 </div>
+
                 <div
-                  className="col-lg-6 col-md-12"
+                  className="col-lg-6 col-md-12 shadow p-4"
                   style={{
                     marginTop: "30px",
-                    boxShadow:
-                      "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
-                    borderRadius: "1rem",
                     paddingLeft: "-15px",
+                    borderRadius: "1rem",
+                    maxWidth: '550px'
                   }}
                 >
+                  <h2 style={{ fontWeight: 600, textAlign: "center" }}>
+                    Discussion Forum
+                  </h2>
                   <ul
                     className="post-job-bx col"
                     style={{
                       paddingTop: "10px",
                     }}
                   >
-                    <h2 style={{ fontWeight: 600, textAlign: "center" }}>
-                      Discussion Forum
-                    </h2>
                     <li>
                       <div className="post-bx">
                         <div className="d-flex m-b10">
-                          <div className="job-post-info">
+                          <div className="job-post-info w-100">
                             <h5>
                               <Link href="/">
                                 Q:Lorem ipsum tell me about your plans
                               </Link>
                             </h5>
-                            <ul style={{ display: "flex" }}>
+                            <ul
+                              style={{
+                                display: "flex",
+                                marginTop: "20px",
+                                color: "#2A6310 !important",
+                              }}
+                            >
                               <p>Author: testsldeldedledldmldlele</p>
                             </ul>
                           </div>
                         </div>
                       </div>
                     </li>
-
                     <li>
-                      <div className="post-bx" style={{ height: "143px" }}>
-                        <div className="d-flex m-b30">
-                          <div className="job-post-info">
+                      <div className="post-bx">
+                        <div className="d-flex m-b10">
+                          <div className="job-post-info w-100">
                             <h5>
                               <Link href="/">
                                 Q:Lorem ipsum tell me about your plans
                               </Link>
                             </h5>
-                            <ul style={{ display: "flex" }}>
+                            <ul
+                              style={{
+                                display: "flex",
+                                marginTop: "20px",
+                                color: "#2A6310 !important",
+                              }}
+                            >
                               <p>Author: testsldeldedledldmldlele</p>
                             </ul>
-                            <button
-                              style={{
-                                display: "grid",
-                                margin: "32px auto 19px",
-                                marginTop: "32px",
-                              }}
-                              className="btn btn-primary"
-                            >
-                              Ask a Question
-                            </button>
                           </div>
                         </div>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        className="mt-4 mb-3"
+                      >
+                        <button className="btn btn-primary" style={{background:'rgb(42, 99, 16)',border:'none'}}>
+                          Ask a Question
+                        </button>
                       </div>
                     </li>
                   </ul>
