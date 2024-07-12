@@ -13735,5 +13735,10 @@ background-color: #fff;
   .section-head{
 flex-direction: column;
   }
+  .ctc-jobs-wrap{
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+  }
 
 }
