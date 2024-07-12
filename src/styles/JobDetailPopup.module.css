@@ -1,0 +1,132 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .d-flex {
+    display: flex !important;
+  }
+  
+  .align-items-center {
+    align-items: center !important;
+  }
+  
+  .mb-4 {
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .mr-3 {
+    margin-right: 1rem !important;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .text-warning {
+    color: #ffc107 !important;
+  }
+  
+  .btnCustom {
+    transition: background-color 0.3s, color 0.3s !important;
+  }
+  
+  .badge {
+    border-radius: 0.25rem !important;
+  }
+  
+  .p-2 {
+    padding: 0.5rem !important;
+  }
+  
+  .job-details {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .job-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2a6310;
+  }
+  
+  .company-name {
+    font-size: 1rem;
+    color: #6c757d;
+  }
+  
+  .job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    color: #6c757d;
+  }
+  
+  .job-meta div {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .job-meta i {
+    margin-right: 5px;
+  }
+  
+  .apply-save-buttons {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .apply-save-buttons .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .job-description {
+    margin-top: 20px;
+  }
+  
+  .job-section {
+    margin-bottom: 20px;
+  }
+  
+  .job-section h5 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #2a6310;
+    margin-bottom: 10px;
+  }
+  
+  .job-section ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .job-section ul li {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .job-section ul li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .job-section ul li i {
+    margin-right: 10px;
+    color: #2a6310;
+  }
+  
+  .btn-custom {
+    transition: background-color 0.3s, color 0.3s;
+  }
+  

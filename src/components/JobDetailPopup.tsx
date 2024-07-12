@@ -1,47 +1,42 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 import {
   useGetRecentJobsQuery,
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
+  usePostApplyJobMutation,
 } from "@/store/global-store/global.query";
-import { RecentJobData } from "@/types/index";
-import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
+import styles from "@/styles/JobDetailPopup.module.css";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 
 type JobDetailPopupType = {
   show: boolean;
-  handleClose: () => void;
-  item: RecentJobData;
+  job: any;
 };
 
-const JobDetailPopup = ({
-  show,
-  handleClose,
-  item,
-  job,
-}: JobDetailPopupType) => {
+const JobDetailPopup = ({ job }: JobDetailPopupType) => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
+  const [applyJob, { isLoading: applyJobIsLoading }] = usePostApplyJobMutation();
+  const [loadingJobs, setLoadingJobs] = useState<string[]>([]);
+  const { user } = useLoggedInUser();
 
-  const dispatch = useDispatch();
-
-  // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
-    // Check if already liking or unliking
     if (isSaving || isDeleting) {
-      return; // If already saving or deleting, do nothing
+      return;
     }
 
-    // Toggle liked state
     if (likedJobs.includes(jobId)) {
-      // Unlike job
       try {
         await deleteJob(jobId);
         setLikedJobs(likedJobs.filter((id) => id !== jobId));
@@ -57,12 +52,11 @@ const JobDetailPopup = ({
         Swal.fire({
           icon: "error",
           title: "Error in Deleted Job",
-          text: "Failed to deleting job.",
+          text: "Failed to delete job.",
           confirmButtonText: "OK",
         });
       }
     } else {
-      // Like job
       try {
         await saveJob({ job_id: jobId });
         setLikedJobs([...likedJobs, jobId]);
@@ -74,134 +68,254 @@ const JobDetailPopup = ({
           timer: 1500,
         });
       } catch (error) {
-        console.error("Error liking job:", error);
+        console.error("Error saving job:", error);
         Swal.fire({
           icon: "error",
           title: "Error in Saving Job",
-          text: "Failed to saving job.",
+          text: "Failed to save job.",
           confirmButtonText: "OK",
         });
       }
     }
   };
-  const requirements = job?.data?.candidate_requirement
-  .split(".     ")
-  .map(req => req.trim())
-  .filter(req => req.length > 0);
 
-console.log(requirements);
+  const requirements = job?.data?.candidate_requirement
+    ?.split(".     ")
+    ?.map((req: any) => req.trim())
+    ?.filter((req: any) => req.length > 0);
+
+  const handleApplyJob = async (jobId: string) => {
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    try {
+      setLoadingJobs([...loadingJobs, jobId]);
+      const { data } = await applyJob({ job_id: jobId });
+      if (data?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Job applied successfully!",
+        });
+      }
+    } catch (error) {
+      console.error("Error applying job:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to apply for the job.",
+      });
+    } finally {
+      setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
+    }
+  };
+
   return (
-    <>
-      <div className="single-event-wrap p-4">
-        <div className="jd-wrap mb-3">
-          <div className="d-flex jd-header mb-3">
-            <div>
-              <img
-                src="https://c8.alamy.com/comp/H9674H/isolated-abstract-red-color-circular-sun-logo-round-shape-logotype-H9674H.jpg"
-                alt="image"
-                className="jd-img"
-              />
+    <div className="container p-4">
+      <div className="shadow p-4 rounded">
+        <div className="d-flex align-items-center mb-4">
+          <img
+            src={`https://c8.alamy.com/comp/H9674H/isolated-abstract-red-color-circular-sun-logo-round-shape-logotype-H9674H.jpg`}
+            alt="Company Logo"
+            width={80}
+            height={80}
+            className="mr-3 rounded-circle"
+          />
+          <div>
+            <h4 className="mb-0">{job?.data?.job_title}</h4>
+            <div className="text-muted">
+              <span style={{ fontWeight: "bold" }}>{job?.data?.company_name}</span> | <i className="fa fa-star text-warning"></i> 4.2 | 782 Reviews
             </div>
-            <div>
-              <h4 className="mb-0">{job?.data?.job_title}</h4>
-              <div className="d-flex jd-header flex-wrap">
-                <div className="jd-loc-wrap">
-                  <i className="fa fa-map-marker"></i>
-                  <span>{job?.data?.address}</span>
-                </div>
-                <div className="jd-loc-wrap">
-                  <i className="fa fa-bookmark-o"></i>
-                  <span>india</span>
-                </div>
-                <div className="jd-loc-wrap">
-                  <i className="fa fa-clock-o"></i> Published{" "}
-                  <span>11 months ago</span>
-                </div>
+            <div className="d-flex flex-wrap text-muted mt-1">
+              <div className="mr-3">
+                <i className="fa fa-briefcase"></i> {job?.data?.total_experience} Years
+              </div>
+              <div className="mr-3">
+                <i className="fa fa-inr"></i> {job?.data?.salary || "Not Disclosed"}
+              </div>
+              <div>
+                <i className="fa fa-map-marker"></i> {job?.data?.address}
               </div>
             </div>
           </div>
-          <div className="d-flex mb-4" style={{ maxWidth: "300px" }}>
-            <div className="job-time mr-2 jd-ft-price">
-              <span>{job?.data?.location?.title}</span>
-            </div>
-            <div className="salary-bx">
-              <span style={{ fontFamily: "__Inter_aaf875", fontSize: "20px" }}>
-                &#8377; {job?.data?.salary}
-              </span>
-            </div>
-          </div>
-          <div className="d-flex jd-header mb-3" style={{ maxWidth: "300px" }}>
-            <Button className="jd-btn">Apply Now</Button>
-            <label
-              className={`like-btn ${
-                likedJobs.includes(item?.id?.toString()) ? "liked" : ""
-              }`}
-              onClick={() => handleLikeToggle(item?.id.toString())}
+        </div>
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
+          <div className="mt-3 mt-md-0">
+            <Button
+              className="btn mr-2"
+              style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
+              onClick={() => handleApplyJob(job?.data?.id.toString())}
+              disabled={loadingJobs.includes(job?.data?.id.toString())}
             >
-              <input type="checkbox" />
-              <span className="checkmark"></span>
-            </label>
+              {user ? "Apply Job" : "Login to apply"}
+            </Button>
+            <Button
+              className="btn btn-outline"
+              onClick={() => handleLikeToggle(job?.data?.id.toString())}
+              style={{
+                backgroundColor: likedJobs.includes(job?.data?.id?.toString())
+                  ? "#2A6310"
+                  : "transparent",
+                borderColor: "#2A6310",
+                color: likedJobs.includes(job?.data?.id?.toString())
+                  ? "#fff"
+                  : "#2A6310",
+              }}
+            >
+              {likedJobs.includes(job?.data?.id?.toString())
+                ? "Saved"
+                : "Save Job"}
+            </Button>
           </div>
         </div>
-        <div className="shadow bg-white full-job-d-wrap p-4">
-          <h3>Job Posted By</h3>
-          <div className="mb-3">
-            <div className="jd-postby">
-              {" "}
-              <i className="fa fa-user"></i>
-              <span> {job?.data?.company_name}</span>
-
-            </div>
+        <div className="mb-4">
+          <h5>Job Posted By</h5>
+          <div className="d-flex align-items-center">
+            <i className="fa fa-user mr-2" style={{ color: "#2A6310" }}></i>
+            <span>{job?.data?.company_name}</span>
           </div>
-          <Button className="mb-3 jd-btn">Connect Now</Button>
-          <div>
-            <h4>Location</h4>
-            <div className="jd-postby mb-3">
-              {" "}
-              <i className="fa fa-map-marker"></i>
-              <span> {job?.data?.location?.title}</span>
-            </div>
+        </div>
+        <div className="mb-4">
+          <Button
+            className={styles.btnCustom}
+            style={{
+              backgroundColor: "transparent",
+              borderColor: "#2A6310",
+              color: "#2A6310",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#2A6310";
+              e.currentTarget.style.color = "#fff";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.style.color = "#2A6310";
+            }}
+          >
+            Connect Now
+          </Button>
+        </div>
+        <div className="mb-4">
+          <h5>Location</h5>
+          <div className="d-flex align-items-center">
+            <i
+              className="fa fa-map-marker mr-2"
+              style={{ color: "#2A6310" }}
+            ></i>
+            <span
+              className="badge badge-light p-2"
+              style={{ color: "#2A6310" }}
+            >
+              {job?.data?.location?.title || job?.data?.location}
+            </span>
           </div>
-          <div>
-            <h4>Full Job Description</h4>
-            <h5>Experience: {job?.data?.total_experience} Years</h5>
-            <p>{job?.data?.job_description}</p>
-            <h4>Key Responsibilities:</h4>
-
-            <ul style={{ paddingLeft: "1rem" }}>
-              <li>Develop new user-facing features using React.js</li>
-              <li>
-                Build reusable components and front-end libraries for future use
-              </li>
-              <li>Translate designs and wireframes into high-quality code</li>
-              <li>
-                Optimize components for maximum performance across a vast array
-                of web-capable devices and browsers
-              </li>
-              <li>Collaborate with other team members and stakeholders</li>
-            </ul>
-            <h4>Requirements:</h4>
-
-            <ul style={{ paddingLeft: "1rem" }}>
-            <ul>
-    {requirements?.map((requirement, index) => (
-      <li key={index}>{requirement}</li>
-    ))}
-  </ul>
-            </ul>
-
-            <h5>Education:</h5>
-            <ul style={{ paddingLeft: "1rem" }}>
+        </div>
+        <div className="mb-4">
+          <h5>Experience</h5>
+          <div className="d-flex align-items-center">
+            <i
+              className="fa fa-briefcase mr-2"
+              style={{ color: "#2A6310" }}
+            ></i>
+            <span
+              className="badge badge-light p-2"
+              style={{ color: "#2A6310" }}
+            >
+              {job?.data?.total_experience} Years
+            </span>
+          </div>
+        </div>
+        <div className="mb-4">
+          <h5>Job Type</h5>
+          <div className="d-flex align-items-center">
+            <i
+              className="fa fa-briefcase mr-2"
+              style={{ color: "#2A6310" }}
+            ></i>
+            <span
+              className="badge badge-light p-2"
+              style={{ color: "#2A6310" }}
+            >
+              {job?.data?.job_type?.title || "Full-time"}
+            </span>
+          </div>
+        </div>
+        <div className="mb-4">
+          <h5>Shift and Schedule</h5>
+          <div className="d-flex align-items-center">
+            <i className="fa fa-clock-o mr-2" style={{ color: "#2A6310" }}></i>
+            <span
+              className="badge badge-light p-2"
+              style={{ color: "#2A6310" }}
+            >
+              Rotational shift
+            </span>
+          </div>
+        </div>
+        <div className="mb-4">
+          <h5>Full Job Description</h5>
+          <div
+            dangerouslySetInnerHTML={{ __html: job?.data?.job_description }}
+            className="mb-4"
+          ></div>
+        </div>
+        <div className="mb-4">
+          <h5>Key Responsibilities</h5>
+          <ul className={styles.responsibilities}>
+            <li>Develop new user-facing features using React.js</li>
+            <li>
+              Build reusable components and front-end libraries for future use
+            </li>
+            <li>Translate designs and wireframes into high-quality code</li>
+            <li>
+              Optimize components for maximum performance across a vast array of
+              web-capable devices and browsers
+            </li>
+            <li>Collaborate with other team members and stakeholders</li>
+          </ul>
+        </div>
+        <div className="mb-4">
+          <h5>Requirements</h5>
+          <ul className={styles.requirements}>
+            {requirements?.map((requirement: any, index: number) => (
+              <li key={index}>{requirement}</li>
+            ))}
+          </ul>
+        </div>
+        {job?.data?.education?.name && (
+          <div className="mb-4">
+            <h5>Education</h5>
+            <ul className={styles.education}>
               <li>{job?.data?.education?.name}</li>
             </ul>
-            <h5>Schedule</h5>
-            <ul style={{ paddingLeft: "1rem" }}>
-              <li>Day shift</li>
+          </div>
+        )}
+        {job?.data?.location?.title && (
+          <div className="mb-4">
+            <h5>Job Type</h5>
+            <ul className={styles.jobType}>
+              <li>{job?.data?.location?.title}</li>
             </ul>
           </div>
+        )}
+        {job?.data?.city && (
+          <div className="mb-4">
+            <h5>Job Location</h5>
+            <ul className={styles.jobLocation}>
+              <li>{job?.data?.city}</li>
+            </ul>
+          </div>
+        )}
+        <div className="mb-4">
+          <h5>Shift and Schedule</h5>
+          <ul className={styles.shiftSchedule}>
+            <li>Rotational shift</li>
+          </ul>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

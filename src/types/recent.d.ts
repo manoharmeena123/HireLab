@@ -100,7 +100,7 @@ export interface RecentJobData {
     education: Education | null;
     user: User | null;
     tags: string
-    
+    salary:string
 }
 
 // Represents the response from the API
