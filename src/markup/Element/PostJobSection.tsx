@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
-import Select, { MultiValue } from "react-select";
-import { SingleValue } from "react-select";
+import Select, { SingleValue } from "react-select";
 import Image from "next/image";
-import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,30 +30,39 @@ import {
   useGetAdditionalPerkQuery,
   useGetCtcDataQuery,
   useGetDesignationQuery,
+  useGetSectorQuery,
 } from "@/store/global-store/global.query";
-import ReactTagInput from '@pathofdev/react-tag-input';
-import '@pathofdev/react-tag-input/build/index.css'; 
-
+import ReactTagInput from "@pathofdev/react-tag-input";
+import "@pathofdev/react-tag-input/build/index.css";
+import Loading from "@/components/Loading";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const PostJobSection = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const profileData = useSelector(selectPostJobState);
-
   const errors = useSelector(selectPostJobErrors);
   const { user, refetch } = useLoggedInUser();
   const [logout] = useLogoutMutation();
-
-  // queries
   const [postJob, { isLoading }] = usePostJobMutation();
-  const { data: educationData } = useGetEducationsQuery();
-  const { data: locationData } = useGetLocationsQuery();
-  const { data: tagsData } = useGetTagsQuery();
-  const { data: jobtTypeData } = useGetJobTypeQuery();
-  const { data: compensationData } = useGetCompensationsQuery();
-  const { data: additionalPerkData } = useGetAdditionalPerkQuery();
-  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
-  const { data: getCtcData } = useGetCtcDataQuery();
+  const { data: educationData, isLoading: educationDataLoading } =
+    useGetEducationsQuery();
+  const { data: locationData, isLoading: locationDataLoading } =
+    useGetLocationsQuery();
+  const { data: tagsData, isLoading: tagsDataLoading } = useGetTagsQuery();
+  const { data: jobtTypeData, isLoading: jobtTypeDataLoading } =
+    useGetJobTypeQuery();
+  const { data: compensationData, isLoading: compensationDataLoading } =
+    useGetCompensationsQuery();
+  const { data: additionalPerkData, isLoading: additionalPerkDataLoading } =
+    useGetAdditionalPerkQuery();
+  const { data: designationData, isLoading: designationDataLoading } =
+    useGetDesignationQuery(); // Fetch designation data
+  const { data: getCtcData, isLoading: getCtcDataLoading } =
+    useGetCtcDataQuery();
+  const { data: getSectorData, isLoading: getSectorDataLoading } =
+    useGetSectorQuery();
 
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
@@ -99,6 +106,8 @@ const PostJobSection = () => {
     number[]
   >([]);
   const [selectedSalary, setSelectedSalary] =
+    useState<SingleValue<OptionType>>(null);
+  const [selectedSector, setSelectedSector] =
     useState<SingleValue<OptionType>>(null);
 
   const handleMouseEnter = (
@@ -173,23 +182,9 @@ const PostJobSection = () => {
     }
   };
 
-  // const handleTagChange = (
-  //   selectedOptions: MultiValue<{ value: string; label: string }>
-  // ) => {
-  //   const selectedTagValues = selectedOptions.map((option) => option.value);
-
-  //   // Ensure we are not duplicating tags
-  //   const uniqueSelectedTagValues = [...new Set(selectedTagValues)];
-
-  //   setSelectedTags(uniqueSelectedTagValues);
-
-  //   // Convert to comma-separated string if needed
-  //   const tagValues = uniqueSelectedTagValues.join(",");
-  //   dispatch(setPostJobData({ tags: tagValues }));
-  // };
-
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
+  const [jobDescription, setJobDescription] = useState<string>("");
 
   const handleInputSelectChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -202,7 +197,6 @@ const PostJobSection = () => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    console.log("first", e.target);
     const { name, value } = e.target;
     const tagValues = tags.join(",");
     dispatch(setPostJobData({ tags: tagValues }));
@@ -211,14 +205,13 @@ const PostJobSection = () => {
 
   const handleAddTag = (tag: string) => {
     setTags([...tags, tag]);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleRemoveTag = (index: number) => {
     const updatedTags = tags.filter((_, i) => i !== index);
     setTags(updatedTags);
   };
-
 
   const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
@@ -246,6 +239,7 @@ const PostJobSection = () => {
     height: "21px",
     fontWeight: "bold",
   };
+
   const customStyles = {
     control: (base: any) => ({
       ...base,
@@ -309,9 +303,21 @@ const PostJobSection = () => {
       id: ctc.id.toString(),
     })) || [];
 
+  const sectorOptions: OptionType[] =
+    getSectorData?.data?.map((sector) => ({
+      value: sector.name,
+      label: sector.name,
+      id: sector.id.toString(),
+    })) || [];
+
   const handleSelectChange = (option: any) => {
     setSelectedSalary(option);
     dispatch(setPostJobData({ ctc: option?.id }));
+  };
+
+  const handleSectorSelectChange = (option: any) => {
+    setSelectedSector(option);
+    dispatch(setPostJobData({ sector: option?.id }));
   };
 
   return (
@@ -469,7 +475,7 @@ const PostJobSection = () => {
                                 key={job_type.id}
                                 onClick={() =>
                                   handleToggleSelect(
-                                    index,
+                                    job_type.id,
                                     "job_type",
                                     setSelectedJobType,
                                     selectedJobType
@@ -505,25 +511,12 @@ const PostJobSection = () => {
                             <div className="tags-container">
                               <ReactTagInput
                                 tags={tags}
-                                onChange={(newTags :any) => setTags(newTags)}
+                                onChange={(newTags: any) => setTags(newTags)}
                                 placeholder="Type tags and press Enter"
                               />
-                              {/* <input
-                                type="text"
-                                className="form-control"
-                                value={inputValue}
-                                onChange={handleInputSelectChange}
-                                onKeyDown={(e) => {
-                                  if (e.key === "Enter") {
-                                    handleAddTag(inputValue.trim());
-                                  }
-                                }}
-                                placeholder="Type tags and press Enter"
-                              /> */}
                             </div>
                           </div>
                           <span className="text-red-500 text-danger">
-                            {/* Replace with your error handling */}
                             {errors?.tags?.[0]}
                           </span>
                         </div>
@@ -840,6 +833,20 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
+                          <label>Industry</label>
+                          <Select
+                            value={selectedSector}
+                            onChange={handleSectorSelectChange}
+                            options={sectorOptions}
+                            placeholder="Select Industry"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.sector?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
                           <label>Salary</label>
                           <input
                             type="number"
@@ -856,12 +863,15 @@ const PostJobSection = () => {
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Job Description</label>
-                          <textarea
-                            className="form-control"
-                            name="job_description"
-                            placeholder="Job Description"
-                            onChange={handleInputChange}
-                          ></textarea>
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={jobDescription}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setJobDescription(data);
+                              dispatch(setPostJobData({ job_description: data }));
+                            }}
+                          />
                         </div>
                         <span className="text-red-500 text-danger">
                           {errors?.job_description?.[0]}

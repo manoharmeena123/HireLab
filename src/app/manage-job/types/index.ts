@@ -1,7 +1,9 @@
 export interface JobData {
   id: number;
   company_name: string;
-  job_type: string | null;
+  job_type: {
+    title:string,
+  };
   job_category: string | null;
   experience: {
     id: number;
@@ -83,6 +85,8 @@ export interface JobData {
     description: string | null;
     city: string | null;
   };
+  sector:string;
+  tags:string;
 }
 
 export interface ManageResponse {
