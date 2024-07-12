@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import DOMPurify from "dompurify";
 import {
   useGetRecentJobsQuery,
   usePostSaveJobMutation,
@@ -111,6 +112,9 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
       setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
     }
   };
+
+  // Sanitize the job description
+  const sanitizedDescription = DOMPurify.sanitize(job?.data?.job_description || "");
 
   return (
     <div className="container p-4">
@@ -257,8 +261,8 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
         <div className="mb-4">
           <h5>Full Job Description</h5>
           <div
-            dangerouslySetInnerHTML={{ __html: job?.data?.job_description }}
-            className="mb-4"
+            className="job-description"
+            dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
           ></div>
         </div>
         <div className="mb-4">
