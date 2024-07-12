@@ -48,6 +48,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  getCtcDataById :{
+    query :(id :string)=>({
+      url: `api/get-ctc-base-job/${id}`,
+      method: "GET",
+    })
+  },
   getCollage: {
     query: () => ({
       url: "api/get-college",

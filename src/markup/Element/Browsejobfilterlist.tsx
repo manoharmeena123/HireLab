@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import {
   useGetSectorQuery,
   useGetFilterJobMutation,
+  useGetCtcDataByIdMutation,
 } from "@/store/global-store/global.query";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/Loading"; // Ensure you import your Loading component
@@ -31,14 +32,24 @@ function Browsejobfilterlist() {
   const jobTitleQuery = searchParams.get("job_title") || "";
   const cityQuery = searchParams.get("city") || "";
   const sectorQuery = searchParams.get("sector") || "";
+  const jobId = searchParams.get("jobId") || "";
+
   const { push } = useRouter();
   console.log("query", jobTitleQuery, cityQuery, sectorQuery);
-
+  const [getJobs, { data: ctcData, isLoading: isCtcLoading }] =
+    useGetCtcDataByIdMutation();
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading, data: jobsData }] =
     useGetFilterJobMutation();
 
-  console.log("jobsData", jobsData);
+  console.log("jobsData", jobsData, jobId);
+  console.log("ctcData", ctcData);
+  useEffect(() => {
+    if (jobId) {
+      getJobs(jobId);
+    }
+  }, [jobId]);
+
   useEffect(() => {
     if (jobTitleQuery || cityQuery || sectorQuery) {
       getFilterJob({
@@ -92,6 +103,11 @@ function Browsejobfilterlist() {
 
   const paginatedJobs = jobsData?.data
     ? applyFilters(jobsData.data).slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      )
+    : ctcData?.data
+    ? applyFilters(ctcData.data).slice(
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
       )
@@ -186,8 +202,8 @@ function Browsejobfilterlist() {
                                       {item?.location?.title}
                                     </li>
                                     <li>
-                                      <i className="fa fa-clock-o"></i> Published{" "}
-                                      {formaterDate(item?.created_at)}
+                                      <i className="fa fa-clock-o"></i>{" "}
+                                      Published {formaterDate(item?.created_at)}
                                     </li>
                                   </ul>
                                 </div>
@@ -206,7 +222,9 @@ function Browsejobfilterlist() {
                               </div>
                               <div className="posted-info clearfix">
                                 <p className="m-tb0 text-primary float-left">
-                                  <span className="text-black m-r10">Posted:</span>{" "}
+                                  <span className="text-black m-r10">
+                                    Posted:
+                                  </span>{" "}
                                   {formatDateAgo(item?.created_at)}
                                 </p>
                               </div>
@@ -221,7 +239,7 @@ function Browsejobfilterlist() {
                     ) : (
                       <ul className="post-job-bx browse-job-grid row">
                         {paginatedJobs.map((item, index) => (
-                          <li className="col-lg-4 col-md-6" key={index}>
+                          <li className="col-lg-6 col-md-6" key={index}>
                             <div className="post-bx">
                               <div className="d-flex m-b30">
                                 <div className="job-post-info">
@@ -244,8 +262,8 @@ function Browsejobfilterlist() {
                                       {item?.location?.title}
                                     </li>
                                     <li>
-                                      <i className="fa fa-clock-o"></i> Published{" "}
-                                      {formaterDate(item?.created_at)}
+                                      <i className="fa fa-clock-o"></i>{" "}
+                                      Published {formaterDate(item?.created_at)}
                                     </li>
                                   </ul>
                                 </div>
@@ -264,7 +282,9 @@ function Browsejobfilterlist() {
                               </div>
                               <div className="posted-info clearfix">
                                 <p className="m-tb0 text-primary float-left">
-                                  <span className="text-black m-r10">Posted:</span>{" "}
+                                  <span className="text-black m-r10">
+                                    Posted:
+                                  </span>{" "}
                                   {formatDateAgo(item?.created_at)}
                                 </p>
                               </div>
@@ -281,7 +301,9 @@ function Browsejobfilterlist() {
                       <Pagination
                         currentPage={currentPage}
                         itemsPerPage={itemsPerPage}
-                        totalItems={jobsData?.data.length || 0}
+                        totalItems={
+                          jobsData?.data.length || ctcData?.data?.length || 0
+                        }
                         onPageChange={setCurrentPage}
                       />
                     )}
