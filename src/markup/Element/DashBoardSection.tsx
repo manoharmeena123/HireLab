@@ -105,7 +105,7 @@ const DashboardSection = () => {
           <div className="section-full bg-white browse-job p-b50">
             <div className="container">
               <div className="row">
-                <div className="col-xl-9 col-lg-9">
+                <div className="col-xl-8 col-lg-8">
                   <h3
                     className="text-center mt-5"
                     style={{ fontWeight: "600px", fontSize: "bold" }}
@@ -201,15 +201,14 @@ const DashboardSection = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="col-xl-3 col-lg-9">
+                <div className="col-xl-4 col-lg-4">
                   <div
-                    className="sticky-top browse-candidates"
+                    className="sticky-top browse-candidates shadow"
                     style={{
                       marginTop: "100px",
                       display: "grid",
                       justifyContent: "space-evenly",
-                      boxShadow:
-                        "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
+                     
                     }}
                   >
                     <h3
