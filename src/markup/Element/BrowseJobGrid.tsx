@@ -245,7 +245,7 @@ const BrowseJobGrid: React.FC = () => {
                       <ul className="post-job-bx browse-job-grid row">
                         {paginatedJobs.map((item) => (
                           <li
-                            className="col-lg-4 col-md-6"
+                            className="col-lg-6 col-md-6"
                             key={item.id}
                             onClick={() => viewJobHandler(item.id)}
                           >

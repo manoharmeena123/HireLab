@@ -26,7 +26,7 @@ import {
   WritableCategoriesResponse,
   Filters,
   WritableBuyPassData,
-  WritableBuyPassResponse
+  WritableBuyPassResponse,
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -67,7 +67,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "JobById",
     "GetFilterJob",
     "BuyPassForEvent",
-    "GetJobUserById"
+    "GetJobUserById",
+    "CTCDataById",
   ],
 });
 
@@ -100,6 +101,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getCtcData: builder.query<WritableCtcApiResponse, void>({
       query: queries.getCtcData.query,
       providesTags: ["CTCData"],
+    }),
+    getCtcDataById: builder.mutation<any, string>({
+      query: queries.getCtcDataById.query,
+      invalidatesTags: ["CTCDataById"],
     }),
     getCollage: builder.query<WritableCollegeResponse, void>({
       query: queries.getCollage.query,
@@ -193,19 +198,19 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (title) => queries.getSingleDiscussionByTitle.query(title),
       invalidatesTags: ["SingleDiscussionByTitle"],
     }),
-    getFilterJob: builder.mutation<
-      SaveJobDataResponse,
-      Filters
-    >({
+    getFilterJob: builder.mutation<SaveJobDataResponse, Filters>({
       query: (queryParams) => queries.getFilterJob.query(queryParams),
       invalidatesTags: ["GetFilterJob"],
     }),
-    buyPassForEvent : builder.mutation<WritableBuyPassResponse,WritableBuyPassData> ({
-      query :(data) => queries.buyPassForEvent.query(data),
+    buyPassForEvent: builder.mutation<
+      WritableBuyPassResponse,
+      WritableBuyPassData
+    >({
+      query: (data) => queries.buyPassForEvent.query(data),
       invalidatesTags: ["BuyPassForEvent"],
     }),
-    getJobUserById :builder.mutation<any, string>({
-      query : (queryParams) => queries.getJobUserById.query(queryParams),
+    getJobUserById: builder.mutation<any, string>({
+      query: (queryParams) => queries.getJobUserById.query(queryParams),
       invalidatesTags: ["GetJobUserById"],
     }),
   }),
@@ -245,6 +250,7 @@ export const {
   useGetSingleEventByTitleMutation,
   useGetFilterJobMutation,
   useBuyPassForEventMutation,
-  useGetJobUserByIdMutation
+  useGetJobUserByIdMutation,
+  useGetCtcDataByIdMutation
 } = globalApi;
 export default globalApi;
