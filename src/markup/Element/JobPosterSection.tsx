@@ -13,6 +13,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { navigateSource } from "@/lib/action";
+import Loading from "@/components/Loading";
 interface OptionType {
   id: string;
   value: string;
@@ -23,11 +24,12 @@ const JobPosterSection = () => {
   const { token } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
   const router = useRouter();
-  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
-  const { data: categoriesData } = useGetCategoriesQuery();
+  const [updateProfile, { isLoading: profileLoading }] =
+    useUpdateProfileMutation();
+  const { data: categoriesData, isLoading: categoriesDataLoading } =
+    useGetCategoriesQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
-
 
   const handleLogout = async () => {
     try {
@@ -160,6 +162,7 @@ const JobPosterSection = () => {
   }, [user, designationOptions, refetch]);
   return (
     <>
+      {profileLoading && categoriesDataLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -171,13 +174,13 @@ const JobPosterSection = () => {
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
                           <Link href={"#"}>
-                          <Image
-                             src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-                            alt="Company Logo"
-                            width={300}
-                            height={300}
-                          />
-                        </Link>
+                            <Image
+                              src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                              alt="Company Logo"
+                              width={300}
+                              height={300}
+                            />
+                          </Link>
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
