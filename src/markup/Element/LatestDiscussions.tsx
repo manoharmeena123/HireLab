@@ -5,6 +5,7 @@ import styles from "@/styles/LatestDiscussions.module.css";
 import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
+import { Button } from "react-bootstrap";
 
 const LatestDiscussions = () => {
   const { push } = useRouter();
@@ -181,12 +182,17 @@ const LatestDiscussions = () => {
                   {discussion?.description}
                 </div>
                 {discussion?.description.length > 80 && (
-                  <button
-                    className="btn btn-link text-primary"
+                  <Button
+                    variant="link"
                     onClick={() => toggleDescription(index)}
+                    style={{
+                      color: "#2a6310",
+                      padding: "0",
+                      textDecoration: "underline",
+                    }}
                   >
                     {expandedIndex === index ? "Read Less" : "Read More"}
-                  </button>
+                  </Button>
                 )}
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <div className="d-flex align-items-center">
