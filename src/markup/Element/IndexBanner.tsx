@@ -151,7 +151,7 @@ const IndexBanner: React.FC = () => {
                       onChange={handleChange}
                       className="select-btn"
                     >
-                      <option>Select Sector</option>
+                      <option>Select Industry</option>
                       {sectorData?.data?.map(
                         (sector: { id: number; name: string }) => (
                           <option key={sector.id} value={sector.name}>

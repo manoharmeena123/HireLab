@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Form } from "react-bootstrap";
-import Select,{SingleValue} from "react-select";
+import Select, { SingleValue } from "react-select";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -35,6 +35,8 @@ import {
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import Loading from "@/components/Loading";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -62,7 +64,6 @@ const PostJobSection = () => {
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
 
-    console.log('getSectorData', getSectorData)
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -183,6 +184,7 @@ const PostJobSection = () => {
 
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
+  const [jobDescription, setJobDescription] = useState<string>("");
 
   const handleInputSelectChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -831,12 +833,12 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
-                          <label>Sector</label>
+                          <label>Industry</label>
                           <Select
                             value={selectedSector}
                             onChange={handleSectorSelectChange}
                             options={sectorOptions}
-                            placeholder="Select Sector"
+                            placeholder="Select Industry"
                           />
                         </div>
                         <span className="text-red-500 text-danger">
@@ -861,12 +863,15 @@ const PostJobSection = () => {
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Job Description</label>
-                          <textarea
-                            className="form-control"
-                            name="job_description"
-                            placeholder="Job Description"
-                            onChange={handleInputChange}
-                          ></textarea>
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={jobDescription}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setJobDescription(data);
+                              dispatch(setPostJobData({ job_description: data }));
+                            }}
+                          />
                         </div>
                         <span className="text-red-500 text-danger">
                           {errors?.job_description?.[0]}
