@@ -105,7 +105,7 @@ const DashboardSection = () => {
           <div className="section-full bg-white browse-job p-b50">
             <div className="container">
               <div className="row">
-                <div className="col-xl-8 col-lg-8">
+                <div className="col-xl-9 col-lg-9">
                   <h3
                     className="text-center mt-5"
                     style={{ fontWeight: "600px", fontSize: "bold" }}
@@ -201,7 +201,7 @@ const DashboardSection = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="col-xl-4 col-lg-4">
+                <div className="col-xl-3 col-lg-9">
                   <div
                     className="sticky-top browse-candidates"
                     style={{

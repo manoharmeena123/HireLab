@@ -1,10 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import { useGetCtcDataQuery } from "@/store/global-store/global.query";
+import { useRouter } from "next/navigation";
 
 const Featureblog: React.FC = () => {
   const { data: ctcData, isLoading, isError } = useGetCtcDataQuery();
+  const { push } = useRouter();
 
+  const viewJobHandler = (id: number) => {
+    push(`/browse-job-filter?jobId=${id}`);
+  };
   return (
     <div
       style={{ backgroundColor: "#F3F3F3" }}
@@ -31,14 +36,18 @@ const Featureblog: React.FC = () => {
                 margin: "10px",
               }}
               onMouseEnter={(e) => {
-                const button = e.currentTarget.querySelector(".site-button") as HTMLElement;
+                const button = e.currentTarget.querySelector(
+                  ".site-button"
+                ) as HTMLElement;
                 if (button) {
                   button.style.backgroundColor = "#fff";
                   button.style.color = "#000";
                 }
               }}
               onMouseLeave={(e) => {
-                const button = e.currentTarget.querySelector(".site-button") as HTMLElement;
+                const button = e.currentTarget.querySelector(
+                  ".site-button"
+                ) as HTMLElement;
                 if (button) {
                   button.style.backgroundColor = "#2A6310";
                   button.style.color = "#fff";
@@ -73,8 +82,7 @@ const Featureblog: React.FC = () => {
                   </li>
                 </ul>
                 <div className="text-center">
-                  <Link
-                    href={"/register"}
+                  <div
                     className="site-button radius-xl white-hover"
                     style={{
                       border: "1px solid white",
@@ -84,10 +92,11 @@ const Featureblog: React.FC = () => {
                     <span
                       className="p-lr30"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                      onClick={() => viewJobHandler(text?.id)}
                     >
                       View Jobs
                     </span>
-                  </Link>
+                  </div>
                 </div>
               </div>
             </div>
