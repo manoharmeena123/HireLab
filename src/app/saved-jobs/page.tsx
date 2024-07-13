@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import SavedJobs from "../SavedJobs";
+import SavedJobs from "@/markup/Element/SavedJobs";
 import Link from "next/link";
 import Image from "next/image";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
