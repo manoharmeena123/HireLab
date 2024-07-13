@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import {Modal} from 'react-bootstrap';
 import {Form} from 'react-bootstrap';
-import Listingsidebar from '../Listingsidebar';
+import ListingSidebar from '@/markup/Element/ListingSidebar';
 
 var bnr = require('../../images/banner/bnr1.jpg');
 
@@ -184,7 +184,7 @@ function Jobmyresume(){
 						<div className="container">
 							<div className="row">
 								<div className="col-xl-3 col-lg-4 col-md-4 col-sm-12 m-b30">
-									<Listingsidebar />
+									<ListingSidebar />
 								</div>
 								<div className="col-xl-9 col-lg-8 col-md-8 col-sm-12">
 									<div id="resume_headline_bx" className=" job-bx bg-white m-b30">
