@@ -13719,6 +13719,17 @@ background-color: #fff;
   height: 57px;
   color: #2a6310;
 }
+.ds-wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width:992px) {
+.membership_class {
+  width: 100%;
+}
+  
+}
+
 @media (max-width:768px) {
   .detail-bypass-title-wrap{
     margin-top: 2.5rem;
@@ -13740,5 +13751,10 @@ flex-direction: column;
     flex-wrap: nowrap;
     overflow-x: scroll;
   }
-
+  .ds-mp-wrap{
+    display: flex;
+    gap: 1rem;
+    overflow-x: scroll;
+    padding-left: 10px;
+  }
 }

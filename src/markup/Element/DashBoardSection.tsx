@@ -103,9 +103,9 @@ const DashboardSection = () => {
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white browse-job p-b50">
-            <div className="container">
+            <div className="ds-wrap">
               <div className="row">
-                <div className="col-xl-8 col-lg-8">
+                <div className="col-lg-9">
                   <h3
                     className="text-center mt-5"
                     style={{ fontWeight: "600px", fontSize: "bold" }}
@@ -201,7 +201,7 @@ const DashboardSection = () => {
                     </ul>
                   </div>
                 </div>
-                <div className="col-xl-4 col-lg-4">
+                <div className="col-lg-3">
                   <div
                     className="sticky-top browse-candidates shadow"
                     style={{
@@ -222,6 +222,7 @@ const DashboardSection = () => {
                     </h3>
                     <p className="text-center">You path to Success</p>
 
+                    <div className="ds-mp-wrap">
                     <div
                       className="membership_class"
                       style={{
@@ -230,26 +231,27 @@ const DashboardSection = () => {
                           : "rgb(42 99 16 / 67%)",
                         padding: "1rem",
                         height: "225px",
-                        width: "325px",
+                        
+                        minWidth:'230px'
                       }}
                     >
                       <div className="quote-info">
                         <div className="d-flex align-items-center relative">
-                          <h1
+                          <h3
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
                           >
                             Wizard
-                          </h1>
+                          </h3>
                           {subscribe && (
                             <div
                               className="px-2 absolute"
-                              style={{ right: "0" }}
+                              style={{ right: "0",top:'5px' }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="46"
-                                height="46"
+                                width="26"
+                                height="26"
                                 viewBox="0 0 36 36"
                                 fill="none"
                               >
@@ -267,12 +269,12 @@ const DashboardSection = () => {
                           <li className="">Salary bracket &gt; 30 lacs</li>
                         </ul>
 
-                        <h2
+                        <h4
                           className="text-white text-center"
                           style={{ fontFamily: "Lato, sans-serif !important" }}
                         >
                           Price
-                        </h2>
+                        </h4>
                         <li
                           className="text-center"
                           style={{
@@ -302,26 +304,27 @@ const DashboardSection = () => {
                           : "rgb(42 99 16 / 67%)",
                         padding: "1rem",
                         height: "225px",
-                        width: "325px",
+                  
+                        minWidth:'230px'
                       }}
                     >
                       <div className="quote-info">
                         <div className="d-flex align-items-center relative">
-                          <h1
+                          <h3
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
                           >
                             Wizard
-                          </h1>
+                          </h3>
                           {!subscribe && (
                             <div
                               className="px-2 absolute"
-                              style={{ right: "0" }}
+                              style={{ right: "0",top:'5px' }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="46"
-                                height="46"
+                                width="26"
+                                height="26"
                                 viewBox="0 0 36 36"
                                 fill="none"
                               >
@@ -339,12 +342,12 @@ const DashboardSection = () => {
                           <li className="">Salary bracket &gt; 30 lacs</li>
                         </ul>
 
-                        <h2
+                        <h4
                           className="text-white text-center"
                           style={{ fontFamily: "Lato, sans-serif !important" }}
                         >
                           Price
-                        </h2>
+                        </h4>
                         <li
                           className="text-center"
                           style={{
@@ -374,26 +377,27 @@ const DashboardSection = () => {
                           : "rgb(42 99 16 / 67%)",
                         padding: "1rem",
                         height: "225px",
-                        width: "325px",
+                  
+                        minWidth:'230px'
                       }}
                     >
                       <div className="quote-info">
                         <div className="d-flex align-items-center relative">
-                          <h1
+                          <h3
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
                           >
                             Wizard
-                          </h1>
+                          </h3>
                           {!subscribe && (
                             <div
                               className="px-2 absolute"
-                              style={{ right: "0" }}
+                              style={{ right: "0",top:'5px' }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="46"
-                                height="46"
+                                width="26"
+                                height="26"
                                 viewBox="0 0 36 36"
                                 fill="none"
                               >
@@ -411,12 +415,12 @@ const DashboardSection = () => {
                           <li className="">Salary bracket &gt; 30 lacs</li>
                         </ul>
 
-                        <h2
+                        <h4
                           className="text-white text-center"
                           style={{ fontFamily: "Lato, sans-serif !important" }}
                         >
                           Price
-                        </h2>
+                        </h4>
                         <li
                           className="text-center"
                           style={{
@@ -446,26 +450,27 @@ const DashboardSection = () => {
                           : "rgb(42 99 16 / 67%)",
                         padding: "1rem",
                         height: "225px",
-                        width: "325px",
+                  
+                        minWidth:'230px'
                       }}
                     >
                       <div className="quote-info">
                         <div className="d-flex align-items-center relative">
-                          <h1
+                          <h3
                             className="text-white text-center  flex-grow-1"
                             style={{ marginBottom: "15px" }}
                           >
                             Wizard
-                          </h1>
+                          </h3>
                           {!subscribe && (
                             <div
                               className="px-2 absolute"
-                              style={{ right: "0" }}
+                              style={{ right: "0",top:'5px' }}
                             >
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                width="46"
-                                height="46"
+                                width="26"
+                                height="26"
                                 viewBox="0 0 36 36"
                                 fill="none"
                               >
@@ -483,12 +488,12 @@ const DashboardSection = () => {
                           <li className="">Salary bracket &gt; 30 lacs</li>
                         </ul>
 
-                        <h2
+                        <h4
                           className="text-white text-center"
                           style={{ fontFamily: "Lato, sans-serif !important" }}
                         >
                           Price
-                        </h2>
+                        </h4>
                         <li
                           className="text-center"
                           style={{
@@ -509,6 +514,7 @@ const DashboardSection = () => {
                           1799/-for 3 months
                         </li>
                       </div>
+                    </div>
                     </div>
                   </div>
                 </div>
