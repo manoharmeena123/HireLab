@@ -3,7 +3,7 @@ import React from 'react';
 import Link from 'next/link'
 import Image from 'next/image';
 
-import Jobsearchform from '../Jobsearchform';
+import JobSearchform from '@/markup/Element/JobSearchform';
 
 var bnr = require('./../../images/banner/bnr1.jpg');
 
@@ -39,7 +39,7 @@ function Categoryalljob(){
 				<div className="dez-bnr-inr jobs-category overlay-black-middle" style={{backgroundImage:"url(" + bnr.default.src + ")"}}>
 					<div className="container">
 						<div className="dez-bnr-inr-entry">
-							<Jobsearchform />
+							<JobSearchform />
 							<div className="category-jobs-info">
 								<div className="nav">
 									<ul>
