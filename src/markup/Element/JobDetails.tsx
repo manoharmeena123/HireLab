@@ -40,7 +40,7 @@ function Jobdetail() {
   return (
     <>
       {isLoading && <Loading />}
-      <JobDetailPopup job={job} show={false}  item={undefined}/>
+      <JobDetailPopup job={job} show={false}/>
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full content-inner">

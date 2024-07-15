@@ -1,30 +1,35 @@
 "use client";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getCookie } from 'typescript-cookie';
 import Loading from "@/components/Loading";
 
 const AuthRoutes = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [storedUser, setStoredUser] = useState<any>(null);
+  const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setStoredUser(JSON.parse(user));
-    } else {
-      setStoredUser(null);
-      setLoading(false); // Ensure loading is set to false if no user is found
-    }
+    const checkAuth = () => {
+      const user = localStorage.getItem("user");
+      const accessToken = getCookie('cred');
+
+      if (user && accessToken) {
+        setAuthenticated(true);
+      } else {
+        setAuthenticated(false);
+      }
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
   useEffect(() => {
-    if (storedUser === null) {
+    if (!loading && !authenticated) {
       router.push("/login");
-    } else {
-      setLoading(false);
     }
-  }, [storedUser, router]);
+  }, [loading, authenticated, router]);
 
   if (loading) {
     return <Loading />;
