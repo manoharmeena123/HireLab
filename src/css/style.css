@@ -13727,7 +13727,24 @@ background-color: #fff;
 .membership_class {
   width: 100%;
 }
+.head-nav{
+  justify-content: space-between !important;
+}
+.mob-view-head{
+  display: none !important;
+}
   
+}
+@media (max-width:992px) {
+  .nav-mob{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .web-view-head{
+    display: none !important;
+  }
 }
 
 @media (max-width:768px) {
@@ -13756,5 +13773,16 @@ flex-direction: column;
     gap: 1rem;
     overflow-x: scroll;
     padding-left: 10px;
+  }
+  .recent-job-scroll-mob{
+    display: flex;
+    overflow-x: scroll;
+    gap: 1.5rem;
+  }
+  .recent-job-scroll-mob li{
+    min-width: 357px;
+  }
+  .recent-job-scroll-mob .job-post-info{
+    width: 100%;
   }
 }

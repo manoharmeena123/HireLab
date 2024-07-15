@@ -70,6 +70,46 @@ const Header = () => {
                 />
               </Link>
             </div>
+            <div className="nav-mob">
+            {!isLoginPage && !isRegisterPage && token && 
+              <div
+                className="mob-view-head"
+                style={{ display: "flex", gap: "1rem" }}
+              >
+                <div title="Messages">
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  data-supported-dps="24x24"
+                  fill="currentColor"
+                  className="mn-icon"
+                  width="24"
+                  height="24"
+                  focusable="false"
+                  
+                >
+                  <path d="M16 4H8a7 7 0 000 14h4v4l8.16-5.39A6.78 6.78 0 0023 11a7 7 0 00-7-7zm-8 8.25A1.25 1.25 0 119.25 11 1.25 1.25 0 018 12.25zm4 0A1.25 1.25 0 1113.25 11 1.25 1.25 0 0112 12.25zm4 0A1.25 1.25 0 1117.25 11 1.25 1.25 0 0116 12.25z"></path>
+                </svg>
+                </div>
+                <div className="Notification">
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  data-supported-dps="24x24"
+                  fill="currentColor"
+                  className="mn-icon"
+                  width="24"
+                  height="24"
+                  focusable="false"
+                >
+                  <path d="M22 19h-8.28a2 2 0 11-3.44 0H2v-1a4.52 4.52 0 011.17-2.83l1-1.17h15.7l1 1.17A4.42 4.42 0 0122 18zM18.21 7.44A6.27 6.27 0 0012 2a6.27 6.27 0 00-6.21 5.44L5 13h14z"></path>
+                </svg>
+                </div>
+              </div>
+              }
+
             <button
               className="navbar-toggler collapsed navicon justify-content-end"
               type="button"
@@ -78,8 +118,9 @@ const Header = () => {
             >
               <FontAwesomeIcon icon={faBars} style={{ fontSize: "1.2rem" }} />
             </button>
+            </div>
             {/* messege notification icon */}
-            <div
+            {/* <div
               className="extra-nav"
               style={{ display: "flex", alignItems: "center", gap: "1rem" }}
             >
@@ -125,14 +166,16 @@ const Header = () => {
                 {renderProfileDropdown}
                 {renderLoginRegisterButtons}
               </div>
-            </div>
+            </div> */}
+            
             <div
-              className={`header-nav navbar-collapse collapse myNavbar justify-content-start ${
+              className={`header-nav navbar-collapse collapse myNavbar justify-content-start head-nav ${
                 menuOpen ? "show" : ""
               }`}
               id="navbarNavDropdown"
               style={{ paddingRight: "2rem" }}
             >
+              
               {menuOpen && (
                 <div className={`logo-header mostion ${styles.logo}`}>
                   <Link href="/">
@@ -171,6 +214,7 @@ const Header = () => {
                   />
                 </button>
               )}
+              
               <ul className="nav navbar-nav">
                 <li className="">
                   <Link href="/">Home</Link>
@@ -188,6 +232,53 @@ const Header = () => {
                   <Link href="/blogs">BLOG</Link>
                 </li>
               </ul>
+              <div
+              className="extra-nav"
+              style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+            >
+              {!isLoginPage && !isRegisterPage && token && 
+              <div
+                className="extra-cell web-view-head"
+                style={{ display: "flex", gap: "1rem" }}
+              >
+                <div title="Messages">
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  data-supported-dps="24x24"
+                  fill="currentColor"
+                  className="mn-icon"
+                  width="24"
+                  height="24"
+                  focusable="false"
+                  
+                >
+                  <path d="M16 4H8a7 7 0 000 14h4v4l8.16-5.39A6.78 6.78 0 0023 11a7 7 0 00-7-7zm-8 8.25A1.25 1.25 0 119.25 11 1.25 1.25 0 018 12.25zm4 0A1.25 1.25 0 1113.25 11 1.25 1.25 0 0112 12.25zm4 0A1.25 1.25 0 1117.25 11 1.25 1.25 0 0116 12.25z"></path>
+                </svg>
+                </div>
+                <div className="Notification">
+
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  data-supported-dps="24x24"
+                  fill="currentColor"
+                  className="mn-icon"
+                  width="24"
+                  height="24"
+                  focusable="false"
+                >
+                  <path d="M22 19h-8.28a2 2 0 11-3.44 0H2v-1a4.52 4.52 0 011.17-2.83l1-1.17h15.7l1 1.17A4.42 4.42 0 0122 18zM18.21 7.44A6.27 6.27 0 0012 2a6.27 6.27 0 00-6.21 5.44L5 13h14z"></path>
+                </svg>
+                </div>
+              </div>
+              }
+              <div className="extra-cell">
+                {renderProfileDropdown}
+                {renderLoginRegisterButtons}
+              </div>
+            </div>
             </div>
           </div>
         </div>

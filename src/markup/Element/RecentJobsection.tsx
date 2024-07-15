@@ -106,7 +106,7 @@ const RecentJobsection = () => {
         </div>
         <div className="row">
           <div className="col-lg-9">
-            <ul className="post-job-bx browse-job">
+            <ul className="post-job-bx browse-job recent-job-scroll-mob">
               {recentJob?.data?.map((item: RecentJobData, index: number) => (
                 <li key={index}>
                   {item && (
