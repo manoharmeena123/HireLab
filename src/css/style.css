@@ -13785,4 +13785,11 @@ flex-direction: column;
   .recent-job-scroll-mob .job-post-info{
     width: 100%;
   }
+  .upcoming-m-wrap{
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    flex-wrap: nowrap;
+
+  }
 }

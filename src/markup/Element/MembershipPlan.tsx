@@ -172,6 +172,11 @@ const MembershipPlans = () => {
           .display-property {
             grid-template-columns: repeat(4, 1fr);
             overflow-x:scroll;
+            padding-left: 1rem;
+          }
+          .member-ship-div{
+            min-width:350px;
+            min-height:auto;
           }
         }
       `}</style>
