@@ -239,29 +239,25 @@ const JobEditSection = () => {
             setSelectedCompensation(data.compensation.id);
             setSelectedJoiningFee(Number(data.joining_fee));
             setSelectedMaximumEducation(Number(data.maximum_education));
-            setSelectedTotalExperience(Number(data.total_experience));
-            if (data.additional_perk) {
-              setSelectedAdditionalPerks([data.additional_perk.id]);
-            }
+            setSelectedTotalExperience(Number(data.experience.id));
+            setSelectedAdditionalPerks(
+              data.additional_perk ? [data.additional_perk.id] : []
+            );
             setTags(data.tags.split(","));
-            if (getCtcData) {
-              setSelectedSalary({
-                value: data.ctc.toString(),
-                label: getCtcData.data.find(
-                  (ctc) => ctc.id.toString() === data.ctc.toString()
-                )?.title,
-                id: data.ctc.toString(),
-              });
-            }
-            if (getSectorData) {
-              setSelectedSector({
-                value: data.sector.toString(),
-                label: getSectorData.data.find(
-                  (sector) => sector.id.toString() === data.sector.toString()
-                )?.name,
-                id: data.sector.toString(),
-              });
-            }
+            setSelectedSalary({
+              value: data.ctc.toString(),
+              label: getCtcData?.data?.find(
+                (ctc) => ctc.id.toString() === data.ctc.toString()
+              )?.title,
+              id: data.ctc.toString(),
+            });
+            setSelectedSector({
+              value: data.sector.toString(),
+              label: getSectorData?.data?.find(
+                (sector) => sector.id.toString() === data.sector.toString()
+              )?.name,
+              id: data.sector.toString(),
+            });
             setJobDescription(data.job_description);
           }
         })
@@ -446,8 +442,8 @@ const JobEditSection = () => {
                           <label>Experience</label>
                           <Form.Control
                             as="select"
-                            name="experience"
-                            value={selectedTotalExperience}
+                            name="total_experience"
+                            value={profileData.total_experience}
                             onChange={(e) => handleInputChange(e as any)}
                             className="custom-select"
                           >
