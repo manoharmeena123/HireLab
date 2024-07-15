@@ -13719,6 +13719,34 @@ background-color: #fff;
   height: 57px;
   color: #2a6310;
 }
+.ds-wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+@media (min-width:992px) {
+.membership_class {
+  width: 100%;
+}
+.head-nav{
+  justify-content: space-between !important;
+}
+.mob-view-head{
+  display: none !important;
+}
+  
+}
+@media (max-width:992px) {
+  .nav-mob{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .web-view-head{
+    display: none !important;
+  }
+}
+
 @media (max-width:768px) {
   .detail-bypass-title-wrap{
     margin-top: 2.5rem;
@@ -13740,5 +13768,21 @@ flex-direction: column;
     flex-wrap: nowrap;
     overflow-x: scroll;
   }
-
+  .ds-mp-wrap{
+    display: flex;
+    gap: 1rem;
+    overflow-x: scroll;
+    padding-left: 10px;
+  }
+  .recent-job-scroll-mob{
+    display: flex;
+    overflow-x: scroll;
+    gap: 1.5rem;
+  }
+  .recent-job-scroll-mob li{
+    min-width: 357px;
+  }
+  .recent-job-scroll-mob .job-post-info{
+    width: 100%;
+  }
 }

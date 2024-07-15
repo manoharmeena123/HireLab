@@ -53,7 +53,7 @@ const UpComingMeetings = () => {
                 <li className="col-lg-6 col-md-6" key={index}>
                   <div className="post-bx">
                     <div className="d-flex">
-                      <div className="job-post-info">
+                      <div className="job-post-info w-100">
                         <div className="d-flex justify-content-between w-100">
                           <h5 onClick={() => viewJobHandler(event?.title)}>
                             <Link
@@ -93,9 +93,9 @@ const UpComingMeetings = () => {
                         <ul
                           style={{
                             display: "flex",
-                            justifyContent: "space-around",
                             marginTop: "20px",
                             color: "#2A6310 !important",
+                            flexWrap:'wrap'
                           }}
                         >
                           <li className="mr-4">
@@ -118,7 +118,7 @@ const UpComingMeetings = () => {
                 <li className="col-lg-6 col-md-6" key={index}>
                   <div className="post-bx">
                     <div className="d-flex">
-                      <div className="job-post-info">
+                      <div className="job-post-info w-100">
                         <div className="d-flex justify-content-between w-100">
                           <h5>
                             <Link
@@ -158,9 +158,9 @@ const UpComingMeetings = () => {
                         <ul
                           style={{
                             display: "flex",
-                            justifyContent: "space-around",
                             marginTop: "20px",
                             color: "#2A6310 !important",
+                            flexWrap:'wrap'
                           }}
                         >
                           <li className="mr-4">
