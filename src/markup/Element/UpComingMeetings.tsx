@@ -43,7 +43,7 @@ const UpComingMeetings = () => {
           </h2>
         </div>
       </div>
-      <ul className="post-job-bx browse-job-grid row">
+      <ul className="post-job-bx browse-job-grid row upcoming-m-wrap">
         {isLoading ? (
           <Loading />
         ) : (

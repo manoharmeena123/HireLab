@@ -116,6 +116,10 @@ const Homepage = () => {
           .display-property {
             grid-template-columns: repeat(1, 1fr);
           }
+          .member-ship-div{
+            min-width:350px;
+            min-height:auto;
+          }
         }
       `}</style>
     </div>
