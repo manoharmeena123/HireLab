@@ -1,40 +1,96 @@
-// src/app/post-job/store/post-job.slice.ts
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { PostJobState, UpdatePostJobType } from "../types";
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PostJobState } from '../types';
-
-const initialState: PostJobState = {
-  company_name: '',
-  job_title: '',
-  job_type: '',
-  experience: '',
-  location: '',
-  address: '',
-  compensation: '',
-  additional_perk: '',
-  joining_fee: '',
-  candidate_requirement: '',
-  maximum_education: '',
-  total_experience: '',
-  job_description: '',
+const initialPostJobState: PostJobState = {
+  company_name: "",
+  job_title: "",
+  job_type: "",
+  experience: "",
+  location: "",
+  address: "",
+  compensation: "",
+  additional_perk: "",
+  joining_fee: "",
+  candidate_requirement: "",
+  maximum_education: "",
+  total_experience: "",
+  job_description: "",
   errors: {},
-  salary: '',
-  tags: '',
-  ctc :''
+  salary: "",
+  tags: "",
+  ctc: "",
+  sector: "",
+};
+
+const initialUpdateJobState: UpdatePostJobType = {
+  id: "",
+  company_name: "",
+  job_title: "",
+  job_type: "",
+  experience: {
+    id: "",
+  },
+  location: "",
+  address: "",
+  compensation: "",
+  additional_perk: "",
+  joining_fee: "",
+  candidate_requirement: "",
+  maximum_education: "",
+  total_experience: "",
+  job_description: "",
+  errors: {},
+  salary: "",
+  tags: "",
+  ctc: "",
+  sector: "",
+};
+
+const initialState = {
+  postJob: initialPostJobState,
+  updateJob: initialUpdateJobState,
 };
 
 const postJobSlice = createSlice({
-  name: 'postJob',
+  name: "postJob",
   initialState,
   reducers: {
     setPostJobData: (state, action: PayloadAction<Partial<PostJobState>>) => {
-      return { ...state, ...action.payload };
+      state.postJob = { ...state.postJob, ...action.payload };
     },
-    setPostJobErrors: (state, action: PayloadAction<PostJobState['errors']>) => {
-      state.errors = action.payload;
+    setPostJobErrors: (
+      state,
+      action: PayloadAction<PostJobState["errors"]>
+    ) => {
+      state.postJob.errors = action.payload;
+    },
+    resetPostJobData: (state) => {
+      state.postJob = initialPostJobState;
+    },
+    setUpdateJobData: (
+      state,
+      action: PayloadAction<Partial<UpdatePostJobType>>
+    ) => {
+      state.updateJob = { ...state.updateJob, ...action.payload };
+    },
+    setUpdateJobErrors: (
+      state,
+      action: PayloadAction<UpdatePostJobType["errors"]>
+    ) => {
+      state.updateJob.errors = action.payload;
+    },
+    resetUpdateJobData: (state) => {
+      state.updateJob = initialUpdateJobState;
     },
   },
 });
 
-export const { setPostJobData, setPostJobErrors } = postJobSlice.actions;
+export const {
+  setPostJobData,
+  setPostJobErrors,
+  resetPostJobData,
+  setUpdateJobData,
+  setUpdateJobErrors,
+  resetUpdateJobData,
+} = postJobSlice.actions;
 export const postJobReducer = postJobSlice.reducer;

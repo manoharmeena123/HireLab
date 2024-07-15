@@ -16,11 +16,13 @@ import { usePostJobMutation } from "@/app/post-job/store/post-job.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
+import { useRouter } from "next/navigation";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import Loading from "@/components/Loading";
 
 const ManageJobs = () => {
+  const { push } = useRouter();
   const {
     data: jobsData,
     error: jobsError,
@@ -35,7 +37,6 @@ const ManageJobs = () => {
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -115,10 +116,13 @@ const ManageJobs = () => {
     }
   };
 
-  if(jobsLoading){
-    <Loading/>
+  if (jobsLoading) {
+    <Loading />;
   }
 
+  const viewJobHandler = (id: number) => {
+    push(`/job-edit?jobId=${id}`);
+  };
   return (
     <>
       <div className="page-content bg-white">
@@ -298,10 +302,11 @@ const ManageJobs = () => {
                             <td className="job-links">
                               <div
                                 className="nav-link mn-icon"
-                                onClick={() => {
-                                  setSelectedJob(job);
-                                  setShow(true);
-                                }}
+                                onClick={
+                                  () => viewJobHandler(job.id)
+                                  // setSelectedJob(job);
+                                  // setShow(true);
+                                }
                               >
                                 <i className="fa fa-edit"></i>
                               </div>

@@ -17,7 +17,30 @@ export interface PostJobType {
   salary: string;
   ctc: string;
   tags: string;
-  sector :string
+  sector: string;
+  errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
+}
+
+export interface UpdatePostJobType {
+  id: string;
+  company_name: string;
+  job_title: string;
+  job_type: string;
+  experience: {id:string};
+  location: string | number;
+  address: string;
+  compensation: string;
+  additional_perk: string;
+  joining_fee: string;
+  candidate_requirement: string;
+  maximum_education: string;
+  total_experience: string;
+  job_description: string;
+  salary: string;
+  ctc: string;
+  tags: string;
+  sector: string;
+  errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
 
 export interface PostJobResponse {
@@ -45,8 +68,7 @@ export interface PostJobResponse {
     ctc: string;
     tags: string;
     id: number;
-    sector :string
-
+    sector: string;
   }>;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
@@ -68,6 +90,6 @@ export interface PostJobState {
   salary: string;
   ctc: string;
   tags: string;
-  sector :string
+  sector: string;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
