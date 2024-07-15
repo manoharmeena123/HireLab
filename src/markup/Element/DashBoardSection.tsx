@@ -15,15 +15,20 @@ import {
 import { RecentJobData } from "@/types/index";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { formaterDate } from "@/utils/formateDate";
+import Loading from "@/components/Loading";
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 const DashboardSection = () => {
   const { push } = useRouter();
   const dispatch = useDispatch();
-  const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
+  const {
+    data: recentJob,
+    isLoading: recentLoading,
+    isError,
+  } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
-  const { data: eventsData } = useGetEventsQuery();
+  const { data: eventsData, isLoading: eventLoading } = useGetEventsQuery();
 
   const [subscribe, setSubscribe] = useState(true);
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
@@ -100,6 +105,7 @@ const DashboardSection = () => {
 
   return (
     <>
+      {recentLoading && eventLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white browse-job p-b50">
@@ -208,7 +214,6 @@ const DashboardSection = () => {
                       marginTop: "100px",
                       display: "grid",
                       justifyContent: "space-evenly",
-                     
                     }}
                   >
                     <h3
@@ -223,304 +228,335 @@ const DashboardSection = () => {
                     <p className="text-center">You path to Success</p>
 
                     <div className="ds-mp-wrap">
-                    <div
-                      className="membership_class"
-                      style={{
-                        backgroundColor: subscribe
-                          ? "#2A6310"
-                          : "rgb(42 99 16 / 67%)",
-                        padding: "1rem",
-                        height: "225px",
-                        
-                        minWidth:'230px'
-                      }}
-                    >
-                      <div className="quote-info">
-                        <div className="d-flex align-items-center relative">
-                          <h3
-                            className="text-white text-center  flex-grow-1"
-                            style={{ marginBottom: "15px" }}
-                          >
-                            Wizard
-                          </h3>
-                          {subscribe && (
-                            <div
-                              className="px-2 absolute"
-                              style={{ right: "0",top:'5px' }}
+                      <div
+                        className="membership_class"
+                        style={{
+                          backgroundColor: subscribe
+                            ? "#2A6310"
+                            : "rgb(42 99 16 / 67%)",
+                          padding: "1rem",
+                          height: "225px",
+
+                          minWidth: "230px",
+                        }}
+                      >
+                        <div className="quote-info">
+                          <div className="d-flex align-items-center relative">
+                            <h3
+                              className="text-white text-center  flex-grow-1"
+                              style={{ marginBottom: "15px" }}
                             >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                viewBox="0 0 36 36"
-                                fill="none"
+                              Wizard
+                            </h3>
+                            {subscribe && (
+                              <div
+                                className="px-2 absolute"
+                                style={{ right: "0", top: "5px" }}
                               >
-                                <circle cx="18" cy="18" r="18" fill="#42A5F5" />
-                                <path
-                                  d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
-                                  fill="#fff"
-                                />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="26"
+                                  height="26"
+                                  viewBox="0 0 36 36"
+                                  fill="none"
+                                >
+                                  <circle
+                                    cx="18"
+                                    cy="18"
+                                    r="18"
+                                    fill="#42A5F5"
+                                  />
+                                  <path
+                                    d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
+                                    fill="#fff"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
 
-                        <ul className="text-center-li">
-                          <li className="">Salary bracket &gt; 30 lacs</li>
-                        </ul>
+                          <ul className="text-center-li">
+                            <li className="">Salary bracket &gt; 30 lacs</li>
+                          </ul>
 
-                        <h4
-                          className="text-white text-center"
-                          style={{ fontFamily: "Lato, sans-serif !important" }}
-                        >
-                          Price
-                        </h4>
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          699/-for 1 month
-                        </li>
-
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          1799/-for 3 months
-                        </li>
-                      </div>
-                    </div>
-                    <div
-                      className="membership_class"
-                      style={{
-                        backgroundColor: !subscribe
-                          ? "#2A6310"
-                          : "rgb(42 99 16 / 67%)",
-                        padding: "1rem",
-                        height: "225px",
-                  
-                        minWidth:'230px'
-                      }}
-                    >
-                      <div className="quote-info">
-                        <div className="d-flex align-items-center relative">
-                          <h3
-                            className="text-white text-center  flex-grow-1"
-                            style={{ marginBottom: "15px" }}
+                          <h4
+                            className="text-white text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                            }}
                           >
-                            Wizard
-                          </h3>
-                          {!subscribe && (
-                            <div
-                              className="px-2 absolute"
-                              style={{ right: "0",top:'5px' }}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                viewBox="0 0 36 36"
-                                fill="none"
-                              >
-                                <circle cx="18" cy="18" r="18" fill="#31E604" />
-                                <path
-                                  d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
-                                  fill="#fff"
-                                />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
-
-                        <ul className="text-center-li">
-                          <li className="">Salary bracket &gt; 30 lacs</li>
-                        </ul>
-
-                        <h4
-                          className="text-white text-center"
-                          style={{ fontFamily: "Lato, sans-serif !important" }}
-                        >
-                          Price
-                        </h4>
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          699/-for 1 month
-                        </li>
-
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          1799/-for 3 months
-                        </li>
-                      </div>
-                    </div>
-                    <div
-                      className="membership_class"
-                      style={{
-                        backgroundColor: !subscribe
-                          ? "#2A6310"
-                          : "rgb(42 99 16 / 67%)",
-                        padding: "1rem",
-                        height: "225px",
-                  
-                        minWidth:'230px'
-                      }}
-                    >
-                      <div className="quote-info">
-                        <div className="d-flex align-items-center relative">
-                          <h3
-                            className="text-white text-center  flex-grow-1"
-                            style={{ marginBottom: "15px" }}
+                            Price
+                          </h4>
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
                           >
-                            Wizard
-                          </h3>
-                          {!subscribe && (
-                            <div
-                              className="px-2 absolute"
-                              style={{ right: "0",top:'5px' }}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                viewBox="0 0 36 36"
-                                fill="none"
-                              >
-                                <circle cx="18" cy="18" r="18" fill="#31E604" />
-                                <path
-                                  d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
-                                  fill="#fff"
-                                />
-                              </svg>
-                            </div>
-                          )}
-                        </div>
+                            699/-for 1 month
+                          </li>
 
-                        <ul className="text-center-li">
-                          <li className="">Salary bracket &gt; 30 lacs</li>
-                        </ul>
-
-                        <h4
-                          className="text-white text-center"
-                          style={{ fontFamily: "Lato, sans-serif !important" }}
-                        >
-                          Price
-                        </h4>
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          699/-for 1 month
-                        </li>
-
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          1799/-for 3 months
-                        </li>
-                      </div>
-                    </div>
-                    <div
-                      className="membership_class"
-                      style={{
-                        backgroundColor: !subscribe
-                          ? "#2A6310"
-                          : "rgb(42 99 16 / 67%)",
-                        padding: "1rem",
-                        height: "225px",
-                  
-                        minWidth:'230px'
-                      }}
-                    >
-                      <div className="quote-info">
-                        <div className="d-flex align-items-center relative">
-                          <h3
-                            className="text-white text-center  flex-grow-1"
-                            style={{ marginBottom: "15px" }}
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
                           >
-                            Wizard
-                          </h3>
-                          {!subscribe && (
-                            <div
-                              className="px-2 absolute"
-                              style={{ right: "0",top:'5px' }}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="26"
-                                height="26"
-                                viewBox="0 0 36 36"
-                                fill="none"
-                              >
-                                <circle cx="18" cy="18" r="18" fill="#31E604" />
-                                <path
-                                  d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
-                                  fill="#fff"
-                                />
-                              </svg>
-                            </div>
-                          )}
+                            1799/-for 3 months
+                          </li>
                         </div>
-
-                        <ul className="text-center-li">
-                          <li className="">Salary bracket &gt; 30 lacs</li>
-                        </ul>
-
-                        <h4
-                          className="text-white text-center"
-                          style={{ fontFamily: "Lato, sans-serif !important" }}
-                        >
-                          Price
-                        </h4>
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          699/-for 1 month
-                        </li>
-
-                        <li
-                          className="text-center"
-                          style={{
-                            fontFamily: "Lato, sans-serif !important",
-                            letterSpacing: "0.05em",
-                          }}
-                        >
-                          1799/-for 3 months
-                        </li>
                       </div>
-                    </div>
+                      <div
+                        className="membership_class"
+                        style={{
+                          backgroundColor: !subscribe
+                            ? "#2A6310"
+                            : "rgb(42 99 16 / 67%)",
+                          padding: "1rem",
+                          height: "225px",
+
+                          minWidth: "230px",
+                        }}
+                      >
+                        <div className="quote-info">
+                          <div className="d-flex align-items-center relative">
+                            <h3
+                              className="text-white text-center  flex-grow-1"
+                              style={{ marginBottom: "15px" }}
+                            >
+                              Wizard
+                            </h3>
+                            {!subscribe && (
+                              <div
+                                className="px-2 absolute"
+                                style={{ right: "0", top: "5px" }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="26"
+                                  height="26"
+                                  viewBox="0 0 36 36"
+                                  fill="none"
+                                >
+                                  <circle
+                                    cx="18"
+                                    cy="18"
+                                    r="18"
+                                    fill="#31E604"
+                                  />
+                                  <path
+                                    d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
+                                    fill="#fff"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+
+                          <ul className="text-center-li">
+                            <li className="">Salary bracket &gt; 30 lacs</li>
+                          </ul>
+
+                          <h4
+                            className="text-white text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                            }}
+                          >
+                            Price
+                          </h4>
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            699/-for 1 month
+                          </li>
+
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            1799/-for 3 months
+                          </li>
+                        </div>
+                      </div>
+                      <div
+                        className="membership_class"
+                        style={{
+                          backgroundColor: !subscribe
+                            ? "#2A6310"
+                            : "rgb(42 99 16 / 67%)",
+                          padding: "1rem",
+                          height: "225px",
+
+                          minWidth: "230px",
+                        }}
+                      >
+                        <div className="quote-info">
+                          <div className="d-flex align-items-center relative">
+                            <h3
+                              className="text-white text-center  flex-grow-1"
+                              style={{ marginBottom: "15px" }}
+                            >
+                              Wizard
+                            </h3>
+                            {!subscribe && (
+                              <div
+                                className="px-2 absolute"
+                                style={{ right: "0", top: "5px" }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="26"
+                                  height="26"
+                                  viewBox="0 0 36 36"
+                                  fill="none"
+                                >
+                                  <circle
+                                    cx="18"
+                                    cy="18"
+                                    r="18"
+                                    fill="#31E604"
+                                  />
+                                  <path
+                                    d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
+                                    fill="#fff"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+
+                          <ul className="text-center-li">
+                            <li className="">Salary bracket &gt; 30 lacs</li>
+                          </ul>
+
+                          <h4
+                            className="text-white text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                            }}
+                          >
+                            Price
+                          </h4>
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            699/-for 1 month
+                          </li>
+
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            1799/-for 3 months
+                          </li>
+                        </div>
+                      </div>
+                      <div
+                        className="membership_class"
+                        style={{
+                          backgroundColor: !subscribe
+                            ? "#2A6310"
+                            : "rgb(42 99 16 / 67%)",
+                          padding: "1rem",
+                          height: "225px",
+
+                          minWidth: "230px",
+                        }}
+                      >
+                        <div className="quote-info">
+                          <div className="d-flex align-items-center relative">
+                            <h3
+                              className="text-white text-center  flex-grow-1"
+                              style={{ marginBottom: "15px" }}
+                            >
+                              Wizard
+                            </h3>
+                            {!subscribe && (
+                              <div
+                                className="px-2 absolute"
+                                style={{ right: "0", top: "5px" }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="26"
+                                  height="26"
+                                  viewBox="0 0 36 36"
+                                  fill="none"
+                                >
+                                  <circle
+                                    cx="18"
+                                    cy="18"
+                                    r="18"
+                                    fill="#31E604"
+                                  />
+                                  <path
+                                    d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
+                                    fill="#fff"
+                                  />
+                                </svg>
+                              </div>
+                            )}
+                          </div>
+
+                          <ul className="text-center-li">
+                            <li className="">Salary bracket &gt; 30 lacs</li>
+                          </ul>
+
+                          <h4
+                            className="text-white text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                            }}
+                          >
+                            Price
+                          </h4>
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            699/-for 1 month
+                          </li>
+
+                          <li
+                            className="text-center"
+                            style={{
+                              fontFamily: "Lato, sans-serif !important",
+                              letterSpacing: "0.05em",
+                            }}
+                          >
+                            1799/-for 3 months
+                          </li>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="row mt-3 justify-content-center" style={{gap:'2rem'}}>
+              <div
+                className="row mt-3 justify-content-center"
+                style={{ gap: "2rem" }}
+              >
                 <div
                   className="col-lg-6 col-md-12 shadow p-4"
                   style={{
@@ -528,7 +564,7 @@ const DashboardSection = () => {
 
                     paddingRight: "-15px",
                     borderRadius: "1rem",
-                    maxWidth: '550px'
+                    maxWidth: "550px",
                   }}
                 >
                   <h2 style={{ fontWeight: 600, textAlign: "center" }}>
@@ -587,7 +623,7 @@ const DashboardSection = () => {
                                     display: "flex",
                                     marginTop: "20px",
                                     color: "#2A6310 !important",
-                                    flexWrap:'wrap'
+                                    flexWrap: "wrap",
                                   }}
                                 >
                                   <li className="mr-4">
@@ -617,7 +653,12 @@ const DashboardSection = () => {
                     }}
                     className="mt-4 mb-3"
                   >
-                    <button className="btn btn-primary" style={{background:'rgb(42, 99, 16)',border:'none'}}>Browse All</button>
+                    <button
+                      className="btn btn-primary"
+                      style={{ background: "rgb(42, 99, 16)", border: "none" }}
+                    >
+                      Browse All
+                    </button>
                   </div>
                 </div>
 
@@ -627,7 +668,7 @@ const DashboardSection = () => {
                     marginTop: "30px",
                     paddingLeft: "-15px",
                     borderRadius: "1rem",
-                    maxWidth: '550px'
+                    maxWidth: "550px",
                   }}
                 >
                   <h2 style={{ fontWeight: 600, textAlign: "center" }}>
@@ -690,7 +731,13 @@ const DashboardSection = () => {
                         }}
                         className="mt-4 mb-3"
                       >
-                        <button className="btn btn-primary" style={{background:'rgb(42, 99, 16)',border:'none'}}>
+                        <button
+                          className="btn btn-primary"
+                          style={{
+                            background: "rgb(42, 99, 16)",
+                            border: "none",
+                          }}
+                        >
                           Ask a Question
                         </button>
                       </div>
