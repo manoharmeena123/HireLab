@@ -4,14 +4,11 @@ import Loading from "@/components/Loading";
 
 const SingleEvent = dynamic(() => import("@/markup/Element/SingleEvent"), {
   ssr: false,
+  loading: () => <Loading />,
 });
 
 const SingleEventPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <SingleEvent />
-    </Suspense>
-  );
+  return <SingleEvent />;
 };
 
 export default SingleEventPage;
