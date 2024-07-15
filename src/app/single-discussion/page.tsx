@@ -6,15 +6,12 @@ const SingleDiscussion = dynamic(
   () => import("@/markup/Element/SingleDiscussion"),
   {
     ssr: false,
+    loading: () => <Loading />,
   }
 );
 
 const SingleDiscussionPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <SingleDiscussion />
-    </Suspense>
-  );
+  return <SingleDiscussion />;
 };
 
 export default SingleDiscussionPage;

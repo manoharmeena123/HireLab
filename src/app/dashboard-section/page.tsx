@@ -2,16 +2,16 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Loading from "@/components/Loading";
 
-const DashboardSection = dynamic(() => import("@/markup/Element/DashBoardSection"), {
-  ssr: false,
-});
+const DashboardSection = dynamic(
+  () => import("@/markup/Element/DashBoardSection"),
+  {
+    ssr: false,
+    loading: () => <Loading />,
+  }
+);
 
 const DashboardSectionPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <DashboardSection />
-    </Suspense>
-  );
+  return <DashboardSection />;
 };
 
 export default DashboardSectionPage;

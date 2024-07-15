@@ -34,12 +34,12 @@ const ModalPopup = ({
   onSubmit,
   selectedJob,
 }: ModalPopupProps) => {
-  const [jobDatas, setJobDatas] = useState<JobData>(selectedJob || {});
+  const [jobDatas, setJobDatas] = useState<any>(selectedJob || {});
   const { id = null, ...jobData } = selectedJob || {};
 
   const handleInputChange = (event: any) => {
     const { name, value } = event.target;
-    setJobDatas((prevData) => ({ ...prevData, [name]: value }));
+    setJobDatas((prevData :any) => ({ ...prevData, [name]: value }));
     dispatch(setPostJobData({ [name]: value }));
   };
 
@@ -144,7 +144,7 @@ const ModalPopup = ({
     }
 
     // Update the jobDatas state
-    setJobDatas((prevData) => ({ ...prevData, [field]: valueToDispatch }));
+    setJobDatas((prevData :any) => ({ ...prevData, [field]: valueToDispatch }));
 
     // Dispatch the updated state to Redux
     dispatch(setPostJobData({ [field]: valueToDispatch }));
