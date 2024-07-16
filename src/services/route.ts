@@ -9,5 +9,4 @@ export const privateRoutes = [
   "/post-job",
   "/manage-job",
   "/applied-job",
-  "/single-blog"
 ];

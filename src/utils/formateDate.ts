@@ -84,3 +84,18 @@ export const truncateText = (text: string, wordLimit: number): string => {
   }
   return words.slice(0, wordLimit).join(' ') + '...';
 };
+
+
+
+//
+// September 18, 2017
+// utils/formatDate.ts
+export const blogformatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  };
+  return date.toLocaleDateString("en-US", options);
+};

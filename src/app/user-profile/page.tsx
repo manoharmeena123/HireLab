@@ -11,7 +11,6 @@ export const ProfileDropdown = () => {
   const { user,refetch } = useLoggedInUser();
   // const { token } = useAuthToken();
 
-  console.log('user', user)
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };

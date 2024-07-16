@@ -69,7 +69,10 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "BuyPassForEvent",
     "GetJobUserById",
     "CTCDataById",
-    "DeleteAppliedJobs"
+    "DeleteAppliedJobs",
+    "DeleteCommentById",
+    "GetCommentForQuetion",
+    "GetCommentForParentComment",
   ],
 });
 
@@ -214,10 +217,26 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (queryParams) => queries.getJobUserById.query(queryParams),
       invalidatesTags: ["GetJobUserById"],
     }),
-    deleteAppliedJob : builder.mutation<any, string>({
+    deleteAppliedJob: builder.mutation<any, string>({
       query: (jobId) => queries.deleteAppliedJob.query(jobId),
       invalidatesTags: ["DeleteAppliedJobs"],
-    })
+    }),
+    getCommentForQuetion: builder.mutation<any, string>({
+      query: (questionId) => queries.getCommentForQuetion.query(questionId),
+      invalidatesTags: ["GetCommentForQuetion"],
+    }),
+    deleteCommentById: builder.mutation<any, string>({
+      query: (commentId) => queries.deleteCommentById.query(commentId),
+      invalidatesTags: ["DeleteCommentById"],
+    }),
+    getCommentForParentComment: builder.mutation<
+      any,
+      { questionId: string; commentId: string }
+    >({
+      query: ({ questionId, commentId }) =>
+        queries.getCommentForParentComment.query(questionId, commentId),
+      invalidatesTags: ["GetCommentForParentComment"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -257,6 +276,9 @@ export const {
   useBuyPassForEventMutation,
   useGetJobUserByIdMutation,
   useGetCtcDataByIdMutation,
-  useDeleteAppliedJobMutation
+  useDeleteAppliedJobMutation,
+  useDeleteCommentByIdMutation,
+  useGetCommentForParentCommentMutation,
+  useGetCommentForQuetionMutation,
 } = globalApi;
 export default globalApi;

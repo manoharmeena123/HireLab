@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Select, { SingleValue } from "react-select";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useRouter } from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { useUpdateProfileMutation } from "@/app/job-poster/store/job-poster.query";
@@ -175,7 +176,7 @@ const JobPosterSection = () => {
                         <div className="canditate-des">
                           <Link href={"#"}>
                             <Image
-                              src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                              src={`${IMAGE_URL + user?.user?.image}`}
                               alt="Company Logo"
                               width={300}
                               height={300}

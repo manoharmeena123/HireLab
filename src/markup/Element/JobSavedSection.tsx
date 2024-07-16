@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import SavedJobs from "@/markup/Element/SavedJobs";
 import Link from "next/link";
 import Image from "next/image";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 var teamImg = require("../../images/team/pic1.jpg");
@@ -17,7 +18,7 @@ const JobSavedSection = () => {
   const [designationLabel, setDesignationLabel] = useState<string>("");
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
-  
+
   useEffect(() => {
     // Map designation options
     if (designationData?.data) {
@@ -71,7 +72,7 @@ const JobSavedSection = () => {
                         <div className="canditate-des">
                           <Link href={"#"}>
                             <Image
-                              src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
+                              src={`${IMAGE_URL + user?.user?.image}`}
                               alt="Company Logo"
                               width={300}
                               height={300}
