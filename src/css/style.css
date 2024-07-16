@@ -13723,6 +13723,32 @@ background-color: #fff;
   max-width: 1200px;
   margin: 0 auto;
 }
+.badge-category-bg{
+  position: relative;
+  top: -2px;
+    width: 9px;
+    height: 9px;
+    margin-right: 5px;
+    display: inline-block;
+    background-color: #2a6310;
+}
+.disc-date-suggest{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.sugg-topic-card-detail{
+  display: flex;
+  justify-content: space-between;
+}
+.sugg-comment-topic{
+  overflow-x: hidden;
+}
+.sugg-comment-topic h6{
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+    overflow: hidden;
+}
 @media (min-width:992px) {
 .membership_class {
   width: 100%;
@@ -13792,4 +13818,5 @@ flex-direction: column;
     flex-wrap: nowrap;
 
   }
+  
 }
