@@ -18,7 +18,7 @@ const SingleEvent = () => {
   const query = searchParams.get("query");
   const [
     getSingleEventByTitle,
-    { data: singleEventByTitle, isLoading :singleEventByTitleLoading, isError, isSuccess, error },
+    { data: singleEventByTitle, isLoading: singleEventByTitleLoading, isError, isSuccess, error },
   ] = useGetSingleEventByTitleMutation();
   const [
     buyPassForEvent,
@@ -49,7 +49,8 @@ const SingleEvent = () => {
     }
     setClickedIndexes(updatedIndexes);
   };
-  const description = singleEventByTitle?.data?.description;
+
+  const description = singleEventByTitle?.data?.description || '';
   const truncatedDescription = truncateText(description, 30);
 
   const handleBuyPass = async () => {
@@ -86,10 +87,16 @@ const SingleEvent = () => {
     }
   };
 
-
+  const mapDescriptionWithIndex = (description: string) => {
+    const paragraphs = description.split("</p><p>").map((para, index) => {
+      return `<p>${index + 1}. ${para.replace(/<\/?p>/g, "")}</p>`;
+    });
+    return paragraphs.join("");
+  };
 
   return (
     <>
+      {singleEventByTitleLoading && <Loading />}
       <div className="single-event-wrap bg-white">
         <div className="upcoming-past-title-wrap py-3 px-1">
           <Button
@@ -193,20 +200,25 @@ const SingleEvent = () => {
                   <h6>
                     <strong>Details</strong>
                   </h6>
-                  <p className="d-para">
-                    {showFullDescription ? description : truncatedDescription}
-                    <Button
-                      variant="link"
-                      onClick={handleToggleDescription}
-                      style={{
-                        color: "#2a6310",
-                        padding: "0",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      {showFullDescription ? "Read Less" : "Read More"}
-                    </Button>
-                  </p>
+                  <div
+                    className="d-para"
+                    dangerouslySetInnerHTML={{
+                      __html: showFullDescription
+                        ? mapDescriptionWithIndex(description)
+                        : truncatedDescription,
+                    }}
+                  ></div>
+                  <Button
+                    variant="link"
+                    onClick={handleToggleDescription}
+                    style={{
+                      color: "#2a6310",
+                      padding: "0",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    {showFullDescription ? "Read Less" : "Read More"}
+                  </Button>
                 </div>
               </div>
               <div>
