@@ -69,6 +69,7 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "BuyPassForEvent",
     "GetJobUserById",
     "CTCDataById",
+    "DeleteAppliedJobs"
   ],
 });
 
@@ -213,6 +214,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (queryParams) => queries.getJobUserById.query(queryParams),
       invalidatesTags: ["GetJobUserById"],
     }),
+    deleteAppliedJob : builder.mutation<any, string>({
+      query: (jobId) => queries.deleteAppliedJob.query(jobId),
+      invalidatesTags: ["DeleteAppliedJobs"],
+    })
   }),
   overrideExisting: true,
 });
@@ -251,6 +256,7 @@ export const {
   useGetFilterJobMutation,
   useBuyPassForEventMutation,
   useGetJobUserByIdMutation,
-  useGetCtcDataByIdMutation
+  useGetCtcDataByIdMutation,
+  useDeleteAppliedJobMutation
 } = globalApi;
 export default globalApi;

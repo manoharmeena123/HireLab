@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 import Header from "@/app/layouts/Header";
 import Footer from "@/app/layouts/Footer";
-import { useGetAppliedJobsQuery } from "@/store/global-store/global.query";
+import { useGetAppliedJobsQuery, useDeleteAppliedJobMutation } from "@/store/global-store/global.query";
 import { formatDateAgo } from "@/utils/formateDate";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
@@ -12,10 +14,12 @@ import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 
+const MySwal = withReactContent(Swal);
+
 const AppliedJobSection = () => {
-  const { data: appliedJob, isLoading } = useGetAppliedJobsQuery();
-  console.log("appliedJob", appliedJob);
-  const { user, refetch } = useLoggedInUser();
+  const { data: appliedJob, refetch } = useGetAppliedJobsQuery();
+  const [deleteAppliedJob] = useDeleteAppliedJobMutation();
+  const { user } = useLoggedInUser();
   const { data: designationData } = useGetDesignationQuery(); 
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
@@ -23,7 +27,6 @@ const AppliedJobSection = () => {
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
   useEffect(() => {
-    // Map designation options
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
         value: designation.title,
@@ -32,11 +35,10 @@ const AppliedJobSection = () => {
       }));
       setDesignationOptions(options);
     }
-  }, [designationData, refetch]);
+  }, [designationData]);
 
   useEffect(() => {
     if (user && user?.user?.designation_id !== null) {
-      // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
       const designation = designationOptions.find(
         (option) => option.id === designationId
@@ -49,7 +51,7 @@ const AppliedJobSection = () => {
     } else {
       setDesignationLabel("Designation not available");
     }
-  }, [user, designationOptions, refetch]);
+  }, [user, designationOptions]);
 
   const handleLogout = async () => {
     try {
@@ -58,6 +60,29 @@ const AppliedJobSection = () => {
       navigateSource("/");
     } catch (error) {
       console.error("Logout failed:", error);
+    }
+  };
+
+  const handleDeleteJob = async (jobId: string) => {
+    try {
+      const result = await MySwal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      });
+
+      if (result.isConfirmed) {
+        await deleteAppliedJob(jobId).unwrap();
+        MySwal.fire('Deleted!', 'Your job has been deleted.', 'success');
+        refetch();
+      }
+    } catch (error) {
+      console.error("Error deleting job:", error);
+      MySwal.fire('Error!', 'Failed to delete the job.', 'error');
     }
   };
 
@@ -74,21 +99,12 @@ const AppliedJobSection = () => {
                       <div className="canditate-des">
                         <Link href={"#"}>
                           <Image
-                         src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                            src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
                             alt="Company Logo"
                             width={300}
                             height={300}
                           />
                         </Link>
-                        {/* <div
-                          className="upload-link"
-                          title="update"
-                          data-toggle="tooltip"
-                          data-placement="right"
-                        >
-                          <input type="file" className="update-flie" />
-                          <i className="fa fa-camera"></i>
-                        </div> */}
                       </div>
                       <div className="candidate-title">
                         <div className="">
@@ -114,10 +130,7 @@ const AppliedJobSection = () => {
                       </li>
                       <li>
                         <Link href={"/jobs-my-resume"}>
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
+                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
                           <span>My Resume</span>
                         </Link>
                       </li>
@@ -195,30 +208,31 @@ const AppliedJobSection = () => {
                             </li>
                           </ul>
                           <div className="job-time m-t15 m-b10">
-                            <Link href={""} className="mr-1">
-                              <span>PHP</span>
-                            </Link>
-                            <Link href={""} className="mr-1">
-                              <span>Angular</span>
-                            </Link>
-                            <Link href={""} className="mr-1">
-                              <span>Bootstrap</span>
-                            </Link>
-                            <Link href={""} className="mr-1">
-                              <span>Wordpress</span>
-                            </Link>
+                            {item?.tags?.split(',').map((tag: string, index: number) => (
+                              <Link href={""} key={index} className="mr-1">
+                                <span>{tag}</span>
+                              </Link>
+                            ))}
                           </div>
                           <div className="posted-info clearfix">
                             <p className="m-tb0 text-primary float-left">
                               <span className="text-black m-r10">Posted:</span>{" "}
                               {formatDateAgo(item?.created_at)}
                             </p>
-                            <Link
-                              href={"/jobs-my-resume"}
-                              className="site-button button-sm float-right"
-                            >
-                              <i className="fa fa-eye"></i>
-                            </Link>
+                            <div className="float-right">
+                              <Link
+                                href={"/jobs-my-resume"}
+                                className="site-button button-sm mr-2"
+                              >
+                                <i className="fa fa-eye"></i>
+                              </Link>
+                              <button
+                                className="site-button button-sm"
+                                onClick={() => handleDeleteJob(item?.id)}
+                              >
+                                <i className="ti-trash"></i>
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -256,4 +270,5 @@ const AppliedJobSection = () => {
     </div>
   );
 };
+
 export default AppliedJobSection;

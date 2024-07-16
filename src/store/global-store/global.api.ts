@@ -48,11 +48,11 @@ export const queries = {
       method: "GET",
     }),
   },
-  getCtcDataById :{
-    query :(id :string)=>({
+  getCtcDataById: {
+    query: (id: string) => ({
       url: `api/get-ctc-base-job/${id}`,
       method: "GET",
-    })
+    }),
   },
   getCollage: {
     query: () => ({
@@ -194,9 +194,15 @@ export const queries = {
       };
     },
   },
-  getJobUserById : {
+  getJobUserById: {
     query: (id: string) => ({
       url: `api/get-job-users/${id}`,
+      method: "GET",
+    }),
+  },
+  deleteAppliedJob: {
+    query: (id: string) => ({
+      url: `api/delete-applied-job/${id}`,
       method: "GET",
     }),
   },
