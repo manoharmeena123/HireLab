@@ -14,7 +14,7 @@ export const queries = {
   },
   getBlogsById: {
     query: (id: string) => ({
-      url: `api/blogs/${id}`,
+      url: `api/blog/${id}`,
       method: "GET",
     }),
   },
@@ -206,7 +206,24 @@ export const queries = {
       method: "GET",
     }),
   },
-
+  getCommentForQuetion: {
+    query: (id: string) => ({
+      url: `api/get-comments-for-question/${id}`,
+      method: "GET",
+    }),
+  },
+  getCommentForParentComment: {
+    query: (quetionId: string, commentId: string) => ({
+      url: `api/get-comments-for-parent-comment/${quetionId}/${commentId}`,
+      method: "GET",
+    }),
+  },
+  deleteCommentById: {
+    query: (id: string) => ({
+      url: `api/delete-comment/${id}`,
+      method: "GET",
+    }),
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

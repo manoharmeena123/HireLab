@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { navigateSource } from "@/lib/action";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
@@ -72,8 +73,6 @@ const Profilesidebar = ({ refetch }: any) => {
     }
   };
 
-
-
   if (userLoading || designationLoading || isLoggingOut) {
     return <Loading />;
   }
@@ -86,7 +85,7 @@ const Profilesidebar = ({ refetch }: any) => {
             <div className="canditate-des">
               <Link href={"#"}>
                 <Image
-                  src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+                  src={`${IMAGE_URL + user?.user?.image}`}
                   alt="profile picture"
                   width={300}
                   height={300}
