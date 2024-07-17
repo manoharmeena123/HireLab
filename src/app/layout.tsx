@@ -5,6 +5,7 @@ import "../css/skin/skin-1.css";
 import "../plugins/slick/slick.min.css";
 import "../plugins/slick/slick-theme.min.css";
 import "react-toastify/dist/ReactToastify.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { ProviderTree } from "@/provider";
 import { Inter } from 'next/font/google';
 import Header from "@/app/layouts/Header";
@@ -20,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body>
         <ProviderTree>
           <ClientWrapper>
             {children}
