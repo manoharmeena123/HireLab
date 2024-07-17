@@ -5,7 +5,10 @@ import Sidebar from "../../markup/Element/Sidebar";
 import Image from "next/image";
 import Link from "next/link";
 import bnr from "../../images/banner/bnr1.jpg";
-import { useGetSingleDiscussionByTitleMutation } from "@/store/global-store/global.query";
+import {
+  useGetSingleDiscussionByTitleMutation,
+  useCreateCommentMutation,
+} from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

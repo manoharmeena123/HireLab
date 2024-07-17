@@ -3,6 +3,7 @@ import {
   Filters,
   SaveJobData,
   WritableBuyPassData,
+  CreateCommentType
 } from "@/types/index";
 
 export const queries = {
@@ -248,4 +249,11 @@ export const queries = {
       body: id,
     }),
   },
+  createComment :{
+    query : (commentData :CreateCommentType)=>({
+      url : "api/create-comment",
+      method : "POST",
+      body : commentData
+    })
+  }
 };
