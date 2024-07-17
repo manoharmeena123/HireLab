@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({
     for (let i = 1; i <= totalPages; i++) {
       pageNumbers.push(
         <li key={i} className={i === currentPage ? "active" : ""}>
-          <button onClick={() => handlePageClick(i)}>{i}</button>
+          <button onClick={() => handlePageClick(i)} style={{backgroundColor:i === currentPage ? 'green' : '',width:'30px',color:i === currentPage ? '#fff' : ''}}>{i}</button>
         </li>
       );
     }

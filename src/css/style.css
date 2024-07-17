@@ -13570,7 +13570,7 @@ ol.commentlist li .star-rating {
   font-size: 16px;
   font-weight: 600;
 }
-.jd-wrap .like-btn {
+.jd-wrap .like-btn ,.browse-job-grid .like-btn {
   position: relative;
   top: 0;
   right: 0;
@@ -13825,6 +13825,24 @@ ul.accordion-list {
 
 .answer.show {
   display: block;
+}
+.pagination{
+  justify-content: end;
+}
+.pagination button{
+  background: #fff;
+    border: 1px solid lightgray;
+}
+.pagination li:first-child button{
+  border-radius: 5px 0 0 5px;
+}
+.pagination li:last-child button{
+  border-radius: 0 5px 5px 0;
+}
+.browse-card-head{
+  display: flex;
+    gap: 10px;
+    justify-content: space-between;
 }
 @media (min-width:992px) {
 .membership_class {

@@ -242,18 +242,24 @@ function Browsejobfilterlist() {
                       ) : (
                         <ul className="post-job-bx browse-job-grid row">
                           {paginatedJobs.map((item, index) => (
-                            <li className="col-lg-6 col-md-6" key={index}>
+                            <li className="col-lg-6" key={index}>
                               <div className="post-bx">
                                 <div className="d-flex m-b30">
                                   <div className="job-post-info">
+                                    
                                     <h4
                                       style={{ cursor: "pointer" }}
                                       onClick={() => viewJobHandler(item.id)}
+                                      className="browse-card-head"
                                     >
                                       <Link href={"/job-detail"}>
                                         {" "}
                                         {item?.job_title}
                                       </Link>
+                                      <label className="like-btn">
+                                  <input type="checkbox" />
+                                  <span className="checkmark"></span>
+                                </label>
                                     </h4>
                                     <ul>
                                       <li>
@@ -280,7 +286,7 @@ function Browsejobfilterlist() {
                                   </div>
 
                                   <div className="salary-bx">
-                                    <span>42000 - 55000</span>
+                                    <span>&#8377;42000 - &#8377;55000</span>
                                     <br />
                                   </div>
                                 </div>
@@ -292,10 +298,10 @@ function Browsejobfilterlist() {
                                     {formatDateAgo(item?.created_at)}
                                   </p>
                                 </div>
-                                <label className="like-btn">
+                                {/* <label className="like-btn">
                                   <input type="checkbox" />
                                   <span className="checkmark"></span>
-                                </label>
+                                </label> */}
                               </div>
                             </li>
                           ))}
