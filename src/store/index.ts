@@ -9,6 +9,7 @@ import { globalEventReducer } from "@/store/global-store/global.slice";
 import { manageJobReducer } from "@/app/manage-job/store/manage-job.slice";
 import { JobPosterReducer } from "@/app/job-poster/store/job-poster.slice";
 import { JobSeekerReducer } from "@/app/job-seeker/store/job-seeker.slice";
+import { resumeReducer } from "@/app/my-resume/store/resume.slice";
 // Combine all reducers into a single root reducer
 const appReducer = combineReducers({
   [hirelabApiSlice.reducerPath]: hirelabApiSlice.reducer,
@@ -20,6 +21,7 @@ const appReducer = combineReducers({
   manageJob: manageJobReducer,
   jobPoster: JobPosterReducer,
   jobSeeker: JobSeekerReducer,
+  resume: resumeReducer,
 });
 
 export const makeStore = () =>

@@ -32,7 +32,6 @@ import {
 
 import { hirelabApiSlice } from "@/rtk/base-query";
 import { queries } from "./global.api";
-import { AnyNaptrRecord } from "dns";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
   addTagTypes: [
