@@ -3,6 +3,8 @@ import {
   Filters,
   SaveJobData,
   WritableBuyPassData,
+  CreateCommentType,
+  HeadlineData,
 } from "@/types/index";
 
 export const queries = {
@@ -246,6 +248,23 @@ export const queries = {
       url: "api/saved-job",
       method: "POST",
       body: id,
+    }),
+  },
+  createComment: {
+    query: (commentData: CreateCommentType) => ({
+      url: "api/create-comment",
+      method: "POST",
+      body: commentData,
+    }),
+  },
+
+  // Resume =============================================================================================>
+  // /api/create-resume-headline
+  createResumeHeadline: {
+    query: (HeadlineData: HeadlineData) => ({
+      url: "api/create-resume-headline",
+      method: "POST",
+      body: HeadlineData,
     }),
   },
 };

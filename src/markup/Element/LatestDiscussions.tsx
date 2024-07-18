@@ -86,7 +86,7 @@ const LatestDiscussions = () => {
   };
 
   const viewJobHandler = (title: any) => {
-    const encodedTitle = encodeURIComponent(title).replace(/%20/g, "+");
+    const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-discussion?query=${encodedTitle}`);
   };
 
