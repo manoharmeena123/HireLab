@@ -79,8 +79,8 @@ const BlogDetailGrid = () => {
                         </ul>
                       </div>
                       <div className="dez-post-title">
-                        <h5 className="post-title font-20">
-                          <Link href={"/blog-details"}>{item?.title}</Link>
+                        <h5 className="post-title font-20" onClick={() => viewBlogHandler(item?.title)}>
+                          <Link href={"#"}>{item?.title}</Link>
                         </h5>
                       </div>
                       <div className="dez-post-text">
