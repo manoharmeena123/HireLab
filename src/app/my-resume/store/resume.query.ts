@@ -5,7 +5,11 @@ import {
   WritableHeadlineData,
   WritableHeadlineDataResponse,
   WritableKeySkillData,
-  WritableKeySkillDataResponse
+  WritableKeySkillDataResponse,
+  WritableEmploymentData,
+  WritableEmploymentDataResponse,
+  WritableEducationData,
+  WritableEducationDataResponse
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -34,6 +38,22 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: ({ data, key_skill_id }) => queries.updateKeySkill.query(data, key_skill_id),
       invalidatesTags: ['Resume'],
     }),
+    createResumeEmployment : builder.mutation<WritableEmploymentDataResponse,WritableEmploymentData>({
+     query: (data) => queries.createResumeEmployment.query(data),
+     invalidatesTags: ['Resume'],
+    }),
+    updateResumeEmployment : builder.mutation<WritableEmploymentDataResponse, { data: WritableEmploymentData, employment_id: number }>({
+     query: ({ data, employment_id }) => queries.updateResumeEmployment.query(data, employment_id),
+     invalidatesTags: ['Resume'],
+    }),
+    createEducation : builder.mutation<WritableEducationDataResponse, WritableEducationData>({ 
+      query: (data) => queries.createEducation.query(data),
+      invalidatesTags: ['Resume'],
+    }),
+    updateEducation : builder.mutation<WritableEducationDataResponse, { data: WritableEducationData, education_id: number }>({ 
+      query: ({ data, education_id }) => queries.updateEducation.query(data, education_id),
+      invalidatesTags: ['Resume'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -44,6 +64,8 @@ export const {
   useUpdateResumeHeadlineMutation,
   useCreateKeySkillMutation,
   useUpdateKeySkillMutation,
+  useCreateResumeEmploymentMutation,
+  useUpdateResumeEmploymentMutation
 } = resumeApi;
 
 export default resumeApi;

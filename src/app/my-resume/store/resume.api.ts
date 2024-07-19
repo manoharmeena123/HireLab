@@ -3,6 +3,10 @@ import {
   WritableHeadlineDataResponse,
   WritableKeySkillData,
   WritableKeySkillDataResponse,
+  WritableEmploymentData,
+  WritableEmploymentDataResponse,
+  WritableEducationData,
+  WritableEducationDataResponse
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -34,7 +38,7 @@ export const queries = {
     query: (data: WritableKeySkillData) => ({
       url: "api/create-resume-key-skill",
       method: "POST",
-      body: data ,
+      body: data,
     }),
   },
   updateKeySkill: {
@@ -44,4 +48,39 @@ export const queries = {
       body: { key_skill_id, title: data.title },
     }),
   },
+
+  //api/create-resume-employment
+
+  createResumeEmployment: {
+    query: (data: WritableEmploymentData) => ({
+      url: "api/create-resume-employment",
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  updateResumeEmployment: {
+    query: (data: WritableEmploymentData, employment_id: number) => ({
+      url: `api/update-resume-employment`,
+      method: "POST",
+      body: { employment_id, ...data },
+    }),
+  },
+
+  // /api/create-resume-education
+
+  createEducation :{
+    query: (data: WritableEducationData) => ({
+      url: "api/create-resume-education",
+      method: "POST",
+      body: data,
+    }),
+  },
+  updateEducation :{
+    query: (data: WritableEducationData, education_id: number) => ({
+      url: `api/update-resume-education`,
+      method: "POST",
+      body: { education_id,...data },
+    }),
+  }
 };

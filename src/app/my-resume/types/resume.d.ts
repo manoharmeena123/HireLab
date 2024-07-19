@@ -74,17 +74,66 @@ export interface Headline {
 }
 
 
+//Employment
+
+
+interface EmploymentData {
+  designation: string;
+  organization: string;
+  current_company: "yes" | "no";
+  start_from_year: string;
+  start_from_month: string;
+  worked_till_year?: string;
+  worked_till_month?: string;
+  describe_job_profile: string;
+}
+
+
+interface EmploymentDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: EmploymentData[];
+
+}
+
+
+// education
+
+interface EducationData {
+  title: string;
+  year: string;
+  description: string;
+  education: string;
+  course: string;
+  university: string;
+}
+interface EducationDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: WritableEducationData[];
+
+}
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
 type WritableKeySkillData = WritableDraft<KeySkillData>;
 type WritableKeySkillDataResponse = WritableDraft<KeySkillDataResponse>;
-
+type WritableEmploymentData= WritableDraft<EmploymentData>;
+type WritableEmploymentDataResponse= WritableDraft<EmploymentDataResponse>;
+type WritableEducationData= WritableDraft<EducationData>;
+type WritableEducationDataResponse= WritableDraft<EducationDataResponse>;
 
 export {
   WritableResumeFetchResponse,
   WritableHeadlineData,
   WritableHeadlineDataResponse, 
   WritableKeySkillData,
-  WritableKeySkillDataResponse
+  WritableKeySkillDataResponse,
+  WritableEmploymentData,
+  WritableEmploymentDataResponse,
+  WritableEducationData,
+  WritableEducationDataResponse
 }
