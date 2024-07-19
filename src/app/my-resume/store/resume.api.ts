@@ -11,6 +11,8 @@ import {
   WritableProjectDataResponse,
   WritableProfileSummaryData,
   WritableProfileSummaryDataResponse,
+  WritablePersonalDetails,
+  WritablePersonalDetailsResponse
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -107,17 +109,34 @@ export const queries = {
   //api/create-resume-profile-summary
 
   createProfileSummary :{ 
-    query: (data: any) => ({
+    query: (data: WritableProfileSummaryData) => ({
       url: "api/create-resume-profile-summary",
       method: "POST",
       body: data,
     }),
   },
   updateProfileSummary :{ 
-    query: (data: any, profile_summary_id: number) => ({
+    query: (data: WritableProfileSummaryData, profile_summary_id: number) => ({
       url: `api/update-resume-profile-summary`,
       method: "POST",
       body: { profile_summary_id,...data },
+    }),
+  },
+
+  // api/create-resume-personal-detail
+
+  createResumePersonalDetails :{
+    query: (data: WritablePersonalDetails) => ({
+      url: "api/create-resume-personal-detail",
+      method: "POST",
+      body: data,
+    }),
+  },
+  updateResumePersonalDetails :{
+    query: (data: WritablePersonalDetails, personal_detail_id: number) => ({
+      url: `api/update-resume-personal-detail`,
+      method: "POST",
+      body: { personal_detail_id,...data },
     }),
   }
 };

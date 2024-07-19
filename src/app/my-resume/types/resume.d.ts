@@ -139,6 +139,30 @@ interface ProfileSummaryDataResponse {
   data: ProfileSummaryData[];
 }
 
+
+//Personal Details
+
+interface PersonalDetails {
+  dob: string;
+  permanent_address: string;
+  gender: string;
+  pin_code: string;
+  marital_status: string;
+  hometown: string;
+  passport_number: string;
+  work_permit_of_other_country: string;
+  differently_abled: string;
+  languages: string;
+}
+interface PersonalDetailsResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: PersonalDetails[];
+}
+
+
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -151,8 +175,9 @@ type WritableEducationDataResponse = WritableDraft<EducationDataResponse>;
 type WritableProjectData = WritableDraft<ProjectData>;
 type WritableProjectDataResponse = WritableDraft<ProjectDataResponse>;
 type WritableProfileSummaryData = WritableDraft<ProfileSummaryData>;
-type WritableProfileSummaryDataResponse =
-  WritableDraft<ProfileSummaryDataResponse>;
+type WritableProfileSummaryDataResponse =WritableDraft<ProfileSummaryDataResponse>;
+type WritablePersonalDetails = WritableDraft<PersonalDetails>;
+type WritablePersonalDetailsResponse =WritableDraft<PersonalDetailsResponse>;
 
 export {
   WritableResumeFetchResponse,
@@ -168,4 +193,6 @@ export {
   WritableProjectDataResponse,
   WritableProfileSummaryData,
   WritableProfileSummaryDataResponse,
+  WritablePersonalDetails,
+  WritablePersonalDetailsResponse
 };
