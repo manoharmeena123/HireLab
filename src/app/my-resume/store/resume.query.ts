@@ -9,7 +9,9 @@ import {
   WritableEmploymentData,
   WritableEmploymentDataResponse,
   WritableEducationData,
-  WritableEducationDataResponse
+  WritableEducationDataResponse,
+  WritableProjectData,
+  WritableProjectDataResponse
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -54,6 +56,14 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: ({ data, education_id }) => queries.updateEducation.query(data, education_id),
       invalidatesTags: ['Resume'],
     }),
+    createResumeProject : builder.mutation<WritableProjectDataResponse, WritableProjectData>({
+      query: (data) => queries.createResumeProject.query(data),
+      invalidatesTags: ['Resume'],
+    }),
+    updateResumeProject : builder.mutation<WritableProjectDataResponse, { data: WritableProjectData, project_id: number }>({
+      query: ({ data, project_id }) => queries.updateResumeProject.query(data, project_id),
+      invalidatesTags: ['Resume'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -68,6 +78,8 @@ export const {
   useUpdateResumeEmploymentMutation,
   useCreateEducationMutation,
   useUpdateEducationMutation,
+  useCreateResumeProjectMutation,
+  useUpdateResumeProjectMutation
 } = resumeApi;
 
 export default resumeApi;

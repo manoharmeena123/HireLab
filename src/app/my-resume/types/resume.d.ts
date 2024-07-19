@@ -116,6 +116,29 @@ interface EducationDataResponse {
 
 }
 
+
+// project
+interface ProjectData {
+  title: string;
+  project_employment: string;
+  client: string;
+  project_status: string;
+  start_from_year: string;
+  start_from_month: string;
+  worked_till_year: string;
+  worked_till_month: string;
+  detail_of_project: string;
+}
+
+interface ProjectDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: ProjectData[];
+
+}
+
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -125,6 +148,8 @@ type WritableEmploymentData= WritableDraft<EmploymentData>;
 type WritableEmploymentDataResponse= WritableDraft<EmploymentDataResponse>;
 type WritableEducationData= WritableDraft<EducationData>;
 type WritableEducationDataResponse= WritableDraft<EducationDataResponse>;
+type WritableProjectData= WritableDraft<ProjectData>;
+type WritableProjectDataResponse= WritableDraft<ProjectDataResponse>;
 
 export {
   WritableResumeFetchResponse,
@@ -135,5 +160,7 @@ export {
   WritableEmploymentData,
   WritableEmploymentDataResponse,
   WritableEducationData,
-  WritableEducationDataResponse
+  WritableEducationDataResponse,
+  WritableProjectData,
+  WritableProjectDataResponse
 }

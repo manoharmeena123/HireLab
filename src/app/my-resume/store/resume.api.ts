@@ -6,7 +6,9 @@ import {
   WritableEmploymentData,
   WritableEmploymentDataResponse,
   WritableEducationData,
-  WritableEducationDataResponse
+  WritableEducationDataResponse,
+  WritableProjectData,
+  WritableProjectDataResponse
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -81,6 +83,22 @@ export const queries = {
       url: `api/update-resume-education`,
       method: "POST",
       body: { education_id,...data },
+    }),
+  },
+
+  // /api/create-resume-projects
+  createResumeProject :{
+    query: (data: WritableProjectData) => ({
+      url: "api/create-resume-projects",
+      method: "POST",
+      body: data,
+    }),
+  },
+  updateResumeProject :{
+    query: (data: WritableProjectData, project_id: number) => ({
+      url: `api/update-resume-projects`,
+      method: "POST",
+      body: { project_id,...data },
     }),
   }
 };
