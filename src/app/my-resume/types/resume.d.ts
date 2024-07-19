@@ -1,9 +1,7 @@
 import { WritableDraft } from "immer";
 
-
-
 // Resume Headline
- interface HeadlineData {
+interface HeadlineData {
   description: string;
 }
 
@@ -17,16 +15,14 @@ export interface HeadlineDataResponse {
 // Resume Key Skill
 
 interface KeySkillData {
-title :string
+  title: string;
 }
 interface KeySkillDataResponse {
   code: number;
   success: boolean;
   message: string;
   data: KeySkillData[];
-
 }
-
 
 //my-resume
 
@@ -73,9 +69,7 @@ export interface Headline {
   };
 }
 
-
 //Employment
-
 
 interface EmploymentData {
   designation: string;
@@ -88,15 +82,12 @@ interface EmploymentData {
   describe_job_profile: string;
 }
 
-
 interface EmploymentDataResponse {
   code: number;
   success: boolean;
   message: string;
   data: EmploymentData[];
-
 }
-
 
 // education
 
@@ -113,9 +104,7 @@ interface EducationDataResponse {
   success: boolean;
   message: string;
   data: WritableEducationData[];
-
 }
-
 
 // project
 interface ProjectData {
@@ -135,26 +124,40 @@ interface ProjectDataResponse {
   success: boolean;
   message: string;
   data: ProjectData[];
-
 }
 
+// Profile Summary
+
+interface ProfileSummaryData {
+  description: string;
+}
+
+interface ProfileSummaryDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: ProfileSummaryData[];
+}
 
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
 type WritableKeySkillData = WritableDraft<KeySkillData>;
 type WritableKeySkillDataResponse = WritableDraft<KeySkillDataResponse>;
-type WritableEmploymentData= WritableDraft<EmploymentData>;
-type WritableEmploymentDataResponse= WritableDraft<EmploymentDataResponse>;
-type WritableEducationData= WritableDraft<EducationData>;
-type WritableEducationDataResponse= WritableDraft<EducationDataResponse>;
-type WritableProjectData= WritableDraft<ProjectData>;
-type WritableProjectDataResponse= WritableDraft<ProjectDataResponse>;
+type WritableEmploymentData = WritableDraft<EmploymentData>;
+type WritableEmploymentDataResponse = WritableDraft<EmploymentDataResponse>;
+type WritableEducationData = WritableDraft<EducationData>;
+type WritableEducationDataResponse = WritableDraft<EducationDataResponse>;
+type WritableProjectData = WritableDraft<ProjectData>;
+type WritableProjectDataResponse = WritableDraft<ProjectDataResponse>;
+type WritableProfileSummaryData = WritableDraft<ProfileSummaryData>;
+type WritableProfileSummaryDataResponse =
+  WritableDraft<ProfileSummaryDataResponse>;
 
 export {
   WritableResumeFetchResponse,
   WritableHeadlineData,
-  WritableHeadlineDataResponse, 
+  WritableHeadlineDataResponse,
   WritableKeySkillData,
   WritableKeySkillDataResponse,
   WritableEmploymentData,
@@ -162,5 +165,7 @@ export {
   WritableEducationData,
   WritableEducationDataResponse,
   WritableProjectData,
-  WritableProjectDataResponse
-}
+  WritableProjectDataResponse,
+  WritableProfileSummaryData,
+  WritableProfileSummaryDataResponse,
+};
