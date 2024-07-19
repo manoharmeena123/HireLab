@@ -65,7 +65,9 @@ export const {
   useCreateKeySkillMutation,
   useUpdateKeySkillMutation,
   useCreateResumeEmploymentMutation,
-  useUpdateResumeEmploymentMutation
+  useUpdateResumeEmploymentMutation,
+  useCreateEducationMutation,
+  useUpdateEducationMutation,
 } = resumeApi;
 
 export default resumeApi;

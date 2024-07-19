@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Form } from "react-bootstrap";
 import Link from "next/link";
 import {
+  useGetResumeDataQuery,
   useCreateEducationMutation,
   useUpdateEducationMutation,
 } from "@/app/my-resume/store/resume.query";
+import { WritableEducationData } from "@/app/my-resume/types/resume";
+
 interface EducationProps {
   show: boolean;
   onShow: () => void;
@@ -12,15 +15,66 @@ interface EducationProps {
 }
 
 const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
+  const { data: resumeData, isLoading } = useGetResumeDataQuery();
+  const [createEducation] = useCreateEducationMutation();
+  const [updateEducation] = useUpdateEducationMutation();
+
+  const [education, setEducation] = useState<WritableEducationData>({
+    title: "",
+    year: "",
+    description: "",
+    education: "",
+    course: "",
+    university: "",
+  });
+
+  const [editMode, setEditMode] = useState(false);
+  const [educationId, setEducationId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (resumeData && resumeData.data.length > 0) {
+      const existingEducation = resumeData.data[0].educations[0]; // Assuming single education entry for simplicity
+      if (existingEducation) {
+        setEducation({
+          title: existingEducation.title,
+          year: existingEducation.year,
+          description: existingEducation.description,
+          education: existingEducation.education,
+          course: existingEducation.course,
+          university: existingEducation.university,
+        });
+        setEducationId(existingEducation.id);
+        setEditMode(true);
+      }
+    }
+  }, [resumeData]);
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setEducation((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = async () => {
+    if (editMode && educationId !== null) {
+      await updateEducation({ data: education, education_id: educationId });
+    } else {
+      await createEducation(education);
+    }
+    onHide();
+  };
+
   return (
     <div id="education_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
         <h5 className="m-b15">Education</h5>
-        <Link
-          href=""
-          onClick={onShow}
-          className="site-button add-btn button-sm"
-        >
+        <Link href="" onClick={onShow} className="site-button add-btn button-sm">
           <i className="fa fa-pencil m-r5"></i> Edit
         </Link>
       </div>
@@ -50,10 +104,20 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Education</label>
-                      <Form.Control as="select">
-                        <option>Doctorate/PhD</option>
-                        <option>Masters/Post-Graduation</option>
-                        <option>Graduation/Diploma</option>
+                      <Form.Control
+                        as="select"
+                        name="education"
+                        value={education.education}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select Education</option>
+                        <option value="Doctorate/PhD">Doctorate/PhD</option>
+                        <option value="Masters/Post-Graduation">
+                          Masters/Post-Graduation
+                        </option>
+                        <option value="Graduation/Diploma">
+                          Graduation/Diploma
+                        </option>
                       </Form.Control>
                     </div>
                   </div>
@@ -61,8 +125,11 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                     <div className="form-group">
                       <label>Course</label>
                       <input
-                        type="email"
+                        type="text"
                         className="form-control"
+                        name="course"
+                        value={education.course}
+                        onChange={handleChange}
                         placeholder="Select Course"
                       />
                     </div>
@@ -71,10 +138,51 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                     <div className="form-group">
                       <label>University/Institute</label>
                       <input
-                        type="email"
+                        type="text"
                         className="form-control"
+                        name="university"
+                        value={education.university}
+                        onChange={handleChange}
                         placeholder="Select University/Institute"
                       />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 col-md-12">
+                    <div className="form-group">
+                      <label>Title</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="title"
+                        value={education.title}
+                        onChange={handleChange}
+                        placeholder="Enter Title"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 col-md-12">
+                    <div className="form-group">
+                      <label>Year</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="year"
+                        value={education.year}
+                        onChange={handleChange}
+                        placeholder="Enter Year"
+                      />
+                    </div>
+                  </div>
+                  <div className="col-lg-12 col-md-12">
+                    <div className="form-group">
+                      <label>Description</label>
+                      <textarea
+                        className="form-control"
+                        name="description"
+                        value={education.description}
+                        onChange={handleChange}
+                        placeholder="Type Description"
+                      ></textarea>
                     </div>
                   </div>
                 </div>
@@ -84,7 +192,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
               <button type="button" className="site-button" onClick={onHide}>
                 Cancel
               </button>
-              <button type="button" className="site-button">
+              <button type="button" className="site-button" onClick={handleSave}>
                 Save
               </button>
             </div>
@@ -94,25 +202,17 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
 
       <div className="row">
         <div className="col-lg-12 col-md-12 col-sm-12">
-          <div className="clearfix m-b20">
-            <label className="m-b0">London - 12th</label>
-            <span className="clearfix font-13">2017</span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">London - 10th</label>
-            <span className="clearfix font-13">2015</span>
-          </div>
+          {resumeData?.data[0].educations.map((edu, index) => (
+            <div key={index} className="clearfix m-b20">
+              <label className="m-b0">{edu.title}</label>
+              <span className="clearfix font-13">{edu.year}</span>
+              <p className="m-b0">Course : {edu.course}</p>
+              <p className="m-b0">University : {edu.university}</p>
+              <p className="m-b0">Description : {edu.description}</p>
+            </div>
+          ))}
         </div>
       </div>
-      <Link href="" className="clearfix">
-        Add Doctorate/PhD
-      </Link>
-      <Link href="" className="clearfix">
-        Add Masters/Post-Graduation
-      </Link>
-      <Link href="" className="clearfix">
-        Add Graduation/Diploma
-      </Link>
     </div>
   );
 };
