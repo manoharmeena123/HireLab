@@ -68,7 +68,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
   }, [resumeData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+    e: any
   ) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({
