@@ -1,0 +1,69 @@
+
+Header Section
+ 1. Api for Notification section
+ 2. Api for chat Icon
+ 3. Api for application logo
+
+ Api for location in Find job location
+ Api for MemberShip section
+ 
+
+ Upcoming Meetups
+  1. Api for save event 
+
+ Discussion Section
+ 1.Api for like
+ 2. Api for view count
+
+
+ Recent Jobs 
+  1. pagination left in recent job section
+  
+
+  Testimonials 
+  1. api modification still in this section 
+
+
+  Footer 
+  1. Social media link left 
+  2 .need to change into dynamic data in footer section 
+
+
+  Job Alert 
+   1. Api for upcoming job alerts 
+   
+
+   Cv Manager 
+   1. Not worked so far ,still completely left 
+
+
+   Credit Earned 
+   1. Not worked so far ,still completely left 
+
+   Manage Job 
+   1. need to improve manage job section ui 
+
+  Validation 
+   1. Need to implement validation in entire application forms 
+   1. proper error is already implemented but need to makesure evrything working sure . 
+
+
+   How It's work
+   1. Not worked so far ,still completely left 
+   
+  Dashboard Section 
+   1. Discussion Forum  is left need to integrated api in this .
+
+
+   Login 
+    Need to improve it's ui
+   
+   Register 
+    Need to improve it's ui 
+   
+   Send Otp 
+    Need to improve it's ui 
+
+
+ Pagination for all section 
+ Search also need to implement 

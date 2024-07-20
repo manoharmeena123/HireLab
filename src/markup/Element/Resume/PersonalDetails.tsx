@@ -414,3 +414,6 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
 };
 
 export default PersonalDetails;
+
+
+

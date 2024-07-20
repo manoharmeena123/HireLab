@@ -139,7 +139,6 @@ interface ProfileSummaryDataResponse {
   data: ProfileSummaryData[];
 }
 
-
 //Personal Details
 
 interface PersonalDetails {
@@ -161,7 +160,28 @@ interface PersonalDetailsResponse {
   data: PersonalDetails[];
 }
 
+//Career Profile
 
+interface CareerProfileData {
+  career_profile_id?: number;
+  industry: string;
+  functional_area: string;
+  role: string;
+  job_type: string;
+  employment_type: string;
+  desired_shift: string;
+  availability_to_join: string;
+  expected_salary: string;
+  desired_location: string;
+  desired_industry: string;
+}
+
+interface CareerProfileDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: CareerProfileData[];
+}
 
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
@@ -175,9 +195,13 @@ type WritableEducationDataResponse = WritableDraft<EducationDataResponse>;
 type WritableProjectData = WritableDraft<ProjectData>;
 type WritableProjectDataResponse = WritableDraft<ProjectDataResponse>;
 type WritableProfileSummaryData = WritableDraft<ProfileSummaryData>;
-type WritableProfileSummaryDataResponse =WritableDraft<ProfileSummaryDataResponse>;
+type WritableProfileSummaryDataResponse =
+  WritableDraft<ProfileSummaryDataResponse>;
 type WritablePersonalDetails = WritableDraft<PersonalDetails>;
-type WritablePersonalDetailsResponse =WritableDraft<PersonalDetailsResponse>;
+type WritablePersonalDetailsResponse = WritableDraft<PersonalDetailsResponse>;
+type WritableCareerProfileData = WritableDraft<CareerProfileData>;
+type WritableCareerProfileDataResponse =
+  WritableDraft<CareerProfileDataResponse>;
 
 export {
   WritableResumeFetchResponse,
@@ -194,5 +218,7 @@ export {
   WritableProfileSummaryData,
   WritableProfileSummaryDataResponse,
   WritablePersonalDetails,
-  WritablePersonalDetailsResponse
+  WritablePersonalDetailsResponse,
+  WritableCareerProfileData,
+  WritableCareerProfileDataResponse,
 };
