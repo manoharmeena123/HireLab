@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, Form } from 'react-bootstrap';
 import Link from 'next/link';
-
+import {useGetResumeDataQuery,  useCreateResumeItSkillsMutation,
+    useUpdateResumeItSkillsMutation} from '@/app/my-resume/store/resume.query'
 interface ITSkillsProps {
     show: boolean;
     onShow: () => void;

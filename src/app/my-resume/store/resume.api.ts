@@ -15,6 +15,8 @@ import {
   WritablePersonalDetailsResponse,
   WritableCareerProfileData,
   WritableCareerProfileDataResponse,
+  WritableResumeItSkill,
+  WritableResumeItSkillResponse
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -159,4 +161,21 @@ export const queries = {
       body: { career_profile_id, ...data },
     }),
   },
+
+  // api/create-resume-it-skill
+
+  createResumeItSkills :{
+    query :(data : WritableResumeItSkill)=>({
+      url :"api/create-resume-it-skill",
+      method: "POST",
+      body: data,
+    })
+  },
+  updateResumeItSkills : {
+    query :(data : WritableResumeItSkill, it_skill_id : number)=>({
+      url :"api/update-resume-it-skill",
+      method: "POST",
+      body: { it_skill_id,...data },
+    })
+  }
 };

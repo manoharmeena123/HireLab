@@ -15,27 +15,13 @@ interface DesiredCareerProfileProps {
   onHide: () => void;
 }
 
-interface CareerProfileData {
-  career_profile_id?: number;
-  industry: string;
-  functional_area: string;
-  role: string;
-  job_type: string;
-  employment_type: string;
-  desired_shift: string;
-  availability_to_join: string;
-  expected_salary: string;
-  desired_location: string;
-  desired_industry: string;
-}
-
 const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
   show,
   onShow,
   onHide,
 }) => {
   const { data: resumeData } = useGetResumeDataQuery();
-  const [profileData, setProfileData] = useState<CareerProfileData>({
+  const [profileData, setProfileData] = useState<WritableCareerProfileData>({
     career_profile_id: undefined,
     industry: "",
     functional_area: "",
@@ -62,14 +48,13 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
       const initialProfile = resumeData?.data[0]?.career_profiles[0];
       setProfileData({
         ...initialProfile,
-        expected_salary: initialProfile?.expected_salary?.replace(' lakh', '') || "",
+        expected_salary:
+          initialProfile?.expected_salary?.replace(" lakh", "") || "",
       });
     }
   }, [resumeData]);
 
-  const handleChange = (
-    e: any
-  ) => {
+  const handleChange = (e: any) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({
       ...prevData,
@@ -80,15 +65,22 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
   const validate = () => {
     const newErrors: Record<string, string> = {};
     if (!profileData.industry) newErrors.industry = "Industry is required";
-    if (!profileData.functional_area) newErrors.functional_area = "Functional Area is required";
+    if (!profileData.functional_area)
+      newErrors.functional_area = "Functional Area is required";
     if (!profileData.role) newErrors.role = "Role is required";
     if (!profileData.job_type) newErrors.job_type = "Job Type is required";
-    if (!profileData.employment_type) newErrors.employment_type = "Employment Type is required";
-    if (!profileData.desired_shift) newErrors.desired_shift = "Desired Shift is required";
-    if (!profileData.availability_to_join) newErrors.availability_to_join = "Availability to Join is required";
-    if (!profileData.expected_salary) newErrors.expected_salary = "Expected Salary is required";
-    if (!profileData.desired_location) newErrors.desired_location = "Desired Location is required";
-    if (!profileData.desired_industry) newErrors.desired_industry = "Desired Industry is required";
+    if (!profileData.employment_type)
+      newErrors.employment_type = "Employment Type is required";
+    if (!profileData.desired_shift)
+      newErrors.desired_shift = "Desired Shift is required";
+    if (!profileData.availability_to_join)
+      newErrors.availability_to_join = "Availability to Join is required";
+    if (!profileData.expected_salary)
+      newErrors.expected_salary = "Expected Salary is required";
+    if (!profileData.desired_location)
+      newErrors.desired_location = "Desired Location is required";
+    if (!profileData.desired_industry)
+      newErrors.desired_industry = "Desired Industry is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -262,7 +254,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                     <div className="form-group">
                       <label>Employment Type</label>
                       <div className="row">
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-3 col-md-6 col-sm-6">
                           <div className="custom-control custom-checkbox">
                             <input
                               type="checkbox"
@@ -270,7 +262,9 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                               id="fulltime"
                               name="employment_type"
                               value="Full Time"
-                              checked={profileData.employment_type === "Full Time"}
+                              checked={profileData.employment_type.includes(
+                                "Full Time"
+                              )}
                               onChange={handleChange}
                             />
                             <label
@@ -281,7 +275,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                             </label>
                           </div>
                         </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-3 col-md-6 col-sm-6">
                           <div className="custom-control custom-checkbox">
                             <input
                               type="checkbox"
@@ -289,7 +283,9 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                               id="parttime"
                               name="employment_type"
                               value="Part Time"
-                              checked={profileData.employment_type === "Part Time"}
+                              checked={profileData.employment_type.includes(
+                                "Part Time"
+                              )}
                               onChange={handleChange}
                             />
                             <label
@@ -303,11 +299,12 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                       </div>
                     </div>
                   </div>
+
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Preferred Shift</label>
                       <div className="row">
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-3 col-md-6 col-sm-6">
                           <div className="custom-control custom-radio">
                             <input
                               type="radio"
@@ -326,7 +323,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                             </label>
                           </div>
                         </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-3 col-md-6 col-sm-6">
                           <div className="custom-control custom-radio">
                             <input
                               type="radio"
@@ -345,7 +342,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                             </label>
                           </div>
                         </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-3 col-md-6 col-sm-6">
                           <div className="custom-control custom-radio">
                             <input
                               type="radio"
@@ -371,7 +368,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                     <div className="form-group">
                       <label>Availability to Join</label>
                       <div className="row">
-                        <div className="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-6 col-md-6 col-sm-6">
                           <Form.Control
                             as="select"
                             name="availability_to_join"
@@ -388,7 +385,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                             {errors.availability_to_join}
                           </Form.Control.Feedback>
                         </div>
-                        <div className="col-lg-6 col-md-6 col-sm-6 col-6">
+                        <div className="col-lg-6 col-md-6 col-sm-6">
                           <Form.Control
                             as="select"
                             name="availability_to_join"
@@ -525,7 +522,15 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
             </div>
             <div className="clearfix m-b20">
               <label className="m-b0">Role</label>
-              <span className="clearfix font-13">{profileData.role || "N/A"}</span>
+              <span className="clearfix font-13">
+                {profileData.role || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Employment Type</label>
+              <span className="clearfix font-13">
+                {profileData.role || "N/A"}
+              </span>
             </div>
             <div className="clearfix m-b20">
               <label className="m-b0">Employment Type</label>
@@ -555,7 +560,9 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
             </div>
             <div className="clearfix m-b20">
               <label className="m-b0">Job Type</label>
-              <span className="clearfix font-13">{profileData.job_type || "N/A"}</span>
+              <span className="clearfix font-13">
+                {profileData.job_type || "N/A"}
+              </span>
             </div>
             <div className="clearfix m-b20">
               <label className="m-b0">Desired Shift</label>
