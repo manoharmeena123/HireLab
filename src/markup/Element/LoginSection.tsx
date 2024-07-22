@@ -87,6 +87,12 @@ const Login = () => {
                             />
                           </div>
                         </div> */}
+                        {/* <h3
+                          className={`form-title m-t0 ${styles["rubik-font"]}`}
+                          style={{ fontWeight: "700"}}
+                        >
+                          <span style={{color:'#2a6310' }}>Welcome</span> Back!
+                        </h3> */}
                         <h3
                           className={`form-title m-t0 ${styles["rubik-font"]}`}
                           style={{ fontWeight: "600" }}
@@ -124,14 +130,14 @@ const Login = () => {
                                 Remember Me
                               </label>
                             </div>
-                            <div className={styles["forget-div"]}>
+                            {/* <div className={styles["forget-div"]}>
                               <Link
                                 href="/forgot-password"
                                 className={styles["forgot-password-link"]}
                               >
                                 Forgot Password?
                               </Link>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
