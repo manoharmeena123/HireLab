@@ -3,12 +3,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useAuthToken } from "@/hooks/useAuthToken";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export const ProfileDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   // const router = useRouter();
-  const { user,refetch } = useLoggedInUser();
+  const { user, refetch } = useLoggedInUser();
   // const { token } = useAuthToken();
 
   const toggleDropdown = () => {
@@ -18,15 +20,19 @@ export const ProfileDropdown = () => {
   return (
     <div className="profile-dropdown" ref={dropdownRef}>
       <div className="profile-header" onClick={toggleDropdown}>
-        <Image
-          src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-          className="profile-image"
-          alt="Profile Image"
-          width={41}
-          height={41}
-          objectFit="cover"
-          style={{ borderRadius:"3rem" }}
-        />
+        {user?.user?.image ? (
+          <Image
+            src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+            className="profile-image"
+            alt="Profile Image"
+            width={41}
+            height={41}
+            objectFit="cover"
+            style={{ borderRadius: "3rem" }}
+          />
+        ) : (
+          <FontAwesomeIcon icon={faUser} style={{ fontSize: "1.2rem" }} />
+        )}
         <span className="profile-name">{user?.user?.name}</span>
       </div>
 

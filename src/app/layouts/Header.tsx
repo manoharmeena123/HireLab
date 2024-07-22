@@ -173,7 +173,7 @@ const Header = () => {
                 menuOpen ? "show" : ""
               }`}
               id="navbarNavDropdown"
-              style={{ paddingRight: "2rem" }}
+              // style={{ paddingRight: "2rem" }}
             >
               
               {menuOpen && (
