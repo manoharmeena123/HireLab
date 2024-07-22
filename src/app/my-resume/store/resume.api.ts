@@ -202,4 +202,21 @@ export const queries = {
       };
     },
   },
+
+  //api/create-resume-accomplishments
+
+  createResumeAccomplishments: {
+    query: (data: WritableAccomplishmentsData) => ({
+      url: "api/create-resume-accomplishments",
+      method: "POST",
+      body: data,
+    }),
+  },
+  updateResumeAccomplishments: {
+    query: (data: WritableAccomplishmentsData, accomplishment_id: number) => ({
+      url: `api/update-resume-accomplishments`,
+      method: "POST",
+      body: { accomplishment_id, ...data },
+    }),
+  },
 };

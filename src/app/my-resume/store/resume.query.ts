@@ -185,6 +185,14 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: (formData) => queries.updateAttachResumeFile.query(formData),
       invalidatesTags: ["Resume"],
     }),
+    createResumeAccomplishments : builder.mutation<WritableAccomplishmentsResponse,WritableAccomplishmentsData>({
+      query : (data) => queries.createResumeAccomplishments.query(data),
+      invalidatesTags : ["Resume"]
+    }),
+    updateResumeAccomplishments : builder.mutation<WritableAccomplishmentsResponse,{data: WritableAccomplishmentsData, accomplishment_id:number}>({
+      query : ({data,accomplishment_id}) => queries.updateResumeAccomplishments.query(data,accomplishment_id),
+      invalidatesTags : ["Resume"]
+    }),
   }),
   overrideExisting: true,
 });
@@ -211,6 +219,8 @@ export const {
   useUpdateResumeItSkillsMutation,
   useCreateAttachmResumeFileMutation,
   useUpdateAttachResumeFileMutation,
+  useCreateResumeAccomplishmentsMutation,
+  useUpdateResumeAccomplishmentsMutation,
 } = resumeApi;
 
 export default resumeApi;
