@@ -20,6 +20,10 @@ import {
   WritableCareerProfileDataResponse,
   WritableResumeItSkill,
   WritableResumeItSkillResponse,
+  WritableCreateResumeFile,
+  WritableCreateResumeFileResponse,
+  WritableAccomplishmentsData,
+  WritableAccomplishmentsResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -167,6 +171,20 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
         queries.updateResumeItSkills.query(data, it_skill_id),
       invalidatesTags: ["Resume"],
     }),
+    createAttachmResumeFile: builder.mutation<
+      WritableCreateResumeFileResponse,
+      FormData
+    >({
+      query: (file) => queries.createAttachmResumeFile.query(file),
+      invalidatesTags: ["Resume"],
+    }),
+    updateAttachResumeFile: builder.mutation<
+      WritableCreateResumeFileResponse,
+      FormData
+    >({
+      query: (formData) => queries.updateAttachResumeFile.query(formData),
+      invalidatesTags: ["Resume"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -191,6 +209,8 @@ export const {
   useUpdateCareerProfileMutation,
   useCreateResumeItSkillsMutation,
   useUpdateResumeItSkillsMutation,
+  useCreateAttachmResumeFileMutation,
+  useUpdateAttachResumeFileMutation,
 } = resumeApi;
 
 export default resumeApi;

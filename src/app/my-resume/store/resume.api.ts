@@ -16,7 +16,11 @@ import {
   WritableCareerProfileData,
   WritableCareerProfileDataResponse,
   WritableResumeItSkill,
-  WritableResumeItSkillResponse
+  WritableResumeItSkillResponse,
+  WritableCreateResumeFile,
+  WritableCreateResumeFileResponse,
+  WritableAccomplishmentsData,
+  WritableAccomplishmentsResponse,
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -164,18 +168,38 @@ export const queries = {
 
   // api/create-resume-it-skill
 
-  createResumeItSkills :{
-    query :(data : WritableResumeItSkill)=>({
-      url :"api/create-resume-it-skill",
+  createResumeItSkills: {
+    query: (data: WritableResumeItSkill) => ({
+      url: "api/create-resume-it-skill",
       method: "POST",
       body: data,
-    })
+    }),
   },
-  updateResumeItSkills : {
-    query :(data : WritableResumeItSkill, it_skill_id : number)=>({
-      url :"api/update-resume-it-skill",
+  updateResumeItSkills: {
+    query: (data: WritableResumeItSkill, it_skill_id: number) => ({
+      url: "api/update-resume-it-skill",
       method: "POST",
-      body: { it_skill_id,...data },
-    })
-  }
+      body: { it_skill_id, ...data },
+    }),
+  },
+
+  // /api/create-resume-file
+  createAttachmResumeFile: {
+    query: (file: FormData) => {
+      return {
+        url: "api/create-resume-file",
+        method: "POST",
+        body: file,
+      };
+    },
+  },
+  updateAttachResumeFile: {
+    query: (formData: FormData) => {
+      return {
+        url: `api/update-resume-file`,
+        method: "POST",
+        body: formData,
+      };
+    },
+  },
 };
