@@ -183,9 +183,8 @@ interface CareerProfileDataResponse {
   data: CareerProfileData[];
 }
 
-
 interface ResumeItSkill {
-  it_skill_id?:number
+  it_skill_id?: number;
   skill: string;
   version: string;
   last_used: string;
@@ -200,6 +199,57 @@ interface ResumeItSkillResponse {
   data: ResumeItSkill[];
 }
 
+interface CreateResumeFile {
+  file_id?: number;
+  file: File;
+}
+
+interface CreateResumeFileResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: CreateResumeFile[];
+}
+
+//Accomplishments
+
+interface AccomplishmentsData {
+  online_social_profile: string;
+  online_social_url: string;
+  online_social_description: string;
+  work_title: string;
+  work_url: string;
+  work_duration_from: string;
+  work_duration_to: string;
+  work_I_am_currently_working_on_this: string;
+  work_description: string;
+  white_paper_title: string;
+  white_paper_url: string;
+  white_paper_published_on_year: string;
+  white_paper_published_on_month: string;
+  white_paper_description: string;
+  presentation_title: string;
+  presentation_url: string;
+  presentation_description: string;
+  patent_title: string;
+  patent_url: string;
+  patent_office: string;
+  patent_status: string;
+  patent_application_number: string;
+  patent_published_on_year: string;
+  patent_published_on_month: string;
+  patent_description: string;
+  certification_name: string;
+  certification_body: string;
+  certification_year: string;
+}
+
+interface AccomplishmentsResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: AccomplishmentsData[];
+}
 
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
@@ -213,16 +263,20 @@ type WritableEducationDataResponse = WritableDraft<EducationDataResponse>;
 type WritableProjectData = WritableDraft<ProjectData>;
 type WritableProjectDataResponse = WritableDraft<ProjectDataResponse>;
 type WritableProfileSummaryData = WritableDraft<ProfileSummaryData>;
-type WritableProfileSummaryDataResponse =
-  WritableDraft<ProfileSummaryDataResponse>;
+type WritableProfileSummaryDataResponse = WritableDraft<ProfileSummaryDataResponse>;
 type WritablePersonalDetails = WritableDraft<PersonalDetails>;
 type WritablePersonalDetailsResponse = WritableDraft<PersonalDetailsResponse>;
 type WritableCareerProfileData = WritableDraft<CareerProfileData>;
-type WritableCareerProfileDataResponse =
-  WritableDraft<CareerProfileDataResponse>;
-  type WritableResumeItSkill = WritableDraft<ResumeItSkill>;
-type WritableResumeItSkillResponse =
-  WritableDraft<ResumeItSkillResponse>;
+type WritableCareerProfileDataResponse = WritableDraft<CareerProfileDataResponse>;
+type WritableResumeItSkill = WritableDraft<ResumeItSkill>;
+type WritableResumeItSkillResponse = WritableDraft<ResumeItSkillResponse>;
+type WritableCreateResumeFile = WritableDraft<CreateResumeFile>;
+type WritableCreateResumeFileResponse = WritableDraft<CreateResumeFileResponse>;
+type WritableAccomplishmentsData = WritableDraft<AccomplishmentsData>;
+type WritableAccomplishmentsResponse = WritableDraft<AccomplishmentsResponse>;
+
+
+
 
 export {
   WritableResumeFetchResponse,
@@ -243,5 +297,9 @@ export {
   WritableCareerProfileData,
   WritableCareerProfileDataResponse,
   WritableResumeItSkill,
-  WritableResumeItSkillResponse
+  WritableResumeItSkillResponse,
+  WritableCreateResumeFile,
+  WritableCreateResumeFileResponse,
+  WritableAccomplishmentsData,
+  WritableAccomplishmentsResponse,
 };

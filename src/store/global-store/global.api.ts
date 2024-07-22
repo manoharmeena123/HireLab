@@ -256,28 +256,4 @@ export const queries = {
       body: commentData,
     }),
   },
-
-  // /api/create-resume-file
-  createAttachmResume :{
-    query: (file: File) => ({
-      url: "api/create-resume-file",
-      method: "POST",
-      body: file,
-    }),
-  },
-  updateAttachResume :[
-    {
-      query: (file: File, resumeId: string) => ({
-        url: `api/update-resume-file/${resumeId}`,
-        method: "PUT",
-        body: file,
-      }),
-    },
-    {
-      query: (resumeId: string) => ({
-        url: `api/delete-resume-file/${resumeId}`,
-        method: "DELETE",
-      }),
-    },
-  ]
 };
