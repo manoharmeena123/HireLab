@@ -12,7 +12,11 @@ import {
   WritableProfileSummaryData,
   WritableProfileSummaryDataResponse,
   WritablePersonalDetails,
-  WritablePersonalDetailsResponse
+  WritablePersonalDetailsResponse,
+  WritableCareerProfileData,
+  WritableCareerProfileDataResponse,
+  WritableResumeItSkill,
+  WritableResumeItSkillResponse
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -75,68 +79,103 @@ export const queries = {
 
   // /api/create-resume-education
 
-  createEducation :{
+  createEducation: {
     query: (data: WritableEducationData) => ({
       url: "api/create-resume-education",
       method: "POST",
       body: data,
     }),
   },
-  updateEducation :{
+  updateEducation: {
     query: (data: WritableEducationData, education_id: number) => ({
       url: `api/update-resume-education`,
       method: "POST",
-      body: { education_id,...data },
+      body: { education_id, ...data },
     }),
   },
 
   // /api/create-resume-projects
-  createResumeProject :{
+  createResumeProject: {
     query: (data: WritableProjectData) => ({
       url: "api/create-resume-projects",
       method: "POST",
       body: data,
     }),
   },
-  updateResumeProject :{
+  updateResumeProject: {
     query: (data: WritableProjectData, project_id: number) => ({
       url: `api/update-resume-projects`,
       method: "POST",
-      body: { project_id,...data },
+      body: { project_id, ...data },
     }),
   },
 
   //api/create-resume-profile-summary
 
-  createProfileSummary :{ 
+  createProfileSummary: {
     query: (data: WritableProfileSummaryData) => ({
       url: "api/create-resume-profile-summary",
       method: "POST",
       body: data,
     }),
   },
-  updateProfileSummary :{ 
+  updateProfileSummary: {
     query: (data: WritableProfileSummaryData, profile_summary_id: number) => ({
       url: `api/update-resume-profile-summary`,
       method: "POST",
-      body: { profile_summary_id,...data },
+      body: { profile_summary_id, ...data },
     }),
   },
 
   // api/create-resume-personal-detail
 
-  createResumePersonalDetails :{
+  createResumePersonalDetails: {
     query: (data: WritablePersonalDetails) => ({
       url: "api/create-resume-personal-detail",
       method: "POST",
       body: data,
     }),
   },
-  updateResumePersonalDetails :{
+  updateResumePersonalDetails: {
     query: (data: WritablePersonalDetails, personal_detail_id: number) => ({
       url: `api/update-resume-personal-detail`,
       method: "POST",
-      body: { personal_detail_id,...data },
+      body: { personal_detail_id, ...data },
     }),
+  },
+
+  ///api/create-resume-career-profile
+
+  createCareerProfile: {
+    query: (data: WritableCareerProfileData) => ({
+      url: "api/create-resume-career-profile",
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  updateCareerProfile: {
+    query: (data: WritableCareerProfileData, career_profile_id: number) => ({
+      url: `api/update-resume-career-profile`,
+      method: "POST",
+      body: { career_profile_id, ...data },
+    }),
+  },
+
+  // api/create-resume-it-skill
+
+  createResumeItSkills :{
+    query :(data : WritableResumeItSkill)=>({
+      url :"api/create-resume-it-skill",
+      method: "POST",
+      body: data,
+    })
+  },
+  updateResumeItSkills : {
+    query :(data : WritableResumeItSkill, it_skill_id : number)=>({
+      url :"api/update-resume-it-skill",
+      method: "POST",
+      body: { it_skill_id,...data },
+    })
   }
 };
