@@ -183,6 +183,24 @@ interface CareerProfileDataResponse {
   data: CareerProfileData[];
 }
 
+
+interface ResumeItSkill {
+  it_skill_id?:number
+  skill: string;
+  version: string;
+  last_used: string;
+  experience: string;
+  description: string;
+}
+
+interface ResumeItSkillResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: ResumeItSkill[];
+}
+
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -202,6 +220,9 @@ type WritablePersonalDetailsResponse = WritableDraft<PersonalDetailsResponse>;
 type WritableCareerProfileData = WritableDraft<CareerProfileData>;
 type WritableCareerProfileDataResponse =
   WritableDraft<CareerProfileDataResponse>;
+  type WritableResumeItSkill = WritableDraft<ResumeItSkill>;
+type WritableResumeItSkillResponse =
+  WritableDraft<ResumeItSkillResponse>;
 
 export {
   WritableResumeFetchResponse,
@@ -221,4 +242,6 @@ export {
   WritablePersonalDetailsResponse,
   WritableCareerProfileData,
   WritableCareerProfileDataResponse,
+  WritableResumeItSkill,
+  WritableResumeItSkillResponse
 };
