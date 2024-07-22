@@ -146,6 +146,11 @@ const SingleDiscussion = () => {
     }
   };
 
+  const handleEditComment = async (commentId: any) => {
+  console.log('edit comment');
+
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -193,6 +198,8 @@ const SingleDiscussion = () => {
                       }}
                       commentData={comments}
                       onSubmitAction={handleCommentSubmit}
+                      onReplyAction={handleCommentSubmit}
+                      onEditAction={handleEditComment}
                       currentData={(data: any) => {
                         console.log("current data", data);
                       }}
