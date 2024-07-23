@@ -7,12 +7,14 @@ import {
   useUpdateAttachResumeFileMutation,
 } from "@/app/my-resume/store/resume.query";
 import Loading from "@/components/Loading";
+
 const AttachResume = () => {
   const { data: resumeData, isLoading } = useGetResumeDataQuery();
   const [createAttachmResumeFile] = useCreateAttachmResumeFileMutation();
   const [updateFile] = useUpdateAttachResumeFileMutation();
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
+  const [currentFileUrl, setCurrentFileUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (resumeData && resumeData.data.length > 0) {
@@ -20,6 +22,7 @@ const AttachResume = () => {
       if (resumeFile) {
         setCurrentFile(resumeFile.file);
         setResumeId(resumeFile.id);
+        setCurrentFileUrl(resumeFile.file); // Assuming the API provides a URL field
       }
     }
   }, [resumeData]);
@@ -40,7 +43,8 @@ const AttachResume = () => {
           } else {
             await createAttachmResumeFile(formData);
           }
-          setCurrentFile(URL.createObjectURL(file));
+          setCurrentFile(file.name);
+          setCurrentFileUrl(URL.createObjectURL(file)); // Update the URL for download
         } catch (error) {
           console.error("Failed to upload file", error);
         }
@@ -53,14 +57,23 @@ const AttachResume = () => {
 
   return (
     <>
-     { isLoading && <Loading />}
+      {isLoading && <Loading />}
       <div id="attach_resume_bx" className="job-bx bg-white m-b30">
         <h5 className="m-b10">Attach Resume</h5>
         <p>
           Resume is the most important document recruiters look for. Recruiters
           generally do not look at profiles without resumes.
         </p>
-        {currentFile && <div className="m-b10">{currentFile}</div>}
+        {currentFile && (
+          <div className="m-b10">
+            {currentFileUrl && (
+              <a href={currentFileUrl} download={currentFile} target="_blank" rel="noopener noreferrer">
+                <i className="fa fa-download"></i> Download Resume
+              </a>
+            )}
+            {currentFile}{" "}
+          </div>
+        )}
         <form className="attach-resume">
           <div className="row">
             <div className="col-lg-12 col-md-12">
