@@ -96,3 +96,13 @@ export interface ManageResponse {
   message: string;
   data: JobData[][];
 }
+
+export type getJobUserData = {
+  jobId: string;
+};
+export interface getJobUserDataResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: any[];
+}
