@@ -8,6 +8,7 @@ import {
   useGetManageJobQuery,
   useDeleteManageJobMutation,
   useUpdateManageJobMutation,
+  useGetJobUserMutation
 } from "@/app/manage-job/store/manage-job.query";
 import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
@@ -20,6 +21,8 @@ import { useRouter } from "next/navigation";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import Loading from "@/components/Loading";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const ManageJobs = () => {
   const { push } = useRouter();
@@ -33,6 +36,8 @@ const ManageJobs = () => {
   const { removeToken } = useAuthToken();
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
+  const [getJobUser, {data: getJobuser}] = useGetJobUserMutation()
+  console.log('getJobuser', getJobuser)
   const { user, refetch } = useLoggedInUser();
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
@@ -54,7 +59,6 @@ const ManageJobs = () => {
 
   const flattenedJobsData = jobsData?.data?.flat() || [];
 
-  const [postJob, { isLoading }] = usePostJobMutation();
 
   const handleEditJob = async (selectedJob: any) => {
     try {
@@ -135,14 +139,31 @@ const ManageJobs = () => {
                     <div className="candidate-info company-info">
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
-                          <Link href={"#"}>
+                          {user?.user?.image ? (
                             <Image
-                              src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-                              alt="Company Logo"
+                              src={`${IMAGE_URL + user?.user?.image}`}
+                              alt="profile picture"
                               width={300}
                               height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
                             />
-                          </Link>
+                          ) : (
+                            <Image
+                              src={profileIcon}
+                              alt="profile picture"
+                              width={300}
+                              height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          )}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
@@ -247,6 +268,7 @@ const ManageJobs = () => {
                           </th>
                           <th>Job Title</th>
                           <th>Location</th>
+                          <th>Applications</th>
                           <th>Date</th>
                           <th>Status</th>
                         </tr>
@@ -295,6 +317,9 @@ const ManageJobs = () => {
                             </td>
                             <td className="application text-primary">
                               {job?.address}
+                            </td>
+                            <td className="text-primary">
+                              ({job?.applicant_count})Applications
                             </td>
                             <td className="expired pending">
                               {formatDate(job?.created_at)}
