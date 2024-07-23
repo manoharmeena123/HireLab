@@ -19,4 +19,10 @@ export const queries = {
       method: "GET",
     }),
   },
+  getJobUser :{
+    query :(jobid :string) =>({
+      url :`get-job-users/${jobid}`,
+      method : "GET",
+    })
+  }
 };

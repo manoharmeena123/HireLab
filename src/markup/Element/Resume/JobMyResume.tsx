@@ -15,11 +15,14 @@ import Accomplishments from "./Accomplishments";
 import DesiredCareerProfile from "./DesiredCareerProfile";
 import PersonalDetails from "./PersonalDetails";
 import AttachResume from "./AttachResume";
-
+import { useLoggedInUser } from '@/hooks/useLoggedInUser'
+import { IMAGE_URL } from '@/lib/apiEndPoints'
 const bnr = require("@/images/banner/bnr1.jpg");
-const teamImg = require("@/images/team/pic1.jpg");
+const profileIcon = require("@/images/favicon.png");
 
 const JobMyResume: React.FC = () => {
+  const { user } = useLoggedInUser();
+  console.log('user', user)
   const [showBasicDetails, setShowBasicDetails] = useState(false);
   const [showResume, setShowResume] = useState(false);
   const [showKeySkills, setShowKeySkills] = useState(false);
@@ -44,22 +47,36 @@ const JobMyResume: React.FC = () => {
               <div className="col-lg-8 col-md-7 candidate-info">
                 <div className="candidate-detail">
                   <div className="canditate-des text-center">
-                    <Link href="/">
-                      <Image alt="" src={teamImg} />
-                    </Link>
-                    <div
-                      className="upload-link"
-                      title="update"
-                      data-toggle="tooltip"
-                      data-placement="right"
-                    >
-                      <input type="file" className="update-flie" />
-                      <i className="fa fa-camera"></i>
-                    </div>
+                      {/* <Image alt="" src={teamImg} /> */}
+                      {user?.user?.image ? (
+                            <Image
+                              src={`${IMAGE_URL + user?.user?.image}`}
+                              alt="profile picture"
+                              width={100}
+                              height={100}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          ) : (
+                            <Image
+                              src={profileIcon}
+                              alt="profile picture"
+                              width={100}
+                              height={100}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          )}
                   </div>
                   <div className="text-white browse-job text-left">
                     <h4 className="m-b0">
-                      John Doe
+                     {user?.user?.name}
                       <Link
                         href=""
                         onClick={() => setShowBasicDetails(true)}
@@ -73,17 +90,16 @@ const JobMyResume: React.FC = () => {
                     </p>
                     <ul className="clearfix">
                       <li>
-                        <i className="ti-location-pin"></i> Sacramento,
-                        California
+                        <i className="ti-location-pin"></i> {user?.user.address}
                       </li>
                       <li>
-                        <i className="ti-mobile"></i> +1 123 456 7890
+                        <i className="ti-mobile"></i> +91 {user?.user?.mobile_number}
                       </li>
                       <li>
                         <i className="ti-briefcase"></i> Fresher
                       </li>
                       <li>
-                        <i className="ti-email"></i> info@example.com
+                        <i className="ti-email"></i> {user?.user?.email}
                       </li>
                     </ul>
                     <div className="progress-box m-t10">
