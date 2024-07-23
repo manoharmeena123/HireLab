@@ -246,14 +246,14 @@ const ManageJobs = () => {
                             </div>
                           </th>
                           <th>Job Title</th>
-                          <th>Location</th>
+                          <th>Applications</th>
                           <th>Date</th>
                           <th>Status</th>
                         </tr>
                       </thead>
                       <tbody>
                         {flattenedJobsData?.map((job, index) => (
-                          <tr key={index}>
+                          <tr key={index} >
                             <td className="feature">
                               <div className="custom-control custom-checkbox">
                                 <input
@@ -280,7 +280,7 @@ const ManageJobs = () => {
                                 <ul className="job-post-info">
                                   <li>
                                     <i className="fa fa-map-marker"></i>{" "}
-                                    {job?.user?.location}
+                                    {job?.address}
                                   </li>
                                   <li>
                                     <i className="fa fa-bookmark-o"></i>{" "}
@@ -294,12 +294,22 @@ const ManageJobs = () => {
                               </div>
                             </td>
                             <td className="application text-primary">
-                              {job?.address}
+                              (9) Applications
                             </td>
                             <td className="expired pending">
                               {formatDate(job?.created_at)}
                             </td>
-                            <td className="job-links">
+                            <td className="job-links " style={{paddingTop:'1.5rem'}}>
+                            <div
+                                className="nav-link mn-icon"
+                                onClick={
+                                  () => viewJobHandler(job.id)
+                                  // setSelectedJob(job);
+                                  // setShow(true);
+                                }
+                              >
+                                <i className="fa fa-eye"></i>
+                              </div>
                               <div
                                 className="nav-link mn-icon"
                                 onClick={
@@ -311,7 +321,7 @@ const ManageJobs = () => {
                                 <i className="fa fa-edit"></i>
                               </div>
                               <div
-                                className="nav-link"
+                                className="nav-link mn-icon"
                                 onClick={() => handleDeleteJob(job?.id)}
                               >
                                 <i className="ti-trash"></i>
