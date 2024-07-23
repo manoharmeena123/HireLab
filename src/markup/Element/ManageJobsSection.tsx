@@ -8,7 +8,7 @@ import {
   useGetManageJobQuery,
   useDeleteManageJobMutation,
   useUpdateManageJobMutation,
-  useGetJobUserMutation
+  useGetJobUserMutation,
 } from "@/app/manage-job/store/manage-job.query";
 import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
@@ -23,6 +23,7 @@ import { useLogoutMutation } from "@/app/login/store/login.query";
 import Loading from "@/components/Loading";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import Pagination from "./Pagination";
 
 const ManageJobs = () => {
   const { push } = useRouter();
@@ -36,12 +37,16 @@ const ManageJobs = () => {
   const { removeToken } = useAuthToken();
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
-  const [getJobUser, {data: getJobuser}] = useGetJobUserMutation()
-  console.log('getJobuser', getJobuser)
+  const [getJobUser, { data: getJobuser }] = useGetJobUserMutation();
+  console.log("getJobuser", getJobuser);
   const { user, refetch } = useLoggedInUser();
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [show, setShow] = useState(false);
+  const [applshow, setApplshow] = useState(false);
+  const [applicationviewid, setApplicationviewid] = useState<
+    number | undefined
+  >(undefined);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -58,7 +63,6 @@ const ManageJobs = () => {
   };
 
   const flattenedJobsData = jobsData?.data?.flat() || [];
-
 
   const handleEditJob = async (selectedJob: any) => {
     try {
@@ -127,6 +131,13 @@ const ManageJobs = () => {
   const viewJobHandler = (id: number) => {
     push(`/job-edit?jobId=${id}`);
   };
+
+  const viewApplicationHandler = (id: number) => {
+    setApplshow(true);
+    setApplicationviewid(id);
+    getJobUser(id)
+  };
+
   return (
     <>
       <div className="page-content bg-white">
@@ -230,212 +241,299 @@ const ManageJobs = () => {
                   onSubmit={handleEditJob}
                   selectedJob={selectedJob || null}
                 />
-                <div className="col-xl-9 col-lg-8 m-b30">
-                  <div className="job-bx browse-job clearfix">
-                    <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">
-                        Manage jobs
-                      </h5>
-                      <div className="float-right">
-                        <span className="select-title">Sort by freshness</span>
-                        <select className="custom-btn">
-                          <option>All</option>
-                          <option>None</option>
-                          <option>Read</option>
-                          <option>Unread</option>
-                          <option>Starred</option>
-                          <option>Unstarred</option>
-                        </select>
+                {!applshow ? (
+                  <div className="col-xl-9 col-lg-8 m-b30">
+                    <div className="job-bx browse-job clearfix">
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Manage jobs
+                        </h5>
+                        <div className="float-right">
+                          <span className="select-title">
+                            Sort by freshness
+                          </span>
+                          <select className="custom-btn">
+                            <option>All</option>
+                            <option>None</option>
+                            <option>Read</option>
+                            <option>Unread</option>
+                            <option>Starred</option>
+                            <option>Unstarred</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
 
-                    <table className="table-job-bx cv-manager company-manage-job">
-                      <thead>
-                        <tr>
-                          <th className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                id="check12"
-                                className="custom-control-input selectAllCheckBox"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check12"
-                              ></label>
-                            </div>
-                          </th>
-                          <th>Job Title</th>
-                          <th>Location</th>
-                          <th>Applications</th>
-                          <th>Date</th>
-                          <th>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {flattenedJobsData?.map((job, index) => (
-                          <tr key={index}>
-                            <td className="feature">
+                      <table className="table-job-bx cv-manager company-manage-job">
+                        <thead>
+                          <tr>
+                            <th className="feature">
                               <div className="custom-control custom-checkbox">
                                 <input
                                   type="checkbox"
-                                  className="custom-control-input"
-                                  id={`check${index}`}
+                                  id="check12"
+                                  className="custom-control-input selectAllCheckBox"
                                   name="example1"
                                 />
                                 <label
                                   className="custom-control-label"
-                                  htmlFor={`check${index}`}
+                                  htmlFor="check12"
                                 ></label>
                               </div>
-                            </td>
-                            <td className="job-name">
-                              <div
-                                className="nav-link"
-                                onClick={() => {
-                                  setSelectedJob(job);
-                                  setCompany(true);
-                                }}
-                              >
-                                <span>{job.job_title}</span>
-                                <ul className="job-post-info">
-                                  <li>
-                                    <i className="fa fa-map-marker"></i>{" "}
-                                    {job?.user?.location}
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-bookmark-o"></i>{" "}
-                                    {job?.job_type?.title}
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-filter"></i>{" "}
-                                    {job?.user?.location}
-                                  </li>
-                                </ul>
-                              </div>
-                            </td>
-                            <td className="application text-primary">
-                              {job?.address}
-                            </td>
-                            <td className="text-primary">
-                              ({job?.applicant_count})Applications
-                            </td>
-                            <td className="expired pending">
-                              {formatDate(job?.created_at)}
-                            </td>
-                            <td className="job-links">
-                              <div
-                                className="nav-link mn-icon"
-                                onClick={
-                                  () => viewJobHandler(job.id)
-                                  // setSelectedJob(job);
-                                  // setShow(true);
-                                }
-                              >
-                                <i className="fa fa-edit"></i>
-                              </div>
-                              <div
-                                className="nav-link"
-                                onClick={() => handleDeleteJob(job?.id)}
-                              >
-                                <i className="ti-trash"></i>
-                              </div>
-                            </td>
+                            </th>
+                            <th>Job Title</th>
+                            <th>Applications</th>
+                            <th>Date</th>
+                            <th>Status</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                        </thead>
+                        <tbody>
+                          {flattenedJobsData?.map((job, index) => (
+                            <tr key={index}>
+                              <td className="feature">
+                                <div className="custom-control custom-checkbox">
+                                  <input
+                                    type="checkbox"
+                                    className="custom-control-input"
+                                    id={`check${index}`}
+                                    name="example1"
+                                  />
+                                  <label
+                                    className="custom-control-label"
+                                    htmlFor={`check${index}`}
+                                  ></label>
+                                </div>
+                              </td>
+                              <td className="job-name">
+                                <div
+                                  className="nav-link"
+                                  onClick={() => {
+                                    setSelectedJob(job);
+                                    setCompany(true);
+                                  }}
+                                >
+                                  <span>{job.job_title}</span>
+                                  <ul className="job-post-info">
+                                    <li>
+                                      <i className="fa fa-map-marker"></i>{" "}
+                                      {job?.address}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-bookmark-o"></i>{" "}
+                                      {job?.job_type?.title}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-filter"></i>{" "}
+                                      {job?.user?.location}
+                                    </li>
+                                  </ul>
+                                </div>
+                              </td>
+                              <td className=" text-primary">
+                                ({job?.applicant_count})Applications
+                              </td>
+                              <td className="expired pending">
+                                {formatDate(job?.created_at)}
+                              </td>
+                              <td
+                                className="job-links "
+                                style={{ paddingTop: "1.5rem" }}
+                              >
+                                <div
+                                  className="nav-link mn-icon"
+                                  onClick={
+                                    () => viewApplicationHandler(job.id)
+                                    // setSelectedJob(job);
+                                    // setShow(true);
+                                  }
+                                >
+                                  <i className="fa fa-eye"></i>
+                                </div>
+                                <div
+                                  className="nav-link mn-icon"
+                                  onClick={
+                                    () => viewJobHandler(job.id)
+                                    // setSelectedJob(job);
+                                    // setShow(true);
+                                  }
+                                >
+                                  <i className="fa fa-edit"></i>
+                                </div>
+                                <div
+                                  className="nav-link mn-icon"
+                                  onClick={() => handleDeleteJob(job?.id)}
+                                >
+                                  <i className="ti-trash"></i>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                      <Pagination
+                        currentPage={1}
+                        itemsPerPage={8}
+                        totalItems={11}
+                        // onPageChange={handlePageChange}
+                      />
 
-                    <div className="pagination-bx m-t30 float-right">
-                      <ul className="pagination">
-                        <li className="previous">
-                          <Link href="#">
-                            <div>
-                              <i className="ti-arrow-left"></i> Prev
+                      <Modal
+                        show={company}
+                        onHide={() => setCompany(false)}
+                        className="modal fade modal-bx-info"
+                      >
+                        <div className="modal-dialog my-0" role="document">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <div className="logo-img">
+                                <img
+                                  alt=""
+                                  src={require("./../../images/logo/icon2.png")}
+                                />
+                              </div>
+                              <h5 className="modal-title">
+                                {selectedJob?.company_name}
+                              </h5>
+                              <button
+                                type="button"
+                                className="close"
+                                onClick={() => setCompany(false)}
+                              >
+                                <span aria-hidden="true">&times;</span>
+                              </button>
                             </div>
-                          </Link>
-                        </li>
-                        <li className="active">
-                          <Link href="#">
-                            <div>1</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="#">
-                            <div>2</div>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="#">
-                            <div>3</div>
-                          </Link>
-                        </li>
-                        <li className="next">
-                          <Link href="#">
-                            <div>
-                              Next <i className="ti-arrow-right"></i>
+                            <div className="modal-body">
+                              <ul>
+                                <li>
+                                  <strong>Job Title :</strong>
+                                  <p> {selectedJob?.job_title} </p>
+                                </li>
+                                <li>
+                                  <strong>Experience :</strong>
+                                  <p>{selectedJob?.user?.experience} Years</p>
+                                </li>
+                                <li>
+                                  <strong>Description :</strong>
+                                  <p>{selectedJob?.user?.description}</p>
+                                </li>
+                              </ul>
                             </div>
-                          </Link>
-                        </li>
-                      </ul>
+                            <div className="modal-footer">
+                              <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => setCompany(false)}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </Modal>
                     </div>
+                  </div>
+                ) : (
+                  <div className="col-xl-9 col-lg-8 m-b30">
+                    <div className="job-bx browse-job clearfix">
+                      <table className="table-job-bx cv-manager company-manage-job">
+                        <tbody>
+                          {flattenedJobsData
+                            ?.filter((appl) => appl.id === applicationviewid)
+                            .map((job, index) => (
+                              <tr key={job.id}>
+                                <td className="feature">
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={() => setApplshow(false)}
+                                  >
+                                    <i className="fa fa-arrow-left"></i>
+                                  </div>
+                                </td>
+                                <td className="job-name">
+                                  <div
+                                    className="nav-link"
+                                    onClick={() => {
+                                      setSelectedJob(job);
+                                      setCompany(true);
+                                    }}
+                                  >
+                                    <span>{job.job_title}</span>
+                                    <ul className="job-post-info">
+                                      <li>
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {job?.address}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-bookmark-o"></i>{" "}
+                                        {job?.job_type?.title}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-filter"></i>{" "}
+                                        {job?.user?.location}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </td>
+                                <td className="text-primary">
+                                  <Button variant="success" style={{background:'#2a6310'}}>
 
-                    <Modal
-                      show={company}
-                      onHide={() => setCompany(false)}
-                      className="modal fade modal-bx-info"
-                    >
-                      <div className="modal-dialog my-0" role="document">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <div className="logo-img">
-                              <img
-                                alt=""
-                                src={require("./../../images/logo/icon2.png")}
-                              />
-                            </div>
-                            <h5 className="modal-title">
-                              {selectedJob?.company_name}
-                            </h5>
-                            <button
-                              type="button"
-                              className="close"
-                              onClick={() => setCompany(false)}
-                            >
-                              <span aria-hidden="true">&times;</span>
-                            </button>
+                                  ({job?.applicant_count}) Applications
+                                  </Button>
+                                </td>
+                                <td className="expired pending">Pending</td>
+                                <td
+                                  className="job-links"
+                                  style={{ paddingTop: "1.5rem" }}
+                                >
+                                  <div
+                                    className="nav-link mn-icon"
+                                    // onClick={() => viewJobHandler(job.id)}
+                                  >
+                                    <i className="fa fa-eye"></i>
+                                  </div>
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={() => viewJobHandler(job.id)}
+                                  >
+                                    <i className="fa fa-edit"></i>
+                                  </div>
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={() => handleDeleteJob(job.id)}
+                                  >
+                                    <i className="ti-trash"></i>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                        </tbody>
+                      </table>
+                      <div>
+                        <div className="d-flex py-4">
+                          <div className="col-4 d-flex align-items-center">
+                          <div
+                                    className="nav-link mn-icon"
+                                  >
+                                    <i className="fa fa-user"></i>
+                                  </div>
+                                  <h6 className="mb-0">Muhd Najeeb</h6>
                           </div>
-                          <div className="modal-body">
-                            <ul>
-                              <li>
-                                <strong>Job Title :</strong>
-                                <p> {selectedJob?.job_title} </p>
-                              </li>
-                              <li>
-                                <strong>Experience :</strong>
-                                <p>{selectedJob?.user?.experience} Years</p>
-                              </li>
-                              <li>
-                                <strong>Description :</strong>
-                                <p>{selectedJob?.user?.description}</p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              onClick={() => setCompany(false)}
-                            >
-                              Close
-                            </button>
+                          <div className="col-8 d-flex application-btns-wrap">
+                            <Button variant="success">ACCEPT</Button>
+                            <Button variant="success">REJECT</Button>
+                            <Button variant="success">VIEW PROFILE</Button>
+                            <Button variant="success">CHAT</Button>
                           </div>
                         </div>
                       </div>
-                    </Modal>
+                      {/* <Pagination
+                        currentPage={1}
+                        itemsPerPage={8}
+                        totalItems={11}
+                        // onPageChange={handlePageChange}
+                      /> */}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
