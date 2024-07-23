@@ -1,5 +1,5 @@
 // src/app/manage-jobs/store/manage-job.query.ts
-import { ManageResponse, JobData } from "../types/index";
+import { ManageResponse, JobData, getJobUserData,getJobUserDataResponse } from "../types/index";
 import { hirelabApiSlice } from "@/rtk/base-query";
 import { queries } from "./manage-job.api";
 
@@ -31,8 +31,8 @@ const manageJobApi = hirelabEnhancedSlice.injectEndpoints({
         invalidatesTags: ["DeleteManageJob"],
       }
     ),
-    getJobUser: builder.mutation<any, { jobid: number }>({
-      query: (jobid) => queries.getJobUser.query(jobid),
+    getJobUser: builder.mutation<getJobUserDataResponse, number>({
+      query: (jobId) => queries.getJobUser.query(jobId),
       invalidatesTags: ["GetJobUser"],
     }),
   }),

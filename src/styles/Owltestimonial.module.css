@@ -1,0 +1,28 @@
+.testimonialItem {
+    height: 300px; /* Set a fixed height for each testimonial item */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .testimonialText {
+    flex-grow: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5; /* Adjust based on desired number of lines */
+    -webkit-box-orient: vertical;
+  }
+  
+  .testimonialPic {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  
+  .testimonialDetail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
