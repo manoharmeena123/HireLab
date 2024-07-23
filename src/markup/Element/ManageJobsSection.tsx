@@ -48,7 +48,7 @@ const ManageJobs = () => {
   >(undefined);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const [currentPage, setCurrentPage] = useState(1);
   const handleDeleteJob = async (jobId: number) => {
     try {
       const res: any = await deleteManageJob(jobId.toString()).unwrap();
@@ -98,13 +98,13 @@ const ManageJobs = () => {
   }, [designationData, refetch]);
 
   useEffect(() => {
-    if (user && user.user?.designation_id !== null) {
-      const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find(
-        (option) => option.id === designationId
+    if (user && user?.user?.designation_id !== null) {
+      const designationId = user?.user?.designation_id.toString();
+      const designation = designationOptions?.find(
+        (option) => option?.id === designationId
       );
       if (designation) {
-        setDesignationLabel(designation.label);
+        setDesignationLabel(designation?.label);
       } else {
         setDesignationLabel("Designation not found");
       }
@@ -131,10 +131,10 @@ const ManageJobs = () => {
     push(`/job-edit?jobId=${id}`);
   };
 
-  const viewApplicationHandler = (id: number) => {
+  const viewApplicationHandler = (jobId: number) => {
     setApplshow(true);
-    setApplicationviewid(id);
-    getJobUser(id)
+    setApplicationviewid(jobId);
+    getJobUser(jobId);
   };
 
   return (
@@ -281,7 +281,7 @@ const ManageJobs = () => {
                             </th>
                             <th>Job Title</th>
                             <th>Applications</th>
-                            <th>Date</th>
+                            {/* <th>Date</th> */}
                             <th>Status</th>
                           </tr>
                         </thead>
@@ -330,9 +330,9 @@ const ManageJobs = () => {
                               <td className=" text-primary">
                                 ({job?.applicant_count})Applications
                               </td>
-                              <td className="expired pending">
+                              {/* <td className="expired pending">
                                 {formatDate(job?.created_at)}
-                              </td>
+                              </td> */}
                               <td
                                 className="job-links "
                                 style={{ paddingTop: "1.5rem" }}
@@ -369,10 +369,10 @@ const ManageJobs = () => {
                         </tbody>
                       </table>
                       <Pagination
-                        currentPage={1}
+                        currentPage={currentPage}
                         itemsPerPage={8}
                         totalItems={11}
-                        // onPageChange={handlePageChange}
+                        onPageChange={setCurrentPage} // onPageChange={handlePageChange}
                       />
 
                       <Modal
@@ -473,9 +473,11 @@ const ManageJobs = () => {
                                   </div>
                                 </td>
                                 <td className="text-primary">
-                                  <Button variant="success" style={{background:'#2a6310'}}>
-
-                                  ({job?.applicant_count}) Applications
+                                  <Button
+                                    variant="success"
+                                    style={{ background: "#2a6310" }}
+                                  >
+                                    ({job?.applicant_count}) Applications
                                   </Button>
                                 </td>
                                 <td className="expired pending">Pending</td>
@@ -507,14 +509,13 @@ const ManageJobs = () => {
                         </tbody>
                       </table>
                       <div>
-                        <div className="d-flex py-4">
-                          <div className="col-4 d-flex align-items-center">
-                          <div
-                                    className="nav-link mn-icon"
-                                  >
-                                    <i className="fa fa-user"></i>
-                                  </div>
-                                  <h6 className="mb-0">Muhd Najeeb</h6>
+                          {getJobuser?.data?.map((item :any, index :number)=>(
+                        <div className="d-flex py-4" key={index}>
+                            <div className="col-4 d-flex align-items-center">
+                            <div className="nav-link mn-icon">
+                              <i className="fa fa-user"></i>
+                            </div>
+                            <h6 className="mb-0">{item?.name}</h6>
                           </div>
                           <div className="col-8 d-flex application-btns-wrap">
                             <Button variant="success">ACCEPT</Button>
@@ -523,6 +524,7 @@ const ManageJobs = () => {
                             <Button variant="success">CHAT</Button>
                           </div>
                         </div>
+                          ))}
                       </div>
                       {/* <Pagination
                         currentPage={1}

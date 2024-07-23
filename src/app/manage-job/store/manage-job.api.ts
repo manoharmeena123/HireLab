@@ -20,8 +20,8 @@ export const queries = {
     }),
   },
   getJobUser :{
-    query :(jobid :string) =>({
-      url :`get-job-users/${jobid}`,
+    query :(jobId :number) =>({
+      url :`api/get-job-users/${jobId}`,
       method : "GET",
     })
   }

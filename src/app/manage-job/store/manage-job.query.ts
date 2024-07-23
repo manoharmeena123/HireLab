@@ -31,8 +31,8 @@ const manageJobApi = hirelabEnhancedSlice.injectEndpoints({
         invalidatesTags: ["DeleteManageJob"],
       }
     ),
-    getJobUser: builder.mutation<any, { jobid: number }>({
-      query: (jobid) => queries.getJobUser.query(jobid),
+    getJobUser: builder.mutation<any, { jobId: number }>({
+      query: (jobId) => queries.getJobUser.query(jobId),
       invalidatesTags: ["GetJobUser"],
     }),
   }),
