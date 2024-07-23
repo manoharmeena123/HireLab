@@ -13,7 +13,6 @@ import {
 import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
 import ModalPopup from "../../components/ModalPopup";
-import { usePostJobMutation } from "@/app/post-job/store/post-job.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";

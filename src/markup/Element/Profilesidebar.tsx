@@ -151,7 +151,7 @@ const Profilesidebar = ({ refetch }: any) => {
               </Link>
             </li>
             <li>
-              <Link href={"/jobs-cv-manager"}>
+              <Link href={"/cv-manager"}>
                 <i className="fa fa-id-card-o" aria-hidden="true"></i>
                 <span>CV Manager</span>
               </Link>
