@@ -13847,6 +13847,16 @@ ul.accordion-list {
 .job-links .nav-link.mn-icon{
   padding: 0;
 }
+.application-btns-wrap{
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.application-btns-wrap button{
+  min-width: 90px;
+  background: #2a6310;
+  border: none;
+}
 @media (min-width:992px) and (max-width:1250px) {
   .fullwidth .header-nav .nav > li > a {
     font-size: 10px;
