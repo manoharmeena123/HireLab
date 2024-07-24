@@ -145,7 +145,7 @@ const Profilesidebar = ({ refetch }: any) => {
               </Link>
             </li>
             <li>
-              <Link href={"/jobs-alerts"}>
+              <Link href={"/job-alert"}>
                 <i className="fa fa-bell-o" aria-hidden="true"></i>
                 <span>Job Alerts</span>
               </Link>

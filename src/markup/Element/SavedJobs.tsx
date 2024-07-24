@@ -10,6 +10,7 @@ import {
 } from "@/store/global-store/global.query";
 import { useRouter } from "next/navigation";
 import { formaterDate } from "@/utils/formateDate";
+import Loading from "@/components/Loading";
 
 interface Job {
   id: number | string;
@@ -21,8 +22,8 @@ interface Job {
 
 const SavedJobs = () => {
   const { push } = useRouter();
-  const { data: savedJob, refetch } = useGetSavedJobQuery();
-  const [deleteSavedJob, { isLoading, isSuccess, isError }] =
+  const { data: savedJob, refetch, isLoading : savedJobLoading } = useGetSavedJobQuery();
+  const [deleteSavedJob, { isLoading :deleteSavedJobLoading, isSuccess, isError }] =
     useDeleteSavedJobMutation();
   const [postModal, setPostModal] = useState(false);
   const [contacts, setContacts] = useState<any>();
@@ -157,6 +158,7 @@ const SavedJobs = () => {
 
   return (
     <>
+    {savedJobLoading && deleteSavedJobLoading && <Loading/> }
       <div className="job-bx save-job browse-job table-job-bx clearfix">
         <div className="job-bx-title clearfix">
           <h5 className="font-weight-700 pull-left text-uppercase">

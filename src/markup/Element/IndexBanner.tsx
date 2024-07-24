@@ -90,7 +90,7 @@ const IndexBanner: React.FC = () => {
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
             <Link
-              href="/browse-job"
+              href="/browse-job-filter"
               className="site-button button-sm"
               style={{ backgroundColor: "#2A6310" }}
             >
