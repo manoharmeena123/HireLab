@@ -116,7 +116,9 @@ const JobMyResume: React.FC = () => {
                       <div className="progress">
                         <div
                           className="progress-bar bg-primary"
-                          style={{ width: `${resumeProfileData?.data?.profile_strength}%` }}
+                          style={{
+                            width: `${resumeProfileData?.data?.profile_strength}%`,
+                          }}
                           role="progressbar"
                         ></div>
                       </div>
