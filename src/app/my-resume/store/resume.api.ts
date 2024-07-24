@@ -21,6 +21,14 @@ import {
   WritableCreateResumeFileResponse,
   WritableAccomplishmentsData,
   WritableAccomplishmentsResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -204,7 +212,6 @@ export const queries = {
   },
 
   //api/create-resume-accomplishments
-
   createResumeAccomplishments: {
     query: (data: WritableAccomplishmentsData) => ({
       url: "api/create-resume-accomplishments",
@@ -217,6 +224,111 @@ export const queries = {
       url: `api/update-resume-accomplishments`,
       method: "POST",
       body: { accomplishment_id, ...data },
+    }),
+  },
+
+  // api/resume-profile
+
+  resumeProfileData: {
+    query: () => ({
+      url: "api/resume-profile",
+      method: "GET",
+    }),
+  },
+
+  jobPosterFaq: {
+    query: () => ({
+      url: "api/faqs/job_poster",
+      method: "GET",
+    }),
+  },
+  jobSeekerFaq: {
+    query: () => ({
+      url: "api/faqs/job_seeker",
+      method: "GET",
+    }),
+  },
+  monthlyMeetFaq: {
+    query: () => ({
+      url: "api/faqs/monthly_meetups",
+      method: "GET",
+    }),
+  },
+  generalQuetionFaq: {
+    query: () => ({
+      url: `api/faqs/general_question`,
+      method: "GET",
+    }),
+  },
+  aboutUsFaq: {
+    query: () => ({
+      url: "api/page/about-us",
+      method: "GET",
+    }),
+  },
+  PrivacyPolicy: {
+    query: () => ({
+      url: "api/page/privacy-policy",
+      method: "GET",
+    }),
+  },
+  termsAndCondition: {
+    query: () => ({
+      url: "api/page/terms-and-conditions",
+      method: "GET",
+    }),
+  },
+  serviceSection: {
+    query: () => ({
+      url: "api/services",
+      method: "GET",
+    }),
+  },
+
+  //api/reject-job-candidate
+
+  rejectJobCandidate: {
+    query: (data: WritableRejectJobCandidate) => ({
+      url: `api/reject-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/accept-job-candidate
+
+  acceptJobCandidate: {
+    query: (data: WritableAcceptJobCandidate) => ({
+      url: `api/accept-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/save-membership
+
+  saveMemberShip: {
+    query: (data: WritableSaveMemberShip) => ({
+      url: `api/save-membership`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // /api/save-event
+
+  saveEvent: {
+    query: (data: WritableSaveEvent) => ({
+      url: `api/save-event`,
+      method: "POST",
+      body: data,
+    }),
+  },
+  ///api/my-event
+  myEvents: {
+    query: () => ({
+      url: `api/my-event`,
+      method: "GET",
     }),
   },
 };
