@@ -219,4 +219,62 @@ export const queries = {
       body: { accomplishment_id, ...data },
     }),
   },
+
+  // api/resume-profile
+
+  resumeProfileData: {
+    query: () => ({
+      url: "api/resume-profile",
+      method: "GET",
+    }),
+  },
+
+  jobPosterFaq: {
+    query: () => ({
+      url: "api/faqs/job_poster",
+      method: "GET",
+    }),
+  },
+  jobSeekerFaq: {
+    query: () => ({
+      url: "api/faqs/job_seeker",
+      method: "GET",
+    }),
+  },
+  monthlyMeetFaq: {
+    query: () => ({
+      url: "api/faqs/monthly_meetups",
+      method: "GET",
+    }),
+  },
+  generalQuetionFaq: {
+    query: () => ({
+      url: `api/faqs/general_question`,
+      method: "GET",
+    }),
+  },
+  aboutUsFaq: {
+    query: () => ({
+      url: "api/page/about-us",
+      method: "GET",
+    }),
+  },
+  PrivacyPolicy: {
+    query: () => ({
+      url: "api/page/privacy-policy",
+      method: "GET",
+    }),
+  },
+  termsAndCondition: {
+    query: () => ({
+      url: "api/page/terms-and-conditions",
+      method: "GET",
+    }),
+  },
+  serviceSection: {
+    query: () => ({
+      url: "api/services",
+      method: "GET",
+    }),
+  },
 };

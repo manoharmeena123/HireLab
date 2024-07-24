@@ -24,10 +24,30 @@ import {
   WritableCreateResumeFileResponse,
   WritableAccomplishmentsData,
   WritableAccomplishmentsResponse,
+  WritableProfileResumeResponse,
+  WritableJobPosterFAQResponse,
+  WritableJobSeekerFAQResponse,
+  WritableMonthlyMeetUpFAQResponse,
+  WritableGeneralQuetionFAQResponse,
+  WritableAboutUsResponse,
+  WritablePrivacyPolicyResponse,
+  WritableTermsAndConditionResponse,
+  WritableServiceResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
-  addTagTypes: ["Resume"],
+  addTagTypes: [
+    "Resume",
+    "ResumeProfile",
+    "JobPosterFAQ",
+    "JobSeekerFAQ",
+    "MonthlyMeetFAQ",
+    "GeneralQuetionFAQ",
+    "AboutUsFAQ",
+    "PrivacyPolicy",
+    "TermsAndCondition",
+    "ServiceSection",
+  ],
 });
 
 const resumeApi = hirelabEnhancedSlice.injectEndpoints({
@@ -185,13 +205,56 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: (formData) => queries.updateAttachResumeFile.query(formData),
       invalidatesTags: ["Resume"],
     }),
-    createResumeAccomplishments : builder.mutation<WritableAccomplishmentsResponse,WritableAccomplishmentsData>({
-      query : (data) => queries.createResumeAccomplishments.query(data),
-      invalidatesTags : ["Resume"]
+    createResumeAccomplishments: builder.mutation<
+      WritableAccomplishmentsResponse,
+      WritableAccomplishmentsData
+    >({
+      query: (data) => queries.createResumeAccomplishments.query(data),
+      invalidatesTags: ["Resume"],
     }),
-    updateResumeAccomplishments : builder.mutation<WritableAccomplishmentsResponse,{data: WritableAccomplishmentsData, accomplishment_id:number}>({
-      query : ({data,accomplishment_id}) => queries.updateResumeAccomplishments.query(data,accomplishment_id),
-      invalidatesTags : ["Resume"]
+    updateResumeAccomplishments: builder.mutation<
+      WritableAccomplishmentsResponse,
+      { data: WritableAccomplishmentsData; accomplishment_id: number }
+    >({
+      query: ({ data, accomplishment_id }) =>
+        queries.updateResumeAccomplishments.query(data, accomplishment_id),
+      invalidatesTags: ["Resume"],
+    }),
+    resumeProfileData: builder.query<WritableProfileResumeResponse, void>({
+      query: queries.resumeProfileData.query,
+      providesTags: ["ResumeProfile"],
+    }),
+    jobPosterFaq: builder.query<WritableJobPosterFAQResponse, void>({
+      query: queries.jobPosterFaq.query,
+      providesTags: ["JobPosterFAQ"],
+    }),
+    jobSeekerFaq: builder.query<WritableJobSeekerFAQResponse, void>({
+      query: queries.jobSeekerFaq.query,
+      providesTags: ["JobSeekerFAQ"],
+    }),
+    monthlyMeetFaq: builder.query<WritableMonthlyMeetUpFAQResponse, void>({
+      query: queries.monthlyMeetFaq.query,
+      providesTags: ["MonthlyMeetFAQ"],
+    }),
+    generalQuetionFaq: builder.query<WritableGeneralQuetionFAQResponse, void>({
+      query: queries.generalQuetionFaq.query,
+      providesTags: ["GeneralQuetionFAQ"],
+    }),
+    aboutUsFaq: builder.query<WritableAboutUsResponse, void>({
+      query: queries.aboutUsFaq.query,
+      providesTags: ["AboutUsFAQ"],
+    }),
+    PrivacyPolicy: builder.query<WritablePrivacyPolicyResponse, void>({
+      query: queries.PrivacyPolicy.query,
+      providesTags: ["PrivacyPolicy"],
+    }),
+    termsAndCondition: builder.query<WritableTermsAndConditionResponse, void>({
+      query: queries.termsAndCondition.query,
+      providesTags: ["TermsAndCondition"],
+    }),
+    serviceSection: builder.query<WritableServiceResponse, void>({
+      query: queries.serviceSection.query,
+      providesTags: ["ServiceSection"],
     }),
   }),
   overrideExisting: true,
@@ -221,6 +284,15 @@ export const {
   useUpdateAttachResumeFileMutation,
   useCreateResumeAccomplishmentsMutation,
   useUpdateResumeAccomplishmentsMutation,
+  useResumeProfileDataQuery,
+  useJobPosterFaqQuery,
+  useJobSeekerFaqQuery,
+  useMonthlyMeetFaqQuery,
+  useGeneralQuetionFaqQuery,
+  useAboutUsFaqQuery,
+  usePrivacyPolicyQuery,
+  useTermsAndConditionQuery,
+  useServiceSectionQuery,
 } = resumeApi;
 
 export default resumeApi;

@@ -251,6 +251,178 @@ interface AccomplishmentsResponse {
   data: AccomplishmentsData[];
 }
 
+//resume profile
+interface ProfileResumeResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: {
+      resume: boolean;
+      profile_strength: number;
+  };
+}
+
+// job poster FAQ Type
+interface JobPosterFAQ {
+  id?: number;
+  parent_id: number | null;
+  question: string;
+  answers: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  is_job_seeker: string;
+}
+
+interface JobPosterFAQResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: JobPosterFAQ[];
+}
+
+
+// job seeket FAQ
+interface JobSeekerFAQ {
+  id: number;
+  parent_id: number | null;
+  question: string;
+  answers: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  is_job_seeker: string;
+}
+
+interface JobSeekerFAQResponse {
+  code: number;
+  success: boolean;
+  data: JobSeekerFAQ[];
+}
+
+// monthly meetup
+interface MonthlyMeetUpFAQ {
+  id: number;
+  parent_id: number | null;
+  question: string;
+  answers: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  is_job_seeker: string;
+}
+
+interface MonthlyMeetUpFAQResponse {
+  code: number;
+  success: boolean;
+  data: MonthlyMeetUpFAQ[];
+}
+
+//general quetion
+
+interface GeneralQuetionFAQ {
+  id: number;
+  parent_id: number | null;
+  question: string;
+  answers: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  is_job_seeker: string;
+}
+
+interface GeneralQuetionFAQResponse {
+  code: number;
+  success: boolean;
+  data: GeneralQuetionFAQ[];
+}
+
+// about-us
+interface AboutUs {
+  id: number;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  bg_image: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface AboutUsResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: AboutUs[];
+}
+
+//privacy policy
+interface PrivacyPolicy {
+  id: number;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  bg_image: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface PrivacyPolicyResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: PrivacyPolicy[];
+}
+
+// terms and condition
+
+interface TermsAndCondition {
+  id: number;
+  title: string;
+  heading: string;
+  description: string;
+  image: string;
+  bg_image: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface TermsAndConditionResponse {
+  code: number;
+  success: string;
+  message: string;
+  data: TermsAndCondition[];
+}
+
+
+//service
+
+interface Service {
+  id: number;
+  title: string;
+  description: string;
+  image: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ServiceResponse {
+  code: number;
+  success: boolean;
+  data: Service[];
+}
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -276,6 +448,15 @@ type WritableAccomplishmentsData = WritableDraft<AccomplishmentsData>;
 type WritableAccomplishmentsResponse = WritableDraft<AccomplishmentsResponse>;
 
 
+type WritableProfileResumeResponse = WritableDraft<ProfileResumeResponse>;
+type WritableJobPosterFAQResponse = WritableDraft<JobPosterFAQResponse>;
+type WritableJobSeekerFAQResponse = WritableDraft<JobSeekerFAQResponse>;
+type WritableMonthlyMeetUpFAQResponse = WritableDraft<MonthlyMeetUpFAQResponse>;
+type WritableGeneralQuetionFAQResponse = WritableDraft<GeneralQuetionFAQResponse>;
+type WritableAboutUsResponse = WritableDraft<AboutUsResponse>;
+type WritablePrivacyPolicyResponse = WritableDraft<PrivacyPolicyResponse>;
+type WritableTermsAndConditionResponse = WritableDraft<TermsAndConditionResponse>;
+type WritableServiceResponse = WritableDraft<ServiceResponse>;
 
 
 export {
@@ -302,4 +483,13 @@ export {
   WritableCreateResumeFileResponse,
   WritableAccomplishmentsData,
   WritableAccomplishmentsResponse,
-};
+  WritableProfileResumeResponse,
+  WritableJobPosterFAQResponse,
+  WritableJobSeekerFAQResponse,
+  WritableMonthlyMeetUpFAQResponse,
+  WritableGeneralQuetionFAQResponse,
+  WritableAboutUsResponse,
+  WritablePrivacyPolicyResponse,
+  WritableTermsAndConditionResponse,
+  WritableServiceResponse
+  };
