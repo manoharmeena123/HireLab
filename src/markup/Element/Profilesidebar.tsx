@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { navigateSource } from "@/lib/action";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
@@ -12,6 +11,8 @@ import { toast } from "react-toastify";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const Profilesidebar = ({ refetch }: any) => {
   const router = useRouter();
@@ -83,18 +84,29 @@ const Profilesidebar = ({ refetch }: any) => {
         <div className="candidate-info">
           <div className="candidate-detail text-center">
             <div className="canditate-des">
-              <Link href={"#"}>
-                <Image
-                  src={`${IMAGE_URL + user?.user?.image}`}
-                  alt="profile picture"
-                  width={300}
-                  height={300}
-                  onError={(e) =>
-                    (e.currentTarget.src = "/default-profile.png")
-                  } // Fallback image
-                  style={{ borderRadius: "50%" }}
-                />
-              </Link>
+                {user?.user?.image ? (
+                  <Image
+                    src={`${IMAGE_URL + user?.user?.image}`}
+                    alt="profile picture"
+                    width={300}
+                    height={300}
+                    onError={(e) =>
+                      (e.currentTarget.src = "../../images/favicon.png")
+                    } // Fallback image
+                    style={{ borderRadius: "50%" }}
+                  />
+                ) : (
+                  <Image
+                    src={profileIcon}
+                    alt="profile picture"
+                    width={300}
+                    height={300}
+                    onError={(e) =>
+                      (e.currentTarget.src = "../../images/favicon.png")
+                    } // Fallback image
+                    style={{ borderRadius: "50%" }}
+                  />
+                )}
             </div>
             <div className="candidate-title">
               <div className="">
@@ -139,7 +151,7 @@ const Profilesidebar = ({ refetch }: any) => {
               </Link>
             </li>
             <li>
-              <Link href={"/jobs-cv-manager"}>
+              <Link href={"/cv-manager"}>
                 <i className="fa fa-id-card-o" aria-hidden="true"></i>
                 <span>CV Manager</span>
               </Link>

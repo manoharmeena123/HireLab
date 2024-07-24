@@ -37,6 +37,8 @@ import "@pathofdev/react-tag-input/build/index.css";
 import Loading from "@/components/Loading";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -168,7 +170,7 @@ const PostJobSection = () => {
     try {
       const response = await postJob(profileData).unwrap();
       if (response.code === 200) {
-        toast.success("Post Job successfully!", { theme: "colored" });
+        toast.success(response?.message, { theme: "colored" });
         router.push("/manage-job");
       } else if (response.code === 401) {
         toast.error(response.message, { theme: "colored" });
@@ -177,8 +179,9 @@ const PostJobSection = () => {
       } else {
         console.error("Unexpected error format:", response);
       }
-    } catch (err) {
+    } catch (err :any) {
       console.error("Error posting job:", err);
+      toast.success(err?.message, { theme: "colored" });
     }
   };
 
@@ -331,14 +334,29 @@ const PostJobSection = () => {
                   <div className="candidate-info company-info">
                     <div className="candidate-detail text-center">
                       <div className="canditate-des">
-                        <Link href={"#"}>
+                        {user?.user?.image ? (
                           <Image
-                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
-                            alt="Company Logo"
+                            src={`${IMAGE_URL + user?.user?.image}`}
+                            alt="profile picture"
                             width={300}
                             height={300}
+                            onError={(e) =>
+                              (e.currentTarget.src = "../../images/favicon.png")
+                            } // Fallback image
+                            style={{ borderRadius: "50%" }}
                           />
-                        </Link>
+                        ) : (
+                          <Image
+                            src={profileIcon}
+                            alt="profile picture"
+                            width={300}
+                            height={300}
+                            onError={(e) =>
+                              (e.currentTarget.src = "../../images/favicon.png")
+                            } // Fallback image
+                            style={{ borderRadius: "50%" }}
+                          />
+                        )}
                       </div>
                       <div className="candidate-title">
                         <h4 className="m-b5">
@@ -869,7 +887,9 @@ const PostJobSection = () => {
                             onChange={(event, editor) => {
                               const data = editor.getData();
                               setJobDescription(data);
-                              dispatch(setPostJobData({ job_description: data }));
+                              dispatch(
+                                setPostJobData({ job_description: data })
+                              );
                             }}
                           />
                         </div>

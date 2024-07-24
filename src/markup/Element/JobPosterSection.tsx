@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Select, { SingleValue } from "react-select";
-import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useRouter } from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { useUpdateProfileMutation } from "@/app/job-poster/store/job-poster.query";
@@ -15,6 +14,8 @@ import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { navigateSource } from "@/lib/action";
 import Loading from "@/components/Loading";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 interface OptionType {
   id: string;
   value: string;
@@ -86,12 +87,13 @@ const JobPosterSection = () => {
     event.preventDefault();
     try {
       const response = await updateProfile(profileData).unwrap();
-      toast.success("Profile successfully updated");
+      toast.success(response?.message);
       refetch();
       console.log("Profile Updated Successfully", response);
       // Redirect or show success message
-    } catch (error) {
+    } catch (error :any) {
       console.error("Failed to update profile", error);
+      toast.success(error?.message);
       // Handle error
     }
   };
@@ -174,14 +176,31 @@ const JobPosterSection = () => {
                     <div className="candidate-info company-info">
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
-                          <Link href={"#"}>
+                          {user?.user?.image ? (
                             <Image
                               src={`${IMAGE_URL + user?.user?.image}`}
-                              alt="Company Logo"
+                              alt="profile picture"
                               width={300}
                               height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
                             />
-                          </Link>
+                          ) : (
+                            <Image
+                              src={profileIcon}
+                              alt="profile picture"
+                              width={300}
+                              height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          )}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
@@ -296,7 +315,7 @@ const JobPosterSection = () => {
                           <div className="form-group">
                             <label>Founded Date</label>
                             <input
-                              type="text"
+                              type="date"
                               name="founded_date"
                               value={profileData.founded_date || ""}
                               onChange={handleChange}

@@ -156,12 +156,12 @@ const JobSeekerSection = () => {
     });
 
     try {
-      await postProfile(formData).unwrap();
-      toast.success("Profile Posted Successfully");
+     const res =  await postProfile(formData).unwrap();
+      toast.success(res?.message);
       refetch();
-    } catch (error) {
+    } catch (error :any) {
       console.log("error", error);
-      toast.error("Error in Profile");
+      toast.error(error.message);
     }
   };
 
@@ -353,7 +353,7 @@ const JobSeekerSection = () => {
                             <input
                               type="text"
                               className="form-control"
-                              placeholder="Enter Expected CTC"
+                              placeholder="Enter Expected CTC (in lakhs)"
                               name="expected_ctc"
                               value={profileForm.expected_ctc || ""}
                               onChange={handleInputChange}

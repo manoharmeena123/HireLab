@@ -202,7 +202,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
 
       <div className="row">
         <div className="col-lg-12 col-md-12 col-sm-12">
-          {resumeData?.data[0].educations.map((edu, index) => (
+          {resumeData?.data[0]?.educations.map((edu, index) => (
             <div key={index} className="clearfix m-b20">
               <label className="m-b0">{edu.title}</label>
               <span className="clearfix font-13">{edu.year}</span>

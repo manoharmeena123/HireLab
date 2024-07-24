@@ -13844,6 +13844,26 @@ ul.accordion-list {
     gap: 10px;
     justify-content: space-between;
 }
+.job-links .nav-link.mn-icon{
+  padding: 0;
+}
+.application-btns-wrap{
+  align-items: center;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.application-btns-wrap button{
+  min-width: 90px;
+  background: #2a6310;
+  border: none;
+}
+@media (min-width:992px) and (max-width:1250px) {
+  .fullwidth .header-nav .nav > li > a {
+    font-size: 10px;
+    font-weight: 800;
+  }
+  
+}
 @media (min-width:992px) {
 .membership_class {
   width: 100%;
@@ -13854,7 +13874,15 @@ ul.accordion-list {
 .mob-view-head{
   display: none !important;
 }
-  
+.fullwidth .logo-header {
+  margin-right: 0 !important;
+}
+  .profile-name{
+    text-wrap: nowrap;
+  }
+  .header-nav .nav {
+    flex-wrap: nowrap;
+  }
 }
 @media (max-width:992px) {
   .nav-mob{

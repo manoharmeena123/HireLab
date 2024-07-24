@@ -20,10 +20,47 @@ import {
   WritableCareerProfileDataResponse,
   WritableResumeItSkill,
   WritableResumeItSkillResponse,
+  WritableCreateResumeFile,
+  WritableCreateResumeFileResponse,
+  WritableAccomplishmentsData,
+  WritableAccomplishmentsResponse,
+  WritableProfileResumeResponse,
+  WritableJobPosterFAQResponse,
+  WritableJobSeekerFAQResponse,
+  WritableMonthlyMeetUpFAQResponse,
+  WritableGeneralQuetionFAQResponse,
+  WritableAboutUsResponse,
+  WritablePrivacyPolicyResponse,
+  WritableTermsAndConditionResponse,
+  WritableServiceResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
-  addTagTypes: ["Resume"],
+  addTagTypes: [
+    "Resume",
+    "ResumeProfile",
+    "JobPosterFAQ",
+    "JobSeekerFAQ",
+    "MonthlyMeetFAQ",
+    "GeneralQuetionFAQ",
+    "AboutUsFAQ",
+    "PrivacyPolicy",
+    "TermsAndCondition",
+    "ServiceSection",
+    "RejectJobCandidate",
+    "AcceptJobCandidate",
+    "SaveMemberShip",
+    "SaveEvent",
+    "MyEvents"
+  ],
 });
 
 const resumeApi = hirelabEnhancedSlice.injectEndpoints({
@@ -167,6 +204,91 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
         queries.updateResumeItSkills.query(data, it_skill_id),
       invalidatesTags: ["Resume"],
     }),
+    createAttachmResumeFile: builder.mutation<
+      WritableCreateResumeFileResponse,
+      FormData
+    >({
+      query: (file) => queries.createAttachmResumeFile.query(file),
+      invalidatesTags: ["Resume"],
+    }),
+    updateAttachResumeFile: builder.mutation<
+      WritableCreateResumeFileResponse,
+      FormData
+    >({
+      query: (formData) => queries.updateAttachResumeFile.query(formData),
+      invalidatesTags: ["Resume"],
+    }),
+    createResumeAccomplishments: builder.mutation<
+      WritableAccomplishmentsResponse,
+      WritableAccomplishmentsData
+    >({
+      query: (data) => queries.createResumeAccomplishments.query(data),
+      invalidatesTags: ["Resume"],
+    }),
+    updateResumeAccomplishments: builder.mutation<
+      WritableAccomplishmentsResponse,
+      { data: WritableAccomplishmentsData; accomplishment_id: number }
+    >({
+      query: ({ data, accomplishment_id }) =>
+        queries.updateResumeAccomplishments.query(data, accomplishment_id),
+      invalidatesTags: ["Resume"],
+    }),
+    resumeProfileData: builder.query<WritableProfileResumeResponse, void>({
+      query: queries.resumeProfileData.query,
+      providesTags: ["ResumeProfile"],
+    }),
+    jobPosterFaq: builder.query<WritableJobPosterFAQResponse, void>({
+      query: queries.jobPosterFaq.query,
+      providesTags: ["JobPosterFAQ"],
+    }),
+    jobSeekerFaq: builder.query<WritableJobSeekerFAQResponse, void>({
+      query: queries.jobSeekerFaq.query,
+      providesTags: ["JobSeekerFAQ"],
+    }),
+    monthlyMeetFaq: builder.query<WritableMonthlyMeetUpFAQResponse, void>({
+      query: queries.monthlyMeetFaq.query,
+      providesTags: ["MonthlyMeetFAQ"],
+    }),
+    generalQuetionFaq: builder.query<WritableGeneralQuetionFAQResponse, void>({
+      query: queries.generalQuetionFaq.query,
+      providesTags: ["GeneralQuetionFAQ"],
+    }),
+    aboutUsFaq: builder.query<WritableAboutUsResponse, void>({
+      query: queries.aboutUsFaq.query,
+      providesTags: ["AboutUsFAQ"],
+    }),
+    PrivacyPolicy: builder.query<WritablePrivacyPolicyResponse, void>({
+      query: queries.PrivacyPolicy.query,
+      providesTags: ["PrivacyPolicy"],
+    }),
+    termsAndCondition: builder.query<WritableTermsAndConditionResponse, void>({
+      query: queries.termsAndCondition.query,
+      providesTags: ["TermsAndCondition"],
+    }),
+    serviceSection: builder.query<WritableServiceResponse, void>({
+      query: queries.serviceSection.query,
+      providesTags: ["ServiceSection"],
+    }),
+    rejectJobCandidate : builder.mutation<WritableRejectJobCandidateResponse,WritableRejectJobCandidate>({
+      query:(data) => queries.rejectJobCandidate.query(data),
+      invalidatesTags: ["RejectJobCandidate"],
+    }),
+    acceptJobCandidate : builder.mutation<WritableAcceptJobCandidateResponse,WritableAcceptJobCandidate>({
+      query:(data) => queries.acceptJobCandidate.query(data),
+      invalidatesTags: ["AcceptJobCandidate"],
+    }),
+    saveMemberShip : builder.mutation<WritableSaveMemberShipResponse,WritableSaveMemberShip>({
+      query:(data) => queries.saveMemberShip.query(data),
+      invalidatesTags: ["SaveMemberShip"],
+    }),
+    saveEvent : builder.mutation<WritableSaveEventResponse,WritableSaveEvent>({
+      query: (data) => queries.saveEvent.query(data),
+      invalidatesTags: ["SaveEvent"],
+    }),
+    myEvents : builder.query<any,void>({
+      query: queries.myEvents.query,
+      providesTags: ["MyEvents"],
+    })
   }),
   overrideExisting: true,
 });
@@ -191,6 +313,24 @@ export const {
   useUpdateCareerProfileMutation,
   useCreateResumeItSkillsMutation,
   useUpdateResumeItSkillsMutation,
+  useCreateAttachmResumeFileMutation,
+  useUpdateAttachResumeFileMutation,
+  useCreateResumeAccomplishmentsMutation,
+  useUpdateResumeAccomplishmentsMutation,
+  useResumeProfileDataQuery,
+  useJobPosterFaqQuery,
+  useJobSeekerFaqQuery,
+  useMonthlyMeetFaqQuery,
+  useGeneralQuetionFaqQuery,
+  useAboutUsFaqQuery,
+  usePrivacyPolicyQuery,
+  useTermsAndConditionQuery,
+  useServiceSectionQuery,
+  useAcceptJobCandidateMutation,
+  useRejectJobCandidateMutation,
+  useSaveMemberShipMutation,
+  useSaveEventMutation,
+  useMyEventsQuery,
 } = resumeApi;
 
 export default resumeApi;

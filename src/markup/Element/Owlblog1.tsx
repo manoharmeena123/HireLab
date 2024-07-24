@@ -2,12 +2,15 @@
 import React from 'react';
 import Slider from "react-slick";
 import Image from 'next/image';
-import { postBlog, PostBlogItem } from '@/data/testimonialData';
-import { useGetTestimonialsQuery }  from '@/store/global-store/global.query'
-import { Testimonial }  from '@/types/index'
+import { useGetTestimonialsQuery } from '@/store/global-store/global.query';
+import { IMAGE_URL } from '@/lib/apiEndPoints';
+import { truncateText } from "@/utils/formateDate";
+import styles from '@/styles/Owltestimonial.module.css'; // Assuming you are using CSS Modules
 
-const Owltestimonial  = () => {
-  const { data :testimonialData, isError, isLoading } = useGetTestimonialsQuery()
+const Owltestimonial = () => {
+  const { data: testimonialData, isError, isLoading } = useGetTestimonialsQuery();
+  console.log('testimonialData', testimonialData);
+
   const settings = {
     slidesToShow: 3,
     arrows: false,
@@ -35,25 +38,27 @@ const Owltestimonial  = () => {
     ],
   };
 
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading testimonials.</div>;
+
   return (
     <Slider className="blog-carousel-center owl-carousel owl-none" {...settings}>
-      {postBlog.map((item: PostBlogItem, index: number) => (
-        <div className="item p-3" key={index}>
+      {testimonialData?.data?.map((item: any, index: number) => (
+        <div className={`item p-3 ${styles.testimonialItem}`} key={index}>
           <div className="testimonial-5">
-            <div className="testimonial-text">
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry.
-              </p>
+            <div className={`testimonial-text ${styles.testimonialText}`}>
+              <div>
+                <p dangerouslySetInnerHTML={{ __html: truncateText(item?.content, 30) }}/>
+              </div>
             </div>
             <div className="testimonial-detail clearfix">
-              <div className="testimonial-pic radius shadow">
-                <Image src={item.image} width={100} height={100} alt="" />
+              <div className={`testimonial-pic radius shadow ${styles.testimonialPic}`}>
+                <Image src={`${IMAGE_URL + item?.image}`} width={100} height={100} alt={item?.name || "Testimonial"} />
               </div>
               <strong style={{ fontWeight: '600' }} className="testimonial-name">
-                David Matin
+                {item?.name}
               </strong>
-              <span className="testimonial-position">Student</span>
+              <span className="testimonial-position">{item?.designation}</span>
             </div>
           </div>
         </div>

@@ -16,7 +16,19 @@ import {
   WritableCareerProfileData,
   WritableCareerProfileDataResponse,
   WritableResumeItSkill,
-  WritableResumeItSkillResponse
+  WritableResumeItSkillResponse,
+  WritableCreateResumeFile,
+  WritableCreateResumeFileResponse,
+  WritableAccomplishmentsData,
+  WritableAccomplishmentsResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -164,18 +176,159 @@ export const queries = {
 
   // api/create-resume-it-skill
 
-  createResumeItSkills :{
-    query :(data : WritableResumeItSkill)=>({
-      url :"api/create-resume-it-skill",
+  createResumeItSkills: {
+    query: (data: WritableResumeItSkill) => ({
+      url: "api/create-resume-it-skill",
       method: "POST",
       body: data,
-    })
+    }),
   },
-  updateResumeItSkills : {
-    query :(data : WritableResumeItSkill, it_skill_id : number)=>({
-      url :"api/update-resume-it-skill",
+  updateResumeItSkills: {
+    query: (data: WritableResumeItSkill, it_skill_id: number) => ({
+      url: "api/update-resume-it-skill",
       method: "POST",
-      body: { it_skill_id,...data },
-    })
-  }
+      body: { it_skill_id, ...data },
+    }),
+  },
+
+  // /api/create-resume-file
+  createAttachmResumeFile: {
+    query: (file: FormData) => {
+      return {
+        url: "api/create-resume-file",
+        method: "POST",
+        body: file,
+      };
+    },
+  },
+  updateAttachResumeFile: {
+    query: (formData: FormData) => {
+      return {
+        url: `api/update-resume-file`,
+        method: "POST",
+        body: formData,
+      };
+    },
+  },
+
+  //api/create-resume-accomplishments
+  createResumeAccomplishments: {
+    query: (data: WritableAccomplishmentsData) => ({
+      url: "api/create-resume-accomplishments",
+      method: "POST",
+      body: data,
+    }),
+  },
+  updateResumeAccomplishments: {
+    query: (data: WritableAccomplishmentsData, accomplishment_id: number) => ({
+      url: `api/update-resume-accomplishments`,
+      method: "POST",
+      body: { accomplishment_id, ...data },
+    }),
+  },
+
+  // api/resume-profile
+
+  resumeProfileData: {
+    query: () => ({
+      url: "api/resume-profile",
+      method: "GET",
+    }),
+  },
+
+  jobPosterFaq: {
+    query: () => ({
+      url: "api/faqs/job_poster",
+      method: "GET",
+    }),
+  },
+  jobSeekerFaq: {
+    query: () => ({
+      url: "api/faqs/job_seeker",
+      method: "GET",
+    }),
+  },
+  monthlyMeetFaq: {
+    query: () => ({
+      url: "api/faqs/monthly_meetups",
+      method: "GET",
+    }),
+  },
+  generalQuetionFaq: {
+    query: () => ({
+      url: `api/faqs/general_question`,
+      method: "GET",
+    }),
+  },
+  aboutUsFaq: {
+    query: () => ({
+      url: "api/page/about-us",
+      method: "GET",
+    }),
+  },
+  PrivacyPolicy: {
+    query: () => ({
+      url: "api/page/privacy-policy",
+      method: "GET",
+    }),
+  },
+  termsAndCondition: {
+    query: () => ({
+      url: "api/page/terms-and-conditions",
+      method: "GET",
+    }),
+  },
+  serviceSection: {
+    query: () => ({
+      url: "api/services",
+      method: "GET",
+    }),
+  },
+
+  //api/reject-job-candidate
+
+  rejectJobCandidate: {
+    query: (data: WritableRejectJobCandidate) => ({
+      url: `api/reject-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/accept-job-candidate
+
+  acceptJobCandidate: {
+    query: (data: WritableAcceptJobCandidate) => ({
+      url: `api/accept-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/save-membership
+
+  saveMemberShip: {
+    query: (data: WritableSaveMemberShip) => ({
+      url: `api/save-membership`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // /api/save-event
+
+  saveEvent: {
+    query: (data: WritableSaveEvent) => ({
+      url: `api/save-event`,
+      method: "POST",
+      body: data,
+    }),
+  },
+  ///api/my-event
+  myEvents: {
+    query: () => ({
+      url: `api/my-event`,
+      method: "GET",
+    }),
+  },
 };
