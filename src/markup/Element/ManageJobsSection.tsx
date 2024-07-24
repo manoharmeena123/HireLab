@@ -10,6 +10,7 @@ import {
   useUpdateManageJobMutation,
   useGetJobUserMutation,
 } from "@/app/manage-job/store/manage-job.query";
+
 import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
 import ModalPopup from "../../components/ModalPopup";

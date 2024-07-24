@@ -15,6 +15,8 @@ import { WritableProfileFormData } from "@/app/job-seeker/types/index";
 import { toast } from "react-toastify";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
+import Image from "next/image";
 
 interface OptionType {
   value: string;
@@ -41,6 +43,7 @@ const JobSeekerSection = () => {
   const [postProfile] = usePostProfileMutation();
   const [resumeName, setResumeName] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
   const [profileForm, setProfileForm] = useState<WritableProfileFormData>({
     name: "",
     email: "",
@@ -90,10 +93,10 @@ const JobSeekerSection = () => {
         experience: user.user.experience || "",
         country: user.user.country || "",
         expected_ctc: user.user.expected_ctc || "",
-        resume: null,
+        resume: user.user.resume || null,
         location: user.user.location || "",
         industry: user.user.industry_id?.toString() || "",
-        image: null,
+        image: user.user.image || null,
       });
 
       setSelectedCollege(
@@ -111,6 +114,14 @@ const JobSeekerSection = () => {
           (option) => option.id === user.user.designation_id?.toString()
         ) || null
       );
+
+      if (user.user.resume) {
+        setResumeName(user.user.resume);
+      }
+      if (user.user.image) {
+        setImageName(user.user.image);
+        setImagePreviewUrl(`${IMAGE_URL}/${user.user.image}`);
+      }
     }
   }, [user, collageData, industryData, designationData]);
 
@@ -125,6 +136,7 @@ const JobSeekerSection = () => {
       } else if (name === "image") {
         setProfileForm((prevForm) => ({ ...prevForm, image: file }));
         setImageName(file.name);
+        setImagePreviewUrl(URL.createObjectURL(file));
       }
     } else {
       setProfileForm((prevForm) => ({ ...prevForm, [name]: value }));
@@ -145,10 +157,15 @@ const JobSeekerSection = () => {
     e.preventDefault();
 
     const formData = new FormData();
+
     Object.entries(profileForm).forEach(([key, value]) => {
       if (value !== null) {
         if (value instanceof File) {
           formData.append(key, value);
+        } else if (key === "resume" && typeof value === "string" && resumeName === value) {
+          // Do not append existing resume URL if it is not a new file
+        } else if (key === "image" && typeof value === "string" && imageName === value) {
+          // Do not append existing image URL if it is not a new file
         } else {
           formData.append(key, value as string);
         }
@@ -156,10 +173,10 @@ const JobSeekerSection = () => {
     });
 
     try {
-     const res =  await postProfile(formData).unwrap();
+      const res = await postProfile(formData).unwrap();
       toast.success(res?.message);
       refetch();
-    } catch (error :any) {
+    } catch (error: any) {
       console.log("error", error);
       toast.error(error.message);
     }
@@ -194,21 +211,23 @@ const JobSeekerSection = () => {
       id: designation.id.toString(),
     })) || [];
 
-  const resumeUrl =
+  const resumeUrl: any =
     profileForm.resume && profileForm.resume instanceof File
-      ? URL.createObjectURL(profileForm.resume)
-      : "";
+      ? URL.createObjectURL(profileForm?.resume)
+      : profileForm.resume || "";
   const imageUrl =
     profileForm.image && profileForm.image instanceof File
-      ? URL.createObjectURL(profileForm.image)
-      : "";
+      ? URL.createObjectURL(profileForm?.image)
+      : `${IMAGE_URL}/${profileForm.image}` || "";
 
   useEffect(() => {
     return () => {
-      if (resumeUrl) URL.revokeObjectURL(resumeUrl);
-      if (imageUrl) URL.revokeObjectURL(imageUrl);
+      if (resumeUrl && profileForm.resume instanceof File)
+        URL.revokeObjectURL(resumeUrl);
+      if (imagePreviewUrl && profileForm.image instanceof File)
+        URL.revokeObjectURL(imagePreviewUrl);
     };
-  }, [resumeUrl, imageUrl]);
+  }, [resumeUrl, imagePreviewUrl]);
 
   return (
     <>
@@ -400,13 +419,7 @@ const JobSeekerSection = () => {
                             />
                             {resumeName && (
                               <div className="mt-2">
-                                <a
-                                  href={resumeUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  {resumeName}
-                                </a>
+                                <span>{resumeName}</span>
                               </div>
                             )}
                           </div>
@@ -420,14 +433,31 @@ const JobSeekerSection = () => {
                               name="image"
                               onChange={handleInputChange}
                             />
-                            {imageName && (
+                            {imagePreviewUrl ? (
                               <div className="mt-2">
-                                <img
-                                  src={imageUrl}
+                                <Image
+                                  src={imagePreviewUrl}
                                   alt="Profile"
-                                  style={{ width: "35%" }}
                                   className="img-thumbnail"
+                                  width={100}
+                                  height={100}
+                                  style={{ width: "35%" }}
                                 />
+                              </div>
+                            ) : imageName ? (
+                              <div className="mt-2">
+                                <Image
+                                  src={`${IMAGE_URL}/${imageName}`}
+                                  alt="Profile"
+                                  className="img-thumbnail"
+                                  width={100}
+                                  height={100}
+                                  style={{ width: "35%" }}
+                                />
+                              </div>
+                            ) : (
+                              <div className="mt-2">
+                                <span>No image uploaded</span>
                               </div>
                             )}
                           </div>
