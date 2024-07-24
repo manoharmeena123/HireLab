@@ -33,6 +33,14 @@ import {
   WritablePrivacyPolicyResponse,
   WritableTermsAndConditionResponse,
   WritableServiceResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -47,6 +55,11 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "PrivacyPolicy",
     "TermsAndCondition",
     "ServiceSection",
+    "RejectJobCandidate",
+    "AcceptJobCandidate",
+    "SaveMemberShip",
+    "SaveEvent",
+    "MyEvents"
   ],
 });
 
@@ -256,6 +269,26 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.serviceSection.query,
       providesTags: ["ServiceSection"],
     }),
+    rejectJobCandidate : builder.mutation<WritableRejectJobCandidateResponse,WritableRejectJobCandidate>({
+      query:(data) => queries.rejectJobCandidate.query(data),
+      invalidatesTags: ["RejectJobCandidate"],
+    }),
+    acceptJobCandidate : builder.mutation<WritableAcceptJobCandidateResponse,WritableAcceptJobCandidate>({
+      query:(data) => queries.acceptJobCandidate.query(data),
+      invalidatesTags: ["AcceptJobCandidate"],
+    }),
+    saveMemberShip : builder.mutation<WritableSaveMemberShipResponse,WritableSaveMemberShip>({
+      query:(data) => queries.saveMemberShip.query(data),
+      invalidatesTags: ["SaveMemberShip"],
+    }),
+    saveEvent : builder.mutation<WritableSaveEventResponse,WritableSaveEvent>({
+      query: (data) => queries.saveEvent.query(data),
+      invalidatesTags: ["SaveEvent"],
+    }),
+    myEvents : builder.query<any,void>({
+      query: queries.myEvents.query,
+      providesTags: ["MyEvents"],
+    })
   }),
   overrideExisting: true,
 });
@@ -293,6 +326,11 @@ export const {
   usePrivacyPolicyQuery,
   useTermsAndConditionQuery,
   useServiceSectionQuery,
+  useAcceptJobCandidateMutation,
+  useRejectJobCandidateMutation,
+  useSaveMemberShipMutation,
+  useSaveEventMutation,
+  useMyEventsQuery,
 } = resumeApi;
 
 export default resumeApi;

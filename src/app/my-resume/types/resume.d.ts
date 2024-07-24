@@ -257,8 +257,8 @@ interface ProfileResumeResponse {
   success: boolean;
   message: string;
   data: {
-      resume: boolean;
-      profile_strength: number;
+    resume: boolean;
+    profile_strength: number;
   };
 }
 
@@ -280,7 +280,6 @@ interface JobPosterFAQResponse {
   message: string;
   data: JobPosterFAQ[];
 }
-
 
 // job seeket FAQ
 interface JobSeekerFAQ {
@@ -404,7 +403,6 @@ interface TermsAndConditionResponse {
   data: TermsAndCondition[];
 }
 
-
 //service
 
 interface Service {
@@ -423,6 +421,52 @@ interface ServiceResponse {
   data: Service[];
 }
 
+//reject job candidate
+interface RejectJobCandidate {
+  job_id: string;
+  user_id: string;
+}
+interface RejectJobCandidateResponse {
+  code: number;
+  success: boolean;
+  data: any[];
+}
+
+// accept job candidate
+interface AcceptJobCandidate {
+  job_id: string;
+  user_id: string;
+}
+interface AcceptJobCandidateResponse {
+  code: number;
+  success: boolean;
+  data: any[];
+}
+
+// save Membership
+interface SaveMemberShip {
+  membership_id: string;
+  user_id: string;
+}
+interface SaveMemberShipResponse {
+  code: number;
+  success: boolean;
+  data: any[];
+}
+
+///api/save-event
+
+interface SaveEvent {
+  event_id: string;
+  user_id: string;
+}
+
+interface SaveEventResponse {
+  code: number;
+  success: boolean;
+  data: any[];
+}
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -435,11 +479,13 @@ type WritableEducationDataResponse = WritableDraft<EducationDataResponse>;
 type WritableProjectData = WritableDraft<ProjectData>;
 type WritableProjectDataResponse = WritableDraft<ProjectDataResponse>;
 type WritableProfileSummaryData = WritableDraft<ProfileSummaryData>;
-type WritableProfileSummaryDataResponse = WritableDraft<ProfileSummaryDataResponse>;
+type WritableProfileSummaryDataResponse =
+  WritableDraft<ProfileSummaryDataResponse>;
 type WritablePersonalDetails = WritableDraft<PersonalDetails>;
 type WritablePersonalDetailsResponse = WritableDraft<PersonalDetailsResponse>;
 type WritableCareerProfileData = WritableDraft<CareerProfileData>;
-type WritableCareerProfileDataResponse = WritableDraft<CareerProfileDataResponse>;
+type WritableCareerProfileDataResponse =
+  WritableDraft<CareerProfileDataResponse>;
 type WritableResumeItSkill = WritableDraft<ResumeItSkill>;
 type WritableResumeItSkillResponse = WritableDraft<ResumeItSkillResponse>;
 type WritableCreateResumeFile = WritableDraft<CreateResumeFile>;
@@ -447,17 +493,27 @@ type WritableCreateResumeFileResponse = WritableDraft<CreateResumeFileResponse>;
 type WritableAccomplishmentsData = WritableDraft<AccomplishmentsData>;
 type WritableAccomplishmentsResponse = WritableDraft<AccomplishmentsResponse>;
 
-
 type WritableProfileResumeResponse = WritableDraft<ProfileResumeResponse>;
 type WritableJobPosterFAQResponse = WritableDraft<JobPosterFAQResponse>;
 type WritableJobSeekerFAQResponse = WritableDraft<JobSeekerFAQResponse>;
 type WritableMonthlyMeetUpFAQResponse = WritableDraft<MonthlyMeetUpFAQResponse>;
-type WritableGeneralQuetionFAQResponse = WritableDraft<GeneralQuetionFAQResponse>;
+type WritableGeneralQuetionFAQResponse =
+  WritableDraft<GeneralQuetionFAQResponse>;
 type WritableAboutUsResponse = WritableDraft<AboutUsResponse>;
 type WritablePrivacyPolicyResponse = WritableDraft<PrivacyPolicyResponse>;
-type WritableTermsAndConditionResponse = WritableDraft<TermsAndConditionResponse>;
+type WritableTermsAndConditionResponse =
+  WritableDraft<TermsAndConditionResponse>;
 type WritableServiceResponse = WritableDraft<ServiceResponse>;
-
+type WritableRejectJobCandidate = WritableDraft<RejectJobCandidate>;
+type WritableRejectJobCandidateResponse =
+  WritableDraft<RejectJobCandidateResponse>;
+type WritableAcceptJobCandidate = WritableDraft<AcceptJobCandidate>;
+type WritableAcceptJobCandidateResponse =
+  WritableDraft<AcceptJobCandidateResponse>;
+type WritableSaveMemberShip = WritableDraft<SaveMemberShip>;
+type WritableSaveMemberShipResponse = WritableDraft<SaveMemberShipResponse>;
+type WritableSaveEvent = WritableDraft<SaveEvent>;
+type WritableSaveEventResponse = WritableDraft<SaveEventResponse>;
 
 export {
   WritableResumeFetchResponse,
@@ -491,5 +547,13 @@ export {
   WritableAboutUsResponse,
   WritablePrivacyPolicyResponse,
   WritableTermsAndConditionResponse,
-  WritableServiceResponse
-  };
+  WritableServiceResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
+};

@@ -21,6 +21,14 @@ import {
   WritableCreateResumeFileResponse,
   WritableAccomplishmentsData,
   WritableAccomplishmentsResponse,
+  WritableRejectJobCandidate,
+  WritableRejectJobCandidateResponse,
+  WritableAcceptJobCandidate,
+  WritableAcceptJobCandidateResponse,
+  WritableSaveMemberShip,
+  WritableSaveMemberShipResponse,
+  WritableSaveEvent,
+  WritableSaveEventResponse,
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -204,7 +212,6 @@ export const queries = {
   },
 
   //api/create-resume-accomplishments
-
   createResumeAccomplishments: {
     query: (data: WritableAccomplishmentsData) => ({
       url: "api/create-resume-accomplishments",
@@ -274,6 +281,53 @@ export const queries = {
   serviceSection: {
     query: () => ({
       url: "api/services",
+      method: "GET",
+    }),
+  },
+
+  //api/reject-job-candidate
+
+  rejectJobCandidate: {
+    query: (data: WritableRejectJobCandidate) => ({
+      url: `api/reject-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/accept-job-candidate
+
+  acceptJobCandidate: {
+    query: (data: WritableAcceptJobCandidate) => ({
+      url: `api/accept-job-candidate`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // api/save-membership
+
+  saveMemberShip: {
+    query: (data: WritableSaveMemberShip) => ({
+      url: `api/save-membership`,
+      method: "POST",
+      body: data,
+    }),
+  },
+
+  // /api/save-event
+
+  saveEvent: {
+    query: (data: WritableSaveEvent) => ({
+      url: `api/save-event`,
+      method: "POST",
+      body: data,
+    }),
+  },
+  ///api/my-event
+  myEvents: {
+    query: () => ({
+      url: `api/my-event`,
       method: "GET",
     }),
   },
