@@ -27,7 +27,9 @@ import {
   Filters,
   WritableBuyPassData,
   WritableBuyPassResponse,
-  CreateCommentType
+  CreateCommentType,
+  SettingResponse,
+  BannerResponse  // Ensure this line is included
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -73,7 +75,9 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "DeleteCommentById",
     "GetCommentForQuetion",
     "GetCommentForParentComment",
-    "CreateComment"
+    "CreateComment",
+    "Settings",
+    "Banner"
   ],
 });
 
@@ -187,10 +191,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getDesignation.query,
       providesTags: ["Designation"],
     }),
-    getSetting: builder.query<WritableSettingResponse, void>({
-      query: queries.getSetting.query,
-      providesTags: ["Setting"],
-    }),
+    
     getCategories: builder.query<WritableCategoriesResponse, void>({
       query: queries.getCategories.query,
       providesTags: ["Categories"],
@@ -218,9 +219,22 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (queryParams) => queries.getJobUserById.query(queryParams),
       invalidatesTags: ["GetJobUserById"],
     }),
+    getSettingData: builder.query<SettingResponse, void>({
+      query: queries.getSetting.query,
+      providesTags: ["Setting"],
+    }),
+    getSettings: builder.query<SettingResponse, void>({ 
+      query: queries.getSettings.query,
+      providesTags: ["Settings"],
+    }),
     deleteAppliedJob: builder.mutation<any, string>({
       query: (jobId) => queries.deleteAppliedJob.query(jobId),
       invalidatesTags: ["DeleteAppliedJobs"],
+    }),
+    
+    getBannerData: builder.query<BannerResponse, void>({
+      query: queries.getBanner.query,
+      providesTags: ["Banner"],
     }),
     getCommentForQuetion: builder.mutation<any, string>({
       query: (questionId) => queries.getCommentForQuetion.query(questionId),
@@ -243,8 +257,11 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       invalidatesTags: ["CreateComment"],
     })
   }),
+
+  
   overrideExisting: true,
 });
+
 
 export const {
   useGetBlogsDataQuery,
@@ -273,7 +290,7 @@ export const {
   useGetAdditionalPerkQuery,
   useGetTierQuery,
   useGetDesignationQuery,
-  useGetSettingQuery,
+  useGetSettingDataQuery, 
   useGetCategoriesQuery,
   useGetSingleDiscussionByTitleMutation,
   useGetSingleEventByTitleMutation,
@@ -285,6 +302,8 @@ export const {
   useDeleteCommentByIdMutation,
   useGetCommentForParentCommentMutation,
   useGetCommentForQuetionMutation,
-  useCreateCommentMutation
+  useCreateCommentMutation,
+  useGetSettingsQuery,
+  useGetBannerDataQuery,
 } = globalApi;
 export default globalApi;

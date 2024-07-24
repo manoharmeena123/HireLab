@@ -225,7 +225,22 @@ export const queries = {
       method: "GET",
     }),
   },
-  //Post===================================================================================>
+
+  getSettings: {
+    query: () => ({
+      url: "api/get-setting",
+      method: "GET",
+    }),
+  },
+
+  getBanner: {
+    query: () => ({
+      url: "page/banner",
+      method: "GET",
+    }),
+  },
+
+ // Post =====================================================================================>
 
   buyPassForEvent: {
     query: (data: WritableBuyPassData) => ({
@@ -234,7 +249,7 @@ export const queries = {
       body: data,
     }),
   },
-
+    
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",
