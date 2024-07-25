@@ -99,3 +99,15 @@ export const blogformatDate = (dateString: string): string => {
   };
   return date.toLocaleDateString("en-US", options);
 };
+
+
+  // utils/formatDate.js
+  export const formatEventDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    };
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", options);
+  };

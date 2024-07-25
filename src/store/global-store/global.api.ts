@@ -21,7 +21,7 @@ export const queries = {
   },
   getEvents: {
     query: () => ({
-      url: "api/get-events",
+      url: "api/upcoming-events",
       method: "GET",
     }),
   },
@@ -165,6 +165,18 @@ export const queries = {
   getCategories: {
     query: () => ({
       url: "api/get-categories",
+      method: "GET",
+    }),
+  },
+  getUpComingEvents: {
+    query: () => ({
+      url: "/api/upcoming-events",
+      method: "GET",
+    }),
+  },
+  getPastEvents: {
+    query: () => ({
+      url: "/api/past-events",
       method: "GET",
     }),
   },

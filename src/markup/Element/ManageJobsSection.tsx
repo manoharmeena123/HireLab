@@ -161,38 +161,62 @@ const ManageJobs = () => {
   };
 
   const handleAcceptApplication = async (id: any) => {
-    const payload = {
-      job_id: applicationviewid?.toString() || "",
-      user_id: id,
-    };
-    try {
-      const res = await acceptJobCandidate(payload).unwrap();
-      if (res?.code === 200) {
-        toast.success("Application accepted successfully!", {
-          theme: "colored",
-        });
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to accept this application?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, accept it!",
+    });
+
+    if (result.isConfirmed) {
+      const payload = {
+        job_id: applicationviewid?.toString() || "",
+        user_id: id,
+      };
+      try {
+        const res = await acceptJobCandidate(payload).unwrap();
+        if (res?.code === 200) {
+          toast.success("Application accepted successfully!", {
+            theme: "colored",
+          });
+        }
+      } catch (error: any) {
+        console.error("Error", error);
+        toast.error(error?.message, { theme: "colored" });
       }
-    } catch (error: any) {
-      console.error("Error", error);
-      toast.error(error?.message, { theme: "colored" });
     }
   };
 
   const handleRejectApplication = async (id: any) => {
-    const payload = {
-      job_id: applicationviewid?.toString() || "",
-      user_id: id,
-    };
-    try {
-      const res = await rejectJobCandidate(payload).unwrap();
-      if (res?.code === 200) {
-        toast.success("Application rejected successfully!", {
-          theme: "colored",
-        });
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to reject this application?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, reject it!",
+    });
+
+    if (result.isConfirmed) {
+      const payload = {
+        job_id: applicationviewid?.toString() || "",
+        user_id: id,
+      };
+      try {
+        const res = await rejectJobCandidate(payload).unwrap();
+        if (res?.code === 200) {
+          toast.success("Application rejected successfully!", {
+            theme: "colored",
+          });
+        }
+      } catch (error: any) {
+        console.error("Error", error);
+        toast.error(error?.message, { theme: "colored" });
       }
-    } catch (error: any) {
-      console.error("Error", error);
-      toast.error(error?.message, { theme: "colored" });
     }
   };
   return (
@@ -569,12 +593,12 @@ const ManageJobs = () => {
                         </tbody>
                       </table>
                       <div>
-                        {getJobuser?.data?.length === 1 ? (
+                        {getJobuser?.data?.length == 0 ? (
                           <div
                             className="d-flex justify-content-center align-items-center"
                             style={{ height: "100px" }}
                           >
-                            No applications found
+                            No applicant found
                           </div>
                         ) : (
                           getJobuser?.data?.map((item: any, index: number) => (

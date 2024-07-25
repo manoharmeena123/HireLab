@@ -27,7 +27,7 @@ import {
   Filters,
   WritableBuyPassData,
   WritableBuyPassResponse,
-  CreateCommentType
+  CreateCommentType,
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -73,7 +73,9 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "DeleteCommentById",
     "GetCommentForQuetion",
     "GetCommentForParentComment",
-    "CreateComment"
+    "CreateComment",
+    "UpComingEvents",
+    "PastEvents"
   ],
 });
 
@@ -238,10 +240,18 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
         queries.getCommentForParentComment.query(questionId, commentId),
       invalidatesTags: ["GetCommentForParentComment"],
     }),
-    createComment : builder.mutation<any, CreateCommentType>({
-      query :(data)=> queries.createComment.query(data),
+    createComment: builder.mutation<any, CreateCommentType>({
+      query: (data) => queries.createComment.query(data),
       invalidatesTags: ["CreateComment"],
-    })
+    }),
+    getUpComingEvents: builder.query<any, void>({
+      query: queries.getUpComingEvents.query,
+      providesTags: ["UpComingEvents"],
+    }),
+    getPastEvents: builder.query<any, void>({
+      query: queries.getPastEvents.query,
+      providesTags: ["PastEvents"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -285,6 +295,8 @@ export const {
   useDeleteCommentByIdMutation,
   useGetCommentForParentCommentMutation,
   useGetCommentForQuetionMutation,
-  useCreateCommentMutation
+  useCreateCommentMutation,
+  useGetUpComingEventsQuery,
+  useGetPastEventsQuery,
 } = globalApi;
 export default globalApi;
