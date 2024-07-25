@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 import Image from "next/image";
 import {
   useGetManageJobQuery,
@@ -10,7 +11,10 @@ import {
   useUpdateManageJobMutation,
   useGetJobUserMutation,
 } from "@/app/manage-job/store/manage-job.query";
-
+import {
+  useAcceptJobCandidateMutation,
+  useRejectJobCandidateMutation,
+} from "@/app/my-resume/store/resume.query";
 import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
 import ModalPopup from "../../components/ModalPopup";
@@ -50,18 +54,32 @@ const ManageJobs = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [currentPage, setCurrentPage] = useState(1);
+
   const handleDeleteJob = async (jobId: number) => {
-    try {
-      const res: any = await deleteManageJob(jobId.toString()).unwrap();
-      if (res.code === 200) {
-        manageRefetch();
-        toast.success(res?.message, { theme: "colored" });
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const res: any = await deleteManageJob(jobId.toString()).unwrap();
+        if (res.code === 200) {
+          manageRefetch();
+          toast.success(res?.message, { theme: "colored" });
+        }
+      } catch (error) {
+        toast.error("Failed to delete job");
       }
-    } catch (error) {
-      toast.error("Failed to delete job");
     }
   };
-
+  const [acceptJobCandidate] = useAcceptJobCandidateMutation();
+  const [rejectJobCandidate] = useRejectJobCandidateMutation();
   const flattenedJobsData = jobsData?.data?.flat() || [];
 
   const handleEditJob = async (selectedJob: any) => {
@@ -132,12 +150,51 @@ const ManageJobs = () => {
     push(`/job-edit?jobId=${id}`);
   };
 
+  const viewJobDetailHandler = (id: number) => {
+    push(`/job-detail?jobId=${id}`);
+  };
+
   const viewApplicationHandler = (jobId: number) => {
     setApplshow(true);
     setApplicationviewid(jobId);
     getJobUser(jobId);
   };
 
+  const handleAcceptApplication = async (id: any) => {
+    const payload = {
+      job_id: applicationviewid?.toString() || "",
+      user_id: id,
+    };
+    try {
+      const res = await acceptJobCandidate(payload).unwrap();
+      if (res?.code === 200) {
+        toast.success("Application accepted successfully!", {
+          theme: "colored",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error", error);
+      toast.error(error?.message, { theme: "colored" });
+    }
+  };
+
+  const handleRejectApplication = async (id: any) => {
+    const payload = {
+      job_id: applicationviewid?.toString() || "",
+      user_id: id,
+    };
+    try {
+      const res = await rejectJobCandidate(payload).unwrap();
+      if (res?.code === 200) {
+        toast.success("Application rejected successfully!", {
+          theme: "colored",
+        });
+      }
+    } catch (error: any) {
+      console.error("Error", error);
+      toast.error(error?.message, { theme: "colored" });
+    }
+  };
   return (
     <>
       <div className="page-content bg-white">
@@ -248,7 +305,7 @@ const ManageJobs = () => {
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Manage jobs
                         </h5>
-                        <div className="float-right">
+                        {/* <div className="float-right">
                           <span className="select-title">
                             Sort by freshness
                           </span>
@@ -260,7 +317,7 @@ const ManageJobs = () => {
                             <option>Starred</option>
                             <option>Unstarred</option>
                           </select>
-                        </div>
+                        </div> */}
                       </div>
 
                       <table className="table-job-bx cv-manager company-manage-job">
@@ -287,86 +344,88 @@ const ManageJobs = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          {flattenedJobsData?.map((job, index) => (
-                            <tr key={index}>
-                              <td className="feature">
-                                <div className="custom-control custom-checkbox">
-                                  <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id={`check${index}`}
-                                    name="example1"
-                                  />
-                                  <label
-                                    className="custom-control-label"
-                                    htmlFor={`check${index}`}
-                                  ></label>
-                                </div>
-                              </td>
-                              <td className="job-name">
-                                <div
-                                  className="nav-link"
-                                  onClick={() => {
-                                    setSelectedJob(job);
-                                    setCompany(true);
-                                  }}
-                                >
-                                  <span>{job.job_title}</span>
-                                  <ul className="job-post-info">
-                                    <li>
-                                      <i className="fa fa-map-marker"></i>{" "}
-                                      {job?.address}
-                                    </li>
-                                    <li>
-                                      <i className="fa fa-bookmark-o"></i>{" "}
-                                      {job?.job_type?.title}
-                                    </li>
-                                    <li>
-                                      <i className="fa fa-filter"></i>{" "}
-                                      {job?.user?.location}
-                                    </li>
-                                  </ul>
-                                </div>
-                              </td>
-                              <td className=" text-primary">
-                                ({job?.applicant_count})Applications
-                              </td>
-                              {/* <td className="expired pending">
-                                {formatDate(job?.created_at)}
-                              </td> */}
-                              <td
-                                className="job-links "
-                                style={{ paddingTop: "1.5rem" }}
-                              >
-                                <div
-                                  className="nav-link mn-icon"
-                                  onClick={
-                                    () => viewApplicationHandler(job.id)
-                                    // setSelectedJob(job);
-                                    // setShow(true);
-                                  }
-                                >
-                                  <i className="fa fa-eye"></i>
-                                </div>
-                                <div
-                                  className="nav-link mn-icon"
-                                  onClick={
-                                    () => viewJobHandler(job.id)
-                                    // setSelectedJob(job);
-                                    // setShow(true);
-                                  }
-                                >
-                                  <i className="fa fa-edit"></i>
-                                </div>
-                                <div
-                                  className="nav-link mn-icon"
-                                  onClick={() => handleDeleteJob(job?.id)}
-                                >
-                                  <i className="ti-trash"></i>
-                                </div>
+                          {flattenedJobsData?.length === 0 ? (
+                            <tr>
+                              <td colSpan={4} className="text-center">
+                                No job Found
                               </td>
                             </tr>
-                          ))}
+                          ) : (
+                            flattenedJobsData?.map((job, index) => (
+                              <tr key={index}>
+                                <td className="feature">
+                                  <div className="custom-control custom-checkbox">
+                                    <input
+                                      type="checkbox"
+                                      className="custom-control-input"
+                                      id={`check${index}`}
+                                      name="example1"
+                                    />
+                                    <label
+                                      className="custom-control-label"
+                                      htmlFor={`check${index}`}
+                                    ></label>
+                                  </div>
+                                </td>
+                                <td className="job-name">
+                                  <div className="nav-link">
+                                    <span>{job.job_title}</span>
+                                    <ul className="job-post-info">
+                                      <li>
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {job?.address}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-bookmark-o"></i>{" "}
+                                        {job?.job_type?.title}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-filter"></i>{" "}
+                                        {job?.user?.location}
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </td>
+                                <td className=" text-primary">
+                                  ({job?.applicant_count})Applications
+                                </td>
+                                {/* <td className="expired pending">
+                                {formatDate(job?.created_at)}
+                              </td> */}
+                                <td
+                                  className="job-links "
+                                  style={{ paddingTop: "1.5rem" }}
+                                >
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={
+                                      () => viewApplicationHandler(job.id)
+                                      // setSelectedJob(job);
+                                      // setShow(true);
+                                    }
+                                  >
+                                    <i className="fa fa-eye"></i>
+                                  </div>
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={
+                                      () => viewJobHandler(job.id)
+                                      // setSelectedJob(job);
+                                      // setShow(true);
+                                    }
+                                  >
+                                    <i className="fa fa-edit"></i>
+                                  </div>
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={() => handleDeleteJob(job?.id)}
+                                  >
+                                    <i className="ti-trash"></i>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))
+                          )}
                         </tbody>
                       </table>
                       <Pagination
@@ -453,7 +512,7 @@ const ManageJobs = () => {
                                     className="nav-link"
                                     onClick={() => {
                                       setSelectedJob(job);
-                                      setCompany(true);
+                                      // setCompany(true);
                                     }}
                                   >
                                     <span>{job.job_title}</span>
@@ -481,14 +540,14 @@ const ManageJobs = () => {
                                     ({job?.applicant_count}) Applications
                                   </Button>
                                 </td>
-                                <td className="expired pending">Pending</td>
+                                {/* <td className="expired pending">Pending</td> */}
                                 <td
                                   className="job-links"
                                   style={{ paddingTop: "1.5rem" }}
                                 >
                                   <div
                                     className="nav-link mn-icon"
-                                    // onClick={() => viewJobHandler(job.id)}
+                                    onClick={() => viewJobDetailHandler(job.id)}
                                   >
                                     <i className="fa fa-eye"></i>
                                   </div>
@@ -510,22 +569,45 @@ const ManageJobs = () => {
                         </tbody>
                       </table>
                       <div>
-                          {getJobuser?.data?.map((item :any, index :number)=>(
-                        <div className="d-flex py-4" key={index}>
-                            <div className="col-4 d-flex align-items-center">
-                            <div className="nav-link mn-icon">
-                              <i className="fa fa-user"></i>
+                        {getJobuser?.data?.length === 1 ? (
+                          <div
+                            className="d-flex justify-content-center align-items-center"
+                            style={{ height: "100px" }}
+                          >
+                            No applications found
+                          </div>
+                        ) : (
+                          getJobuser?.data?.map((item: any, index: number) => (
+                            <div className="d-flex py-4" key={index}>
+                              <div className="col-4 d-flex align-items-center">
+                                <div className="nav-link mn-icon">
+                                  <i className="fa fa-user"></i>
+                                </div>
+                                <h6 className="mb-0">{item?.name}</h6>
+                              </div>
+                              <div className="col-8 d-flex application-btns-wrap">
+                                <Button
+                                  variant="success"
+                                  onClick={() =>
+                                    handleAcceptApplication(item?.id)
+                                  }
+                                >
+                                  ACCEPT
+                                </Button>
+                                <Button
+                                  variant="success"
+                                  onClick={() =>
+                                    handleRejectApplication(item?.id)
+                                  }
+                                >
+                                  REJECT
+                                </Button>
+                                <Button variant="success">VIEW PROFILE</Button>
+                                <Button variant="success">CHAT</Button>
+                              </div>
                             </div>
-                            <h6 className="mb-0">{item?.name}</h6>
-                          </div>
-                          <div className="col-8 d-flex application-btns-wrap">
-                            <Button variant="success">ACCEPT</Button>
-                            <Button variant="success">REJECT</Button>
-                            <Button variant="success">VIEW PROFILE</Button>
-                            <Button variant="success">CHAT</Button>
-                          </div>
-                        </div>
-                          ))}
+                          ))
+                        )}
                       </div>
                       {/* <Pagination
                         currentPage={1}
