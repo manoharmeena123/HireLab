@@ -86,8 +86,12 @@ const IndexBanner: React.FC = () => {
       <div className="container">
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
-            <Link href="/browse-job" className="site-button button-sm" style={{ backgroundColor: "#2A6310" }}>
-              {bannerData?.data?.heading || "Find Jobs, Employment & Career Opportunities"}
+            <Link
+              href="/browse-job-filter"
+              className="site-button button-sm"
+              style={{ backgroundColor: "#2A6310" }}
+            >
+              Find Jobs, Employment & Career Opportunities
             </Link>
             <h2>{bannerData?.data?.description || "Search Between More Than 50,000 open jobs"}</h2>
             <form className="dezPlaceAni" onSubmit={handleSubmit}>

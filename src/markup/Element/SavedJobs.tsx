@@ -8,8 +8,10 @@ import {
   useGetSavedJobQuery,
   useDeleteSavedJobMutation,
 } from "@/store/global-store/global.query";
-
+import { useRouter } from "next/navigation";
 import { formaterDate } from "@/utils/formateDate";
+import Loading from "@/components/Loading";
+
 interface Job {
   id: number | string;
   title: string;
@@ -19,8 +21,9 @@ interface Job {
 }
 
 const SavedJobs = () => {
-  const { data: savedJob, refetch } = useGetSavedJobQuery();
-  const [deleteSavedJob, { isLoading, isSuccess, isError }] =
+  const { push } = useRouter();
+  const { data: savedJob, refetch, isLoading : savedJobLoading } = useGetSavedJobQuery();
+  const [deleteSavedJob, { isLoading :deleteSavedJobLoading, isSuccess, isError }] =
     useDeleteSavedJobMutation();
   const [postModal, setPostModal] = useState(false);
   const [contacts, setContacts] = useState<any>();
@@ -46,7 +49,6 @@ const SavedJobs = () => {
 
   // Delete data
   const handleDeleteClick = async (contactId: string) => {
-    console.log("contactId", contactId);
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -59,12 +61,10 @@ const SavedJobs = () => {
       if (result.isConfirmed) {
         try {
           const response = await deleteSavedJob(contactId).unwrap();
-          console.log("API response:", response);
           Swal.fire("Deleted!", "Your job has been deleted.", "success");
-          refetch(); // Example: refetch data after deletion
+          refetch(); // Refetch data after deletion
         } catch (error) {
-          console.error("Error deleting:", error);
-          Swal.fire("Error", "Failed to delete the file.", "error");
+          Swal.fire("Error", "Failed to delete the job.", "error");
         }
       }
     });
@@ -102,12 +102,9 @@ const SavedJobs = () => {
         date: addFormData.date,
         image: addFormData.image,
       };
-      setContacts((prevContacts :any) => [...prevContacts, newContact]);
+      setContacts((prevContacts: any) => [...prevContacts, newContact]);
       setPostModal(false);
-      //   swal("Good job!", "Successfully Added", "success");
       setAddFormData({ id: "", title: "", company: "", date: "", image: "" });
-    } else {
-      //   swal("Oops", errorMsg, "error");
     }
   };
 
@@ -155,8 +152,13 @@ const SavedJobs = () => {
     setEditModal(false);
   };
 
+  const viewJobHandler = (id: number) => {
+    push(`/job-detail?jobId=${id}`);
+  };
+
   return (
     <>
+    {savedJobLoading && deleteSavedJobLoading && <Loading/> }
       <div className="job-bx save-job browse-job table-job-bx clearfix">
         <div className="job-bx-title clearfix">
           <h5 className="font-weight-700 pull-left text-uppercase">
@@ -190,18 +192,10 @@ const SavedJobs = () => {
                 </td>
                 <td className="date">{formaterDate(contact?.created_at)}</td>
                 <td className="job-links pencil">
-                  <Link
-                    href={"#"}
-                    onClick={(
-                      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-                    ) => handleEditClick(event, contact)}
-                  >
+                  <span onClick={() => viewJobHandler(contact?.id)}>
                     <i className="fa fa-eye"></i>
-                  </Link>
-                  <Link
-                    href={"#"}
-                    onClick={() => handleDeleteClick(contact.id.toString())}
-                  >
+                  </span>
+                  <Link href={"#"} onClick={() => handleDeleteClick(contact.id.toString())}>
                     <i className="ti-trash"></i>
                   </Link>
                 </td>
@@ -256,21 +250,6 @@ const SavedJobs = () => {
                 <i className="flaticon-cancel-12 close"></i>
                 <div className="add-contact-box">
                   <div className="add-contact-content">
-                    {/* <div className="image-placeholder">	
-											<div className="avatar-edit">
-												<input type="file" onChange={fileHandler} id="imageUpload" 
-													onClick={(event) => setFile(event.target.value)}
-												/> 					
-												<label htmlFor="imageUpload" name=''  ></label>
-											</div>
-											<div className="avatar-preview">
-												<div id="imagePreview">
-													<img id="saveImageFile" src={file? URL.createObjectURL(file) : user} 
-														alt={file? file.name : null}
-													/>
-												</div>
-											</div>
-										</div>  */}
                     <div className="form-group">
                       <label className="text-black font-w500">Job Title</label>
                       <div className="contact-name">
@@ -423,4 +402,5 @@ const SavedJobs = () => {
     </>
   );
 };
+
 export default SavedJobs;
