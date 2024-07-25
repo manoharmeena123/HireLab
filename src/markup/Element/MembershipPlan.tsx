@@ -1,14 +1,37 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useGetMembershipQuery } from "@/store/global-store/global.query";
+import { useSaveMemberShipMutation } from '@/app/my-resume/store/resume.query';
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 // Images
 const bnr7 = require("./../../images/background/plans.png");
 
 const MembershipPlans = () => {
   const { data: membershipData } = useGetMembershipQuery();
+  const [saveMemberShip] = useSaveMemberShipMutation();
+  const { user } = useLoggedInUser();
+  const router = useRouter();
 
   const parseHtml = (htmlString: any) => {
     return { __html: htmlString };
+  };
+
+  const handleGetStarted = async (membershipId: number) => {
+    console.log('membershipId', membershipId)
+    if (user?.user?.id) {
+      const payload = {
+        user_id: user.user.id.toString(),
+        membership_id: membershipId.toString(),
+      };
+
+      try {
+        await saveMemberShip(payload).unwrap();
+        router.push('/dashboard-section');
+      } catch (error) {
+        console.error("Failed to save membership", error);
+      }
+    }
   };
 
   return (
@@ -132,8 +155,8 @@ const MembershipPlans = () => {
                 ))}
 
                 <div className="text-center button-wrap">
-                  <Link
-                    href={"/register"}
+                  <button
+                    onClick={() => handleGetStarted(text?.id)}
                     className="site-button radius-xl white-hover"
                     style={{
                       border: "1px solid white",
@@ -146,7 +169,7 @@ const MembershipPlans = () => {
                     >
                       Get Started
                     </span>
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
