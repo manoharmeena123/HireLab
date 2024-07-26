@@ -13857,6 +13857,11 @@ ul.accordion-list {
   background: #2a6310;
   border: none;
 }
+.faq-wrap{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
 @media (min-width:992px) and (max-width:1250px) {
   .fullwidth .header-nav .nav > li > a {
     font-size: 10px;
