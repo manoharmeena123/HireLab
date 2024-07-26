@@ -26,11 +26,8 @@ const UpComingMeetings = () => {
   const itemsPerPage = 4;
 
   useEffect(() => {
-    // Set clickedIndexes based on saved events
-    if (myEventData?.data) {
-      const savedEventIds = myEventData.data.map(
-        (event: any) => event.event_id
-      );
+    if (user && myEventData?.data) {
+      const savedEventIds = myEventData.data.map((event: any) => event.event_id);
       const indexes = eventsData?.data?.reduce(
         (acc: number[], event: any, index: number) => {
           if (savedEventIds.includes(event.id)) {
@@ -42,7 +39,7 @@ const UpComingMeetings = () => {
       );
       setClickedIndexes(indexes || []);
     }
-  }, [myEventData, eventsData]);
+  }, [myEventData, eventsData, user]);
 
   const handleIconClick = async (index: number, event: any) => {
     if (!user) {
@@ -114,8 +111,7 @@ const UpComingMeetings = () => {
 
   // Calculate items to display
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems =
-    eventsData?.data?.slice(startIndex, startIndex + itemsPerPage) || [];
+  const currentItems = eventsData?.data?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -143,8 +139,8 @@ const UpComingMeetings = () => {
                   <div className="d-flex">
                     <div className="job-post-info w-100">
                       <div className="d-flex justify-content-between w-100">
-                        <h5 onClick={() => viewJobHandler(event?.title)}>
-                          <Link href={""} style={{ fontWeight: "600" }}>
+                        <h5 onClick={() => user && viewJobHandler(event?.title)}>
+                          <Link href={user ? "" : "/login"} style={{ fontWeight: "600" }}>
                             {event.title}
                           </Link>
                         </h5>
