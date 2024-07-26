@@ -9,3 +9,5 @@ export * from "./testimonial";
 export * from "./post-job";
 export * from "./buypass";
 export * from "./comment";
+export * from "./get-setting";
+export * from "./banner";  

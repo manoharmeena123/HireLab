@@ -212,3 +212,52 @@ export const selectBuyPassError = createSelector(
   selectBuyPassState,
   (buyPassState) => buyPassState.error
 );
+
+
+  // Setting Selectors
+export const selectSettingState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    setting: globalState.setting,
+    loading: globalState.loading,
+    error: globalState.error,
+  })
+);
+
+export const selectSetting = createSelector(
+  selectSettingState,
+  (settingState) => settingState.setting
+);
+
+export const selectSettingLoading = createSelector(
+  selectSettingState,
+  (settingState) => settingState.loading
+);
+
+export const selectSettingError = createSelector(
+  selectSettingState,
+  (settingState) => settingState.error
+);
+
+export const selectBannerState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    banner: globalState.banner,
+    loading: globalState.loading,
+    error: globalState.error,
+  })
+);
+export const selectBanner = createSelector(
+  selectBannerState,
+  (bannerState) => bannerState.banner
+);
+
+export const selectBannerLoading = createSelector(
+  selectBannerState,
+  (bannerState) => bannerState.loading
+);
+
+export const selectBannerError = createSelector(
+  selectBannerState,
+  (bannerState) => bannerState.error
+);
