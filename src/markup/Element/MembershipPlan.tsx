@@ -300,6 +300,9 @@ const MembershipPlans = () => {
             min-width: 350px;
             min-height: auto;
           }
+          .display-property {
+          display:flex
+          }
         }
       `}</style>
     </div>
