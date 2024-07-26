@@ -18,6 +18,44 @@ const CreditEarned = () => {
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
+  const dummyData = [
+    {
+      id: 1,
+      description: "Credit for job post: Social Media Expert",
+      credit: 100,
+      date: "2023-07-01",
+      status: "Credited",
+    },
+    {
+      id: 2,
+      description: "Debit for job application: Web Designer",
+      credit: -50,
+      date: "2023-07-05",
+      status: "Debited",
+    },
+    {
+      id: 3,
+      description: "Credit for job post: Finance Accountant",
+      credit: 200,
+      date: "2023-07-10",
+      status: "Credited",
+    },
+    {
+      id: 4,
+      description: "Debit for job application: Social Media Expert",
+      credit: -30,
+      date: "2023-07-15",
+      status: "Debited",
+    },
+    {
+      id: 5,
+      description: "Credit for job post: Web Designer",
+      credit: 150,
+      date: "2023-07-20",
+      status: "Credited",
+    },
+  ];
+
   useEffect(() => {
     // Map designation options
     if (designationData?.data) {
@@ -137,7 +175,7 @@ const CreditEarned = () => {
                 </div>
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
-                    <div className="job-bx-title  clearfix">
+                    <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         CREDIT EARNED
                       </h5>
@@ -176,443 +214,41 @@ const CreditEarned = () => {
                               ></label>
                             </div>
                           </th>
-                          <th>Job Title</th>
-                          <th>Credit Earned</th>
-                          <th>Date</th>
+                          <th>Description</th>
+                          <th>Credit</th>
                           <th>Status</th>
+                          <th>Date</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check1"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check1"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Social Media Expert</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (5) Applications
-                          </td>
-                          <td className="expired pending">Pending </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check2"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check2"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Web Designer</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (8) Applications
-                          </td>
-                          <td className="expired text-red">Expired</td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check3"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check3"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Finance Accountant</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (9) Applications
-                          </td>
-                          <td className="expired pending">Pending </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check4"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check4"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Social Media Expert</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (7) Applications
-                          </td>
-                          <td className="expired success">Active </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check5"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check5"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Web Designer</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (6) Applications
-                          </td>
-                          <td className="expired pending">Pending </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check6"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check6"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Finance Accountant</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (3) Applications
-                          </td>
-                          <td className="expired text-red">Expired</td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check7"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check7"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Social Media Expert</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (2) Applications
-                          </td>
-                          <td className="expired success">Active </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check8"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check8"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Web Designer</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (4) Applications
-                          </td>
-                          <td className="expired success">Active </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check9"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check9"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Finance Accountant</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (1) Applications
-                          </td>
-                          <td className="expired text-red">Expired</td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="feature">
-                            <div className="custom-control custom-checkbox">
-                              <input
-                                type="checkbox"
-                                className="custom-control-input"
-                                id="check10"
-                                name="example1"
-                              />
-                              <label
-                                className="custom-control-label"
-                                htmlFor="check10"
-                              ></label>
-                            </div>
-                          </td>
-                          <td className="job-name">
-                            <Link href={"#"}>Web Designer</Link>
-                            <ul className="job-post-info">
-                              <li>
-                                <i className="fa fa-map-marker"></i> Sacramento,
-                                California
-                              </li>
-                              <li>
-                                <i className="fa fa-bookmark-o"></i> Full Time
-                              </li>
-                              <li>
-                                <i className="fa fa-filter"></i> Web Designer
-                              </li>
-                            </ul>
-                          </td>
-                          <td className="application text-primary">
-                            (1) Applications
-                          </td>
-                          <td className="expired success">Active </td>
-                          <td className="job-links">
-                            <Link href={"#"} onClick={() => setCompany(true)}>
-                              <i className="fa fa-eye"></i>
-                            </Link>
-                            <Link href={"#"}>
-                              <i className="ti-trash"></i>
-                            </Link>
-                          </td>
-                        </tr>
+                        {dummyData.map((item) => (
+                          <tr key={item.id}>
+                            <td className="feature">
+                              <div className="custom-control custom-checkbox">
+                                <input
+                                  type="checkbox"
+                                  className="custom-control-input"
+                                  id={`check${item.id}`}
+                                  name="example1"
+                                />
+                                <label
+                                  className="custom-control-label"
+                                  htmlFor={`check${item.id}`}
+                                ></label>
+                              </div>
+                            </td>
+                            <td className="job-name">
+                              <Link href={"#"}>{item.description}</Link>
+                            </td>
+                            <td className={`application ${item.credit < 0 ? 'text-red' : 'text-primary'}`}>
+                            {item.credit} {item.credit < 0 ? 'Debited' : 'Credits'}
+                            </td>
+                            <td className={`application ${item.credit < 0 ? 'text-red' : 'text-primary'}`}>
+                              {item.status}
+                            </td>
+                            <td className="expired pending">{item.date} </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                     <div className="pagination-bx m-t30 float-right">
@@ -673,7 +309,7 @@ const CreditEarned = () => {
                                 <p>5 Year 3 Months</p>
                               </li>
                               <li>
-                                <strong>Deseription :</strong>
+                                <strong>Description :</strong>
                                 <p>
                                   Lorem Ipsum is simply dummy text of the
                                   printing and typesetting industry has been the

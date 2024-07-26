@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import ProfileDropdown from "@/app/user-profile/page";
-import logo2 from "../../images/Hire Labs_Final logo.png";
+import logo2 from "../../images/hiralablogo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname , useRouter} from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
@@ -65,8 +65,9 @@ const Header = () => {
                   src={logo2}
                   className="logo"
                   alt="img"
-                  fill
-                  style={{ objectFit: "contain", fontSize: "1.5rem" }}
+                  width={50}
+                  height={45}
+                  objectFit={"contain"}
                 />
               </Link>
             </div>
