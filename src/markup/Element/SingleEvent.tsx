@@ -13,11 +13,13 @@ import {
 import {
   useSaveEventMutation,
   useMyEventsQuery,
+  useRemoveEventMutation,
 } from "@/app/my-resume/store/resume.query";
 import { truncateText, formatEventDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { toast } from "react-toastify";
 
 const SingleEvent = () => {
   const { user } = useLoggedInUser();
@@ -29,6 +31,7 @@ const SingleEvent = () => {
   const [processingEventId, setProcessingEventId] = useState<number | null>(null);
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const [removeEvent] = useRemoveEventMutation();
   const [
     getSingleEventByTitle,
     {
@@ -54,7 +57,7 @@ const SingleEvent = () => {
     isError: isPastError,
   } = useGetPastEventsQuery();
   const [saveEvent] = useSaveEventMutation();
-  const { data: myEventsData } = useMyEventsQuery();
+  const { data: myEventsData, refetch } = useMyEventsQuery();
 
   useEffect(() => {
     if (query) {
@@ -94,25 +97,68 @@ const SingleEvent = () => {
   };
 
   const handleIconClick = async (event: any, index: number) => {
+    if (!user) {
+      push("/login");
+      return;
+    }
+
     const updatedIndexes = [...clickedIndexes];
     const currentIndex = updatedIndexes.indexOf(index);
-    if (currentIndex === -1) {
-      updatedIndexes.push(index);
-    } else {
-      updatedIndexes.splice(currentIndex, 1);
-    }
-    setClickedIndexes(updatedIndexes);
-
     const payload = {
       event_id: event?.id?.toString(),
       user_id: user?.user?.id?.toString(),
     };
-    try {
-      await saveEvent(payload).unwrap();
-      Swal.fire("Saved!", "Event has been saved successfully.", "success");
-    } catch (error: any) {
-      Swal.fire("Error", `Failed to save the event: ${error?.message}`, "error");
+
+    if (currentIndex === -1) {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to save this event?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      });
+
+      if (result.isConfirmed) {
+        updatedIndexes.push(index);
+        try {
+          const res = await saveEvent(payload).unwrap();
+          refetch();
+          toast.success(res?.message , {theme :'colored'})
+          // Swal.fire("Saved!", "Event has been saved successfully.", "success");
+        } catch (error: any) {
+          toast.error(error?.message , {theme :'colored'})
+
+          // Swal.fire("Error", `Failed to save the event: ${error?.message}`, "error");
+        }
+      }
+    } else {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to remove this event?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!",
+      });
+
+      if (result.isConfirmed) {
+        updatedIndexes.splice(currentIndex, 1);
+        try {
+          const res = await removeEvent(payload).unwrap();
+          refetch();
+          toast.success(res.message , {theme :'colored'})
+          // Swal.fire("Removed!", "Event has been removed successfully.", "success");
+        } catch (error: any) {
+          toast.error(error?.message , {theme :'colored'})
+          // Swal.fire("Error", `Failed to remove the event: ${error?.message}`, "error");
+        }
+      }
     }
+
+    setClickedIndexes(updatedIndexes);
   };
 
   const handleEventClick = (event: any) => {
