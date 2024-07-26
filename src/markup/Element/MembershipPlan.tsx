@@ -1,14 +1,37 @@
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useGetMembershipQuery } from "@/store/global-store/global.query";
+import { useSaveMemberShipMutation } from "@/app/my-resume/store/resume.query";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 // Images
 const bnr7 = require("./../../images/background/plans.png");
 
 const MembershipPlans = () => {
   const { data: membershipData } = useGetMembershipQuery();
+  const [saveMemberShip] = useSaveMemberShipMutation();
+  const { user } = useLoggedInUser();
+  const router = useRouter();
 
   const parseHtml = (htmlString: any) => {
     return { __html: htmlString };
+  };
+
+  const handleGetStarted = async (membershipId: number) => {
+    console.log("membershipId", membershipId);
+    if (user?.user?.id) {
+      const payload = {
+        user_id: user.user.id.toString(),
+        membership_id: membershipId.toString(),
+      };
+
+      try {
+        await saveMemberShip(payload).unwrap();
+        router.push("/dashboard-section");
+      } catch (error) {
+        console.error("Failed to save membership", error);
+      }
+    }
   };
 
   return (
@@ -132,21 +155,40 @@ const MembershipPlans = () => {
                 ))}
 
                 <div className="text-center button-wrap">
-                  <Link
-                    href={"/register"}
-                    className="site-button radius-xl white-hover"
-                    style={{
-                      border: "1px solid white",
-                      backgroundColor: "#2A6310",
-                    }}
-                  >
-                    <span
-                      className="p-lr30 button-text"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                  {user?.user ? (
+                    <button
+                      onClick={() => handleGetStarted(text?.id)}
+                      className="site-button radius-xl white-hover"
+                      style={{
+                        border: "1px solid white",
+                        backgroundColor: "#2A6310",
+                      }}
                     >
-                      Get Started
-                    </span>
-                  </Link>
+                      <span
+                        className="p-lr30 button-text"
+                        style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                      >
+                        Get Started
+                      </span>
+                    </button>
+                  ) : (
+                    <Link href="/login">
+                      <button
+                        className="site-button radius-xl white-hover"
+                        style={{
+                          border: "1px solid white",
+                          backgroundColor: "#2A6310",
+                        }}
+                      >
+                        <span
+                          className="p-lr30 button-text"
+                          style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                        >
+                          Login to Get Started
+                        </span>
+                      </button>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>
@@ -257,6 +299,9 @@ const MembershipPlans = () => {
           .member-ship-div {
             min-width: 350px;
             min-height: auto;
+          }
+          .display-property {
+          display:flex
           }
         }
       `}</style>

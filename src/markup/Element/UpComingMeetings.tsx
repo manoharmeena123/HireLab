@@ -7,10 +7,12 @@ import Pagination from "./Pagination";
 import {
   useSaveEventMutation,
   useMyEventsQuery,
+  useRemoveEventMutation,
 } from "@/app/my-resume/store/resume.query";
 import { toast } from "react-toastify";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formatEventDate } from "@/utils/formateDate";
+import Swal from "sweetalert2";
 
 const UpComingMeetings = () => {
   const { push } = useRouter();
@@ -18,7 +20,7 @@ const UpComingMeetings = () => {
   const { user } = useLoggedInUser();
   const [saveEvent] = useSaveEventMutation();
   const { data: myEventData } = useMyEventsQuery();
-
+  const [removeEvent] = useRemoveEventMutation();
   const [clickedIndexes, setClickedIndexes] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 4;
@@ -43,29 +45,69 @@ const UpComingMeetings = () => {
   }, [myEventData, eventsData]);
 
   const handleIconClick = async (index: number, event: any) => {
+    if (!user) {
+      push("/login");
+      return;
+    }
+
     const updatedIndexes = [...clickedIndexes];
     const currentIndex = updatedIndexes.indexOf(index);
-    if (currentIndex === -1) {
-      updatedIndexes.push(index);
-    } else {
-      updatedIndexes.splice(currentIndex, 1);
-    }
-    setClickedIndexes(updatedIndexes);
-
     const payload = {
       event_id: event?.id?.toString(),
       user_id: user?.user?.id?.toString(),
     };
-    // Call saveEvent mutation
-    try {
-      await saveEvent(payload).unwrap();
-      toast.success("Event saved successfully!", { theme: "colored" });
-    } catch (error) {
-      toast.error("Failed to save event.", { theme: "colored" });
+
+    if (currentIndex === -1) {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to save this event?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, save it!",
+      });
+
+      if (result.isConfirmed) {
+        updatedIndexes.push(index);
+        try {
+          await saveEvent(payload).unwrap();
+          toast.success("Event saved successfully!", { theme: "colored" });
+        } catch (error) {
+          toast.error("Failed to save event.", { theme: "colored" });
+        }
+      }
+    } else {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to remove this event?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, remove it!",
+      });
+
+      if (result.isConfirmed) {
+        updatedIndexes.splice(currentIndex, 1);
+        try {
+          await removeEvent(payload).unwrap();
+          toast.success("Event removed successfully!", { theme: "colored" });
+        } catch (error) {
+          toast.error("Failed to remove event.", { theme: "colored" });
+        }
+      }
     }
+
+    setClickedIndexes(updatedIndexes);
   };
 
   const viewJobHandler = (title: any) => {
+    if (!user) {
+      push("/login");
+      return;
+    }
+
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-event?query=${encodedTitle}`);
   };
@@ -82,7 +124,7 @@ const UpComingMeetings = () => {
 
   return (
     <>
-      z{isLoading && <Loading />}
+      {isLoading && <Loading />}
       <div className="container">
         <div className="row">
           <div className="col-lg-12 section-head text-center">
@@ -124,7 +166,7 @@ const UpComingMeetings = () => {
                             <path
                               d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
                               fill={
-                                clickedIndexes.includes(index)
+                                user && clickedIndexes.includes(index)
                                   ? "#2A6310"
                                   : "#fff"
                               }

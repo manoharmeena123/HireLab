@@ -49,7 +49,7 @@ const ManageJobs = () => {
   const [show, setShow] = useState(false);
   const [applshow, setApplshow] = useState(false);
   const [applicationviewid, setApplicationviewid] = useState<
-    number | undefined
+    any | undefined
   >(undefined);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -160,7 +160,8 @@ const ManageJobs = () => {
     getJobUser(jobId);
   };
 
-  const handleAcceptApplication = async (id: any) => {
+  const handleAcceptApplication = async (item :any) => {
+    console.log('item', item)
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to accept this application?",
@@ -174,11 +175,12 @@ const ManageJobs = () => {
     if (result.isConfirmed) {
       const payload = {
         job_id: applicationviewid?.toString() || "",
-        user_id: id,
+        user_id: item?.id,
       };
       try {
         const res = await acceptJobCandidate(payload).unwrap();
         if (res?.code === 200) {
+          getJobUser(applicationviewid);
           toast.success("Application accepted successfully!", {
             theme: "colored",
           });
@@ -209,6 +211,7 @@ const ManageJobs = () => {
       try {
         const res = await rejectJobCandidate(payload).unwrap();
         if (res?.code === 200) {
+          getJobUser(applicationviewid);
           toast.success("Application rejected successfully!", {
             theme: "colored",
           });
@@ -613,7 +616,7 @@ const ManageJobs = () => {
                                 <Button
                                   variant="success"
                                   onClick={() =>
-                                    handleAcceptApplication(item?.id)
+                                    handleAcceptApplication(item)
                                   }
                                 >
                                   ACCEPT

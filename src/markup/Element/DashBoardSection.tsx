@@ -11,16 +11,22 @@ import {
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
   useGetEventsQuery,
+  useGetMembershipQuery
 } from "@/store/global-store/global.query";
+
 import { RecentJobData } from "@/types/index";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 const DashboardSection = () => {
+  const { user } = useLoggedInUser();
+  console.log('user', user)
   const { push } = useRouter();
   const dispatch = useDispatch();
+  const { data: membershipData } = useGetMembershipQuery();
   const {
     data: recentJob,
     isLoading: recentLoading,
