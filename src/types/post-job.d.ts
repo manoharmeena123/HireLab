@@ -104,6 +104,8 @@ interface Membership {
   status: string;
   discount_price: string;
   info: MembershipInfo[];
+  monthly_price :string ;
+  quarterly_price :string
 }
 
 interface MembershipResponse {

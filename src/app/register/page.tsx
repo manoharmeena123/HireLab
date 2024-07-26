@@ -60,7 +60,7 @@ const LoginSection = () => {
           }}
         >
           <div className="row">
-            <div className="col-xl-4 col-lg-5 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll skew-section left-bottom">
+            <div className="col-xl-4 col-lg-5 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll skew-section left-bottom overflow-hide">
               <div className="login-form style-2" style={{ width: "100%" }}>
                 <div className="logo-header text-center p-tb30">
                   <Link href={"./"}>
@@ -78,6 +78,7 @@ const LoginSection = () => {
                       className="dez-form p-b30"
                       method="post"
                       onSubmit={handleSubmit}
+                      style={{width:"100%"}}
                     >
                       <h3
                         className={`${styles["form-title"]} ${styles["rubik-font"]}`}
@@ -133,8 +134,21 @@ const LoginSection = () => {
                           {isLoading ? "Loading..." : "Register"}
                         </button>
                       </div>
+                    <div className={`${styles["create-div"]}`}>
+                        <p
+                          className={`${styles["lato-font"]} ${styles["no-wrap"]}`}
+                        >
+                          If you have already account?{" "}
+                          <Link
+                            href="/login"
+                            className={styles["forgot-password-link"]}
+                          >
+                            Login
+                          </Link>
+                        </p>
+                      </div>
                     </form>
-                    <div
+                    {/* <div
                       className={styles["lato-font"]}
                       style={{ marginTop: "0px" }}
                     >
@@ -169,7 +183,7 @@ const LoginSection = () => {
                       >
                         <p className={styles["lato-font"]}>Submit</p>
                       </button>
-                    </div>
+                    </div> */}
                     <div className="text-center bottom"></div>
                   </div>
                 </div>

@@ -22,9 +22,15 @@ interface Job {
 
 const SavedJobs = () => {
   const { push } = useRouter();
-  const { data: savedJob, refetch, isLoading : savedJobLoading } = useGetSavedJobQuery();
-  const [deleteSavedJob, { isLoading :deleteSavedJobLoading, isSuccess, isError }] =
-    useDeleteSavedJobMutation();
+  const {
+    data: savedJob,
+    refetch,
+    isLoading: savedJobLoading,
+  } = useGetSavedJobQuery();
+  const [
+    deleteSavedJob,
+    { isLoading: deleteSavedJobLoading, isSuccess, isError },
+  ] = useDeleteSavedJobMutation();
   const [postModal, setPostModal] = useState(false);
   const [contacts, setContacts] = useState<any>();
   const [addFormData, setAddFormData] = useState<Job>({
@@ -158,7 +164,7 @@ const SavedJobs = () => {
 
   return (
     <>
-    {savedJobLoading && deleteSavedJobLoading && <Loading/> }
+      {savedJobLoading && deleteSavedJobLoading && <Loading />}
       <div className="job-bx save-job browse-job table-job-bx clearfix">
         <div className="job-bx-title clearfix">
           <h5 className="font-weight-700 pull-left text-uppercase">
@@ -182,50 +188,63 @@ const SavedJobs = () => {
             </tr>
           </thead>
           <tbody>
-            {savedJob?.data?.map((contact: any, index: number) => (
-              <tr key={index}>
-                <td className="job-name">
-                  <Link href={"/job-detail"}>{contact?.job_title}</Link>
-                </td>
-                <td className="criterias text-primary">
-                  {contact?.company_name}
-                </td>
-                <td className="date">{formaterDate(contact?.created_at)}</td>
-                <td className="job-links pencil">
-                  <span onClick={() => viewJobHandler(contact?.id)}>
-                    <i className="fa fa-eye"></i>
-                  </span>
-                  <Link href={"#"} onClick={() => handleDeleteClick(contact.id.toString())}>
-                    <i className="ti-trash"></i>
-                  </Link>
+            {savedJob?.data?.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="text-center">
+                  No job saved
                 </td>
               </tr>
-            ))}
+            ) : (
+              savedJob?.data?.map((contact: any, index: number) => (
+                <tr key={index}>
+                  <td className="job-name">
+                    <Link href={"/job-detail"}>{contact?.job_title}</Link>
+                  </td>
+                  <td className="criterias text-primary">
+                    {contact?.company_name}
+                  </td>
+                  <td className="date">{formaterDate(contact?.created_at)}</td>
+                  <td className="job-links pencil">
+                    <span onClick={() => viewJobHandler(contact?.id)}>
+                      <i className="fa fa-eye"></i>
+                    </span>
+                    <Link
+                      href={"#"}
+                      onClick={() => handleDeleteClick(contact.id.toString())}
+                    >
+                      <i className="ti-trash"></i>
+                    </Link>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
-        <div className="pagination-bx float-right">
-          <ul className="pagination">
-            <li className="previous">
-              <Link href={"#"}>
-                <i className="ti-arrow-left"></i> Prev
-              </Link>
-            </li>
-            <li className="active">
-              <Link href={"#"}>1</Link>
-            </li>
-            <li>
-              <Link href={"#"}>2</Link>
-            </li>
-            <li>
-              <Link href={"#"}>3</Link>
-            </li>
-            <li className="next">
-              <Link href={"#"}>
-                Next <i className="ti-arrow-right"></i>
-              </Link>
-            </li>
-          </ul>
-        </div>
+        {savedJob?.data?.length !== 0 && (
+          <div className="pagination-bx float-right">
+            <ul className="pagination">
+              <li className="previous">
+                <Link href={"#"}>
+                  <i className="ti-arrow-left"></i> Prev
+                </Link>
+              </li>
+              <li className="active">
+                <Link href={"#"}>1</Link>
+              </li>
+              <li>
+                <Link href={"#"}>2</Link>
+              </li>
+              <li>
+                <Link href={"#"}>3</Link>
+              </li>
+              <li className="next">
+                <Link href={"#"}>
+                  Next <i className="ti-arrow-right"></i>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
 
       <Modal

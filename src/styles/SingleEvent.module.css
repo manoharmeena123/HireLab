@@ -1,0 +1,65 @@
+/* SingleEvent.module.css */
+.singleEventWrap {
+  background-color: white !important;
+}
+
+.upcomingPastTitleWrap {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 1rem !important;
+  padding: 1rem 0 !important;
+}
+
+.meetupDetailsWrap {
+  display: flex !important;
+  padding: 1rem 0 !important;
+}
+
+.eventsColumn {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+.passDetailCard {
+  flex: 0 0 30% !important;
+  padding: 1rem !important;
+}
+
+.meetupCard {
+  padding: 1rem !important;
+}
+
+.eventChapterTitle {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.jdHeader {
+  display: flex !important;
+  gap: 1rem !important;
+}
+
+.jdLocWrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+}
+
+.detailBypassTitleWrap {
+  display: flex !important;
+  gap: 1rem !important;
+  margin-top: 1rem !important;
+  justify-content: center !important;
+}
+
+.selected {
+  border: 2px solid #2a6310 !important;
+  background-color: #f9f9f9 !important;
+}
+
+.savesvg {
+  cursor: pointer !important;
+}

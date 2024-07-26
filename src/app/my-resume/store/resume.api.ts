@@ -29,6 +29,8 @@ import {
   WritableSaveMemberShipResponse,
   WritableSaveEvent,
   WritableSaveEventResponse,
+  WritableRemoveEvent,
+  WritableRemoveEventResponse,
 } from "../types/resume";
 
 // Resume =============================================================================================>
@@ -329,6 +331,15 @@ export const queries = {
     query: () => ({
       url: `api/my-event`,
       method: "GET",
+    }),
+  },
+
+  //api/remove-event
+  removeEvent: {
+    query: (data: WritableRemoveEvent) => ({
+      url: `api/remove-event`,
+      method: "POST",
+      body: data,
     }),
   },
 };

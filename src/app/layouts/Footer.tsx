@@ -104,37 +104,37 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Frequently Asked Questions</h5>
                 <ul className="list-2 list-line">
                   <li>
-                    <Link href={""}>Privacy & Seurty</Link>
+                    <Link href={""}>Privacy & Securty</Link>
                   </li>
                   <li>
                     <Link href={""}>Terms of Serice</Link>
                   </li>
                   <li>
-                    <Link href={""}>Communications</Link>
+                  <Link href={"/job-poster-faq"}>Job Poster FAQ</Link>
                   </li>
                   <li>
                     <Link href={""}>Referral Terms</Link>
                   </li>
                   <li>
-                    <Link href={""}>Lending Licnses</Link>
+                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
                   </li>
                   <li>
                     <Link href={""}>Support</Link>
                   </li>
                   <li>
-                    <Link href={""}>How It Works</Link>
+                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
                   </li>
                   <li>
                     <Link href={""}>For Employers</Link>
                   </li>
                   <li>
-                    <Link href={""}>Underwriting</Link>
+                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
                   </li>
                   <li>
                     <Link href={"/contact-us"}>Contact Us</Link>
                   </li>
                   <li>
-                    <Link href={""}>Lending Licnses</Link>
+                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
                   </li>
                   <li>
                     <Link href={""}>Support</Link>
