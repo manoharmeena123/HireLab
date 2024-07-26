@@ -130,7 +130,9 @@ const UpComingMeetings = () => {
           </div>
         </div>
         <ul className="post-job-bx browse-job-grid row upcoming-m-wrap">
-          {
+          {isLoading ? (
+            <Loading />
+          ) : (
             currentItems.map((event: any, index: number) => (
               <li className="col-lg-6 col-md-6" key={index}>
                 <div className="post-bx">
@@ -191,7 +193,7 @@ const UpComingMeetings = () => {
                   </div>
                 </div>
               </li>
-            )
+            ))
           )}
         </ul>
         <div className="d-flex justify-content-center w-100">
