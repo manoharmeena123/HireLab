@@ -41,6 +41,8 @@ import {
   WritableSaveMemberShipResponse,
   WritableSaveEvent,
   WritableSaveEventResponse,
+  WritableRemoveEvent,
+  WritableRemoveEventResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -59,7 +61,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "AcceptJobCandidate",
     "SaveMemberShip",
     "SaveEvent",
-    "MyEvents"
+    "MyEvents",
+    "RemoveEvent"
   ],
 });
 
@@ -288,6 +291,10 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
     myEvents : builder.query<any,void>({
       query: queries.myEvents.query,
       providesTags: ["MyEvents"],
+    }),
+    removeEvent :  builder.mutation<WritableRemoveEventResponse,WritableRemoveEvent>({
+      query :(data) => queries.removeEvent.query(data),
+      invalidatesTags: ["RemoveEvent"],
     })
   }),
   overrideExisting: true,
@@ -331,6 +338,7 @@ export const {
   useSaveMemberShipMutation,
   useSaveEventMutation,
   useMyEventsQuery,
+  useRemoveEventMutation
 } = resumeApi;
 
 export default resumeApi;

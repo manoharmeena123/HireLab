@@ -467,6 +467,17 @@ interface SaveEventResponse {
   data: any[];
 }
 
+interface RemoveEvent {
+  event_id: string;
+  user_id: string;
+}
+
+interface RemoveEventResponse {
+  code: number;
+  success: boolean;
+  data: any[];
+}
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -514,7 +525,8 @@ type WritableSaveMemberShip = WritableDraft<SaveMemberShip>;
 type WritableSaveMemberShipResponse = WritableDraft<SaveMemberShipResponse>;
 type WritableSaveEvent = WritableDraft<SaveEvent>;
 type WritableSaveEventResponse = WritableDraft<SaveEventResponse>;
-
+type WritableRemoveEvent = WritableDraft<RemoveEvent>;
+type WritableRemoveEventResponse = WritableDraft<RemoveEventResponse>;
 export {
   WritableResumeFetchResponse,
   WritableHeadlineData,
@@ -556,4 +568,6 @@ export {
   WritableSaveMemberShipResponse,
   WritableSaveEvent,
   WritableSaveEventResponse,
+  WritableRemoveEvent,
+  WritableRemoveEventResponse,
 };
