@@ -101,6 +101,7 @@ export interface RecentJobData {
     user: User | null;
     tags: string
     salary:string
+    ctc : string;
 }
 
 // Represents the response from the API

@@ -28,7 +28,9 @@ const SingleEvent = () => {
   const [activeButton, setActiveButton] = useState("upcoming");
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
-  const [processingEventId, setProcessingEventId] = useState<number | null>(null);
+  const [processingEventId, setProcessingEventId] = useState<number | null>(
+    null
+  );
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const [removeEvent] = useRemoveEventMutation();
@@ -59,21 +61,26 @@ const SingleEvent = () => {
   const [saveEvent] = useSaveEventMutation();
   const { data: myEventsData, refetch } = useMyEventsQuery();
 
+  // Fetch the event data when the component mounts
   useEffect(() => {
     if (query) {
       getSingleEventByTitle(query);
     }
   }, [getSingleEventByTitle, query]);
 
+  // Update the selected event when the single event data changes
   useEffect(() => {
     if (singleEventByTitle?.data) {
       setSelectedEvent(singleEventByTitle.data);
     }
   }, [singleEventByTitle]);
 
+  // Update the clicked indexes for saved events
   useEffect(() => {
     if (myEventsData?.data) {
-      const savedEventIds = myEventsData.data.map((event: any) => event.event_id);
+      const savedEventIds = myEventsData.data.map(
+        (event: any) => event.event_id
+      );
       const indexes = upcomingEventsData?.data?.reduce(
         (acc: number[], event: any, index: number) => {
           if (savedEventIds.includes(event.id)) {
@@ -96,6 +103,7 @@ const SingleEvent = () => {
     setShowFullDescription(!showFullDescription);
   };
 
+  // Handle the click on the save icon
   const handleIconClick = async (event: any, index: number) => {
     if (!user) {
       push("/login");
@@ -125,12 +133,9 @@ const SingleEvent = () => {
         try {
           const res = await saveEvent(payload).unwrap();
           refetch();
-          toast.success(res?.message , {theme :'colored'})
-          // Swal.fire("Saved!", "Event has been saved successfully.", "success");
+          toast.success(res?.message, { theme: "colored" });
         } catch (error: any) {
-          toast.error(error?.message , {theme :'colored'})
-
-          // Swal.fire("Error", `Failed to save the event: ${error?.message}`, "error");
+          toast.error(error?.message, { theme: "colored" });
         }
       }
     } else {
@@ -149,11 +154,9 @@ const SingleEvent = () => {
         try {
           const res = await removeEvent(payload).unwrap();
           refetch();
-          toast.success(res.message , {theme :'colored'})
-          // Swal.fire("Removed!", "Event has been removed successfully.", "success");
+          toast.success(res.message, { theme: "colored" });
         } catch (error: any) {
-          toast.error(error?.message , {theme :'colored'})
-          // Swal.fire("Error", `Failed to remove the event: ${error?.message}`, "error");
+          toast.error(error?.message, { theme: "colored" });
         }
       }
     }
@@ -251,11 +254,24 @@ const SingleEvent = () => {
                   onClick={() => handleEventClick(event)}
                   style={{
                     padding: "1rem",
-                    border: selectedEvent?.id === event.id ? "2px solid #2a6310" : "none",
-                    backgroundColor: selectedEvent?.id === event.id ? "#f9f9f9" : "transparent",
+                    border:
+                      selectedEvent?.id === event.id
+                        ? "2px solid #2a6310"
+                        : "none",
+                    backgroundColor:
+                      selectedEvent?.id === event.id
+                        ? "#f9f9f9"
+                        : "transparent",
                   }}
                 >
-                  <div className="event-chapter-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div
+                    className="event-chapter-title"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <h3 onClick={() => handleEventClick(event)}>
                       <Link href={""} style={{ fontWeight: "600" }}>
                         {event.title}
@@ -270,7 +286,11 @@ const SingleEvent = () => {
                         e.stopPropagation();
                         handleIconClick(event, index);
                       }}
-                      style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        cursor: "pointer",
+                      }}
                     >
                       <path
                         d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
@@ -280,19 +300,46 @@ const SingleEvent = () => {
                     </svg>
                   </div>
                   <div>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div
+                      style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <i className="fa fa-map-marker"></i>
                         <span>{event.location}</span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <span>{formatEventDate(event.date)}</span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <span>{event.time} Am onwards</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "1rem",
+                        marginTop: "1rem",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Button variant="success">Details</Button>
                       <Button
                         variant="success"
@@ -302,7 +349,9 @@ const SingleEvent = () => {
                         }}
                         disabled={processingEventId === event.id}
                       >
-                        {processingEventId === event.id ? "Processing..." : "Buy Pass"}
+                        {processingEventId === event.id
+                          ? "Processing..."
+                          : "Buy Pass"}
                       </Button>
                     </div>
                   </div>
@@ -318,11 +367,24 @@ const SingleEvent = () => {
                   onClick={() => handleEventClick(event)}
                   style={{
                     padding: "1rem",
-                    border: selectedEvent?.id === event.id ? "2px solid #2a6310" : "none",
-                    backgroundColor: selectedEvent?.id === event.id ? "#f9f9f9" : "transparent",
+                    border:
+                      selectedEvent?.id === event.id
+                        ? "2px solid #2a6310"
+                        : "none",
+                    backgroundColor:
+                      selectedEvent?.id === event.id
+                        ? "#f9f9f9"
+                        : "transparent",
                   }}
                 >
-                  <div className="event-chapter-title" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div
+                    className="event-chapter-title"
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <h3 onClick={() => handleEventClick(event)}>
                       <Link href={""} style={{ fontWeight: "600" }}>
                         {event.title}
@@ -337,7 +399,11 @@ const SingleEvent = () => {
                         e.stopPropagation();
                         handleIconClick(event, index);
                       }}
-                      style={{ width: "20px", height: "20px", cursor: "pointer" }}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        cursor: "pointer",
+                      }}
                     >
                       <path
                         d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
@@ -347,19 +413,46 @@ const SingleEvent = () => {
                     </svg>
                   </div>
                   <div>
-                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div
+                      style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <i className="fa fa-map-marker"></i>
                         <span>{event.location}</span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <span>{formatEventDate(event.date)}</span>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
                         <span>{event.time} Am onwards</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "1rem",
+                        marginTop: "1rem",
+                        justifyContent: "center",
+                      }}
+                    >
                       <Button variant="success">Details</Button>
                       <Button
                         variant="success"
@@ -369,7 +462,9 @@ const SingleEvent = () => {
                         }}
                         disabled={processingEventId === event.id}
                       >
-                        {processingEventId === event.id ? "Processing..." : "Buy Pass"}
+                        {processingEventId === event.id
+                          ? "Processing..."
+                          : "Buy Pass"}
                       </Button>
                     </div>
                   </div>
@@ -438,13 +533,23 @@ const SingleEvent = () => {
                     </strong>
                   </div>
                 </div>
-                <div className="detail-bypass-title-wrap justify-content-center py-3" style={{ display: 'flex', gap: '1rem', marginTop: '1rem', justifyContent: 'center' }}>
+                <div
+                  className="detail-bypass-title-wrap justify-content-center py-3"
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                    marginTop: "1rem",
+                    justifyContent: "center",
+                  }}
+                >
                   <Button
                     variant="success"
                     onClick={() => handleBuyPass(selectedEvent)}
                     disabled={processingEventId === selectedEvent?.id}
                   >
-                    {processingEventId === selectedEvent?.id ? "Processing..." : "Buy Pass"}
+                    {processingEventId === selectedEvent?.id
+                      ? "Processing..."
+                      : "Buy Pass"}
                   </Button>
                 </div>
               </div>

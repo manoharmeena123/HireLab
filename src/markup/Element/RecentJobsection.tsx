@@ -7,26 +7,38 @@ import {
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
   useGetJobsQuery,
+  useGetCtcDataQuery
 } from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useLoggedInUser } from '@/hooks/useLoggedInUser';
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const dispatch = useDispatch();
   const { push } = useRouter();
+  const { user } = useLoggedInUser();
+  const { data: ctcData } = useGetCtcDataQuery();
+
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcData?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
 
   // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
+    // Check if user is logged in
+    if (!user) {
+      push('/login');
+      return;
+    }
+
     // Check if already liking or unliking
     if (isSaving || isDeleting) {
       return; // If already saving or deleting, do nothing
@@ -50,7 +62,7 @@ const RecentJobsection = () => {
         Swal.fire({
           icon: "error",
           title: "Error in Deleted Job",
-          text: "Failed to deleting job.",
+          text: "Failed to delete job.",
           confirmButtonText: "OK",
         });
       }
@@ -71,21 +83,19 @@ const RecentJobsection = () => {
         Swal.fire({
           icon: "error",
           title: "Error in Saving Job",
-          text: "Failed to saving job.",
+          text: "Failed to save job.",
           confirmButtonText: "OK",
         });
       }
     }
   };
-  const { data: JobDetails, refetch } = useGetJobsQuery();
-  // // Render loading state if data is still loading
-  // if (isLoading) return <div>Loading...</div>;
 
-  // // Render error message if there's an error fetching data
-  // if (isError) return <div>Error fetching data</div>;
+  const { data: JobDetails, refetch } = useGetJobsQuery();
+
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
   };
+
   return (
     <div className="section-full bg-white content-inner-2">
       <div className="container">
@@ -140,21 +150,22 @@ const RecentJobsection = () => {
                         {item.tags &&
                           item.tags.split(",").map((tag, index) => (
                             <Link key={index} href="#" className="mr-1">
-                              <span>{tag.trim()}</span>
+                              <span className="tag">{tag.trim()}</span>
                             </Link>
                           ))}
                       </div>
 
-                      <div className="d-flex">
-                        <div className="job-time mr-auto">
+                      <div className="d-flex justify-content-between align-items-center">
+                        <div className="job-time">
                           <Link href="">
                             <span>{item?.location?.title}</span>
                           </Link>
                         </div>
 
                         <div className="salary-bx">
-                          <span>42000 - 55000</span>
-                          <br />
+                          <span className="ctc-badge">
+                            <i className="fa fa-money"></i> {getCtcTitleById(item.ctc)}
+                          </span>
                         </div>
                       </div>
                       <label
