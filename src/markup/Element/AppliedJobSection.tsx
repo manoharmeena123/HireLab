@@ -170,6 +170,12 @@ const AppliedJobSection = () => {
                         </Link>
                       </li>
                       <li>
+                        <Link href={"/transaction"}>
+                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                          <span>Transaction</span>
+                        </Link>
+                      </li>
+                      <li>
                         <Link href={"./"} onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>

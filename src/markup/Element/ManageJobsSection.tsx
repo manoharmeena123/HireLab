@@ -304,7 +304,12 @@ const ManageJobs = () => {
                             <span>Manage Jobs</span>
                           </Link>
                         </li>
-
+                        <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                          </Link>
+                        </li>
                         <li>
                           <Link href="/" onClick={handleLogout}>
                             <i

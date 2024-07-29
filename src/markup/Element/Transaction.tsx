@@ -8,8 +8,11 @@ import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
-const CreditEarned = () => {
+
+const Transaction = () => {
   const { user, refetch } = useLoggedInUser();
   const { removeToken } = useAuthToken();
   const [company, setCompany] = useState<boolean>(false);
@@ -103,66 +106,90 @@ const CreditEarned = () => {
               <div className="row">
                 <div className="col-xl-3 col-lg-4 m-b30">
                   <div className="sticky-top">
-                    <div className="candidate-info company-info">
+                  <div className="candidate-info">
                       <div className="candidate-detail text-center">
                         <div className="canditate-des">
-                          <Link href={"#"}>
+                          {user?.user?.image ? (
                             <Image
-                              src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-                              alt="Company Logo"
+                              src={`${IMAGE_URL + user?.user?.image}`}
+                              alt="profile picture"
                               width={300}
                               height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
                             />
-                          </Link>
+                          ) : (
+                            <Image
+                              src={profileIcon}
+                              alt="profile picture"
+                              width={300}
+                              height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          )}
                         </div>
                         <div className="candidate-title">
-                          <h4 className="m-b5">
-                            <Link href={"#"}>
-                              {user?.user?.name || "User Name"}
-                            </Link>
-                          </h4>
-                          <p className="m-b0">
-                            <Link href={"#"}>
-                              {designationLabel || "Not available"}
-                            </Link>
-                          </p>
+                          <div className="">
+                            <h4 className="m-b5">
+                              <Link href={"#"}>David Matin</Link>
+                            </h4>
+                            <p className="m-b0">
+                              <Link href={"#"}>Web developer</Link>
+                            </p>
+                          </div>
                         </div>
                       </div>
                       <ul>
                         <li>
-                          <Link href="/job-poster">
+                          <Link href={"/job-poster"}>
                             <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>{user?.user?.name} Profile</span>
+                            <span>Profile</span>
                           </Link>
                         </li>
-
                         <li>
-                          <Link href="/post-job">
+                          <Link href={"/my-resume"}>
                             <i
                               className="fa fa-file-text-o"
                               aria-hidden="true"
                             ></i>
-                            <span>Post A job</span>
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link className="active" href="/credit-earned">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Credit Earned</span>
-                          </Link>
-                        </li>
-
-                        <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Manage Jobs</span>
+                            <span>My Resume</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/dashboard-section">
+                          <Link href={"/saved-jobs"}>
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
+                            <span>Saved Jobs</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/applied-jobs"}>
+                            <i
+                              className="fa fa-briefcase"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Applied Jobs</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/job-alert"}>
+                            <i className="fa fa-bell-o" aria-hidden="true"></i>
+                            <span>Job Alerts</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/cv-manager"} className="active">
+                            <i
+                              className="fa fa-id-card-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>CV Manager</span>
                           </Link>
                         </li>
                         <li>
@@ -182,7 +209,7 @@ const CreditEarned = () => {
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
-                        CREDIT EARNED
+                        TRANSACTIONS
                       </h5>
                       <div className="float-right">
                         <span className="select-title">Sort by freshness</span>
@@ -198,8 +225,8 @@ const CreditEarned = () => {
                     </div>
                     <div>
                       <h3>
-                        Wallet{" "}
-                        <span style={{ color: "blue" }}>6700 Credits</span>
+                        <span style={{ color: "blue" }}>6700</span>{" "}
+                        Transactions
                       </h3>
                     </div>
                     <table className="table-job-bx cv-manager company-manage-job">
@@ -220,7 +247,7 @@ const CreditEarned = () => {
                             </div>
                           </th>
                           <th>Description</th>
-                          <th>Credit</th>
+                          <th>Amount</th>
                           <th>Status</th>
                           <th>Date</th>
                         </tr>
@@ -345,4 +372,4 @@ const CreditEarned = () => {
     </>
   );
 };
-export default CreditEarned;
+export default Transaction;

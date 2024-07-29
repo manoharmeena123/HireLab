@@ -1160,6 +1160,8 @@
   width: 100%;
   background-color: #fff;
   padding: 5px;
+  width: 150px;
+  height: 148px;
 }
 .candidate-title {
   margin-top: 25px;

@@ -8,7 +8,7 @@ const Footer = () => {
       <div className="footer-top">
         <div className="container">
           <div className="row">
-            <div className="col-xl-5 col-lg-4 col-md-12 col-sm-12">
+            <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
               <div className="widget">
                 <div className="d-flex align-items-center">
                   <img
@@ -99,10 +99,36 @@ const Footer = () => {
                 </ul>
               </div>
             </div>
-            <div className="col-xl-5 col-lg-5 col-md-8 col-sm-8 col-12">
-              <div className="widget border-0">
-                <h5 className="m-b30 text-white">Frequently Asked Questions</h5>
-                <ul className="list-2 list-line">
+            <div className="col-xl-6 col-lg-5 col-md-8 col-sm-8 col-12 d-flex gap-2">
+              <div className="widget border-0 w-100">
+                <h5 className="m-b30 text-white">Pages</h5>
+                <ul className="list-2 list-line d-flex flex-column">
+                  <li>
+                    <Link href={"/"}>Home</Link>
+                  </li>
+                  <li>
+                    <Link href={"/about-us"}>About Us</Link>
+                  </li>
+                  <li>
+                  <Link href={"/contact-us"}>Contact Us</Link>
+                  </li>
+                  <li>
+                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
+                  </li>
+                  <li>
+                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
+                  </li>
+                  <li>
+                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
+                  </li>
+                  <li>
+                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="widget border-0 w-100">
+                <h5 className="m-b30 text-white">Information</h5>
+                <ul className="list-2 list-line d-flex flex-column">
                   <li>
                     <Link href={""}>Privacy & Securty</Link>
                   </li>
@@ -110,34 +136,13 @@ const Footer = () => {
                     <Link href={""}>Terms of Serice</Link>
                   </li>
                   <li>
-                  <Link href={"/job-poster-faq"}>Job Poster FAQ</Link>
-                  </li>
-                  <li>
                     <Link href={""}>Referral Terms</Link>
                   </li>
                   <li>
-                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
-                  </li>
-                  <li>
                     <Link href={""}>Support</Link>
                   </li>
                   <li>
-                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>For Employers</Link>
-                  </li>
-                  <li>
-                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
-                  </li>
-                  <li>
-                    <Link href={"/contact-us"}>Contact Us</Link>
-                  </li>
-                  <li>
-                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>Support</Link>
+                    <Link href={"/refund-policy"}>Refund Policy</Link>
                   </li>
                 </ul>
               </div>
