@@ -7,14 +7,17 @@ import {
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
   useGetJobsQuery,
-  useGetCtcDataQuery
+  useGetCtcDataQuery,
+  useGetTestimonialsQuery,
 } from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { useRouter } from "next/navigation";
-import { useLoggedInUser } from '@/hooks/useLoggedInUser';
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import parse from "html-react-parser";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
@@ -25,7 +28,9 @@ const RecentJobsection = () => {
   const { push } = useRouter();
   const { user } = useLoggedInUser();
   const { data: ctcData } = useGetCtcDataQuery();
-
+  const { data: testimonialData } = useGetTestimonialsQuery();
+  const lastTestimonial = testimonialData?.data?.slice(-1)[0];
+  console.log("testimonialData", lastTestimonial);
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
@@ -35,7 +40,7 @@ const RecentJobsection = () => {
   const handleLikeToggle = async (jobId: string) => {
     // Check if user is logged in
     if (!user) {
-      push('/login');
+      push("/login");
       return;
     }
 
@@ -137,7 +142,7 @@ const RecentJobsection = () => {
                             </li>
                             <li>
                               <i className="fa fa-bookmark-o"></i>
-                              {item?.location?.title}
+                              {item?.company_name}
                             </li>
                             <li>
                               <i className="fa fa-clock-o"></i> Published{" "}
@@ -164,7 +169,8 @@ const RecentJobsection = () => {
 
                         <div className="salary-bx">
                           <span className="ctc-badge">
-                            <i className="fa fa-money"></i> {getCtcTitleById(item.ctc)}
+                            <i className="fa fa-money"></i>{" "}
+                            {getCtcTitleById(item.ctc)}
                           </span>
                         </div>
                       </div>
@@ -196,28 +202,28 @@ const RecentJobsection = () => {
           <div className="col-lg-3">
             <div className="sticky-top">
               <div className="candidates-are-sys m-b30">
-                <div className="candidates-bx">
-                  <div className="testimonial-pic radius">
-                    <Image
-                      src={require("../../images/testimonials/pic3.jpg")}
-                      alt=""
-                      width="100"
-                      height="100"
-                    />
+                {lastTestimonial && (
+                  <div className="candidates-bx">
+                    <div className="testimonial-pic radius">
+                      <Image
+                        src={`${IMAGE_URL + lastTestimonial?.image}`}
+                        width={100}
+                        height={100}
+                        alt={lastTestimonial?.name || "Testimonial"}
+                      />
+                    </div>
+                    <div className="testimonial-text">
+                      <p>
+                        {lastTestimonial ? parse(lastTestimonial.content) : ""}
+                      </p>
+                    </div>
+                    <div className="testimonial-detail">
+                      <strong className="testimonial-name">
+                        {lastTestimonial.name}
+                      </strong>
+                    </div>
                   </div>
-                  <div className="testimonial-text">
-                    <p>
-                      I just got a job that I applied for via careerfy! I used
-                      the site all the time during my job hunt.
-                    </p>
-                  </div>
-                  <div className="testimonial-detail">
-                    <strong className="testimonial-name">
-                      Richard Anderson
-                    </strong>
-                    <span className="testimonial-position">Nevada, USA</span>
-                  </div>
-                </div>
+                )}
               </div>
               <div className="quote-bx">
                 <div className="quote-info">
