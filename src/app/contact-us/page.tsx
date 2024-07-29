@@ -1,10 +1,24 @@
 "use client";
+"use client";
 import React from "react";
 import Link from "next/link";
 import PageTitle from "@/markup/Layout/PageTitle";
 import bnr from "../../../src/images/banner/bnr1.jpg";
+import { useGetSettingDataQuery } from "@/store/global-store/global.query";
 
 const Contact = () => {
+  const { data, error, isLoading } = useGetSettingDataQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading settings</div>;
+  }
+
+  const setting = data?.data;
+
   return (
     <>
       <div className="page-content bg-white">
@@ -36,9 +50,7 @@ const Contact = () => {
                         <h6 className="text-uppercase m-tb0 dez-tilte">
                           Address:
                         </h6>
-                        <p>
-                          123 West Street, Melbourne Victoria 3000 Australia
-                        </p>
+                        <p>{setting?.address}</p>
                       </div>
                     </li>
                     <li className="icon-bx-wraper left  m-b30">
@@ -52,7 +64,7 @@ const Contact = () => {
                         <h6 className="text-uppercase m-tb0 dez-tilte">
                           Email:
                         </h6>
-                        <p>info@example.com</p>
+                        <p>{setting?.email}</p>
                       </div>
                     </li>
                     <li className="icon-bx-wraper left">
@@ -66,42 +78,52 @@ const Contact = () => {
                         <h6 className="text-uppercase m-tb0 dez-tilte">
                           PHONE
                         </h6>
-                        <p>+61 3 8376 6284</p>
+                        <p>{setting?.number}</p>
                       </div>
                     </li>
                   </ul>
                   <div className="m-t20">
                     <ul className="dez-social-icon dez-social-icon-lg">
-                      <li>
-                        <Link
-                          href={"#"}
-                          className="fa fa-facebook bg-primary mr-1"
-                        ></Link>
-                      </li>
-                      <li>
-                        <Link
-                          href={"#"}
-                          className="fa fa-twitter bg-primary mr-1"
-                        ></Link>
-                      </li>
-                      <li>
-                        <Link
-                          href={"#"}
-                          className="fa fa-linkedin bg-primary mr-1"
-                        ></Link>
-                      </li>
-                      <li>
-                        <Link
-                          href={"#"}
-                          className="fa fa-instagram bg-primary mr-1"
-                        ></Link>
-                      </li>
-                      <li>
-                        <Link
-                          href={"#"}
-                          className="fa fa-google-plus bg-primary"
-                        ></Link>
-                      </li>
+                      {setting?.facebook && (
+                        <li>
+                          <Link
+                            href={setting.facebook}
+                            className="fa fa-facebook bg-primary mr-1"
+                          ></Link>
+                        </li>
+                      )}
+                      {setting?.twitter && (
+                        <li>
+                          <Link
+                            href={setting.twitter}
+                            className="fa fa-twitter bg-primary mr-1"
+                          ></Link>
+                        </li>
+                      )}
+                      {setting?.linkedin && (
+                        <li>
+                          <Link
+                            href={setting.linkedin}
+                            className="fa fa-linkedin bg-primary mr-1"
+                          ></Link>
+                        </li>
+                      )}
+                      {setting?.instagram && (
+                        <li>
+                          <Link
+                            href={setting.instagram}
+                            className="fa fa-instagram bg-primary mr-1"
+                          ></Link>
+                        </li>
+                      )}
+                      {/* {setting?.google_plus && (
+                        <li>
+                          <Link
+                            href={setting.google_plus}
+                            className="fa fa-google-plus bg-primary"
+                          ></Link>
+                        </li>
+                      )} */}
                     </ul>
                   </div>
                 </div>
@@ -148,7 +170,7 @@ const Contact = () => {
                           <div className="input-group">
                             <textarea
                               name="dzMessage"
-							                rows={4}
+                              rows={4}
                               className="form-control"
                               required
                               placeholder="Your Message..."
@@ -209,3 +231,6 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
+
