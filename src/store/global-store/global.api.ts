@@ -237,6 +237,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  getBanner : {
+    query : ()=>({
+      url : `/api/page/banner`,
+      method : 'GET'
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

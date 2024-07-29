@@ -199,9 +199,9 @@ const LatestDiscussions = () => {
                     <span className="ml-2">by {discussion?.user?.name}</span>
                   </div>
                   <div className="d-flex">
-                    <span className="mr-3">❤️ {discussion?.likes}</span>
+                    {/* <span className="mr-3">❤️ {discussion?.likes}</span> */}
                     <span className="mr-3">💬 {discussion?.comments}</span>
-                    <span>👀 {discussion?.views}</span>
+                    {/* <span>👀 {discussion?.views}</span> */}
                   </div>
                 </div>
               </div>

@@ -75,7 +75,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "GetCommentForParentComment",
     "CreateComment",
     "UpComingEvents",
-    "PastEvents"
+    "PastEvents",
+    "Banner"
   ],
 });
 
@@ -252,6 +253,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getPastEvents.query,
       providesTags: ["PastEvents"],
     }),
+    getBanner : builder.query<any, void>({
+      query : queries.getBanner.query,
+      providesTags : ["Banner"]
+    })
   }),
   overrideExisting: true,
 });
@@ -298,5 +303,6 @@ export const {
   useCreateCommentMutation,
   useGetUpComingEventsQuery,
   useGetPastEventsQuery,
+  useGetBannerQuery
 } = globalApi;
 export default globalApi;
