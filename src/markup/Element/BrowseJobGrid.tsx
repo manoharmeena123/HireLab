@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import PageTitle from "@/markup/Layout/PageTitle";
 import Jobfindbox from "@/markup/Element/Jobfindbox";
@@ -8,13 +8,19 @@ import {
   useGetJobsQuery,
   useGetSectorQuery,
   useGetCtcDataQuery,
+  usePostSaveJobMutation,
+  useDeleteSavedJobMutation,
+  useGetSavedJobQuery
 } from "@/store/global-store/global.query";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import Pagination from "./Pagination";
 import styles from "@/styles/BrowseJobGrid.module.css";
+import Swal from "sweetalert2";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 var bnr = require("./../../images/banner/bnr1.jpg");
+
 interface Job {
   company_name: string;
   id: number;
@@ -41,6 +47,11 @@ const BrowseJobGrid: React.FC = () => {
   const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
   const { data: sectorData, isLoading: sectorLoading } = useGetSectorQuery();
   const { data: ctcDatas } = useGetCtcDataQuery();
+  const { data: savedJobsData, isLoading: savedJobsLoading, refetch } = useGetSavedJobQuery();
+  const { user } = useLoggedInUser();
+  const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
+  const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
+  const [likedJobs, setLikedJobs] = useState<string[]>([]);
   const [view, setView] = useState<"list" | "grid">("grid");
   const [sortOption, setSortOption] = useState("last2Months");
   const [filters, setFilters] = useState<Filters>({
@@ -54,8 +65,68 @@ const BrowseJobGrid: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  useEffect(() => {
+    if (savedJobsData) {
+      console.log('Saved Jobs Data:', savedJobsData);
+      setLikedJobs(savedJobsData?.data?.map((job: { id: number }) => job.id.toString()));
+    }
+  }, [savedJobsData]);
+
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
+  };
+
+  const handleLikeToggle = async (jobId: string) => {
+    if (!user) {
+      push("/login");
+      return;
+    }
+
+    if (isSaving || isDeleting) {
+      return;
+    }
+
+    if (likedJobs.includes(jobId)) {
+      try {
+        await deleteJob(jobId);
+        refetch();
+        setLikedJobs(likedJobs.filter((id) => id !== jobId));
+        Swal.fire({
+          icon: "success",
+          title: "Job Removed from Saved Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        console.error("Error removing saved job:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error in Removing Saved Job",
+          text: "Failed to remove saved job.",
+          confirmButtonText: "OK",
+        });
+      }
+    } else {
+      try {
+        await saveJob({ job_id: jobId });
+        refetch();
+        setLikedJobs([...likedJobs, jobId]);
+        Swal.fire({
+          icon: "success",
+          title: "Job Saved Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      } catch (error) {
+        console.error("Error saving job:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error in Saving Job",
+          text: "Failed to save job.",
+          confirmButtonText: "OK",
+        });
+      }
+    }
   };
 
   const sortJobs = (jobs: Job[]): Job[] => {
@@ -125,16 +196,14 @@ const BrowseJobGrid: React.FC = () => {
     currentPage * itemsPerPage
   );
 
-  // if (getAlljobsLoading || sectorLoading) {
-  //   return <Loading />;
-  // }
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
+
   return (
     <>
-      {getAlljobsLoading && sectorLoading && <Loading />}
+      {(getAlljobsLoading || sectorLoading || savedJobsLoading) && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -195,7 +264,6 @@ const BrowseJobGrid: React.FC = () => {
                         justifyContent: "center",
                         alignItems: "center",
                         height: "60%",
-                        // backgroundColor: "rgba(0,0,0,0.5)",
                       }}
                     >
                       <h3>No jobs found</h3>
@@ -247,7 +315,17 @@ const BrowseJobGrid: React.FC = () => {
                                     </span>
                                   </div>
                                 </div>
-                                <label className="like-btn">
+                                <label
+                                  className={`like-btn ${
+                                    likedJobs.includes(item.id.toString())
+                                      ? "liked"
+                                      : ""
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleLikeToggle(item.id.toString());
+                                  }}
+                                >
                                   <input type="checkbox" />
                                   <span className="checkmark"></span>
                                 </label>
@@ -287,6 +365,20 @@ const BrowseJobGrid: React.FC = () => {
                                       </li>
                                     </ul>
                                   </div>
+                                  <label
+                                    className={`like-btn ${
+                                      likedJobs.includes(item.id.toString())
+                                        ? "liked"
+                                        : ""
+                                    }`}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleLikeToggle(item.id.toString());
+                                    }}
+                                  >
+                                    <input type="checkbox" />
+                                    <span className="checkmark"></span>
+                                  </label>
                                 </div>
                                 <div className="d-flex">
                                   <div className="job-time mr-auto">
@@ -301,10 +393,6 @@ const BrowseJobGrid: React.FC = () => {
                                     </span>
                                   </div>
                                 </div>
-                                <label className="like-btn">
-                                  <input type="checkbox" />
-                                  <span className="checkmark"></span>
-                                </label>
                               </div>
                             </li>
                           ))}
