@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -6,8 +5,11 @@ import { Form } from "react-bootstrap";
 import {
   useGetSectorQuery,
   useGetFilterJobMutation,
+  useGetBannerQuery
 } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
+import parse from "html-react-parser";
+
 const bnr1 = require("./../../images/main-slider/slide2.jpg");
 
 interface Filters {
@@ -22,7 +24,8 @@ const IndexBanner: React.FC = () => {
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading }] =
     useGetFilterJobMutation();
-
+  const { data: bannerData } = useGetBannerQuery();
+  console.log('first', bannerData);
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
     city: "",
@@ -94,11 +97,12 @@ const IndexBanner: React.FC = () => {
               className="site-button button-sm"
               style={{ backgroundColor: "#2A6310" }}
             >
-              Find Jobs, Employment & Career Opportunities
+              <div style={{ margin: "0px", padding: "0px" }}>
+                {bannerData ? parse(bannerData?.data?.heading.replace(/<p/g, '<p style="margin-bottom: 0"')) : ""}
+              </div>
             </Link>
-            <h2>
-              Search Between More Than <br />
-              <span style={{ color: "#2A6310" }}>50,000</span> Open Jobs.
+            <h2 style={{ marginTop: "20px" }}>
+              {bannerData ? parse(bannerData?.data?.description.replace(/<p/g, '<p style="margin-bottom: 0"')) : ""} <br />
             </h2>
             <form className="dezPlaceAni" onSubmit={handleSubmit}>
               <div className="row">

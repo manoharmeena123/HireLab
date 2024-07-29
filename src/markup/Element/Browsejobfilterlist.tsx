@@ -9,6 +9,7 @@ import {
   useGetSectorQuery,
   useGetFilterJobMutation,
   useGetCtcDataByIdMutation,
+  useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
 import { useSearchParams } from "next/navigation";
 import Loading from "@/components/Loading"; // Ensure you import your Loading component
@@ -38,6 +39,8 @@ function Browsejobfilterlist() {
   console.log("query", jobTitleQuery, cityQuery, sectorQuery);
   const [getJobs, { data: ctcData, isLoading: isCtcLoading }] =
     useGetCtcDataByIdMutation();
+  const { data: ctcDatas } = useGetCtcDataQuery();
+
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading, data: jobsData }] =
     useGetFilterJobMutation();
@@ -120,10 +123,13 @@ function Browsejobfilterlist() {
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
   };
-
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
   return (
     <>
-      {isSectorLoading && isFilterLoading && <Loading/>}
+      {isSectorLoading && isFilterLoading && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -196,12 +202,12 @@ function Browsejobfilterlist() {
                                     </h4>
                                     <ul>
                                       <li>
-                                        <i className="fa fa-map-marker"></i>{" "}
-                                        {item?.address}
+                                        <i className="fa fa-bookmark-o"></i>
+                                        {item?.company_name}
                                       </li>
                                       <li>
-                                        <i className="fa fa-bookmark-o"></i>
-                                        {item?.location?.title}
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {item?.address}
                                       </li>
                                       <li>
                                         <i className="fa fa-clock-o"></i>{" "}
@@ -246,7 +252,6 @@ function Browsejobfilterlist() {
                               <div className="post-bx">
                                 <div className="d-flex m-b30">
                                   <div className="job-post-info">
-                                    
                                     <h4
                                       style={{ cursor: "pointer" }}
                                       onClick={() => viewJobHandler(item.id)}
@@ -257,18 +262,18 @@ function Browsejobfilterlist() {
                                         {item?.job_title}
                                       </Link>
                                       <label className="like-btn">
-                                  <input type="checkbox" />
-                                  <span className="checkmark"></span>
-                                </label>
+                                        <input type="checkbox" />
+                                        <span className="checkmark"></span>
+                                      </label>
                                     </h4>
                                     <ul>
                                       <li>
-                                        <i className="fa fa-map-marker"></i>{" "}
-                                        {item?.address}
+                                        <i className="fa fa-bookmark-o"></i>
+                                        {item?.company_name}
                                       </li>
                                       <li>
-                                        <i className="fa fa-bookmark-o"></i>
-                                        {item?.location?.title}
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {item?.address}
                                       </li>
                                       <li>
                                         <i className="fa fa-clock-o"></i>{" "}
@@ -286,8 +291,10 @@ function Browsejobfilterlist() {
                                   </div>
 
                                   <div className="salary-bx">
-                                    <span>&#8377;42000 - &#8377;55000</span>
-                                    <br />
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
                                   </div>
                                 </div>
                                 <div className="posted-info clearfix">

@@ -30,7 +30,7 @@ const RecentJobsection = () => {
   const { data: ctcData } = useGetCtcDataQuery();
   const { data: testimonialData } = useGetTestimonialsQuery();
   const lastTestimonial = testimonialData?.data?.slice(-1)[0];
-  console.log("testimonialData", lastTestimonial);
+  
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";

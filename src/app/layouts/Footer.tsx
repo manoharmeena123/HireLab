@@ -13,7 +13,7 @@ const Footer = () => {
                 <div className="d-flex align-items-center">
                   <img
                     src={
-                      require("./../../images/Hire Labs_Final logo.png")
+                      require("./../../images/hiralablogo.png")
                         .default.src
                     }
                     style={{ width: "60px", height: "67px" }}

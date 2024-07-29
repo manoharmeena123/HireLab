@@ -7,6 +7,7 @@ import Accordsidebar from "@/markup/Element/Accordsidebar";
 import {
   useGetJobsQuery,
   useGetSectorQuery,
+  useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
@@ -15,6 +16,7 @@ import Pagination from "./Pagination";
 import styles from "@/styles/BrowseJobGrid.module.css";
 var bnr = require("./../../images/banner/bnr1.jpg");
 interface Job {
+  company_name: string;
   id: number;
   job_title: string;
   address: string;
@@ -23,6 +25,7 @@ interface Job {
   education?: { name: string };
   created_at: string;
   salary: string;
+  ctc: string;
 }
 
 interface Filters {
@@ -37,7 +40,7 @@ const BrowseJobGrid: React.FC = () => {
   const { push } = useRouter();
   const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
   const { data: sectorData, isLoading: sectorLoading } = useGetSectorQuery();
-
+  const { data: ctcDatas } = useGetCtcDataQuery();
   const [view, setView] = useState<"list" | "grid">("grid");
   const [sortOption, setSortOption] = useState("last2Months");
   const [filters, setFilters] = useState<Filters>({
@@ -125,7 +128,10 @@ const BrowseJobGrid: React.FC = () => {
   // if (getAlljobsLoading || sectorLoading) {
   //   return <Loading />;
   // }
-
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
   return (
     <>
       {getAlljobsLoading && sectorLoading && <Loading />}
@@ -213,12 +219,12 @@ const BrowseJobGrid: React.FC = () => {
                                     </h5>
                                     <ul>
                                       <li>
-                                        <i className="fa fa-map-marker"></i>{" "}
-                                        {item.address}
+                                        <i className="fa fa-bookmark-o"></i>{" "}
+                                        {item?.company_name}
                                       </li>
                                       <li>
-                                        <i className="fa fa-bookmark-o"></i>{" "}
-                                        {item.location.title}
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {item.address}
                                       </li>
                                       <li>
                                         <i className="fa fa-clock-o"></i>{" "}
@@ -229,13 +235,16 @@ const BrowseJobGrid: React.FC = () => {
                                   </div>
                                 </div>
                                 <div className="d-flex">
-                                  <div className="job-time mr-auhref">
+                                  <div className="job-time mr-auto">
                                     <Link href="#">
                                       <span>{item.location.title}</span>
                                     </Link>
                                   </div>
                                   <div className="salary-bx">
-                                    <span>{item.salary}</span>
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
                                   </div>
                                 </div>
                                 <label className="like-btn">
@@ -264,12 +273,12 @@ const BrowseJobGrid: React.FC = () => {
                                     </h5>
                                     <ul>
                                       <li>
-                                        <i className="fa fa-map-marker"></i>{" "}
-                                        {item.address}
+                                        <i className="fa fa-bookmark-o"></i>{" "}
+                                        {item?.company_name}
                                       </li>
                                       <li>
-                                        <i className="fa fa-bookmark-o"></i>{" "}
-                                        {item.location.title}
+                                        <i className="fa fa-map-marker"></i>{" "}
+                                        {item.address}
                                       </li>
                                       <li>
                                         <i className="fa fa-clock-o"></i>{" "}
@@ -280,13 +289,16 @@ const BrowseJobGrid: React.FC = () => {
                                   </div>
                                 </div>
                                 <div className="d-flex">
-                                  <div className="job-time mr-auhref">
+                                  <div className="job-time mr-auto">
                                     <Link href="#">
                                       <span>{item.location.title}</span>
                                     </Link>
                                   </div>
                                   <div className="salary-bx">
-                                    <span>{item.salary}</span>
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
                                   </div>
                                 </div>
                                 <label className="like-btn">
