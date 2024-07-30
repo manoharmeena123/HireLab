@@ -464,6 +464,7 @@ interface SaveEvent {
 interface SaveEventResponse {
   code: number;
   success: boolean;
+  message :string;
   data: any[];
 }
 
@@ -475,6 +476,7 @@ interface RemoveEvent {
 interface RemoveEventResponse {
   code: number;
   success: boolean;
+  message :string;
   data: any[];
 }
 

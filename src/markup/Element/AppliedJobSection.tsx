@@ -6,13 +6,17 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Header from "@/app/layouts/Header";
 import Footer from "@/app/layouts/Footer";
-import { useGetAppliedJobsQuery, useDeleteAppliedJobMutation } from "@/store/global-store/global.query";
+import {
+  useGetAppliedJobsQuery,
+  useDeleteAppliedJobMutation,
+} from "@/store/global-store/global.query";
 import { formatDateAgo } from "@/utils/formateDate";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
+import { useRouter } from "next/navigation";
 
 const MySwal = withReactContent(Swal);
 
@@ -20,12 +24,12 @@ const AppliedJobSection = () => {
   const { data: appliedJob, refetch } = useGetAppliedJobsQuery();
   const [deleteAppliedJob] = useDeleteAppliedJobMutation();
   const { user } = useLoggedInUser();
-  const { data: designationData } = useGetDesignationQuery(); 
+  const { data: designationData } = useGetDesignationQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
-
+  const { push } = useRouter();
   useEffect(() => {
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
@@ -66,24 +70,28 @@ const AppliedJobSection = () => {
   const handleDeleteJob = async (jobId: string) => {
     try {
       const result = await MySwal.fire({
-        title: 'Are you sure?',
+        title: "Are you sure?",
         text: "You won't be able to revert this!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
       });
 
       if (result.isConfirmed) {
         await deleteAppliedJob(jobId).unwrap();
-        MySwal.fire('Deleted!', 'Your job has been deleted.', 'success');
+        MySwal.fire("Deleted!", "Your job has been deleted.", "success");
         refetch();
       }
     } catch (error) {
       console.error("Error deleting job:", error);
-      MySwal.fire('Error!', 'Failed to delete the job.', 'error');
+      MySwal.fire("Error!", "Failed to delete the job.", "error");
     }
+  };
+
+  const viewJobHandler = (id: number) => {
+    push(`/job-detail?jobId=${id}`);
   };
 
   return (
@@ -130,7 +138,10 @@ const AppliedJobSection = () => {
                       </li>
                       <li>
                         <Link href={"/jobs-my-resume"}>
-                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
                           <span>My Resume</span>
                         </Link>
                       </li>
@@ -156,6 +167,12 @@ const AppliedJobSection = () => {
                         <Link href={"/jobs-cv-manager"}>
                           <i className="fa fa-id-card-o" aria-hidden="true"></i>
                           <span>CV Manager</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={"/transaction"}>
+                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                          <span>Transaction</span>
                         </Link>
                       </li>
                       <li>
@@ -190,29 +207,31 @@ const AppliedJobSection = () => {
                         <div className="job-post-info m-a0">
                           <h4>
                             <Link href={"/job-detail"}>
-                              {item?.company_name}
+                              {item?.job_title}
                             </Link>
                           </h4>
                           <ul>
                             <li>
                               <Link href={"/company-profile"}>
-                                @company-name
+                              {item?.company_name}
                               </Link>
                             </li>
                             <li>
                               <i className="fa fa-map-marker"></i>{" "}
                               {item?.address}
                             </li>
-                            <li>
-                              <i className="fa fa-money"></i> {item?.ctc}
+                            <li> 
+                              <i className="fa fa-money"></i> {item?.ctc}{" "} lakhs
                             </li>
                           </ul>
                           <div className="job-time m-t15 m-b10">
-                            {item?.tags?.split(',').map((tag: string, index: number) => (
-                              <Link href={""} key={index} className="mr-1">
-                                <span>{tag}</span>
-                              </Link>
-                            ))}
+                            {item?.tags
+                              ?.split(",")
+                              .map((tag: string, index: number) => (
+                                <Link href={"#"} key={index} className="mr-1">
+                                  <span>{tag}</span>
+                                </Link>
+                              ))}
                           </div>
                           <div className="posted-info clearfix">
                             <p className="m-tb0 text-primary float-left">
@@ -220,12 +239,12 @@ const AppliedJobSection = () => {
                               {formatDateAgo(item?.created_at)}
                             </p>
                             <div className="float-right">
-                              <Link
-                                href={"/jobs-my-resume"}
+                            <button
                                 className="site-button button-sm mr-2"
+                                onClick={() => viewJobHandler(item?.id)}
                               >
                                 <i className="fa fa-eye"></i>
-                              </Link>
+                              </button>
                               <button
                                 className="site-button button-sm"
                                 onClick={() => handleDeleteJob(item?.id)}

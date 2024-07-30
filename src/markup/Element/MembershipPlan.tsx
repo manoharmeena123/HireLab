@@ -42,11 +42,6 @@ const MembershipPlans = () => {
             <div
               key={index}
               className="pricingtable-wrapper style2 bg-white member-ship-div"
-              style={{
-                minHeight: "500px",
-                borderRadius: "20px",
-                position: "relative",
-              }}
               onMouseEnter={(e) => {
                 const button = e.currentTarget.querySelector(
                   ".site-button"
@@ -84,16 +79,7 @@ const MembershipPlans = () => {
             >
               <div className="pricingtable-inner">
                 <div className="pricingtable-price">
-                  <h4
-                    className="font-weight-900 m-t10 m-b0 text-center pricingtable-title"
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "28px",
-                      border: "1.5px solid black",
-                      borderRadius: "20px",
-                      padding: "5px",
-                    }}
-                  >
+                  <h4 className="font-weight-900 m-t10 m-b0 text-center pricingtable-title">
                     {text?.title}
                   </h4>
                   <p
@@ -101,95 +87,42 @@ const MembershipPlans = () => {
                     dangerouslySetInnerHTML={parseHtml(text?.description)}
                   ></p>
                 </div>
-                <div className="m-t10 price-wrap">
-                  <h3
-                    className="font-weight-300 m-t10 m-b0 price-title"
-                    style={{
-                      fontSize: "20px",
-                      textAlign: "center",
-                      fontWeight: "700",
-                    }}
-                  >
+                <div className="price-info-wrapper">
+                  <h3 className="font-weight-300 m-t10 m-b0 price-title">
                     Price
                   </h3>
-                  <ul className="mb-0 price-list">
-                    <li
-                      className="price-item"
-                      style={{
-                        color: "black",
-                        margin: "5px 0px",
-                        fontSize: "18px",
-                      }}
-                    >
+                  <ul className="price-list">
+                    <li className="price-item">
                       <b>{text?.monthly_price}</b>
                     </li>
-                    <li
-                      className="price-item"
-                      style={{
-                        color: "black",
-                        margin: "5px 0px",
-                        fontSize: "18px",
-                      }}
-                    >
+                    <li className="price-item">
                       <del className="text-red">{text?.quarterly_price}</del>
                     </li>
                   </ul>
+                  <div className="text-center button-wrap">
+                    {user?.user ? (
+                      <button
+                        onClick={() => handleGetStarted(text?.id)}
+                        className="site-button radius-xl white-hover"
+                      >
+                        <span className="p-lr30 button-text">Get Started</span>
+                      </button>
+                    ) : (
+                      <Link href="/login">
+                        <button className="site-button radius-xl white-hover">
+                          <span className="p-lr30 button-text">
+                            Login to Get Started
+                          </span>
+                        </button>
+                      </Link>
+                    )}
+                  </div>
                 </div>
                 {text.info?.map((e, i) => (
-                  <ul
-                    key={i}
-                    className="mp-cards"
-                    style={{ marginTop: "20px" }}
-                  >
-                    <li
-                      className="mp-card-item"
-                      style={{
-                        color: "black",
-                        margin: "0px 0px",
-                        fontSize: "18px",
-                      }}
-                    >
-                      {e?.content}
-                    </li>
+                  <ul key={i} className="mp-cards">
+                    <li className="mp-card-item">{e?.content}</li>
                   </ul>
                 ))}
-
-                <div className="text-center button-wrap">
-                  {user?.user ? (
-                    <button
-                      onClick={() => handleGetStarted(text?.id)}
-                      className="site-button radius-xl white-hover"
-                      style={{
-                        border: "1px solid white",
-                        backgroundColor: "#2A6310",
-                      }}
-                    >
-                      <span
-                        className="p-lr30 button-text"
-                        style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                      >
-                        Get Started
-                      </span>
-                    </button>
-                  ) : (
-                    <Link href="/login">
-                      <button
-                        className="site-button radius-xl white-hover"
-                        style={{
-                          border: "1px solid white",
-                          backgroundColor: "#2A6310",
-                        }}
-                      >
-                        <span
-                          className="p-lr30 button-text"
-                          style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                        >
-                          Login to Get Started
-                        </span>
-                      </button>
-                    </Link>
-                  )}
-                </div>
               </div>
             </div>
           ))}
@@ -205,7 +138,6 @@ const MembershipPlans = () => {
           margin: 20px;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
         }
         .member-ship-div:hover {
           background-color: #2a6310 !important;
@@ -248,9 +180,9 @@ const MembershipPlans = () => {
           text-align: center;
           margin-bottom: 20px;
         }
-        .price-wrap {
+        .price-info-wrapper {
+          margin-top: auto;
           text-align: center;
-          margin-bottom: 20px;
         }
         .price-title {
           font-size: 20px;
@@ -267,7 +199,6 @@ const MembershipPlans = () => {
         }
         .button-wrap {
           text-align: center;
-          margin-top: auto;
         }
         .display-property {
           display: grid;
@@ -301,7 +232,7 @@ const MembershipPlans = () => {
             min-height: auto;
           }
           .display-property {
-          display:flex
+            display: flex;
           }
         }
       `}</style>

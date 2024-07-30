@@ -5,6 +5,7 @@ export interface Testimonial {
   id: number;
   title: string;
   content: string;
+  name: string;
   image: string;
   designation: string;
   created_at: string;

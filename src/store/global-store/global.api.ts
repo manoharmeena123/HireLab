@@ -245,14 +245,14 @@ export const queries = {
     }),
   },
 
-  getBanner: {
-    query: () => ({
-      url: "page/banner",
-      method: "GET",
-    }),
-  },
-
  // Post =====================================================================================>
+  getBanner : {
+    query : ()=>({
+      url : `/api/page/banner`,
+      method : 'GET'
+    })
+  },
+  //Post===================================================================================>
 
   buyPassForEvent: {
     query: (data: WritableBuyPassData) => ({

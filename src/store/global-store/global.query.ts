@@ -29,7 +29,7 @@ import {
   WritableBuyPassResponse,
   CreateCommentType,
   SettingResponse,
-  BannerResponse  // Ensure this line is included
+  BannerResponse, // Ensure this line is included
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -78,9 +78,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "CreateComment",
     "UpComingEvents",
     "PastEvents",
+    "Banner",
     "Settings",
-    "Banner"
-   
   ],
 });
 
@@ -194,7 +193,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getDesignation.query,
       providesTags: ["Designation"],
     }),
-    
+
     getCategories: builder.query<WritableCategoriesResponse, void>({
       query: queries.getCategories.query,
       providesTags: ["Categories"],
@@ -226,7 +225,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getSetting.query,
       providesTags: ["Setting"],
     }),
-    getSettings: builder.query<SettingResponse, void>({ 
+    getSettings: builder.query<SettingResponse, void>({
       query: queries.getSettings.query,
       providesTags: ["Settings"],
     }),
@@ -234,7 +233,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (jobId) => queries.deleteAppliedJob.query(jobId),
       invalidatesTags: ["DeleteAppliedJobs"],
     }),
-    
+
     getBannerData: builder.query<BannerResponse, void>({
       query: queries.getBanner.query,
       providesTags: ["Banner"],
@@ -267,12 +266,14 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getPastEvents.query,
       providesTags: ["PastEvents"],
     }),
+    getBanner: builder.query<any, void>({
+      query: queries.getBanner.query,
+      providesTags: ["Banner"],
+    }),
   }),
 
-  
   overrideExisting: true,
 });
-
 
 export const {
   useGetBlogsDataQuery,
@@ -301,7 +302,7 @@ export const {
   useGetAdditionalPerkQuery,
   useGetTierQuery,
   useGetDesignationQuery,
-  useGetSettingDataQuery, 
+  useGetSettingDataQuery,
   useGetCategoriesQuery,
   useGetSingleDiscussionByTitleMutation,
   useGetSingleEventByTitleMutation,
@@ -317,7 +318,6 @@ export const {
   useGetUpComingEventsQuery,
   useGetPastEventsQuery,
   useGetSettingsQuery,
-  useGetBannerDataQuery,
-
+  useGetBannerQuery,
 } = globalApi;
 export default globalApi;

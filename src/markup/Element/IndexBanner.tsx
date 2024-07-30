@@ -1,12 +1,15 @@
-// src/markup/Element/IndexBanner.tsx
-"use client";
 import React, { useEffect, useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Form } from "react-bootstrap";
-import { useGetSectorQuery, useGetFilterJobMutation, useGetBannerDataQuery } from "@/store/global-store/global.query";
+import {
+  useGetSectorQuery,
+  useGetFilterJobMutation,
+  useGetBannerQuery,
+} from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
-import { BannerResponse } from "@/types/index"; 
+import parse from "html-react-parser";
+import { toast } from "react-toastify";
 
 const bnr1 = require("./../../images/main-slider/slide2.jpg");
 
@@ -20,9 +23,10 @@ interface Filters {
 const IndexBanner: React.FC = () => {
   const { push } = useRouter();
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
-  const [getFilterJob, { isLoading: isFilterLoading }] = useGetFilterJobMutation();
-  const { data: bannerData, isLoading: isBannerLoading } = useGetBannerDataQuery();
-
+  const [getFilterJob, { isLoading: isFilterLoading }] =
+    useGetFilterJobMutation();
+  const { data: bannerData, isLoading :isBannerLoading } = useGetBannerQuery();
+  console.log("first", bannerData);
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
     city: "",
@@ -71,8 +75,14 @@ const IndexBanner: React.FC = () => {
     e.preventDefault();
     try {
       const query = new URLSearchParams(filters as any).toString();
-      push(`/browse-job-filter?${query}`);
-    } catch (error) {
+      // Check if any filter is provided
+      if (filters.job_title || filters.city || filters.sector) {
+        push(`/browse-job-filter?${query}`);
+      } else {
+        push(`/browse-jobs-grid`);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.error("Error filtering jobs:", error);
     }
   };
@@ -91,9 +101,28 @@ const IndexBanner: React.FC = () => {
               className="site-button button-sm"
               style={{ backgroundColor: "#2A6310" }}
             >
-              {bannerData?.data?.heading ? <div dangerouslySetInnerHTML={{ __html: bannerData.data.heading }} /> : "Find Jobs, Employment & Career Opportunities"}
+              <div style={{ margin: "0px", padding: "0px" }}>
+                {bannerData
+                  ? parse(
+                      bannerData?.data?.heading.replace(
+                        /<p/g,
+                        '<p style="margin-bottom: 0"'
+                      )
+                    )
+                  : ""}
+              </div>
             </Link>
-            <h2>{bannerData?.data?.description ? <div dangerouslySetInnerHTML={{ __html: bannerData.data.description }} /> : "Search Between More Than 50,000 open jobs"}</h2>
+            <h2 style={{ marginTop: "20px" }}>
+              {bannerData
+                ? parse(
+                    bannerData?.data?.description.replace(
+                      /<p/g,
+                      '<p style="margin-bottom: 0"'
+                    )
+                  )
+                : ""}{" "}
+              <br />
+            </h2>
             <form className="dezPlaceAni" onSubmit={handleSubmit}>
               <div className="row">
                 <div className="col-lg-4 col-md-6">

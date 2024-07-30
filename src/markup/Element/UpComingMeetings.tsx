@@ -100,11 +100,6 @@ const UpComingMeetings = () => {
   };
 
   const viewJobHandler = (title: any) => {
-    if (!user) {
-      push("/login");
-      return;
-    }
-
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-event?query=${encodedTitle}`);
   };
@@ -139,8 +134,8 @@ const UpComingMeetings = () => {
                   <div className="d-flex">
                     <div className="job-post-info w-100">
                       <div className="d-flex justify-content-between w-100">
-                        <h5 onClick={() => user && viewJobHandler(event?.title)}>
-                          <Link href={user ? "" : "/login"} style={{ fontWeight: "600" }}>
+                        <h5 onClick={() => viewJobHandler(event?.title)}>
+                          <Link href={"#"} style={{ fontWeight: "600" }}>
                             {event.title}
                           </Link>
                         </h5>

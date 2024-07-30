@@ -5789,7 +5789,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
 .list-2 li {
   float: left;
   padding: 5px 5px 5px 20px;
-  width: 50%;
+  /* width: 50%; */
   position: relative;
 }
 .list-2 li:before {
@@ -13861,6 +13861,13 @@ ul.accordion-list {
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
+}
+#login input[type=number]::-webkit-inner-spin-button, 
+#login input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
 }
 @media (min-width:992px) and (max-width:1250px) {
   .fullwidth .header-nav .nav > li > a {

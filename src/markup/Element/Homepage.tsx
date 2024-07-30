@@ -5,7 +5,7 @@ import IndexBanner from "./IndexBanner";
 import Jobcategories from "./Jobcategories";
 import Featureblog from "./Featureblog";
 import RecentJobsection from "./RecentJobsection";
-import Owltestimonial from "./Owlblog1";
+import Owltestimonial from "./Owltestimonial";
 import LatestDiscussions from "./LatestDiscussions";
 import MembershipPlans from './MembershipPlan'
 import { useDispatch, useSelector } from "react-redux";
