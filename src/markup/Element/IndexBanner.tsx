@@ -131,7 +131,7 @@ const IndexBanner: React.FC = () => {
                       <div className="input-group-append">
                         <span className="input-group-text">
                           <i className="fa fa-map-marker"></i>
-                        </span>   BLOG SINGAL PAGE 
+                        </span> 
                       </div>
                     </div>
                   </div>

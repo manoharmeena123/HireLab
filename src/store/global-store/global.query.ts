@@ -80,6 +80,7 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "PastEvents",
     "Settings",
     "Banner"
+   
   ],
 });
 
@@ -317,5 +318,6 @@ export const {
   useGetPastEventsQuery,
   useGetSettingsQuery,
   useGetBannerDataQuery,
+
 } = globalApi;
 export default globalApi;
