@@ -241,6 +241,12 @@ const CompanyProfile = () => {
                             </Link>
                           </li>
                           <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                          </Link>
+                        </li>
+                          <li>
                             <Link href="/change-password">
                               <i className="fa fa-key" aria-hidden="true"></i>
                               <span>Change Password</span>
