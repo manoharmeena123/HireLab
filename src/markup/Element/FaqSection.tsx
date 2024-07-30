@@ -4,7 +4,8 @@ import {
   useJobSeekerFaqQuery,
   useJobPosterFaqQuery,
   useGeneralQuetionFaqQuery,
-  useMonthlyMeetFaqQuery
+  useMonthlyMeetFaqQuery,
+  useAboutUsFaqQuery
 } from "@/app/my-resume/store/resume.query";
 import Loading from "@/components/Loading";
 
