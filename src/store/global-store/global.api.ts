@@ -245,10 +245,22 @@ export const queries = {
     }),
   },
 
- // Post =====================================================================================>
   getBanner : {
     query : ()=>({
       url : `/api/page/banner`,
+      method : 'GET'
+    })
+  },
+
+  getService :{
+    query : () =>({
+      url : `api/services`,
+      method : 'GET'
+    })
+  },
+  getSingleService :{
+    query : (title : string)=>({
+      url : `api/services/${title}`,
       method : 'GET'
     })
   },

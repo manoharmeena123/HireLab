@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,6 +17,9 @@ import { navigateSource } from "@/lib/action";
 import Loading from "@/components/Loading";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 interface OptionType {
   id: string;
   value: string;
@@ -26,10 +30,8 @@ const JobPosterSection = () => {
   const { token } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
   const router = useRouter();
-  const [updateProfile, { isLoading: profileLoading }] =
-    useUpdateProfileMutation();
-  const { data: categoriesData, isLoading: categoriesDataLoading } =
-    useGetCategoriesQuery();
+  const [updateProfile, { isLoading: profileLoading }] = useUpdateProfileMutation();
+  const { data: categoriesData, isLoading: categoriesDataLoading } = useGetCategoriesQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
 
@@ -90,11 +92,9 @@ const JobPosterSection = () => {
       toast.success(response?.message);
       refetch();
       console.log("Profile Updated Successfully", response);
-      // Redirect or show success message
-    } catch (error :any) {
+    } catch (error: any) {
       console.error("Failed to update profile", error);
-      toast.success(error?.message);
-      // Handle error
+      toast.error(error?.message);
     }
   };
 
@@ -106,9 +106,7 @@ const JobPosterSection = () => {
     }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setProfileData((prevState) => ({
       ...prevState,
@@ -130,13 +128,12 @@ const JobPosterSection = () => {
     }),
   };
 
-  const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+  const { data: designationData } = useGetDesignationQuery();
 
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
   useEffect(() => {
-    // Map designation options
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
         value: designation.title,
@@ -149,11 +146,8 @@ const JobPosterSection = () => {
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
-      // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find(
-        (option) => option.id === designationId
-      );
+      const designation = designationOptions.find((option) => option.id === designationId);
       if (designation) {
         setDesignationLabel(designation.label);
       } else {
@@ -163,6 +157,7 @@ const JobPosterSection = () => {
       setDesignationLabel("Designation not available");
     }
   }, [user, designationOptions, refetch]);
+
   return (
     <>
       {profileLoading && categoriesDataLoading && <Loading />}
@@ -182,10 +177,7 @@ const JobPosterSection = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) =>
-                                (e.currentTarget.src =
-                                  "../../images/favicon.png")
-                              } // Fallback image
+                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           ) : (
@@ -194,24 +186,17 @@ const JobPosterSection = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) =>
-                                (e.currentTarget.src =
-                                  "../../images/favicon.png")
-                              } // Fallback image
+                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           )}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>
-                              {user?.user?.name || "User Name"}
-                            </Link>
+                            <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
                           </h4>
                           <p className="m-b0">
-                            <Link href={"#"}>
-                              {designationLabel || "Not available"}
-                            </Link>
+                            <Link href={"#"}>{designationLabel || "Not available"}</Link>
                           </p>
                         </div>
                       </div>
@@ -224,10 +209,7 @@ const JobPosterSection = () => {
                         </li>
                         <li>
                           <Link href="/post-job">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
+                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
                             <span>Post A job</span>
                           </Link>
                         </li>
@@ -251,10 +233,7 @@ const JobPosterSection = () => {
                         </li>
                         <li>
                           <Link href="/" onClick={handleLogout}>
-                            <i
-                              className="fa fa-sign-out"
-                              aria-hidden="true"
-                            ></i>
+                            <i className="fa fa-sign-out" aria-hidden="true"></i>
                             <span>Log Out</span>
                           </Link>
                         </li>
@@ -265,13 +244,8 @@ const JobPosterSection = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">
-                        {user?.user?.name}'s Profile
-                      </h5>
-                      <Link
-                        href={"/company-profile"}
-                        className="site-button right-arrow button-sm float-right"
-                      >
+                      <h5 className="font-weight-700 pull-left text-uppercase">{user?.user?.name}'s Profile</h5>
+                      <Link href={"/company-profile"} className="site-button right-arrow button-sm float-right">
                         Back
                       </Link>
                     </div>
@@ -335,10 +309,7 @@ const JobPosterSection = () => {
                             <label>Category</label>
                             <Select
                               styles={customStyles}
-                              value={categoryOptions?.find(
-                                (option) =>
-                                  option.id === profileData.category_id
-                              )}
+                              value={categoryOptions?.find((option) => option.id === profileData.category_id)}
                               onChange={handleCategoryChange}
                               options={categoryOptions}
                               placeholder="Select Category"
@@ -348,22 +319,23 @@ const JobPosterSection = () => {
                         <div className="col-lg-12 col-md-12">
                           <div className="form-group">
                             <label>Description:</label>
-                            <textarea
-                              className="form-control"
-                              value={profileData.description || ""}
-                              onChange={handleChange}
-                              name="description"
-                              placeholder="write about yourself"
-                              rows={4}
-                            ></textarea>
+                            <CKEditor
+                              editor={ClassicEditor}
+                              data={profileData.description || ""}
+                              onChange={(event, editor) => {
+                                const data = editor.getData();
+                                setProfileData((prevState) => ({
+                                  ...prevState,
+                                  description: data,
+                                }));
+                              }}
+                            />
                           </div>
                         </div>
                       </div>
                       {/* Contact Information */}
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">
-                          Contact Information
-                        </h5>
+                        <h5 className="font-weight-700 pull-left text-uppercase">Contact Information</h5>
                       </div>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
@@ -434,9 +406,7 @@ const JobPosterSection = () => {
                       </div>
                       {/* Social Link */}
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">
-                          Social Link
-                        </h5>
+                        <h5 className="font-weight-700 pull-left text-uppercase">Social Link</h5>
                       </div>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
