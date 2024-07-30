@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import { useGetServiceQuery } from "@/store/global-store/global.query";
@@ -30,42 +30,39 @@ const ServicesSection: React.FC = () => {
           <h2 className="font-weight-bold">Our Services</h2>
         </div>
         <div className="row">
-          {getServiceData?.data?.map((service: any, index: number) => (
-            <div key={index} className="col-12 mb-4">
-              <details className="service-item p-4 bg-white shadow-sm rounded">
-                <summary className="h3 mb-2">{service.title}</summary>
+          <ul className="col-12">
+            {getServiceData?.data?.map((service: any, index: number) => (
+              <ol className="list-group list-group-numbered">
+              <li key={index} className="service-item p-4 bg-white shadow-sm rounded mb-4">
+                <h4 className="mb-2">{service.title}</h4>
                 <div dangerouslySetInnerHTML={{ __html: service.description }} />
-              </details>
-            </div>
-          ))}
+              </li>
+              </ol>
+            ))}
+          </ul>
         </div>
         <div className="section-head text-center mt-5 mb-5">
           <h2 className="font-weight-bold">Meetups and Networking Events</h2>
         </div>
         <div className="row">
-          {networkingEvents.map((event, index) => (
-            <div key={index} className="col-12 mb-4">
-              <details className="networking-event-item p-4 bg-white shadow-sm rounded">
-                <summary className="h4 mb-2">{event.split(".")[0]}</summary>
+          <ul className="col-12">
+            {networkingEvents.map((event, index) => (
+              <li key={index} className="networking-event-item p-4 bg-white shadow-sm rounded mb-4">
+                <h4 className="mb-2">{event.split(".")[0]}</h4>
                 <p>{event}</p>
-              </details>
-            </div>
-          ))}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
       <style jsx>{`
         .service-item, .networking-event-item {
+          list-style-type: none;
           transition: transform 0.2s, box-shadow 0.2s;
         }
         .service-item:hover, .networking-event-item:hover {
           transform: translateY(-5px);
           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-        summary {
-          cursor: pointer;
-        }
-        summary::marker {
-          color: #2A6310;
         }
       `}</style>
     </div>
