@@ -113,16 +113,7 @@ const Footer = () => {
                   <Link href={"/contact-us"}>Contact Us</Link>
                   </li>
                   <li>
-                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
+                  <Link href={"/faq-sections"}>Faq</Link>
                   </li>
                 </ul>
               </div>
