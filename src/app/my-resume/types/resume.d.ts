@@ -400,7 +400,7 @@ interface TermsAndConditionResponse {
   code: number;
   success: string;
   message: string;
-  data: TermsAndCondition[];
+  data: TermsAndCondition;
 }
 
 //service

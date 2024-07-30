@@ -260,7 +260,7 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.aboutUsFaq.query,
       providesTags: ["AboutUsFAQ"],
     }),
-    PrivacyPolicy: builder.query<WritablePrivacyPolicyResponse, void>({
+    PrivacyPolicy: builder.query<any, void>({
       query: queries.PrivacyPolicy.query,
       providesTags: ["PrivacyPolicy"],
     }),

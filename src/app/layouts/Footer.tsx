@@ -130,10 +130,10 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 list-line d-flex flex-column">
                   <li>
-                    <Link href={""}>Privacy & Securty</Link>
+                    <Link href={"/privacy-policy"}>Privacy & Securty</Link>
                   </li>
                   <li>
-                    <Link href={""}>Terms of Serice</Link>
+                    <Link href={"/terms-conditions"}>Terms of Serice</Link>
                   </li>
                   <li>
                     <Link href={""}>Referral Terms</Link>
