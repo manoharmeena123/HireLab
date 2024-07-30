@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, RecentJobsState,GetJobsState,
    WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse,SaveJobDataState,SaveJobDataResponse,
    WritableBuyPassState, 
-   WritableBuyPassResponse} from '@/types/index';
+   WritableBuyPassResponse,SettingState, // Correct type name
+   SettingResponse ,BannerState, BannerResponse} from '@/types/index';
 
 // Define initial states for both blogs and events
 const initialBlogsState: BlogsState = {
@@ -52,6 +53,19 @@ const initialBuyPassState: WritableBuyPassState = {
   buyPassLoading: false,
   buyPassError: null,
 };
+
+const initialSettingState: SettingState = {
+  setting: null,
+  loading: false,
+  error: null,
+};
+
+const initialBannerState: BannerState = {
+  banner: null,
+  loading: false,
+  error: null,
+};
+
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -63,6 +77,8 @@ const globalSlice = createSlice({
     ...initialApplyJobState,
     ...initialSaveJobState,
     ...initialBuyPassState,
+    ...initialSettingState,
+    ...initialBannerState,
   },
   reducers: {
     // Reducers for managing blogs state
@@ -176,6 +192,34 @@ const globalSlice = createSlice({
       state.buyPassLoading = false;
       state.buyPassError = action.payload;
     },
+
+      // Reducers for managing settings state
+      fetchSettingStart: (state) => {
+        state.loading = true;
+        state.error = null;
+      },
+      fetchSettingSuccess: (state, action: PayloadAction<SettingResponse>) => {
+        state.setting = action.payload.data;
+        state.loading = false;
+      },
+      fetchSettingFailure: (state, action: PayloadAction<string>) => {
+        state.loading = false;
+        state.error = action.payload;
+      },
+      // Reducers for managing banner state
+    fetchBannerStart: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    fetchBannerSuccess: (state, action: PayloadAction<BannerResponse>) => {
+      state.banner = action.payload.data;
+      state.loading = false;
+    },
+    fetchBannerFailure: (state, action: PayloadAction<string>) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
   },
 });
 
@@ -201,6 +245,12 @@ export const {
   fetchBuyPassStart,
   fetchBuyPassSuccess,
   fetchBuyPassFailure,
+  fetchSettingStart,
+  fetchSettingSuccess,
+  fetchSettingFailure,
+  fetchBannerStart,
+  fetchBannerSuccess,
+  fetchBannerFailure,
 } = globalSlice.actions;
 
 export const globalEventReducer = globalSlice.reducer;

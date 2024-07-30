@@ -25,7 +25,7 @@ const IndexBanner: React.FC = () => {
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading }] =
     useGetFilterJobMutation();
-  const { data: bannerData } = useGetBannerQuery();
+  const { data: bannerData, isLoading :isBannerLoading } = useGetBannerQuery();
   console.log("first", bannerData);
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
@@ -87,15 +87,12 @@ const IndexBanner: React.FC = () => {
     }
   };
 
-  if (isSectorLoading || isFilterLoading) {
+  if (isSectorLoading || isFilterLoading || isBannerLoading) {
     return <Loading />;
   }
 
   return (
-    <div
-      className="dez-bnr-inr dez-bnr-inr-md"
-      style={{ backgroundImage: `url(${bnr1.default.src})` }}
-    >
+    <div className="dez-bnr-inr dez-bnr-inr-md" style={{ backgroundImage: `url(${bnr1.default.src})` }}>
       <div className="container">
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
@@ -163,7 +160,7 @@ const IndexBanner: React.FC = () => {
                       <div className="input-group-append">
                         <span className="input-group-text">
                           <i className="fa fa-map-marker"></i>
-                        </span>
+                        </span> 
                       </div>
                     </div>
                   </div>
@@ -178,13 +175,11 @@ const IndexBanner: React.FC = () => {
                       className="select-btn"
                     >
                       <option>Select Industry</option>
-                      {sectorData?.data?.map(
-                        (sector: { id: number; name: string }) => (
-                          <option key={sector.id} value={sector.name}>
-                            {sector.name}
-                          </option>
-                        )
-                      )}
+                      {sectorData?.data?.map((sector: { id: number; name: string }) => (
+                        <option key={sector.id} value={sector.name}>
+                          {sector.name}
+                        </option>
+                      ))}
                     </Form.Control>
                   </div>
                 </div>
@@ -210,3 +205,4 @@ const IndexBanner: React.FC = () => {
 };
 
 export default IndexBanner;
+

@@ -237,6 +237,15 @@ export const queries = {
       method: "GET",
     }),
   },
+
+  getSettings: {
+    query: () => ({
+      url: "api/get-setting",
+      method: "GET",
+    }),
+  },
+
+ // Post =====================================================================================>
   getBanner : {
     query : ()=>({
       url : `/api/page/banner`,
@@ -252,7 +261,7 @@ export const queries = {
       body: data,
     }),
   },
-
+    
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",
