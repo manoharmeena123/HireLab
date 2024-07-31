@@ -8,17 +8,6 @@ const ServicesSection: React.FC = () => {
   const { data: getServiceData, isLoading: getServiceLoading } = useGetServiceQuery();
   console.log('getServiceData', getServiceData);
 
-  const networkingEvents = [
-    "Discover local networking events and industry meetups.",
-    "Connect face-to-face with professionals and employers.",
-    "Participate in workshops, seminars, and panel discussions.",
-    "Stay updated on career development and industry trends.",
-    "Build valuable relationships in your industry.",
-    "Access exclusive networking opportunities and industry insights.",
-    "Join themed meetups focused on specific career interests.",
-    "Register easily and get event updates directly."
-  ];
-
   if (getServiceLoading) {
     return <Loading />;
   }
@@ -26,43 +15,58 @@ const ServicesSection: React.FC = () => {
   return (
     <div className="services-section py-5 bg-light">
       <div className="container">
-        <div className="section-head text-center mb-5">
-          <h2 className="font-weight-bold">Our Services</h2>
-        </div>
+        {/* <div className="section-head text-center mb-5">
+          <h2 className="font-weight-bold" style={{color:"#2a6310"}}>Our Services</h2>
+        </div> */}
         <div className="row">
-          <ul className="col-12">
+          <div className="col-12">
             {getServiceData?.data?.map((service: any, index: number) => (
-              <ol className="list-group list-group-numbered">
-              <li key={index} className="service-item p-4 bg-white shadow-sm rounded mb-4">
-                <h4 className="mb-2">{service.title}</h4>
-                <div dangerouslySetInnerHTML={{ __html: service.description }} />
-              </li>
-              </ol>
+              <div key={index}>
+                <h4 className="mb-2 text-center" style={{color:"#2a6310", fontWeight:700}}>{service.title}</h4>
+                <div className="list-container">
+                  <ul className="list-group">
+                    {service.description.replace(/<[^>]*>?/gm, '').split('.').map((item :any, i :number) => (
+                      item.trim() && <li key={i}  className="service-item p-4 bg-white shadow-sm rounded mb-4">{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             ))}
-          </ul>
-        </div>
-        <div className="section-head text-center mt-5 mb-5">
-          <h2 className="font-weight-bold">Meetups and Networking Events</h2>
-        </div>
-        <div className="row">
-          <ul className="col-12">
-            {networkingEvents.map((event, index) => (
-              <li key={index} className="networking-event-item p-4 bg-white shadow-sm rounded mb-4">
-                <h4 className="mb-2">{event.split(".")[0]}</h4>
-                <p>{event}</p>
-              </li>
-            ))}
-          </ul>
+          </div>
         </div>
       </div>
       <style jsx>{`
-        .service-item, .networking-event-item {
+        .services-section {
+          padding-top: 60px !important;
+          padding-bottom: 60px !important;
+        }
+        .service-item {
           list-style-type: none;
           transition: transform 0.2s, box-shadow 0.2s;
+          text-align: left;
         }
-        .service-item:hover, .networking-event-item:hover {
+        .service-item:hover {
           transform: translateY(-5px);
           box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .service-item h4 {
+          font-size: 20px !important;
+          color: #2a6310 !important;
+        }
+        .list-container {
+          padding-left: 0;
+        }
+        .list-group {
+          padding-left: 20px;
+        }
+        .list-group li {
+          font-size: 16px !important;
+          color: #333 !important;
+          margin-bottom: 8px;
+          background: none !important;
+        }
+        .text-center {
+          text-align: center !important;
         }
       `}</style>
     </div>
