@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useState, useEffect, FocusEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Form } from "react-bootstrap";
@@ -33,12 +33,12 @@ const IndexBanner: React.FC = () => {
     sector: "",
   });
 
-  const handleFocus = useCallback((event: FocusEvent) => {
+  const handleFocus = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.target as HTMLInputElement;
     target.parentElement?.parentElement?.classList.add("focused");
-  }, []);
+  };
 
-  const handleBlur = useCallback((event: FocusEvent) => {
+  const handleBlur = (event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = event.target as HTMLInputElement;
     const inputValue = target.value;
     if (inputValue === "") {
@@ -47,24 +47,7 @@ const IndexBanner: React.FC = () => {
     } else {
       target.parentElement?.parentElement?.classList.add("filled");
     }
-  }, []);
-
-  useEffect(() => {
-    const inputSelector = document.querySelectorAll("input, textarea");
-
-    inputSelector.forEach((input) => {
-      input.addEventListener("focus", handleFocus as EventListener);
-      input.addEventListener("blur", handleBlur as EventListener);
-    });
-
-    // Cleanup event listeners on component unmount
-    return () => {
-      inputSelector.forEach((input) => {
-        input.removeEventListener("focus", handleFocus as EventListener);
-        input.removeEventListener("blur", handleBlur as EventListener);
-      });
-    };
-  }, [handleFocus, handleBlur]);
+  };
 
   const handleChange = (e: any) => {
     const { name, value } = e.target;
@@ -135,6 +118,8 @@ const IndexBanner: React.FC = () => {
                         name="job_title"
                         value={filters.job_title}
                         onChange={handleChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         placeholder=""
                       />
                       <div className="input-group-append">
@@ -155,6 +140,8 @@ const IndexBanner: React.FC = () => {
                         name="city"
                         value={filters.city}
                         onChange={handleChange}
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
                         placeholder=""
                       />
                       <div className="input-group-append">
@@ -172,6 +159,8 @@ const IndexBanner: React.FC = () => {
                       name="sector"
                       value={filters.sector}
                       onChange={handleChange}
+                      onFocus={handleFocus}
+                      onBlur={handleBlur}
                       className="select-btn"
                     >
                       <option>Select Industry</option>

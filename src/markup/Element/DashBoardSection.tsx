@@ -120,10 +120,7 @@ const DashboardSection = () => {
                     Recent Jobs
                   </h3>
                   <div
-                    style={{
-                      boxShadow:
-                        "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
-                    }}
+                    
                   >
                     <ul
                       className="post-job-bx"
@@ -238,21 +235,20 @@ const DashboardSection = () => {
                               item.id
                                 ? "#2A6310"
                                 : "rgb(42 99 16 / 67%)",
-                            padding: "1rem",
-                            height: "225px",
+                            padding: "10px",
                             minWidth: "230px",
                             position: "relative",
+                            height:'auto'
                           }}
                           key={index}
                         >
                           <div className="quote-info">
                             <div className="d-flex align-items-center relative">
-                              <h3
-                                className="text-white text-center  flex-grow-1"
-                                style={{ marginBottom: "15px" }}
+                              <h5
+                                className="text-white text-center  flex-grow-1 mb-0"
                               >
                                 {item?.title}
-                              </h3>
+                              </h5>
                               {user?.user?.membership?.membership_id ===
                                 item.id && (
                                 <div
@@ -281,16 +277,16 @@ const DashboardSection = () => {
                               )}
                             </div>
 
-                            <h4
-                              className="text-white text-center"
+                            <h6
+                              className="text-white text-center mb-1"
                               style={{
                                 fontFamily: "Lato, sans-serif !important",
                               }}
                             >
                               Price
-                            </h4>
+                            </h6>
                             <li
-                              className="text-center"
+                              className="text-center mp-lists"
                               style={{
                                 fontFamily: "Lato, sans-serif !important",
                                 letterSpacing: "0.05em",
@@ -300,7 +296,7 @@ const DashboardSection = () => {
                             </li>
 
                             <li
-                              className="text-center"
+                              className="text-center mp-lists"
                               style={{
                                 fontFamily: "Lato, sans-serif !important",
                                 letterSpacing: "0.05em",
