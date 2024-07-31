@@ -85,5 +85,4 @@ const Grievances = () => {
     </>
   );
 };
-
 export default Grievances;
