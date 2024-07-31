@@ -28,7 +28,7 @@ const FaqSection: React.FC<FaqSectionProps> = ({
   handleClick,
 }) => (
   <div className="faq-wrap my-4">
-    <h2 className="text-center my-4">{title}</h2>
+    <h2 className="text-center my-4" style={{color:"#2a6310" , fontWeight:700}}>{title}</h2>
     <ul className="accordion-list">
       {data.map((faq, index) => (
         <li
