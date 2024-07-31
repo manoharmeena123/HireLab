@@ -39,7 +39,7 @@ const Grievances = () => {
               backgroundImage: `url(${IMAGE_URL + grievancesData.data.image})`,
             }}
           >
-            <div className="container">
+            <div className="container ">
               <div className="dez-bnr-inr-entry">
                 <h1 className={styles.bannerTitle}>
                   {grievancesData?.data?.title}
@@ -56,7 +56,7 @@ const Grievances = () => {
             </div>
           </div>
         )}
-        <Container className={styles.container}>
+        <div className="container py-5 bg-light">
           <Row className="justify-content-center">
             <Col md={10}>
               <Card className="border-0">
@@ -80,7 +80,7 @@ const Grievances = () => {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </div>
       </div>
     </>
   );
