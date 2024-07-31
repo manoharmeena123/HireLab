@@ -143,14 +143,14 @@ const Page: React.FC = () => {
           background: #2a6310;
           color: #fff;
           margin: 0;
-          font-size: 1.5rem;
+          font-size: 2rem;
           font-weight: 600;
         }
         .answer {
           display: none;
           padding: 20px;
           border-top: 1px solid #ddd;
-          font-size: 1.1rem;
+          font-size: 1.5rem;
           line-height: 1.8;
         }
         .answer.show {
