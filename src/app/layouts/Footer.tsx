@@ -113,16 +113,7 @@ const Footer = () => {
                   <Link href={"/contact-us"}>Contact Us</Link>
                   </li>
                   <li>
-                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
+                  <Link href={"/faq-sections"}>Faq</Link>
                   </li>
                 </ul>
               </div>
@@ -130,16 +121,16 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 list-line d-flex flex-column">
                   <li>
-                    <Link href={""}>Privacy & Securty</Link>
+                    <Link href={"/privacy-policy"}>Privacy & Securty</Link>
                   </li>
                   <li>
-                    <Link href={""}>Terms of Serice</Link>
+                    <Link href={"/terms-conditions"}>Terms and Conditions</Link>
                   </li>
                   <li>
-                    <Link href={""}>Referral Terms</Link>
+                    <Link href={"/referral"}>Referral Terms</Link>
                   </li>
                   <li>
-                    <Link href={""}>Support</Link>
+                    <Link href={"/support"}>Support</Link>
                   </li>
                   <li>
                     <Link href={"/refund-policy"}>Refund Policy</Link>

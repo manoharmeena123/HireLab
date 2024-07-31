@@ -137,12 +137,12 @@ const RecentJobsection = () => {
                           </h4>
                           <ul>
                             <li>
-                              <i className="fa fa-map-marker"></i>
-                              {item?.address}
-                            </li>
-                            <li>
                               <i className="fa fa-bookmark-o"></i>
                               {item?.company_name}
+                            </li>
+                            <li>
+                              <i className="fa fa-map-marker"></i>
+                              {item?.address}
                             </li>
                             <li>
                               <i className="fa fa-clock-o"></i> Published{" "}

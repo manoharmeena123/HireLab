@@ -1,0 +1,52 @@
+/* Support.module.css */
+.contentSection {
+    padding: 1rem 0 !important;
+    line-height: 1.6 !important;
+    font-size: 1rem !important;
+    color: #333 !important;
+  }
+  
+  .cardTitle {
+    font-size: 2rem !important;
+    font-weight: bold !important;
+    color: #2A6310 !important;
+  }
+  
+  .cardImgTop {
+    max-height: 400px !important;
+    object-fit: cover !important;
+    border-radius: 10px 10px 0 0 !important;
+  }
+  
+  .cardBody {
+    padding: 2rem !important;
+    background-color: #f9f9f9 !important;
+    border-bottom-left-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+  }
+  
+  .container {
+    margin-top: 3rem !important;
+  }
+  
+  .support h1,
+  .support h2,
+  .support h3,
+  .support h4,
+  .support h5,
+  .support h6 {
+    color: #2A6310 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    font-weight: bold !important;
+  }
+  
+  .support ul {
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .support li {
+    margin-bottom: 0.5rem !important;
+  }
+  

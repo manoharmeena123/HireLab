@@ -5,10 +5,11 @@ import { Form } from "react-bootstrap";
 import {
   useGetSectorQuery,
   useGetFilterJobMutation,
-  useGetBannerQuery
+  useGetBannerQuery,
 } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
+import { toast } from "react-toastify";
 
 const bnr1 = require("./../../images/main-slider/slide2.jpg");
 
@@ -22,9 +23,10 @@ interface Filters {
 const IndexBanner: React.FC = () => {
   const { push } = useRouter();
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
-  const [getFilterJob, { isLoading: isFilterLoading }] = useGetFilterJobMutation();
-  const { data: bannerData } = useGetBannerQuery();
-  console.log('first', bannerData);
+  const [getFilterJob, { isLoading: isFilterLoading }] =
+    useGetFilterJobMutation();
+  const { data: bannerData, isLoading :isBannerLoading } = useGetBannerQuery();
+  console.log("first", bannerData);
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
     city: "",
@@ -56,21 +58,24 @@ const IndexBanner: React.FC = () => {
     e.preventDefault();
     try {
       const query = new URLSearchParams(filters as any).toString();
-      push(`/browse-job-filter?${query}`);
-    } catch (error) {
+      // Check if any filter is provided
+      if (filters.job_title || filters.city || filters.sector) {
+        push(`/browse-job-filter?${query}`);
+      } else {
+        push(`/browse-jobs-grid`);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
       console.error("Error filtering jobs:", error);
     }
   };
 
-  if (isSectorLoading || isFilterLoading) {
+  if (isSectorLoading || isFilterLoading || isBannerLoading) {
     return <Loading />;
   }
 
   return (
-    <div
-      className="dez-bnr-inr dez-bnr-inr-md"
-      style={{ backgroundImage: `url(${bnr1.default.src})` }}
-    >
+    <div className="dez-bnr-inr dez-bnr-inr-md" style={{ backgroundImage: `url(${bnr1.default.src})` }}>
       <div className="container">
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
@@ -80,11 +85,26 @@ const IndexBanner: React.FC = () => {
               style={{ backgroundColor: "#2A6310" }}
             >
               <div style={{ margin: "0px", padding: "0px" }}>
-                {bannerData ? parse(bannerData?.data?.heading.replace(/<p/g, '<p style="margin-bottom: 0"')) : ""}
+                {bannerData
+                  ? parse(
+                      bannerData?.data?.heading.replace(
+                        /<p/g,
+                        '<p style="margin-bottom: 0"'
+                      )
+                    )
+                  : ""}
               </div>
             </Link>
             <h2 style={{ marginTop: "20px" }}>
-              {bannerData ? parse(bannerData?.data?.description.replace(/<p/g, '<p style="margin-bottom: 0"')) : ""} <br />
+              {bannerData
+                ? parse(
+                    bannerData?.data?.description.replace(
+                      /<p/g,
+                      '<p style="margin-bottom: 0"'
+                    )
+                  )
+                : ""}{" "}
+              <br />
             </h2>
             <form className="dezPlaceAni" onSubmit={handleSubmit}>
               <div className="row">
@@ -127,7 +147,7 @@ const IndexBanner: React.FC = () => {
                       <div className="input-group-append">
                         <span className="input-group-text">
                           <i className="fa fa-map-marker"></i>
-                        </span>
+                        </span> 
                       </div>
                     </div>
                   </div>
@@ -144,13 +164,11 @@ const IndexBanner: React.FC = () => {
                       className="select-btn"
                     >
                       <option>Select Industry</option>
-                      {sectorData?.data?.map(
-                        (sector: { id: number; name: string }) => (
-                          <option key={sector.id} value={sector.name}>
-                            {sector.name}
-                          </option>
-                        )
-                      )}
+                      {sectorData?.data?.map((sector: { id: number; name: string }) => (
+                        <option key={sector.id} value={sector.name}>
+                          {sector.name}
+                        </option>
+                      ))}
                     </Form.Control>
                   </div>
                 </div>
@@ -176,3 +194,4 @@ const IndexBanner: React.FC = () => {
 };
 
 export default IndexBanner;
+

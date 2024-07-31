@@ -28,6 +28,13 @@ import {
   WritableBuyPassData,
   WritableBuyPassResponse,
   CreateCommentType,
+  SettingResponse,
+  BannerResponse,
+  WritableServiceResponse,
+  WritableReferralResponse,
+  WritableSupportResponse,
+  WritableRefundPolicyResponse,
+  WritableCtcStaticTextResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -63,10 +70,13 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Setting",
     "Categories",
     "SingleEventByTitle",
+    "UpComingEvents",
+    "PastEvents",
+    "EventText",
     "SingleDiscussionByTitle",
+    "BuyPassForEvent",
     "JobById",
     "GetFilterJob",
-    "BuyPassForEvent",
     "GetJobUserById",
     "CTCDataById",
     "DeleteAppliedJobs",
@@ -74,9 +84,14 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "GetCommentForQuetion",
     "GetCommentForParentComment",
     "CreateComment",
-    "UpComingEvents",
-    "PastEvents",
-    "Banner"
+    "Banner",
+    "Settings",
+    "Service",
+    "SingleService",
+    "ReferralTerms",
+    "Support",
+    "RefundPolicy",
+    "CtcText"
   ],
 });
 
@@ -93,6 +108,29 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getEvents: builder.query<EventResponse, void>({
       query: queries.getEvents.query,
       providesTags: ["Events"],
+    }),
+    getEventText :builder.query<WritableCtcStaticTextResponse, void>({
+      query: queries.getEventText.query,
+      providesTags: ["EventText"],
+    }),
+    getUpComingEvents: builder.query<any, void>({
+      query: queries.getUpComingEvents.query,
+      providesTags: ["UpComingEvents"],
+    }),
+    getPastEvents: builder.query<any, void>({
+      query: queries.getPastEvents.query,
+      providesTags: ["PastEvents"],
+    }),
+    buyPassForEvent: builder.mutation<
+      WritableBuyPassResponse,
+      WritableBuyPassData
+    >({
+      query: (data) => queries.buyPassForEvent.query(data),
+      invalidatesTags: ["BuyPassForEvent"],
+    }),
+    getSingleEventByTitle: builder.mutation<any, string>({
+      query: (title) => queries.getSingleEventByTitle.query(title),
+      invalidatesTags: ["SingleEventByTitle"],
     }),
     getSector: builder.query<SectorResponse, void>({
       query: queries.getSector.query,
@@ -113,6 +151,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getCtcDataById: builder.mutation<any, string>({
       query: queries.getCtcDataById.query,
       invalidatesTags: ["CTCDataById"],
+    }),
+    getCtcText : builder.query<WritableCtcStaticTextResponse, void>({
+      query : queries.getCtcText.query,
+     providesTags: ["CtcText"]
     }),
     getCollage: builder.query<WritableCollegeResponse, void>({
       query: queries.getCollage.query,
@@ -190,17 +232,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getDesignation.query,
       providesTags: ["Designation"],
     }),
-    getSetting: builder.query<WritableSettingResponse, void>({
-      query: queries.getSetting.query,
-      providesTags: ["Setting"],
-    }),
+
     getCategories: builder.query<WritableCategoriesResponse, void>({
       query: queries.getCategories.query,
       providesTags: ["Categories"],
-    }),
-    getSingleEventByTitle: builder.mutation<any, string>({
-      query: (title) => queries.getSingleEventByTitle.query(title),
-      invalidatesTags: ["SingleEventByTitle"],
     }),
     getSingleDiscussionByTitle: builder.mutation<any, string>({
       query: (title) => queries.getSingleDiscussionByTitle.query(title),
@@ -210,20 +245,26 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (queryParams) => queries.getFilterJob.query(queryParams),
       invalidatesTags: ["GetFilterJob"],
     }),
-    buyPassForEvent: builder.mutation<
-      WritableBuyPassResponse,
-      WritableBuyPassData
-    >({
-      query: (data) => queries.buyPassForEvent.query(data),
-      invalidatesTags: ["BuyPassForEvent"],
-    }),
     getJobUserById: builder.mutation<any, string>({
       query: (queryParams) => queries.getJobUserById.query(queryParams),
       invalidatesTags: ["GetJobUserById"],
     }),
+    getSettingData: builder.query<SettingResponse, void>({
+      query: queries.getSetting.query,
+      providesTags: ["Setting"],
+    }),
+    getSettings: builder.query<SettingResponse, void>({
+      query: queries.getSettings.query,
+      providesTags: ["Settings"],
+    }),
     deleteAppliedJob: builder.mutation<any, string>({
       query: (jobId) => queries.deleteAppliedJob.query(jobId),
       invalidatesTags: ["DeleteAppliedJobs"],
+    }),
+
+    getBannerData: builder.query<BannerResponse, void>({
+      query: queries.getBanner.query,
+      providesTags: ["Banner"],
     }),
     getCommentForQuetion: builder.mutation<any, string>({
       query: (questionId) => queries.getCommentForQuetion.query(questionId),
@@ -245,19 +286,32 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (data) => queries.createComment.query(data),
       invalidatesTags: ["CreateComment"],
     }),
-    getUpComingEvents: builder.query<any, void>({
-      query: queries.getUpComingEvents.query,
-      providesTags: ["UpComingEvents"],
+    getBanner: builder.query<any, void>({
+      query: queries.getBanner.query,
+      providesTags: ["Banner"],
     }),
-    getPastEvents: builder.query<any, void>({
-      query: queries.getPastEvents.query,
-      providesTags: ["PastEvents"],
+    getService: builder.query<WritableServiceResponse, void>({
+      query: queries.getService.query,
+      providesTags: ["Service"],
     }),
-    getBanner : builder.query<any, void>({
-      query : queries.getBanner.query,
-      providesTags : ["Banner"]
-    })
+    getSingleService: builder.mutation<WritableServiceResponse, string>({
+      query: (title) => queries.getSingleService.query(title),
+      invalidatesTags: ["SingleService"],
+    }),
+    getReferralTerms: builder.query<WritableReferralResponse, void>({
+      query: queries.getRecentJobs.query,
+      providesTags: ["ReferralTerms"],
+    }),
+    getSupport: builder.query<WritableSupportResponse, void>({
+      query: queries.getSupport.query,
+      providesTags: ["Support"],
+    }),
+    getRefundPolicy: builder.query<WritableRefundPolicyResponse, void>({
+      query: queries.getRefundPolicy.query,
+      providesTags: ["RefundPolicy"],
+    }),
   }),
+
   overrideExisting: true,
 });
 
@@ -288,7 +342,7 @@ export const {
   useGetAdditionalPerkQuery,
   useGetTierQuery,
   useGetDesignationQuery,
-  useGetSettingQuery,
+  useGetSettingDataQuery,
   useGetCategoriesQuery,
   useGetSingleDiscussionByTitleMutation,
   useGetSingleEventByTitleMutation,
@@ -303,6 +357,14 @@ export const {
   useCreateCommentMutation,
   useGetUpComingEventsQuery,
   useGetPastEventsQuery,
-  useGetBannerQuery
+  useGetSettingsQuery,
+  useGetBannerQuery,
+  useGetServiceQuery,
+  useGetSingleServiceMutation,
+  useGetReferralTermsQuery,
+  useGetSupportQuery,
+  useGetRefundPolicyQuery,
+  useGetCtcTextQuery,
+  useGetEventTextQuery
 } = globalApi;
 export default globalApi;

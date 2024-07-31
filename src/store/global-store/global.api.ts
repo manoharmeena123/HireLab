@@ -55,6 +55,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  getCtcText :{
+    query :()=>({
+      url : `api/page/ctc`,
+      method : "GET"
+    })
+  },
   getCollage: {
     query: () => ({
       url: "api/get-college",
@@ -168,6 +174,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  getEventText :{
+    query :()=>({
+      url : `api/page/Meetups-and-Events`,
+      method : "GET"
+    })
+  },
   getUpComingEvents: {
     query: () => ({
       url: "/api/upcoming-events",
@@ -237,12 +249,60 @@ export const queries = {
       method: "GET",
     }),
   },
+
+  getSettings: {
+    query: () => ({
+      url: "api/get-setting",
+      method: "GET",
+    }),
+  },
+
   getBanner : {
     query : ()=>({
       url : `/api/page/banner`,
       method : 'GET'
     })
   },
+
+  getService :{
+    query : () =>({
+      url : `api/services`,
+      method : 'GET'
+    })
+  },
+  getSingleService :{
+    query : (title : string)=>({
+      url : `api/services/${title}`,
+      method : 'GET'
+    })
+  },
+
+  //api/page/referral-terms
+
+   getReferralTerms : {
+    query : () => ({
+      url : `/api/page/referral-terms`,
+      method : 'GET'
+    })
+   },
+
+   // api/page/support
+   getSupport : {
+    query : () => ({
+      url : `/api/page/support`,
+      method : 'GET'
+    })
+   },
+
+   //api/page/refund-policy
+   getRefundPolicy : {
+    query : () => ({
+      url : `/api/page/refund-policy`,
+      method : 'GET'
+    })
+   },
+
+
   //Post===================================================================================>
 
   buyPassForEvent: {
@@ -252,7 +312,7 @@ export const queries = {
       body: data,
     }),
   },
-
+    
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",

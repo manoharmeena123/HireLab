@@ -2,5 +2,8 @@
     "cSpell.words": [
         "Companyprofile",
         "Jobsection"
-    ]
+    ],
+    "files.associations": {
+        "plyconfig.json": "jsonc"
+    }
 }

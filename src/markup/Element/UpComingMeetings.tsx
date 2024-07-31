@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useGetEventsQuery } from "@/store/global-store/global.query";
+import { useGetEventsQuery,useGetEventTextQuery } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import Pagination from "./Pagination";
@@ -17,6 +17,7 @@ import Swal from "sweetalert2";
 const UpComingMeetings = () => {
   const { push } = useRouter();
   const { data: eventsData, isLoading, isError } = useGetEventsQuery();
+  const { data :eventText } =useGetEventTextQuery()
   const { user } = useLoggedInUser();
   const [saveEvent] = useSaveEventMutation();
   const { data: myEventData } = useMyEventsQuery();
@@ -120,7 +121,7 @@ const UpComingMeetings = () => {
         <div className="row">
           <div className="col-lg-12 section-head text-center">
             <h2 style={{ fontWeight: "600" }} className="m-b5">
-              Upcoming Meetups
+              {eventText?.data?.title}
             </h2>
           </div>
         </div>

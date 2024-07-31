@@ -173,15 +173,17 @@ const PostJobSection = () => {
         toast.success(response?.message, { theme: "colored" });
         router.push("/manage-job");
       } else if (response.code === 401) {
-        toast.error(response.message, { theme: "colored" });
+        toast.error(response?.message, { theme: "colored" });
       } else if (response.code === 404) {
+        console.error("Error posting job:", response);
+        toast.error(response?.message, { theme: "colored" });
         dispatch(setPostJobErrors(response.errors));
       } else {
         console.error("Unexpected error format:", response);
       }
     } catch (err :any) {
       console.error("Error posting job:", err);
-      toast.success(err?.message, { theme: "colored" });
+      toast.error(err?.message, { theme: "colored" });
     }
   };
 
