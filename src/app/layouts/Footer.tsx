@@ -123,12 +123,12 @@ const Footer = () => {
                   <li>
                     <Link href={"/terms-conditions"}>Terms and Conditions</Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link href={"/referral"}>Referral Terms</Link>
                   </li>
                   <li>
                     <Link href={"/support"}>Support</Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </div>
