@@ -33,14 +33,15 @@ const FaqSection: React.FC<FaqSectionProps> = ({
       {data.map((faq, index) => (
         <li
           key={index}
-          className={`accordion-item ${
-            activeIndex === index ? "active" : ""
-          }`}
+          className={`accordion-item ${activeIndex === index ? "active" : ""}`}
           onClick={() => handleClick(index)}
         >
-          <h3 className="faq-question" style={{ fontSize: "20px" }}>{faq.question}</h3>
+          <h3 className="faq-question" style={{ fontSize: "20px" }}>
+            {faq.question}
+          </h3>
           <div className={`answer ${activeIndex === index ? "show" : ""}`}>
-            {faq.answers && parse(faq.answers.replace(/<p/g, '<p style="font-size: 17px;"'))}
+            {faq.answers &&
+              parse(faq.answers.replace(/<p/g, '<p style="font-size: 17px;"'))}
           </div>
         </li>
       ))}
@@ -98,16 +99,16 @@ const Page: React.FC = () => {
             handleClick={handleClick1}
           />
           <FaqSection
-            title="General Questions FAQ's"
-            data={generalQuestionFaq?.data || []}
-            activeIndex={activeIndex3}
-            handleClick={handleClick3}
-          />
-          <FaqSection
             title="Monthly Meetup FAQ's"
             data={monthlyMeetFaq?.data || []}
             activeIndex={activeIndex4}
             handleClick={handleClick4}
+          />
+          <FaqSection
+            title="General Questions FAQ's"
+            data={generalQuestionFaq?.data || []}
+            activeIndex={activeIndex3}
+            handleClick={handleClick3}
           />
         </div>
       </div>
