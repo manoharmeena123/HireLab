@@ -493,6 +493,22 @@ interface RemoveEventResponse {
   data: any[];
 }
 
+
+///cv manager
+interface ResumeDataResponse {
+  code: number;
+  success: boolean;
+  message :string;
+  data: ResumeData[];
+}
+interface ResumeData {
+  name: string;
+  created_at: string | null;
+  address: string | null;
+  resume: string;
+}
+
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -542,6 +558,8 @@ type WritableSaveEvent = WritableDraft<SaveEvent>;
 type WritableSaveEventResponse = WritableDraft<SaveEventResponse>;
 type WritableRemoveEvent = WritableDraft<RemoveEvent>;
 type WritableRemoveEventResponse = WritableDraft<RemoveEventResponse>;
+type WritableResumeDataResponse = WritableDraft<ResumeDataResponse>;
+
 export {
   WritableResumeFetchResponse,
   WritableHeadlineData,
@@ -585,4 +603,5 @@ export {
   WritableSaveEventResponse,
   WritableRemoveEvent,
   WritableRemoveEventResponse,
+  WritableResumeDataResponse
 };
