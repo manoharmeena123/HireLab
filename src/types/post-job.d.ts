@@ -104,8 +104,8 @@ interface Membership {
   status: string;
   discount_price: string;
   info: MembershipInfo[];
-  monthly_price :string ;
-  quarterly_price :string
+  monthly_price: string;
+  quarterly_price: string;
 }
 
 interface MembershipResponse {
@@ -146,6 +146,27 @@ interface CtcApiResponse {
   success: string;
   message: string;
   data: CtcData[];
+}
+
+//ctc text
+
+interface CtcStaticText {
+  code: number;
+  success: string;
+  message: string;
+  data: {
+    id: number;
+    title: string;
+    heading: string;
+    description: string;
+    image: string | null;
+    bg_image: string | null;
+    meta_title: string | null;
+    meta_description: string | null;
+    status: string;
+    created_at: string | null;
+    updated_at: string | null;
+  };
 }
 
 //getTier
@@ -239,6 +260,7 @@ type WritableJobTypeResponse = WritableDraft<JobTypeResponse>;
 type WritableEducationResponse = WritableDraft<EducationResponse>;
 type WritableCompensationResponse = WritableDraft<CompensationResponse>;
 type WritableCtcApiResponse = WritableDraft<CtcApiResponse>;
+type WritableCtcStaticTextResponse = WritableDraft<CtcStaticText>;
 type WritableTiersResponse = WritableDraft<TiersResponse>;
 type WritableDesignationsResponse = WritableDraft<DesignationsResponse>;
 type WritableSettingResponse = WritableDraft<SettingResponse>;
@@ -258,4 +280,5 @@ export {
   WritableDesignationsResponse,
   WritableSettingResponse,
   WritableCategoriesResponse,
+  WritableCtcStaticTextResponse,
 };

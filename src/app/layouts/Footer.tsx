@@ -127,10 +127,10 @@ const Footer = () => {
                     <Link href={"/terms-conditions"}>Terms and Conditions</Link>
                   </li>
                   <li>
-                    <Link href={""}>Referral Terms</Link>
+                    <Link href={"/referral"}>Referral Terms</Link>
                   </li>
                   <li>
-                    <Link href={""}>Support</Link>
+                    <Link href={"/support"}>Support</Link>
                   </li>
                   <li>
                     <Link href={"/refund-policy"}>Refund Policy</Link>
