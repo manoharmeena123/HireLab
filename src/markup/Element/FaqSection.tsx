@@ -7,6 +7,7 @@ import {
   useMonthlyMeetFaqQuery,
 } from "@/app/my-resume/store/resume.query";
 import Loading from "@/components/Loading";
+import parse from "html-react-parser";
 
 interface FaqData {
   question: string;
@@ -37,9 +38,9 @@ const FaqSection: React.FC<FaqSectionProps> = ({
           }`}
           onClick={() => handleClick(index)}
         >
-          <h3 className="faq-question">{faq.question}</h3>
+          <h3 className="faq-question" style={{ fontSize: "20px" }}>{faq.question}</h3>
           <div className={`answer ${activeIndex === index ? "show" : ""}`}>
-            <p dangerouslySetInnerHTML={{ __html: faq.answers }} />
+            {faq.answers && parse(faq.answers.replace(/<p/g, '<p style="font-size: 17px;"'))}
           </div>
         </li>
       ))}
@@ -96,75 +97,77 @@ const Page: React.FC = () => {
             activeIndex={activeIndex1}
             handleClick={handleClick1}
           />
-            <FaqSection
-              title="Monthly Meetup FAQ's"
-              data={monthlyMeetFaq?.data || []}
-              activeIndex={activeIndex4}
-              handleClick={handleClick4}
-            />
           <FaqSection
             title="General Questions FAQ's"
             data={generalQuestionFaq?.data || []}
             activeIndex={activeIndex3}
             handleClick={handleClick3}
           />
+          <FaqSection
+            title="Monthly Meetup FAQ's"
+            data={monthlyMeetFaq?.data || []}
+            activeIndex={activeIndex4}
+            handleClick={handleClick4}
+          />
         </div>
       </div>
       <style jsx>{`
         .faq-container {
-          background-color: #f9f9f9;
-          padding: 60px 0;
+          background-color: #f9f9f9 !important;
+          padding: 60px 0 !important;
         }
         .faq-wrap {
-          margin-bottom: 40px;
+          margin-bottom: 40px !important;
         }
         .text-center {
-          text-align: center;
+          text-align: center !important;
         }
         .accordion-list {
-          list-style: none;
-          padding: 0;
-          margin: 0;
+          list-style: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
         }
         .accordion-item {
-          background: #fff;
-          border: 1px solid #ddd;
-          margin-bottom: 10px;
-          border-radius: 8px;
-          overflow: hidden;
-          cursor: pointer;
-          transition: all 0.3s ease;
+          background: #fff !important;
+          border: 1px solid #ddd !important;
+          margin-bottom: 10px !important;
+          border-radius: 8px !important;
+          overflow: hidden !important;
+          cursor: pointer !important;
+          transition: all 0.3s ease !important;
         }
         .accordion-item.active {
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
         }
         .faq-question {
-          padding: 20px;
-          background: #2a6310;
-          color: #fff;
-          margin: 0;
-          font-size: 2rem;
-          font-weight: 600;
+          padding: 20px !important;
+          background: #2a6310 !important;
+          color: #fff !important;
+          margin: 0 !important;
+          font-size: 20px !important;
+          font-weight: 600 !important;
         }
         .answer {
-          display: none;
-          padding: 20px;
-          border-top: 1px solid #ddd;
-          font-size: 1.5rem;
-          line-height: 1.8;
+          display: none !important;
+          padding: 20px !important;
+          border-top: 1px solid #ddd !important;
+          font-size: 17px !important;
+          line-height: 1.8 !important;
+          background: #f9f9f9 !important;
         }
         .answer.show {
-          display: block;
+          display: block !important;
         }
         .answer p {
-          margin: 0;
+          margin: 0 !important;
+          padding: 0 !important;
         }
         @media (max-width: 768px) {
           .faq-question {
-            font-size: 1.25rem;
+            font-size: 15px !important;
           }
           .answer {
-            font-size: 1rem;
+            font-size: 12px !important;
           }
         }
       `}</style>
