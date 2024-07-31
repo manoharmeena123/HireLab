@@ -301,6 +301,13 @@ export const queries = {
       method : 'GET'
     })
    },
+   //api/page/grievances
+   getGrievances :{
+    query :()=>({
+      url : `/api/page/grievances`,
+      method : 'GET'
+    })
+   },
 
 
   //Post===================================================================================>

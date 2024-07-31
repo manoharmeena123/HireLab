@@ -91,7 +91,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "ReferralTerms",
     "Support",
     "RefundPolicy",
-    "CtcText"
+    "CtcText",
+    "Grievances"
   ],
 });
 
@@ -310,6 +311,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getRefundPolicy.query,
       providesTags: ["RefundPolicy"],
     }),
+    getGrievances : builder.query<WritableRefundPolicyResponse,void>({
+      query : queries.getGrievances.query,
+      providesTags :["Grievances"]
+    })
   }),
 
   overrideExisting: true,
@@ -365,6 +370,7 @@ export const {
   useGetSupportQuery,
   useGetRefundPolicyQuery,
   useGetCtcTextQuery,
-  useGetEventTextQuery
+  useGetEventTextQuery,
+  useGetGrievancesQuery
 } = globalApi;
 export default globalApi;
