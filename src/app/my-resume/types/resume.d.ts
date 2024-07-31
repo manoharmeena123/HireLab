@@ -355,8 +355,21 @@ interface AboutUsResponse {
   code: number;
   success: string;
   message: string;
-  data: AboutUs[];
+  data: {
+    id: number;
+    title: string;
+    heading: string;
+    description: string;
+    image: string | null;
+    bg_image: string | null;
+    meta_title: string | null;
+    meta_description: string | null;
+    status: string;
+    created_at: string;
+    updated_at: string;
+};
 }
+
 
 //privacy policy
 interface PrivacyPolicy {
