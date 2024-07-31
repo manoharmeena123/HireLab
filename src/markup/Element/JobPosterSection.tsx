@@ -216,10 +216,17 @@ const JobPosterSection = () => {
                         </div>
                       </div>
                       <ul>
+                      
                         <li>
                           <Link href="/profile" className="active">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>{user?.user?.name} Profile</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
@@ -243,12 +250,7 @@ const JobPosterSection = () => {
                             <span>Manage Jobs</span>
                           </Link>
                         </li>
-                        <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
+                        
                         <li>
                           <Link href="/" onClick={handleLogout}>
                             <i
