@@ -299,7 +299,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       invalidatesTags: ["SingleService"],
     }),
     getReferralTerms: builder.query<WritableReferralResponse, void>({
-      query: queries.getRecentJobs.query,
+      query: queries.getReferralTerms.query,
       providesTags: ["ReferralTerms"],
     }),
     getSupport: builder.query<WritableSupportResponse, void>({

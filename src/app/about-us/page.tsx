@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image';
 var bnr1 = require('../../images/banner/bnr1.jpg');
 var bnr2 = require('../../images/background/bg4.jpg');
-
+import { useAboutUsFaqQuery } from "@/app/my-resume/store/resume.query"
 function Aboutus(){
 	return(
 		<div className="page-wraper">		
