@@ -1,19 +1,52 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import PageTitle from "@/markup/Layout/PageTitle";
 import bnr from "../../../src/images/banner/bnr1.jpg";
-import { useGetSettingDataQuery } from "@/store/global-store/global.query";
-import Loading from "@/components/Loading";
+import { useGetSettingDataQuery, usePostSaveContactMutation } from "@/store/global-store/global.query";
 
 const Contact = () => {
   const { data, error, isLoading } = useGetSettingDataQuery();
+  const [postSaveContact] = usePostSaveContactMutation();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [formError, setFormError] = useState<string | null>(null);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading settings</div>;
+  }
 
   const setting = data?.data;
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("Form data before API call:", formData);
+    
+    try {
+      const response = await postSaveContact(formData).unwrap();
+      console.log("API response:", response);
+      alert("Message sent successfully");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error("Error sending message:", err);
+      setFormError("Failed to send message. Please try again later.");
+    }
+  };
+  
   return (
     <>
-      {isLoading && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -34,10 +67,9 @@ const Contact = () => {
                   <ul className="no-margin">
                     <li className="icon-bx-wraper left m-b30">
                       <div className="icon-bx-xs border-1">
-                        {" "}
                         <Link href={"#"} className="icon-cell">
                           <i className="ti-location-pin"></i>
-                        </Link>{" "}
+                        </Link>
                       </div>
                       <div className="icon-content">
                         <h6 className="text-uppercase m-tb0 dez-tilte">
@@ -48,10 +80,9 @@ const Contact = () => {
                     </li>
                     <li className="icon-bx-wraper left  m-b30">
                       <div className="icon-bx-xs border-1">
-                        {" "}
                         <Link href={"#"} className="icon-cell">
                           <i className="ti-email"></i>
-                        </Link>{" "}
+                        </Link>
                       </div>
                       <div className="icon-content">
                         <h6 className="text-uppercase m-tb0 dez-tilte">
@@ -62,10 +93,9 @@ const Contact = () => {
                     </li>
                     <li className="icon-bx-wraper left">
                       <div className="icon-bx-xs border-1">
-                        {" "}
                         <Link href={"#"} className="icon-cell">
                           <i className="ti-mobile"></i>
-                        </Link>{" "}
+                        </Link>
                       </div>
                       <div className="icon-content">
                         <h6 className="text-uppercase m-tb0 dez-tilte">
@@ -109,14 +139,6 @@ const Contact = () => {
                           ></Link>
                         </li>
                       )}
-                      {/* {setting?.google_plus && (
-                        <li>
-                          <Link
-                            href={setting.google_plus}
-                            className="fa fa-google-plus bg-primary"
-                          ></Link>
-                        </li>
-                      )} */}
                     </ul>
                   </div>
                 </div>
@@ -124,20 +146,19 @@ const Contact = () => {
               <div className="col-lg-4 col-md-6">
                 <div className="p-a30 m-b30 radius-sm bg-gray clearfix">
                   <h4>Send Message Us</h4>
-                  <div className="dzFormMsg"></div>
-                  <form
-                    method="post"
-                    className="dzForm"
-                    action="script/contact.php"
-                  >
-                    <input type="hidden" value="Contact" name="dzToDo" />
+                  <div className="dzFormMsg">
+                    {formError && <div className="alert alert-danger">{formError}</div>}
+                  </div>
+                  <form onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="form-group">
                           <div className="input-group">
                             <input
-                              name="dzName"
+                              name="name"
                               type="text"
+                              value={formData.name}
+                              onChange={handleInputChange}
                               required
                               className="form-control"
                               placeholder="Your Name"
@@ -149,10 +170,12 @@ const Contact = () => {
                         <div className="form-group">
                           <div className="input-group">
                             <input
-                              name="dzEmail"
+                              name="email"
                               type="email"
-                              className="form-control"
+                              value={formData.email}
+                              onChange={handleInputChange}
                               required
+                              className="form-control"
                               placeholder="Your Email Address"
                             />
                           </div>
@@ -162,10 +185,12 @@ const Contact = () => {
                         <div className="form-group">
                           <div className="input-group">
                             <textarea
-                              name="dzMessage"
+                              name="message"
                               rows={4}
-                              className="form-control"
+                              value={formData.message}
+                              onChange={handleInputChange}
                               required
+                              className="form-control"
                               placeholder="Your Message..."
                             ></textarea>
                           </div>
@@ -173,21 +198,11 @@ const Contact = () => {
                       </div>
                       <div className="col-lg-12">
                         <div className="recaptcha-bx">
-                          <div className="input-group">
-                            <div
-                              className="g-recaptcha"
-                              data-sitekey="6LefsVUUAAAAADBPsLZzsNnETChealv6PYGzv3ZN"
-                              data-callback="verifyRecaptchaCallback"
-                              data-expired-callback="expiredRecaptchaCallback"
-                            ></div>
-                            <input
-                              className="form-control d-none"
-                              style={{ display: "none" }}
-                              data-recaptcha="true"
-                              required
-                              data-error="Please complete the Captcha"
-                            />
-                          </div>
+                          <div className="g-recaptcha"
+                            data-sitekey="6LefsVUUAAAAADBPsLZzsNnETChealv6PYGzv3ZN"
+                            data-callback="verifyRecaptchaCallback"
+                            data-expired-callback="expiredRecaptchaCallback"
+                          ></div>
                         </div>
                       </div>
 
@@ -196,10 +211,9 @@ const Contact = () => {
                           name="submit"
                           type="submit"
                           value="Submit"
-                          className="site-button "
+                          className="site-button"
                         >
-                          {" "}
-                          <span>Submit</span>{" "}
+                          <span>Submit</span>
                         </button>
                       </div>
                     </div>
