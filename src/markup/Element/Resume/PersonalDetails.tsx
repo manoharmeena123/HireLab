@@ -7,6 +7,7 @@ import {
   useUpdateResumePersonalDetailsMutation,
 } from "@/app/my-resume/store/resume.query";
 import { WritablePersonalDetails } from "@/app/my-resume/types/resume";
+import { toast } from "react-toastify";
 interface PersonalDetailsProps {
   show: boolean;
   onShow: () => void;
@@ -112,16 +113,21 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
 
   const handleSave = async () => {
     if (!validateForm()) return;
-
-    if (editMode && personalDetailsId !== null) {
-      await updatePersonalDetails({
-        data: personalDetails,
-        personal_detail_id: personalDetailsId,
-      });
-    } else {
-      await createPersonalDetails(personalDetails);
+    try {
+      if (editMode && personalDetailsId !== null) {
+        const response = await updatePersonalDetails({
+          data: personalDetails,
+          personal_detail_id: personalDetailsId,
+        });
+        toast.success(response?.data?.message, { theme: "colored" });
+      } else {
+        const response = await createPersonalDetails(personalDetails);
+        toast.success(response?.data?.message, { theme: "colored" });
+      }
+      onHide();
+    } catch (error: any) {
+      toast.error(error?.message, { theme: "colored" });
     }
-    onHide();
   };
 
   return (
@@ -413,6 +419,3 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
 };
 
 export default PersonalDetails;
-
-
-
