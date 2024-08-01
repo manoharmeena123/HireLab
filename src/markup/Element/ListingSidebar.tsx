@@ -91,7 +91,7 @@ const ListingSidebar: React.FC = () => {
               <span>Profile Summary</span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               activeClass="active"
               className="scroll-bar nav-link"
@@ -102,7 +102,7 @@ const ListingSidebar: React.FC = () => {
             >
               <span>Accomplishments</span>
             </Link>
-          </li>
+          </li> */}
           <li>
             <Link
               activeClass="active"

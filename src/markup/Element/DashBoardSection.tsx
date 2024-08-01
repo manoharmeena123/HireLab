@@ -10,6 +10,7 @@ import {
   useDeleteSavedJobMutation,
   useGetEventsQuery,
   useGetMembershipQuery,
+  useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
 
 import { RecentJobData } from "@/types/index";
@@ -33,7 +34,7 @@ const DashboardSection = () => {
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const { data: eventsData, isLoading: eventLoading } = useGetEventsQuery();
-
+  const { data: ctcData } = useGetCtcDataQuery();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
 
   const viewJobHandler = (id: number) => {
@@ -103,7 +104,10 @@ const DashboardSection = () => {
     }
     setClickedIndexes(updatedIndexes);
   };
-
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcData?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
   return (
     <>
       {recentLoading && eventLoading && <Loading />}
@@ -119,9 +123,7 @@ const DashboardSection = () => {
                   >
                     Recent Jobs
                   </h3>
-                  <div
-                    
-                  >
+                  <div>
                     <ul
                       className="post-job-bx"
                       style={{
@@ -180,8 +182,10 @@ const DashboardSection = () => {
                                   </div>
 
                                   <div className="salary-bx">
-                                    <span>42000 - 55000</span>
-                                    <br />
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
                                   </div>
                                 </div>
                                 <label
@@ -231,22 +235,19 @@ const DashboardSection = () => {
                           className="membership_class"
                           style={{
                             backgroundColor:
-                              user?.user?.membership?.membership_id ===
-                              item.id
+                              user?.user?.membership?.membership_id === item.id
                                 ? "#2A6310"
                                 : "rgb(42 99 16 / 67%)",
                             padding: "10px",
                             minWidth: "230px",
                             position: "relative",
-                            height:'auto'
+                            height: "auto",
                           }}
                           key={index}
                         >
                           <div className="quote-info">
                             <div className="d-flex align-items-center relative">
-                              <h5
-                                className="text-white text-center  flex-grow-1 mb-0"
-                              >
+                              <h5 className="text-white text-center  flex-grow-1 mb-0">
                                 {item?.title}
                               </h5>
                               {user?.user?.membership?.membership_id ===
@@ -326,7 +327,9 @@ const DashboardSection = () => {
                     maxWidth: "550px",
                   }}
                 >
-                  <h2 style={{ fontWeight: 600, textAlign: "center" }}>Meet Ups</h2>
+                  <h2 style={{ fontWeight: 600, textAlign: "center" }}>
+                    Meet Ups
+                  </h2>
                   <ul
                     className="post-job-bx col"
                     style={{

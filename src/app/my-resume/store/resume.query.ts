@@ -70,7 +70,7 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
 
 const resumeApi = hirelabEnhancedSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getResumeData: builder.query<WritableResumeFetchResponse, void>({
+    getResumeData: builder.query<any, void>({
       query: queries.getResumeData.query,
       providesTags: ["Resume"],
     }),

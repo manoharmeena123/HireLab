@@ -8,6 +8,7 @@ import {
   useUpdateCareerProfileMutation,
 } from "@/app/my-resume/store/resume.query";
 import { WritableCareerProfileData } from "@/app/my-resume/types/resume";
+import { toast } from "react-toastify";
 
 interface DesiredCareerProfileProps {
   show: boolean;
@@ -94,16 +95,18 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
         expected_salary: `${profileData.expected_salary} lakh`,
       };
       if (profileData.career_profile_id) {
-        await updateCareerProfile({
+        const response = await updateCareerProfile({
           data: updatedProfileData,
           career_profile_id: profileData.career_profile_id,
         });
+        toast.success(response?.data?.message, { theme: "colored" });
       } else {
-        await createCareerProfile(updatedProfileData);
+        const response = await createCareerProfile(updatedProfileData);
+        toast.success(response?.data?.message, { theme: "colored" });
       }
       onHide();
-    } catch (error) {
-      console.error("Failed to save career profile", error);
+    } catch (error: any) {
+      toast.error(error?.message, { theme: "colored" });
     }
   };
 

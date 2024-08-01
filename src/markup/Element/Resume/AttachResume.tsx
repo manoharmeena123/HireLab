@@ -7,6 +7,7 @@ import {
   useUpdateAttachResumeFileMutation,
 } from "@/app/my-resume/store/resume.query";
 import Loading from "@/components/Loading";
+import { toast } from "react-toastify";
 
 const AttachResume = () => {
   const { data: resumeData, isLoading } = useGetResumeDataQuery();
@@ -38,14 +39,23 @@ const AttachResume = () => {
         }
 
         try {
+          let res;
           if (resumeId) {
-            await updateFile(formData);
+            res = await updateFile(formData);
           } else {
-            await createAttachmResumeFile(formData);
+            res = await createAttachmResumeFile(formData);
+          }
+          if (res && res.data) {
+            toast.success(res.data.message, { theme: "colored" });
+          } else {
+            toast.error("Failed to upload file",{ theme: "colored" });
           }
           setCurrentFile(file.name);
           setCurrentFileUrl(URL.createObjectURL(file)); // Update the URL for download
-        } catch (error) {
+        } catch (error: any) {
+          toast.error(error?.message || "Failed to upload file", {
+            theme: "colored",
+          });
           console.error("Failed to upload file", error);
         }
       }
@@ -67,7 +77,12 @@ const AttachResume = () => {
         {currentFile && (
           <div className="m-b10">
             {currentFileUrl && (
-              <a href={currentFileUrl} download={currentFile} target="_blank" rel="noopener noreferrer">
+              <a
+                href={currentFileUrl}
+                download={currentFile}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <i className="fa fa-download"></i> Download Resume
               </a>
             )}

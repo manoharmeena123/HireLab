@@ -79,7 +79,7 @@ interface EmploymentData {
   start_from_month: string;
   worked_till_year?: string;
   worked_till_month?: string;
-  describe_job_profile: string;
+  // describe_job_profile: string;
 }
 
 interface EmploymentDataResponse {
@@ -92,9 +92,9 @@ interface EmploymentDataResponse {
 // education
 
 interface EducationData {
-  title: string;
+  // title: string;
   year: string;
-  description: string;
+  // description: string;
   education: string;
   course: string;
   university: string;
@@ -116,7 +116,7 @@ interface ProjectData {
   start_from_month: string;
   worked_till_year: string;
   worked_till_month: string;
-  detail_of_project: string;
+  // detail_of_project: string;
 }
 
 interface ProjectDataResponse {
@@ -189,7 +189,7 @@ interface ResumeItSkill {
   version: string;
   last_used: string;
   experience: string;
-  description: string;
+  // description: string;
 }
 
 interface ResumeItSkillResponse {
@@ -367,9 +367,8 @@ interface AboutUsResponse {
     status: string;
     created_at: string;
     updated_at: string;
-};
+  };
 }
-
 
 //privacy policy
 interface PrivacyPolicy {
@@ -477,7 +476,7 @@ interface SaveEvent {
 interface SaveEventResponse {
   code: number;
   success: boolean;
-  message :string;
+  message: string;
   data: any[];
 }
 
@@ -489,16 +488,15 @@ interface RemoveEvent {
 interface RemoveEventResponse {
   code: number;
   success: boolean;
-  message :string;
+  message: string;
   data: any[];
 }
-
 
 ///cv manager
 interface ResumeDataResponse {
   code: number;
   success: boolean;
-  message :string;
+  message: string;
   data: ResumeData[];
 }
 interface ResumeData {
@@ -507,7 +505,6 @@ interface ResumeData {
   address: string | null;
   resume: string;
 }
-
 
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
@@ -603,5 +600,5 @@ export {
   WritableSaveEventResponse,
   WritableRemoveEvent,
   WritableRemoveEventResponse,
-  WritableResumeDataResponse
+  WritableResumeDataResponse,
 };

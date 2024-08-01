@@ -12,7 +12,6 @@ interface PersonalDetailsProps {
   onShow: () => void;
   onHide: () => void;
 }
-
 const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   show,
   onShow,

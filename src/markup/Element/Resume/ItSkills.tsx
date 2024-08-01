@@ -7,6 +7,7 @@ import {
   useUpdateResumeItSkillsMutation
 } from '@/app/my-resume/store/resume.query';
 import { WritableResumeItSkill } from '@/app/my-resume/types/resume';
+import { toast } from 'react-toastify';
 
 interface ITSkillsProps {
   show: boolean;
@@ -24,7 +25,7 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
     version: '',
     last_used: '',
     experience: '',
-    description: ''
+    // description: ''
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -47,7 +48,7 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
     if (!skillData.version) newErrors.version = 'Version is required';
     if (!skillData.last_used) newErrors.last_used = 'Last used is required';
     if (!skillData.experience) newErrors.experience = 'Experience is required';
-    if (!skillData.description) newErrors.description = 'Description is required';
+    // if (!skillData.description) newErrors.description = 'Description is required';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -57,12 +58,16 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
 
     try {
       if (editMode && skillId !== null) {
-        await updateITSkill({ data: skillData, it_skill_id: skillId });
+        const response :any = await updateITSkill({ data: skillData, it_skill_id: skillId });
+        toast.success(response?.data.message, { theme: "colored" });
       } else {
-        await createITSkill(skillData);
+       const response =  await createITSkill(skillData);
+       toast.success(response?.data?.message, { theme: "colored" });
       }
       onHide();
-    } catch (error) {
+    } catch (error :any) {
+      toast.error(error?.message, { theme: "colored" });
+
       console.error('Failed to save IT skill', error);
     }
   };
@@ -90,8 +95,8 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
           </tr>
         </thead>
         <tbody>
-          {resumeData?.data[0]?.it_skills?.map((itSkill) => (
-            <tr key={itSkill.id}>
+          {resumeData?.data[0]?.it_skills?.map((itSkill :any, index:number) => (
+            <tr key={index}>
               <td>{itSkill.skill}</td>
               <td>{itSkill.version}</td>
               <td>{itSkill.last_used}</td>
@@ -106,7 +111,7 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
                       version: itSkill.version,
                       last_used: itSkill.last_used,
                       experience: itSkill.experience,
-                      description: itSkill.description
+                      // description: itSkill.description
                     });
                     setSkillId(itSkill.id);
                     setEditMode(true);
@@ -195,7 +200,7 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
                       {errors.experience && <div className="invalid-feedback">{errors.experience}</div>}
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Description</label>
                       <textarea
@@ -207,7 +212,7 @@ const ITSkills: React.FC<ITSkillsProps> = ({ show, onShow, onHide }) => {
                       ></textarea>
                       {errors.description && <div className="invalid-feedback">{errors.description}</div>}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </div>

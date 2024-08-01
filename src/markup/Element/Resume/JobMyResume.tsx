@@ -16,7 +16,10 @@ import DesiredCareerProfile from "./DesiredCareerProfile";
 import PersonalDetails from "./PersonalDetails";
 import AttachResume from "./AttachResume";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { useResumeProfileDataQuery } from "@/app/my-resume/store/resume.query";
+import {
+  useResumeProfileDataQuery,
+  useGetResumeDataQuery,
+} from "@/app/my-resume/store/resume.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 const bnr = require("@/images/banner/bnr1.jpg");
 const profileIcon = require("@/images/favicon.png");
@@ -36,7 +39,9 @@ const JobMyResume: React.FC = () => {
   const [showCareerProfile, setShowCareerProfile] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const { data: resumeProfileData } = useResumeProfileDataQuery();
-  console.log("resumeProfileData", resumeProfileData);
+  const { data: resumeData, isLoading } = useGetResumeDataQuery();
+
+
   return (
     <>
       <div className="page-content">
@@ -85,9 +90,11 @@ const JobMyResume: React.FC = () => {
                         <i className="fa fa-pencil"></i>
                       </Link>
                     </h4>
-                    <p className="m-b15">
-                      Freelance Senior PHP Developer at various agencies
-                    </p>
+                    {resumeData?.data.map((item: any, index: number) => (
+                      <p className="m-b15">
+                        {item?.headlines[0]?.description || "Not available"}
+                      </p>
+                    ))}
                     <ul className="clearfix">
                       <li>
                         <i className="ti-location-pin"></i> {user?.user.address}
@@ -189,11 +196,11 @@ const JobMyResume: React.FC = () => {
                     onShow={() => setShowProfileSummary(true)}
                     onHide={() => setShowProfileSummary(false)}
                   />
-                  <Accomplishments
+                  {/* <Accomplishments
                     show={showAccomplishments}
                     onShow={() => setShowAccomplishments(true)}
                     onHide={() => setShowAccomplishments(false)}
-                  />
+                  /> */}
                   <DesiredCareerProfile
                     show={showCareerProfile}
                     onShow={() => setShowCareerProfile(true)}

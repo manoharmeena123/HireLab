@@ -7,6 +7,7 @@ import {
   useUpdateResumeEmploymentMutation,
 } from "@/app/my-resume/store/resume.query";
 import { WritableEmploymentData } from "@/app/my-resume/types/resume";
+import { toast } from "react-toastify";
 
 interface EmploymentProps {
   show: boolean;
@@ -27,7 +28,7 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
     start_from_month: "",
     worked_till_year: "",
     worked_till_month: "",
-    describe_job_profile: "",
+    // describe_job_profile: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -46,7 +47,7 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
           start_from_month: existingEmployment.start_from_month,
           worked_till_year: existingEmployment.worked_till_year,
           worked_till_month: existingEmployment.worked_till_month,
-          describe_job_profile: existingEmployment.describe_job_profile,
+          // describe_job_profile: existingEmployment.describe_job_profile,
         });
         setEmploymentId(existingEmployment.id);
         setEditMode(true);
@@ -103,12 +104,19 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
 
     try {
       if (editMode && employmentId !== null) {
-        await updateEmployment({ data: employment, employment_id: employmentId });
+        const response = await updateEmployment({
+          data: employment,
+          employment_id: employmentId,
+        });
+        toast.success(response?.data?.message, { theme: "colored" });
       } else {
-        await createEmployment(employment);
+        const response = await createEmployment(employment);
+        toast.success(response?.data?.message, { theme: "colored" });
       }
       onHide();
-    } catch (error) {
+    } catch (error: any) {
+      toast.error(error?.message, { theme: "colored" });
+
       console.error("Error saving employment:", error);
     }
   };
@@ -117,7 +125,11 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
     <div id="employment_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
         <h5 className="m-b15">Employment</h5>
-        <Link href="" onClick={onShow} className="site-button add-btn button-sm">
+        <Link
+          href=""
+          onClick={onShow}
+          className="site-button add-btn button-sm"
+        >
           <i className="fa fa-pencil m-r5"></i> Edit
         </Link>
       </div>
@@ -131,11 +143,15 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
             {employment.start_from_month} {employment.start_from_year} to{" "}
             {employment.worked_till_month} {employment.worked_till_year}
           </p>
-          <p className="m-b0">{employment.describe_job_profile}</p>
+          {/* <p className="m-b0">{employment.describe_job_profile}</p> */}
         </>
       )}
 
-      <Modal show={show} onHide={onHide} className="modal fade modal-bx-info editor">
+      <Modal
+        show={show}
+        onHide={onHide}
+        className="modal fade modal-bx-info editor"
+      >
         <div className="modal-dialog my-0" role="document">
           <div className="modal-content">
             <div className="modal-header">
@@ -191,7 +207,10 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                               checked={employment.current_company === "yes"}
                               onChange={handleChange}
                             />
-                            <label className="custom-control-label" htmlFor="employ_yes">
+                            <label
+                              className="custom-control-label"
+                              htmlFor="employ_yes"
+                            >
                               Yes
                             </label>
                           </div>
@@ -207,7 +226,10 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                               checked={employment.current_company === "no"}
                               onChange={handleChange}
                             />
-                            <label className="custom-control-label" htmlFor="employ_no">
+                            <label
+                              className="custom-control-label"
+                              htmlFor="employ_no"
+                            >
                               No
                             </label>
                           </div>
@@ -341,7 +363,7 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Describe your Job Profile</label>
                       <textarea
@@ -352,7 +374,7 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                         placeholder="Type Description"
                       ></textarea>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </div>

@@ -6,6 +6,7 @@ import {
   useCreateResumeProjectMutation,
   useUpdateResumeProjectMutation,
 } from "@/app/my-resume/store/resume.query";
+import { toast } from "react-toastify";
 
 interface ProjectsProps {
   show: boolean;
@@ -22,7 +23,7 @@ interface ProjectData {
   start_from_month: string;
   worked_till_year: string;
   worked_till_month: string;
-  detail_of_project: string;
+  // detail_of_project: string;
 }
 
 const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
@@ -39,7 +40,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
     start_from_month: "",
     worked_till_year: "",
     worked_till_month: "",
-    detail_of_project: "",
+    // detail_of_project: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -59,7 +60,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
           start_from_month: existingProject.start_from_month,
           worked_till_year: existingProject.worked_till_year,
           worked_till_month: existingProject.worked_till_month,
-          detail_of_project: existingProject.detail_of_project,
+          // detail_of_project: existingProject.detail_of_project,
         });
         setProjectId(existingProject.id);
         setEditMode(true);
@@ -89,7 +90,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
       start_from_month,
       worked_till_year,
       worked_till_month,
-      detail_of_project,
+      // detail_of_project,
     } = project;
 
     const newErrors: string[] = [];
@@ -100,8 +101,8 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
       !client ||
       !project_status ||
       !start_from_year ||
-      !start_from_month ||
-      !detail_of_project
+      !start_from_month
+      // !detail_of_project
     ) {
       newErrors.push("All fields must be filled.");
     }
@@ -131,13 +132,21 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
 
   const handleSave = async () => {
     if (!validateForm()) return;
-
-    if (editMode && projectId !== null) {
-      await updateProject({ data: project, project_id: projectId });
-    } else {
-      await createProject(project);
+    try {
+      if (editMode && projectId !== null) {
+        const response = await updateProject({
+          data: project,
+          project_id: projectId,
+        });
+        toast.success(response?.data?.message, { theme: "colored" });
+      } else {
+        const response = await createProject(project);
+        toast.success(response?.data?.message, { theme: "colored" });
+      }
+      onHide();
+    } catch (error :any) {
+      toast.error(error?.message, { theme: "colored" });
     }
-    onHide();
   };
 
   return (
@@ -164,7 +173,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
               ? `${project.worked_till_month} ${project.worked_till_year}`
               : "Present"}
           </p>
-          <p className="m-b0">{project.detail_of_project}</p>
+          {/* <p className="m-b0">{project.detail_of_project}</p> */}
         </>
       )}
 
@@ -415,7 +424,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                     </>
                   )}
 
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Details of Project</label>
                       <textarea
@@ -426,7 +435,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                         placeholder="Type Description"
                       ></textarea>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </div>

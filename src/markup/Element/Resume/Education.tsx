@@ -7,6 +7,7 @@ import {
   useUpdateEducationMutation,
 } from "@/app/my-resume/store/resume.query";
 import { WritableEducationData } from "@/app/my-resume/types/resume";
+import { toast } from "react-toastify";
 
 interface EducationProps {
   show: boolean;
@@ -20,9 +21,9 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
   const [updateEducation] = useUpdateEducationMutation();
 
   const [education, setEducation] = useState<WritableEducationData>({
-    title: "",
+    // title: "",
     year: "",
-    description: "",
+    // description: "",
     education: "",
     course: "",
     university: "",
@@ -36,9 +37,9 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
       const existingEducation = resumeData.data[0].educations[0]; // Assuming single education entry for simplicity
       if (existingEducation) {
         setEducation({
-          title: existingEducation.title,
+          // title: existingEducation.title,
           year: existingEducation.year,
-          description: existingEducation.description,
+          // description: existingEducation.description,
           education: existingEducation.education,
           course: existingEducation.course,
           university: existingEducation.university,
@@ -62,19 +63,32 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
   };
 
   const handleSave = async () => {
-    if (editMode && educationId !== null) {
-      await updateEducation({ data: education, education_id: educationId });
-    } else {
-      await createEducation(education);
+    try {
+      if (editMode && educationId !== null) {
+        const response = await updateEducation({
+          data: education,
+          education_id: educationId,
+        });
+        toast.success(response?.data?.message, { theme: "colored" });
+      } else {
+        const response = await createEducation(education);
+        toast.success(response?.data?.message, { theme: "colored" });
+      }
+      onHide();
+    } catch (error: any) {
+      toast.error(error?.message, { theme: "colored" });
     }
-    onHide();
   };
 
   return (
     <div id="education_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
         <h5 className="m-b15">Education</h5>
-        <Link href="" onClick={onShow} className="site-button add-btn button-sm">
+        <Link
+          href=""
+          onClick={onShow}
+          className="site-button add-btn button-sm"
+        >
           <i className="fa fa-pencil m-r5"></i> Edit
         </Link>
       </div>
@@ -147,7 +161,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Title</label>
                       <input
@@ -159,7 +173,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                         placeholder="Enter Title"
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Year</label>
@@ -173,7 +187,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Description</label>
                       <textarea
@@ -184,7 +198,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                         placeholder="Type Description"
                       ></textarea>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </form>
             </div>
@@ -192,7 +206,11 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
               <button type="button" className="site-button" onClick={onHide}>
                 Cancel
               </button>
-              <button type="button" className="site-button" onClick={handleSave}>
+              <button
+                type="button"
+                className="site-button"
+                onClick={handleSave}
+              >
                 Save
               </button>
             </div>
@@ -202,13 +220,23 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
 
       <div className="row">
         <div className="col-lg-12 col-md-12 col-sm-12">
-          {resumeData?.data[0]?.educations.map((edu, index) => (
+          {resumeData?.data[0]?.educations.map((edu: any, index: number) => (
             <div key={index} className="clearfix m-b20">
-              <label className="m-b0">{edu.title}</label>
-              <span className="clearfix font-13">{edu.year}</span>
-              <p className="m-b0">Course : {edu.course}</p>
-              <p className="m-b0">University : {edu.university}</p>
-              <p className="m-b0">Description : {edu.description}</p>
+              {/* <label className="m-b0">{edu.title}</label> */}
+              <span className="clearfix font-17 d-flex">
+                {" "}
+                <b>Years :</b>
+                {edu.year}
+              </span>
+              <p className="m-b0 d-flex font-17">
+                <b>Course : </b>
+                {edu.course}
+              </p>
+              <p className="m-b0 d-flex font-17">
+                <b>University : </b>
+                {edu.university}
+              </p>
+              {/* <p className="m-b0">Description : {edu.description}</p> */}
             </div>
           ))}
         </div>

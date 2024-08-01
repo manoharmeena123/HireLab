@@ -6,6 +6,7 @@ import {
   useCreateProfileSummaryMutation,
   useUpdateProfileSummaryMutation,
 } from "@/app/my-resume/store/resume.query";
+import { toast } from "react-toastify";
 
 interface ProfileSummaryProps {
   show: boolean;
@@ -65,13 +66,21 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
 
   const handleSave = async () => {
     if (!validateForm()) return;
-
-    if (editMode && profileSummary.id) {
-      await updateProfileSummary({ data: profileSummary, profile_summary_id: profileSummary.id });
-    } else {
-      await createProfileSummary(profileSummary);
+    try {
+      if (editMode && profileSummary.id) {
+        const response = await updateProfileSummary({
+          data: profileSummary,
+          profile_summary_id: profileSummary.id,
+        });
+        toast.success(response?.data?.message, { theme: "colored" });
+      } else {
+        const response = await createProfileSummary(profileSummary);
+        toast.success(response?.data?.message, { theme: "colored" });
+      }
+      onHide();
+    } catch (error: any) {
+      toast.error(error?.message, { theme: "colored" });
     }
-    onHide();
   };
 
   return (
@@ -136,7 +145,11 @@ const ProfileSummary: React.FC<ProfileSummaryProps> = ({
               <button type="button" className="site-button" onClick={onHide}>
                 Cancel
               </button>
-              <button type="button" className="site-button" onClick={handleSave}>
+              <button
+                type="button"
+                className="site-button"
+                onClick={handleSave}
+              >
                 Save
               </button>
             </div>
