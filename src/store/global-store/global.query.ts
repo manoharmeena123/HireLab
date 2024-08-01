@@ -29,7 +29,9 @@ import {
   WritableBuyPassResponse,
   CreateCommentType,
   SettingResponse,
-  BannerResponse, // Ensure this line is included
+  BannerResponse,
+  SaveContactData,
+ SaveContactDataResponse
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -80,6 +82,7 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "PastEvents",
     "Banner",
     "Settings",
+    "SaveContacts"
   ],
 });
 
@@ -266,9 +269,15 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getPastEvents.query,
       providesTags: ["PastEvents"],
     }),
+  
     getBanner: builder.query<any, void>({
       query: queries.getBanner.query,
       providesTags: ["Banner"],
+    }),
+
+    postSaveContact: builder.mutation<SaveContactDataResponse, SaveContactData>({
+      query: (data) => queries.postSaveContact.query(data),
+      invalidatesTags: ["SaveContacts"],
     }),
   }),
 
@@ -318,6 +327,7 @@ export const {
   useGetUpComingEventsQuery,
   useGetPastEventsQuery,
   useGetSettingsQuery,
-  useGetBannerQuery,
+  useGetBannerQuery, 
+  usePostSaveContactMutation,
 } = globalApi;
 export default globalApi;
