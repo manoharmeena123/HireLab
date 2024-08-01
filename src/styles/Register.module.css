@@ -1,0 +1,83 @@
+.page-wraper {
+  width: 100% !important;
+  height: 100vh !important;
+}
+
+.browse-job {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.bg-img-fix {
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.form-title {
+  font-weight: 600 !important;
+}
+
+.lato-font {
+  font-family: "Lato", sans-serif !important;
+  letter-spacing: 0.03em !important;
+  margin: 0px !important;
+  width: 100% !important;
+}
+
+.lato-fonts {
+  font-family: "Lato", sans-serif !important;
+  letter-spacing: 0.03em !important;
+  width: 180% !important;
+}
+
+.rubik-font {
+  font-family: "Rubik", sans-serif !important;
+}
+
+.custom-checkbox {
+  appearance: none !important;
+  background-color: rgba(46, 85, 250, 0.1) !important;
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0 8px 0 0 !important;
+  border-radius: 4px !important;
+  position: relative !important;
+  cursor: pointer !important;
+}
+
+.custom-checkbox:checked {
+  background-color: #000 !important;
+}
+
+.custom-checkbox:checked::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 6px !important;
+  height: 12px !important;
+  border: solid #fff !important;
+  border-width: 0 2px 2px 0 !important;
+  transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+.text-danger {
+  color: red !important;
+}
+
+.create-div {
+  text-align: center !important !important;
+}
+
+.no-wrap {
+  white-space: nowrap !important;
+}
+
+.forgot-password-link {
+  color: #007bff !important;
+  text-decoration: none !important !important;
+  white-space: nowrap !important;
+  text-align: center !important !important;
+}

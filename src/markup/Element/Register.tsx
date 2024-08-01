@@ -14,7 +14,7 @@ import {
 } from "@/app/register/store/register.selectors";
 import { toast } from "react-toastify";
 import { navigateSource } from "@/lib/action";
-import styles from "./styles/Register.module.css";
+import styles from "@/styles/Register.module.css";
 import { RootState } from "@/store";
 
 const bnr = require("./../../images/background/bg6.jpg");
