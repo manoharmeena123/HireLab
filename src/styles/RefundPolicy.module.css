@@ -20,14 +20,12 @@
 
 .cardBody {
   padding: 2rem !important;
-  background-color: #f9f9f9 !important;
+  /* background-color: #f9f9f9 !important; */
   border-bottom-left-radius: 10px !important;
   border-bottom-right-radius: 10px !important;
 }
 
-.container {
-  margin-top: 0 !important;
-}
+
 
 .refundPolicy h1,
 .refundPolicy h2,

@@ -54,7 +54,7 @@ const RefundPolicy: React.FC = () => {
             </div>
           </div>
         )}
-        <Container className={styles.container}>
+        <div className="bg-light">
           <Row className="justify-content-center">
             <Col md={10}>
               <Card className="border-0">
@@ -78,7 +78,7 @@ const RefundPolicy: React.FC = () => {
               </Card>
             </Col>
           </Row>
-        </Container>
+        </div>
       </div>
     </>
   );

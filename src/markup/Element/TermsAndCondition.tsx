@@ -56,7 +56,7 @@ const TermsAndCondition: React.FC = () => {
             </div>
           </div>
         )}
-        <div className="container py-5 bg-light">
+        <div className="bg-light">
           <Row className="justify-content-center">
             <Col md={10}>
               <Card className="border-0">
