@@ -342,4 +342,12 @@ export const queries = {
       body: data,
     }),
   },
+
+  //api/cv-manager
+  getCvManager :{
+    query : () =>({
+      url : `api/cv-manager`,
+      method : "GET",
+    })
+  }
 };

@@ -43,6 +43,7 @@ import {
   WritableSaveEventResponse,
   WritableRemoveEvent,
   WritableRemoveEventResponse,
+  WritableResumeDataResponse,
 } from "../types/resume";
 
 const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
@@ -62,7 +63,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "SaveMemberShip",
     "SaveEvent",
     "MyEvents",
-    "RemoveEvent"
+    "RemoveEvent",
+    "CvManager",
   ],
 });
 
@@ -260,7 +262,7 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.aboutUsFaq.query,
       providesTags: ["AboutUsFAQ"],
     }),
-    PrivacyPolicy: builder.query<WritablePrivacyPolicyResponse, void>({
+    PrivacyPolicy: builder.query<any, void>({
       query: queries.PrivacyPolicy.query,
       providesTags: ["PrivacyPolicy"],
     }),
@@ -272,30 +274,46 @@ const resumeApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.serviceSection.query,
       providesTags: ["ServiceSection"],
     }),
-    rejectJobCandidate : builder.mutation<WritableRejectJobCandidateResponse,WritableRejectJobCandidate>({
-      query:(data) => queries.rejectJobCandidate.query(data),
+    rejectJobCandidate: builder.mutation<
+      WritableRejectJobCandidateResponse,
+      WritableRejectJobCandidate
+    >({
+      query: (data) => queries.rejectJobCandidate.query(data),
       invalidatesTags: ["RejectJobCandidate"],
     }),
-    acceptJobCandidate : builder.mutation<WritableAcceptJobCandidateResponse,WritableAcceptJobCandidate>({
-      query:(data) => queries.acceptJobCandidate.query(data),
+    acceptJobCandidate: builder.mutation<
+      WritableAcceptJobCandidateResponse,
+      WritableAcceptJobCandidate
+    >({
+      query: (data) => queries.acceptJobCandidate.query(data),
       invalidatesTags: ["AcceptJobCandidate"],
     }),
-    saveMemberShip : builder.mutation<WritableSaveMemberShipResponse,WritableSaveMemberShip>({
-      query:(data) => queries.saveMemberShip.query(data),
+    saveMemberShip: builder.mutation<
+      WritableSaveMemberShipResponse,
+      WritableSaveMemberShip
+    >({
+      query: (data) => queries.saveMemberShip.query(data),
       invalidatesTags: ["SaveMemberShip"],
     }),
-    saveEvent : builder.mutation<WritableSaveEventResponse,WritableSaveEvent>({
+    saveEvent: builder.mutation<WritableSaveEventResponse, WritableSaveEvent>({
       query: (data) => queries.saveEvent.query(data),
       invalidatesTags: ["SaveEvent"],
     }),
-    myEvents : builder.query<any,void>({
+    myEvents: builder.query<any, void>({
       query: queries.myEvents.query,
       providesTags: ["MyEvents"],
     }),
-    removeEvent :  builder.mutation<WritableRemoveEventResponse,WritableRemoveEvent>({
-      query :(data) => queries.removeEvent.query(data),
+    removeEvent: builder.mutation<
+      WritableRemoveEventResponse,
+      WritableRemoveEvent
+    >({
+      query: (data) => queries.removeEvent.query(data),
       invalidatesTags: ["RemoveEvent"],
-    })
+    }),
+    getCvManager: builder.query<WritableResumeDataResponse, void>({
+      query: queries.getCvManager.query,
+      providesTags: ["CvManager"],
+    }),
   }),
   overrideExisting: true,
 });
@@ -338,7 +356,8 @@ export const {
   useSaveMemberShipMutation,
   useSaveEventMutation,
   useMyEventsQuery,
-  useRemoveEventMutation
+  useRemoveEventMutation,
+  useGetCvManagerQuery,
 } = resumeApi;
 
 export default resumeApi;

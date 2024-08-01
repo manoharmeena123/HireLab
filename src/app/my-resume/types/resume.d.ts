@@ -355,8 +355,21 @@ interface AboutUsResponse {
   code: number;
   success: string;
   message: string;
-  data: AboutUs[];
+  data: {
+    id: number;
+    title: string;
+    heading: string;
+    description: string;
+    image: string | null;
+    bg_image: string | null;
+    meta_title: string | null;
+    meta_description: string | null;
+    status: string;
+    created_at: string;
+    updated_at: string;
+};
 }
+
 
 //privacy policy
 interface PrivacyPolicy {
@@ -400,7 +413,7 @@ interface TermsAndConditionResponse {
   code: number;
   success: string;
   message: string;
-  data: TermsAndCondition[];
+  data: TermsAndCondition;
 }
 
 //service
@@ -480,6 +493,22 @@ interface RemoveEventResponse {
   data: any[];
 }
 
+
+///cv manager
+interface ResumeDataResponse {
+  code: number;
+  success: boolean;
+  message :string;
+  data: ResumeData[];
+}
+interface ResumeData {
+  name: string;
+  created_at: string | null;
+  address: string | null;
+  resume: string;
+}
+
+
 type WritableResumeFetchResponse = WritableDraft<ResumeFetchResponse>;
 type WritableHeadlineData = WritableDraft<HeadlineData>;
 type WritableHeadlineDataResponse = WritableDraft<HeadlineDataResponse>;
@@ -529,6 +558,8 @@ type WritableSaveEvent = WritableDraft<SaveEvent>;
 type WritableSaveEventResponse = WritableDraft<SaveEventResponse>;
 type WritableRemoveEvent = WritableDraft<RemoveEvent>;
 type WritableRemoveEventResponse = WritableDraft<RemoveEventResponse>;
+type WritableResumeDataResponse = WritableDraft<ResumeDataResponse>;
+
 export {
   WritableResumeFetchResponse,
   WritableHeadlineData,
@@ -572,4 +603,5 @@ export {
   WritableSaveEventResponse,
   WritableRemoveEvent,
   WritableRemoveEventResponse,
+  WritableResumeDataResponse
 };

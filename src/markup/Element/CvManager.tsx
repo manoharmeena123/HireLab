@@ -10,6 +10,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import profileIcon from "../../images/favicon.png";
 import Image from "next/image";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import { useGetCvManagerQuery } from "@/app/my-resume/store/resume.query";
 
 const managerBlog = [
   {
@@ -44,7 +45,9 @@ const managerBlog = [
   },
 ];
 
-function CvManager() {
+const CvManager = () => {
+  const { data: cvManagerData } = useGetCvManagerQuery();
+  console.log("cvManagerData", cvManagerData);
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
@@ -164,11 +167,14 @@ function CvManager() {
                           </Link>
                         </li>
                         <li>
-                        <Link href={"/transaction"}>
-                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
+                          <Link href={"/transaction"}>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Transaction</span>
+                          </Link>
+                        </li>
                         <li>
                           <Link href="/" onClick={handleLogout}>
                             <i
@@ -273,5 +279,5 @@ function CvManager() {
       </div>
     </>
   );
-}
+};
 export default CvManager;

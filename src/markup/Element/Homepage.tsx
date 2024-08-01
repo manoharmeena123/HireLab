@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import IndexBanner from "./IndexBanner";
 import Jobcategories from "./Jobcategories";
-import Featureblog from "./Featureblog";
+import CtcSection from "./CtcSection";
 import RecentJobsection from "./RecentJobsection";
 import Owltestimonial from "./Owltestimonial";
 import LatestDiscussions from "./LatestDiscussions";
@@ -50,7 +50,7 @@ const Homepage = () => {
           <LatestDiscussions />
         </div>
 
-        <Featureblog />
+        <CtcSection />
         <RecentJobsection />
         <div
           className="section-full p-tb70 overlay-black-dark text-white text-center bg-img-fix"

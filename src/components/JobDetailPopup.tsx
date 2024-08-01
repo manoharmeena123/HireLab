@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import styles from "@/styles/JobDetailPopup.module.css";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { formaterDate } from "@/utils/formateDate";
 
 type JobDetailPopupType = {
   show: boolean;
@@ -28,9 +29,11 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
   const [likedJobs, setLikedJobs] = useState<string[]>([]);
-  const [applyJob, { isLoading: applyJobIsLoading }] = usePostApplyJobMutation();
+  const [applyJob, { isLoading: applyJobIsLoading }] =
+    usePostApplyJobMutation();
   const [loadingJobs, setLoadingJobs] = useState<string[]>([]);
   const { user } = useLoggedInUser();
+  console.log(job);
 
   const handleLikeToggle = async (jobId: string) => {
     if (isSaving || isDeleting) {
@@ -114,58 +117,55 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
   };
 
   // Sanitize the job description
-  const sanitizedDescription = DOMPurify.sanitize(job?.data?.job_description || "");
+  const sanitizedDescription = DOMPurify.sanitize(
+    job?.data?.job_description || ""
+  );
 
   return (
     <div className="container p-4">
       <div className="shadow p-4 rounded">
-        <div className="d-flex align-items-center mb-4">
-          <img
-            src={`https://c8.alamy.com/comp/H9674H/isolated-abstract-red-color-circular-sun-logo-round-shape-logotype-H9674H.jpg`}
-            alt="Company Logo"
-            width={80}
-            height={80}
-            className="mr-3 rounded-circle"
-          />
+        <div className="d-flex align-items-center mb-2">
           <div>
-            <h4 className="mb-0">{job?.data?.job_title}</h4>
-            <div className="text-muted">
-              <span style={{ fontWeight: "bold" }}>{job?.data?.company_name}</span> | <i className="fa fa-star text-warning"></i> 4.2 | 782 Reviews
-            </div>
-            <div className="d-flex flex-wrap text-muted mt-1">
-              <div className="mr-3">
-                <i className="fa fa-briefcase"></i> {job?.data?.total_experience} Years
-              </div>
-              <div className="mr-3">
-                <i className="fa fa-inr"></i> {job?.data?.salary || "Not Disclosed"}
-              </div>
-              <div>
-                <i className="fa fa-map-marker"></i> {job?.data?.address}
-              </div>
-            </div>
+            <h4 className="mb-0" style={{ textTransform: "capitalize" }}>
+              {job?.data?.job_title}
+            </h4>
+            <ul className="jd-top-list mt-2 flex-wrap">
+              <li>
+                <i className="fa fa-bookmark-o"></i>
+                {job?.data?.company_name}
+              </li>
+              <li>
+                <i className="fa fa-map-marker"></i>
+                {job?.data?.address}
+              </li>
+              <li>
+                <i className="fa fa-clock-o"></i> Published{" "}
+                {formaterDate(job?.data?.created_at)}
+              </li>
+            </ul>
           </div>
         </div>
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
           <div className="mt-3 mt-md-0">
             <Button
-              className="btn mr-2"
-              style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
+              className="btn mr-2 apply-saved-btn"
+              // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
               onClick={() => handleApplyJob(job?.data?.id.toString())}
               disabled={loadingJobs.includes(job?.data?.id.toString())}
             >
               {user ? "Apply Job" : "Login to apply"}
             </Button>
             <Button
-              className="btn btn-outline"
+              className="btn btn-outline apply-saved-btn"
               onClick={() => handleLikeToggle(job?.data?.id.toString())}
               style={{
                 backgroundColor: likedJobs.includes(job?.data?.id?.toString())
                   ? "#2A6310"
-                  : "transparent",
+                  : "",
                 borderColor: "#2A6310",
                 color: likedJobs.includes(job?.data?.id?.toString())
                   ? "#fff"
-                  : "#2A6310",
+                  : "",
               }}
             >
               {likedJobs.includes(job?.data?.id?.toString())
@@ -178,7 +178,7 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
           <h5>Job Posted By</h5>
           <div className="d-flex align-items-center">
             <i className="fa fa-user mr-2" style={{ color: "#2A6310" }}></i>
-            <span>{job?.data?.company_name}</span>
+            <span>{job?.data?.user?.name}</span>
           </div>
         </div>
         <div className="mb-4">
@@ -201,62 +201,69 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
             Connect Now
           </Button>
         </div>
-        <div className="mb-4">
-          <h5>Location</h5>
-          <div className="d-flex align-items-center">
-            <i
-              className="fa fa-map-marker mr-2"
-              style={{ color: "#2A6310" }}
-            ></i>
-            <span
-              className="badge badge-light p-2"
-              style={{ color: "#2A6310" }}
-            >
-              {job?.data?.location?.title || job?.data?.location}
-            </span>
+        <div className="d-flex jd-split-wrap">
+          <div className="mb-4">
+            <h5>Location</h5>
+            <div className="d-flex align-items-center">
+              <i
+                className="fa fa-map-marker mr-2"
+                style={{ color: "#2A6310" }}
+              ></i>
+              <span
+                className="badge badge-light p-2"
+                style={{ color: "#2A6310" }}
+              >
+                {/* {job?.data?.location?.title || job?.data?.location} */}
+                {job?.data?.address}
+
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="mb-4">
-          <h5>Experience</h5>
-          <div className="d-flex align-items-center">
-            <i
-              className="fa fa-briefcase mr-2"
-              style={{ color: "#2A6310" }}
-            ></i>
-            <span
-              className="badge badge-light p-2"
-              style={{ color: "#2A6310" }}
-            >
-              {job?.data?.total_experience} Years
-            </span>
+          <div className="mb-4">
+            <h5>Experience</h5>
+            <div className="d-flex align-items-center">
+              <i
+                className="fa fa-briefcase mr-2"
+                style={{ color: "#2A6310" }}
+              ></i>
+              <span
+                className="badge badge-light p-2"
+                style={{ color: "#2A6310" }}
+              >
+                {job?.data?.total_experience} Years
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="mb-4">
-          <h5>Job Type</h5>
-          <div className="d-flex align-items-center">
-            <i
-              className="fa fa-briefcase mr-2"
-              style={{ color: "#2A6310" }}
-            ></i>
-            <span
-              className="badge badge-light p-2"
-              style={{ color: "#2A6310" }}
-            >
-              {job?.data?.job_type?.title || "Full-time"}
-            </span>
+          <div className="mb-4">
+            <h5>Job Type</h5>
+            <div className="d-flex align-items-center">
+              <i
+                className="fa fa-briefcase mr-2"
+                style={{ color: "#2A6310" }}
+              ></i>
+              <span
+                className="badge badge-light p-2"
+                style={{ color: "#2A6310" }}
+              >
+                {job?.data?.job_type?.title || "Full-time"}
+              </span>
+            </div>
           </div>
-        </div>
-        <div className="mb-4">
-          <h5>Shift and Schedule</h5>
-          <div className="d-flex align-items-center">
-            <i className="fa fa-clock-o mr-2" style={{ color: "#2A6310" }}></i>
-            <span
-              className="badge badge-light p-2"
-              style={{ color: "#2A6310" }}
-            >
-              Rotational shift
-            </span>
-          </div>
+          {/* <div className="mb-4">
+            <h5>Shift and Schedule</h5>
+            <div className="d-flex align-items-center">
+              <i
+                className="fa fa-clock-o mr-2"
+                style={{ color: "#2A6310" }}
+              ></i>
+              <span
+                className="badge badge-light p-2"
+                style={{ color: "#2A6310" }}
+              >
+                Rotational shift
+              </span>
+            </div>
+          </div> */}
         </div>
         <div className="mb-4">
           <h5>Full Job Description</h5>
@@ -265,9 +272,13 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
             dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
           ></div>
         </div>
-        <div className="mb-4">
+        {/* key responsibility */}
+        {/* <div className="mb-4">
           <h5>Key Responsibilities</h5>
-          <ul className={styles.responsibilities}>
+          <ul
+            className={styles.responsibilities}
+            style={{ paddingLeft: "1rem" }}
+          >
             <li>Develop new user-facing features using React.js</li>
             <li>
               Build reusable components and front-end libraries for future use
@@ -279,10 +290,10 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
             </li>
             <li>Collaborate with other team members and stakeholders</li>
           </ul>
-        </div>
+        </div> */}
         <div className="mb-4">
           <h5>Requirements</h5>
-          <ul className={styles.requirements}>
+          <ul className={styles.requirements} style={{ paddingLeft: "1rem" }}>
             {requirements?.map((requirement: any, index: number) => (
               <li key={index}>{requirement}</li>
             ))}
@@ -291,33 +302,27 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
         {job?.data?.education?.name && (
           <div className="mb-4">
             <h5>Education</h5>
-            <ul className={styles.education}>
+            <ul className={styles.education} style={{ paddingLeft: "1rem" }}>
               <li>{job?.data?.education?.name}</li>
-            </ul>
-          </div>
-        )}
-        {job?.data?.location?.title && (
-          <div className="mb-4">
-            <h5>Job Type</h5>
-            <ul className={styles.jobType}>
-              <li>{job?.data?.location?.title}</li>
             </ul>
           </div>
         )}
         {job?.data?.city && (
           <div className="mb-4">
             <h5>Job Location</h5>
-            <ul className={styles.jobLocation}>
+            <ul className={styles.jobLocation} style={{ paddingLeft: "1rem" }}>
               <li>{job?.data?.city}</li>
             </ul>
           </div>
         )}
-        <div className="mb-4">
-          <h5>Shift and Schedule</h5>
-          <ul className={styles.shiftSchedule}>
-            <li>Rotational shift</li>
-          </ul>
-        </div>
+        {job?.data?.ctc && (
+          <div className="mb-4">
+            <h5>CTC</h5>
+            <ul className={styles.jobLocation} style={{ paddingLeft: "1rem" }}>
+              <li>{job?.data?.ctc} LPA</li>
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );

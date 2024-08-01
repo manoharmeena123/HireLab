@@ -12,15 +12,11 @@ const Footer = () => {
               <div className="widget">
                 <div className="d-flex align-items-center">
                   <img
-                    src={
-                      require("./../../images/hiralablogo.png")
-                        .default.src
-                    }
+                    src={require("./../../images/hiralablogo.png").default.src}
                     style={{ width: "60px", height: "67px" }}
                     className="m-b15 mr-1"
                     alt=""
                   />
-				  
                 </div>
                 <p className="text-capitalize m-b20">
                   Lorem Ipsum is simply dummy text of the printing and
@@ -101,7 +97,7 @@ const Footer = () => {
             </div>
             <div className="col-xl-6 col-lg-5 col-md-8 col-sm-8 col-12 d-flex gap-2">
               <div className="widget border-0 w-100">
-                <h5 className="m-b30 text-white">Pages</h5>
+                <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 list-line d-flex flex-column">
                   <li>
                     <Link href={"/"}>Home</Link>
@@ -109,20 +105,9 @@ const Footer = () => {
                   <li>
                     <Link href={"/about-us"}>About Us</Link>
                   </li>
+
                   <li>
-                  <Link href={"/contact-us"}>Contact Us</Link>
-                  </li>
-                  <li>
-                  <Link href={"/job-seeker-faq"}>Job Seeker FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/monthly-meetup-faq"}>Monthly Meetup FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/general-question-faq"}>General Question FAQ</Link>
-                  </li>
-                  <li>
-                  <Link href={"/about-us-faq"}>About Us FAQ</Link>
+                    <Link href={"/faq-sections"}>FAQs</Link>
                   </li>
                 </ul>
               </div>
@@ -130,44 +115,32 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 list-line d-flex flex-column">
                   <li>
-                    <Link href={""}>Privacy & Securty</Link>
+                    <Link href={"/contact-us"}>Contact</Link>
                   </li>
                   <li>
-                    <Link href={""}>Terms of Serice</Link>
+                    <Link href={"/privacy-policy"}>Privacy</Link>
                   </li>
                   <li>
-                    <Link href={""}>Referral Terms</Link>
+                    <Link href={"/terms-conditions"}>Terms and Conditions</Link>
+                  </li>
+                  {/* <li>
+                    <Link href={"/referral"}>Referral Terms</Link>
                   </li>
                   <li>
-                    <Link href={""}>Support</Link>
-                  </li>
-                  <li>
-                    <Link href={"/refund-policy"}>Refund Policy</Link>
-                  </li>
+                    <Link href={"/support"}>Support</Link>
+                  </li> */}
                 </ul>
               </div>
             </div>
             <div className="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-12">
               <div className="widget border-0">
-                <h5 className="m-b30 text-white">Find Jobs</h5>
+                <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 w10 list-line">
                   <li>
-                    <Link href={""}>US Jobs</Link>
+                    <Link href={"/grievances"}>Grievances</Link>
                   </li>
                   <li>
-                    <Link href={""}>Canada Jobs</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>UK Jobs</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>Emplois en Fnce</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>Jobs in Deuts</Link>
-                  </li>
-                  <li>
-                    <Link href={""}>Vacatures China</Link>
+                    <Link href={"/refund-policy"}>Refund Policy</Link>
                   </li>
                 </ul>
               </div>

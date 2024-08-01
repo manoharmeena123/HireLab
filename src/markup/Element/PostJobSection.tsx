@@ -173,15 +173,17 @@ const PostJobSection = () => {
         toast.success(response?.message, { theme: "colored" });
         router.push("/manage-job");
       } else if (response.code === 401) {
-        toast.error(response.message, { theme: "colored" });
+        toast.error(response?.message, { theme: "colored" });
       } else if (response.code === 404) {
+        console.error("Error posting job:", response);
+        toast.error(response?.message, { theme: "colored" });
         dispatch(setPostJobErrors(response.errors));
       } else {
         console.error("Unexpected error format:", response);
       }
     } catch (err :any) {
       console.error("Error posting job:", err);
-      toast.success(err?.message, { theme: "colored" });
+      toast.error(err?.message, { theme: "colored" });
     }
   };
 
@@ -372,12 +374,19 @@ const PostJobSection = () => {
                       </div>
                     </div>
                     <ul>
+                      
                       <li>
                         <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
                           <span>{user?.user?.name} Profile</span>
                         </Link>
                       </li>
+                      <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                          </Link>
+                        </li>
                       <li>
                         <Link className="active" href="/post-job">
                           <i
@@ -399,12 +408,7 @@ const PostJobSection = () => {
                           <span>Manage Jobs</span>
                         </Link>
                       </li>
-                      <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
+                      
                       <li>
                         <Link href="/" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
