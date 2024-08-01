@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -21,7 +22,6 @@ import ModalPopup from "../../components/ModalPopup";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
-import { useRouter } from "next/navigation";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import Loading from "@/components/Loading";
@@ -31,6 +31,8 @@ import Pagination from "./Pagination";
 
 const ManageJobs = () => {
   const { push } = useRouter();
+  const router = useRouter();
+
   const {
     data: jobsData,
     error: jobsError,
@@ -48,9 +50,9 @@ const ManageJobs = () => {
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [show, setShow] = useState(false);
   const [applshow, setApplshow] = useState(false);
-  const [applicationviewid, setApplicationviewid] = useState<
-    any | undefined
-  >(undefined);
+  const [applicationviewid, setApplicationviewid] = useState<any | undefined>(
+    undefined
+  );
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -133,15 +135,35 @@ const ManageJobs = () => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
-
   if (jobsLoading) {
     <Loading />;
   }
@@ -160,8 +182,8 @@ const ManageJobs = () => {
     getJobUser(jobId);
   };
 
-  const handleAcceptApplication = async (item :any) => {
-    console.log('item', item)
+  const handleAcceptApplication = async (item: any) => {
+    console.log("item", item);
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to accept this application?",
@@ -274,7 +296,6 @@ const ManageJobs = () => {
                         </div>
                       </div>
                       <ul>
-                      
                         <li>
                           <Link href="/job-poster">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
@@ -311,9 +332,9 @@ const ManageJobs = () => {
                             <span>Manage Jobs</span>
                           </Link>
                         </li>
-                        
+
                         <li>
-                          <Link href="/" onClick={handleLogout}>
+                          <Link href="#" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"
@@ -336,23 +357,17 @@ const ManageJobs = () => {
                   <div className="col-xl-9 col-lg-8 m-b30">
                     <div className="job-bx browse-job clearfix">
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          <h5 className="font-weight-700 pull-left text-uppercase">
                           Manage jobs
-                        </h5>
-                        {/* <div className="float-right">
-                          <span className="select-title">
-                            Sort by freshness
-                          </span>
-                          <select className="custom-btn">
-                            <option>All</option>
-                            <option>None</option>
-                            <option>Read</option>
-                            <option>Unread</option>
-                            <option>Starred</option>
-                            <option>Unstarred</option>
-                          </select>
-                        </div> */}
-                      </div>
+                          </h5>
+                          <button
+                            onClick={() => router.back()}
+                            className="site-button right-arrow button-sm float-right"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                          >
+                            Back
+                          </button>
+                        </div>
 
                       <table className="table-job-bx cv-manager company-manage-job">
                         <thead>
@@ -622,9 +637,7 @@ const ManageJobs = () => {
                               <div className="col-8 d-flex application-btns-wrap">
                                 <Button
                                   variant="success"
-                                  onClick={() =>
-                                    handleAcceptApplication(item)
-                                  }
+                                  onClick={() => handleAcceptApplication(item)}
                                 >
                                   ACCEPT
                                 </Button>

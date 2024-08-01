@@ -39,12 +39,12 @@ const JobPosterSection = () => {
 
   const handleLogout = async () => {
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will be logged out of your account.',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, log out!',
-      cancelButtonText: 'No, stay logged in'
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
     });
 
     if (result.isConfirmed) {
@@ -52,10 +52,18 @@ const JobPosterSection = () => {
         await logout().unwrap();
         removeToken();
         navigateSource("/");
-        Swal.fire('Logged out!', 'You have been logged out successfully.', 'success');
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
       } catch (error) {
         console.error("Logout failed:", error);
-        Swal.fire('Logout failed', 'Failed to log out. Please try again.', 'error');
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
       }
     }
   };
@@ -102,22 +110,22 @@ const JobPosterSection = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: 'You are about to update your profile.',
-      icon: 'warning',
+      title: "Are you sure?",
+      text: "You are about to update your profile.",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: 'Yes, update it!',
-      cancelButtonText: 'No, cancel'
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel",
     });
 
     if (result.isConfirmed) {
       try {
         const response = await updateProfile(profileData).unwrap();
         Swal.fire({
-          icon: 'success',
-          title: 'Profile Updated',
+          icon: "success",
+          title: "Profile Updated",
           text: response?.message,
         });
         refetch();
@@ -125,14 +133,13 @@ const JobPosterSection = () => {
       } catch (error: any) {
         console.error("Failed to update profile", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Update Failed',
+          icon: "error",
+          title: "Update Failed",
           text: error?.message,
         });
       }
     }
   };
-
 
   // const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
   //   const selectedCategoryId = (selectedOption as OptionType)?.id || null;
@@ -304,12 +311,13 @@ const JobPosterSection = () => {
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         {user?.user?.name}'s Profile
                       </h5>
-                      <Link
-                        href={"/company-profile"}
+                      <button
+                        onClick={() => router.back()}
                         className="site-button right-arrow button-sm float-right"
+                        style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                       >
                         Back
-                      </Link>
+                      </button>
                     </div>
                     <form onSubmit={handleSubmit}>
                       <div className="row m-b30">

@@ -39,6 +39,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import Swal from "sweetalert2";
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -167,29 +168,58 @@ const PostJobSection = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await postJob(profileData).unwrap();
-      if (response.code === 200) {
-        toast.success(response?.message, { theme: "colored" });
-        router.push("/manage-job");
-      } else if (response.code === 401) {
-        toast.error(response?.message, { theme: "colored" });
-      } else if (response.code === 404) {
-        console.error("Error posting job:", response);
-        toast.error(response?.message, { theme: "colored" });
-        dispatch(setPostJobErrors(response.errors));
-      } else {
-        console.error("Unexpected error format:", response);
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to post this job.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, post it!",
+      cancelButtonText: "No, cancel",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await postJob(profileData).unwrap();
+        if (response.code === 200) {
+          Swal.fire({
+            icon: "success",
+            title: "Job Posted",
+            text: response?.message,
+          });
+          router.push("/manage-job");
+        } else if (response.code === 401) {
+          Swal.fire({
+            icon: "error",
+            title: "Unauthorized",
+            text: response?.message,
+          });
+        } else if (response.code === 404) {
+          console.error("Error posting job:", response);
+          Swal.fire({
+            icon: "error",
+            title: "Not Found",
+            text: response?.message,
+          });
+          dispatch(setPostJobErrors(response.errors));
+        } else {
+          console.error("Unexpected error format:", response);
+        }
+      } catch (err: any) {
+        console.error("Error posting job:", err);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: err?.message,
+        });
       }
-    } catch (err :any) {
-      console.error("Error posting job:", err);
-      toast.error(err?.message, { theme: "colored" });
     }
   };
 
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [jobDescription, setJobDescription] = useState<string>("");
+  const [candidateRequirement, setCandidateRequirement] = useState<string>("");
 
   const handleInputSelectChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -286,12 +316,33 @@ const PostJobSection = () => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
 
@@ -374,7 +425,6 @@ const PostJobSection = () => {
                       </div>
                     </div>
                     <ul>
-                      
                       <li>
                         <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
@@ -382,11 +432,11 @@ const PostJobSection = () => {
                         </Link>
                       </li>
                       <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
+                        <Link href="/dashboard-section">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          <span>Dashboard</span>
+                        </Link>
+                      </li>
                       <li>
                         <Link className="active" href="/post-job">
                           <i
@@ -408,9 +458,9 @@ const PostJobSection = () => {
                           <span>Manage Jobs</span>
                         </Link>
                       </li>
-                      
+
                       <li>
-                        <Link href="/" onClick={handleLogout}>
+                        <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
                         </Link>
@@ -425,13 +475,13 @@ const PostJobSection = () => {
                     <h5 className="font-weight-700 pull-left text-uppercase">
                       Post A Job
                     </h5>
-                    <Link
-                      href={"/company-profile"}
+                    <button
+                      onClick={() => router.back()}
                       className="site-button right-arrow button-sm float-right"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
                       Back
-                    </Link>
+                    </button>
                   </div>
                   <form
                     method="post"
@@ -529,26 +579,7 @@ const PostJobSection = () => {
                           {errors?.job_type?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Tags</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            <div className="tags-container">
-                              <ReactTagInput
-                                tags={tags}
-                                onChange={(newTags: any) => setTags(newTags)}
-                                placeholder="Type tags and press Enter"
-                              />
-                            </div>
-                          </div>
-                          <span className="text-red-500 text-danger">
-                            {errors?.tags?.[0]}
-                          </span>
-                        </div>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Location</label>
@@ -587,21 +618,7 @@ const PostJobSection = () => {
                           {errors?.location?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Office Address/Landmark</label>
-                          <input
-                            type="text"
-                            name="address"
-                            onChange={handleInputChange}
-                            placeholder="Enter a address"
-                            className="form-control tags_input"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.address?.[0]}
-                        </span>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Compensation</label>
@@ -740,21 +757,7 @@ const PostJobSection = () => {
                           {errors?.joining_fee?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Candidate Requirement</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="candidate_requirement"
-                            placeholder="Requirement"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.candidate_requirement?.[0]}
-                        </span>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Maximum Education</label>
@@ -847,7 +850,27 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
-                          <label>Ctc</label>
+                          <label>Tags</label>
+                          <div
+                            className="job-time d-flex flex-wrap mr-auto"
+                            style={{ gap: "1rem" }}
+                          >
+                            <div className="tags-container">
+                              <ReactTagInput
+                                tags={tags}
+                                onChange={(newTags: any) => setTags(newTags)}
+                                placeholder="Type tags and press Enter"
+                              />
+                            </div>
+                          </div>
+                          <span className="text-red-500 text-danger">
+                            {errors?.tags?.[0]}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>CTC</label>
                           <Select
                             value={selectedSalary}
                             onChange={handleSelectChange}
@@ -856,7 +879,7 @@ const PostJobSection = () => {
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.salary?.[0]}
+                          {errors?.ctc?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -875,17 +898,36 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
-                          <label>Salary</label>
+                          <label>Office Address/Landmark</label>
                           <input
-                            type="number"
-                            className="form-control"
-                            name="salary"
-                            placeholder="Enter salary in rupee"
+                            type="text"
+                            name="address"
                             onChange={handleInputChange}
+                            placeholder="Enter a address"
+                            className="form-control tags_input"
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.salary?.[0]}
+                          {errors?.address?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>Candidate Requirement</label>
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={candidateRequirement}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setCandidateRequirement(data);
+                              dispatch(
+                                setPostJobData({ candidate_requirement: data })
+                              );
+                            }}
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.candidate_requirement?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -913,7 +955,7 @@ const PostJobSection = () => {
                       className="site-button m-b30"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
-                      {isLoading ? "Loading..." : "Upload"}
+                      {isLoading ? "Loading..." : "Post a Job"}
                     </button>
                   </form>
                 </div>

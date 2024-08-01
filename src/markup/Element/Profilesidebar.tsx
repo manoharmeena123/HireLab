@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import Swal from "sweetalert2";
 
 const Profilesidebar = ({ refetch }: any) => {
   const router = useRouter();
@@ -61,16 +62,33 @@ const Profilesidebar = ({ refetch }: any) => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      const response = await logout().unwrap();
-      if (response?.code === 200) {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
         removeToken();
-        router.push("/");
-      } else {
-        throw new Error("Logout failed");
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
       }
-    } catch (error: any) {
-      toast.error("Logout failed: " + error.message);
     }
   };
 
@@ -84,29 +102,29 @@ const Profilesidebar = ({ refetch }: any) => {
         <div className="candidate-info">
           <div className="candidate-detail text-center">
             <div className="canditate-des">
-                {user?.user?.image ? (
-                  <Image
-                    src={`${IMAGE_URL + user?.user?.image}`}
-                    alt="profile picture"
-                    width={300}
-                    height={300}
-                    onError={(e) =>
-                      (e.currentTarget.src = "../../images/favicon.png")
-                    } // Fallback image
-                    style={{ borderRadius: "50%" }}
-                  />
-                ) : (
-                  <Image
-                    src={profileIcon}
-                    alt="profile picture"
-                    width={300}
-                    height={300}
-                    onError={(e) =>
-                      (e.currentTarget.src = "../../images/favicon.png")
-                    } // Fallback image
-                    style={{ borderRadius: "50%" }}
-                  />
-                )}
+              {user?.user?.image ? (
+                <Image
+                  src={`${IMAGE_URL + user?.user?.image}`}
+                  alt="profile picture"
+                  width={300}
+                  height={300}
+                  onError={(e) =>
+                    (e.currentTarget.src = "../../images/favicon.png")
+                  } // Fallback image
+                  style={{ borderRadius: "50%" }}
+                />
+              ) : (
+                <Image
+                  src={profileIcon}
+                  alt="profile picture"
+                  width={300}
+                  height={300}
+                  onError={(e) =>
+                    (e.currentTarget.src = "../../images/favicon.png")
+                  } // Fallback image
+                  style={{ borderRadius: "50%" }}
+                />
+              )}
             </div>
             <div className="candidate-title">
               <div className="">
@@ -157,13 +175,13 @@ const Profilesidebar = ({ refetch }: any) => {
               </Link>
             </li>
             <li>
-                        <Link href={"/transaction"}>
-                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
+              <Link href={"/transaction"}>
+                <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                <span>Transaction</span>
+              </Link>
+            </li>
             <li>
-              <Link href={"./"} onClick={handleLogout}>
+              <Link href={"#"} onClick={handleLogout}>
                 <i className="fa fa-sign-out" aria-hidden="true"></i>
                 <span>Log Out</span>
               </Link>

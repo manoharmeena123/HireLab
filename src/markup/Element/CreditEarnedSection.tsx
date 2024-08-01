@@ -2,14 +2,17 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Modal } from "react-bootstrap";
+import { useRouter } from 'next/navigation'
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
+import Swal from "sweetalert2";
 
 const CreditEarned = () => {
+  const router = useRouter();
   const { user, refetch } = useLoggedInUser();
   const { removeToken } = useAuthToken();
   const [company, setCompany] = useState<boolean>(false);
@@ -86,12 +89,33 @@ const CreditEarned = () => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
   return (
@@ -168,7 +192,7 @@ const CreditEarned = () => {
                         </li>
                         
                         <li>
-                          <Link href="/" onClick={handleLogout}>
+                          <Link href="#" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"
@@ -187,15 +211,13 @@ const CreditEarned = () => {
                         CREDIT EARNED
                       </h5>
                       <div className="float-right">
-                        <span className="select-title">Sort by freshness</span>
-                        <select className="custom-btn">
-                          <option>All</option>
-                          <option>None</option>
-                          <option>Read</option>
-                          <option>Unread</option>
-                          <option>Starred</option>
-                          <option>Unstarred</option>
-                        </select>
+                      <button
+                      onClick={() => router.back()}
+                      className="site-button right-arrow button-sm float-right"
+                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                    >
+                      Back
+                    </button>
                       </div>
                     </div>
                     <div>

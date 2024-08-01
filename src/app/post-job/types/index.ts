@@ -14,7 +14,6 @@ export interface PostJobType {
   maximum_education: string;
   total_experience: string;
   job_description: string;
-  salary: string;
   ctc: string;
   tags: string;
   sector: string;
@@ -36,7 +35,6 @@ export interface UpdatePostJobType {
   maximum_education: string;
   total_experience: string;
   job_description: string;
-  salary: string;
   ctc: string;
   tags: string;
   sector: string;
@@ -64,7 +62,6 @@ export interface PostJobResponse {
     job_description: string;
     updated_at: string;
     created_at: string;
-    salary: string;
     ctc: string;
     tags: string;
     id: number;
@@ -87,7 +84,6 @@ export interface PostJobState {
   maximum_education: string;
   total_experience: string;
   job_description: string;
-  salary: string;
   ctc: string;
   tags: string;
   sector: string;
