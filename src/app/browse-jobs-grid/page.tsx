@@ -4,14 +4,11 @@ import Loading from "@/components/Loading";
 
 const BrowseJobGrid = dynamic(() => import("@/markup/Element/BrowseJobGrid"), {
   ssr: false,
+  loading: () => <Loading />,
 });
 
 const BrowseJobGridPage = () => {
-  return (
-    <Suspense fallback={<Loading />}>
-      <BrowseJobGrid />
-    </Suspense>
-  );
+  return <BrowseJobGrid />;
 };
 
 export default BrowseJobGridPage;
