@@ -261,3 +261,29 @@ export const selectBannerError = createSelector(
   selectBannerState,
   (bannerState) => bannerState.error
 );
+
+
+// Save Contact Selectors
+export const selectSaveContactState = createSelector(
+  selectGlobalState,
+  (globalState) => ({
+    saveContact: globalState.saveContact,
+    loading: globalState.saveContactLoading,
+    error: globalState.saveContactError,
+  })
+);
+
+export const selectSaveContact = createSelector(
+  selectSaveContactState,
+  (saveContactState) => saveContactState.saveContact
+);
+
+export const selectSaveContactLoading = createSelector(
+  selectSaveContactState,
+  (saveContactState) => saveContactState.loading
+);
+
+export const selectSaveContactError = createSelector(
+  selectSaveContactState,
+  (saveContactState) => saveContactState.error
+);

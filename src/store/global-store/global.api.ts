@@ -4,6 +4,7 @@ import {
   SaveJobData,
   WritableBuyPassData,
   CreateCommentType,
+  SaveContactData,
 } from "@/types/index";
 
 export const queries = {
@@ -341,4 +342,14 @@ export const queries = {
       body: commentData,
     }),
   },
+
+  postSaveContact: {
+    query: (data: SaveContactData) => ({
+      url: "api/save-contact",
+      method: "POST",
+      body: data,
+    }),
+  },
+
+
 };

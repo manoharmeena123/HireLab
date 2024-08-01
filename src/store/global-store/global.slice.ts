@@ -3,7 +3,8 @@ import { BlogsState, BlogResponse, EventsState, EventResponse, SectorState, Rece
    WritableRecentJobResponse, SectorResponse,ApplyJobState,ApplyJobResponse,SaveJobDataState,SaveJobDataResponse,
    WritableBuyPassState, 
    WritableBuyPassResponse,SettingState, // Correct type name
-   SettingResponse ,BannerState, BannerResponse} from '@/types/index';
+   SettingResponse ,BannerState, BannerResponse, SaveContactDataState,
+   SaveContactDataResponse} from '@/types/index';
 
 // Define initial states for both blogs and events
 const initialBlogsState: BlogsState = {
@@ -66,6 +67,12 @@ const initialBannerState: BannerState = {
   error: null,
 };
 
+const initialSaveContactState: SaveContactDataState = {
+  saveContact: [],
+  saveContactLoading: false,
+  saveContactError: null,
+};
+
 const globalSlice = createSlice({
   name: 'global',
   initialState: {
@@ -79,6 +86,7 @@ const globalSlice = createSlice({
     ...initialBuyPassState,
     ...initialSettingState,
     ...initialBannerState,
+    ...initialSaveContactState,
   },
   reducers: {
     // Reducers for managing blogs state
@@ -219,6 +227,20 @@ const globalSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+   // Reducers for saveContact state
+   fetchSaveContactStart: (state) => {
+    state.saveContactLoading = true;
+    state.saveContactError = null;
+  },
+  fetchSaveContactSuccess: (state, action: PayloadAction<SaveContactDataResponse>) => {
+    state.saveContact = action.payload.data;
+    state.saveContactLoading = false;
+  },
+  fetchSaveContactFailure: (state, action: PayloadAction<string>) => {
+    state.saveContactLoading = false;
+    state.saveContactError = action.payload;
+  },
+    
 
   },
 });
@@ -251,6 +273,9 @@ export const {
   fetchBannerStart,
   fetchBannerSuccess,
   fetchBannerFailure,
+  fetchSaveContactStart,
+  fetchSaveContactSuccess,
+  fetchSaveContactFailure,
 } = globalSlice.actions;
 
 export const globalEventReducer = globalSlice.reducer;

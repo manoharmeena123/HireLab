@@ -3,15 +3,15 @@ import { Suspense } from "react";
 import Loading from "@/components/Loading";
 
 const ContactUsSectionSection = dynamic(
-  () => import("@/markup/Element/ContactUsSection"),
-  {
-    ssr: false,
-    loading: () => <Loading />,
-  }
+() => import("@/markup/Element/ContactUsSection"),
+{
+ssr: false,
+loading: () => <Loading />,
+}
 );
 
 const ContactUsSectionPage = () => {
-  return <ContactUsSectionSection />;
+return <ContactUsSectionSection />;
 };
 
 export default ContactUsSectionPage;

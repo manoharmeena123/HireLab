@@ -10,6 +10,8 @@ export * from "./post-job";
 export * from "./buypass";
 export * from "./comment";
 export * from "./get-setting";
+export * from "./banner";  
+export * from "./save-contact";
 export * from "./banner";
 export * from "./service";
 export * from "./faq";
