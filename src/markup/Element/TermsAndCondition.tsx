@@ -1,121 +1,88 @@
 "use client";
 import React from "react";
 import { useTermsAndConditionQuery } from "@/app/my-resume/store/resume.query";
+import { Container, Row, Col, Card, Alert } from "react-bootstrap";
 import Loading from "@/components/Loading";
+import parse from "html-react-parser";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
+import styles from "@/styles/TermsAndCondition.module.css";
+import Link from "next/link";
 
 const TermsAndCondition: React.FC = () => {
-  const { data: termsAndCondition, isLoading: termsAndConditionLoading } =
-    useTermsAndConditionQuery();
-  console.log("termsAndCondition", termsAndCondition);
+  const { data: termsAndCondition, isLoading, isError } = useTermsAndConditionQuery();
 
-  if (!termsAndCondition) return null;
+  if (isError) {
+    return (
+      <Alert variant="danger">
+        Failed to load terms and conditions content. Please try again later.
+      </Alert>
+    );
+  }
 
-  const { title, heading, description } = termsAndCondition.data;
-
-  // Function to dynamically create sections with appropriate tags
-  const createSectionsFromDescription = (htmlContent: string) => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(htmlContent, "text/html");
-    const sections :any = [];
-
-    doc.body.childNodes.forEach((node : any, index : any) => {
-      if (node.nodeType === 1) { // Element node
-        if (node.tagName === "P" && node.querySelector("strong")) {
-          sections.push(
-            <h3 key={index} className="mt-4">
-              {node.textContent}
-            </h3>
-          );
-        } else if (node.tagName === "UL" || node.tagName === "OL") {
-          sections.push(
-            <div key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
-          );
-        } else if (node.tagName === "LI" && node.querySelector("strong")) {
-          sections.push(
-            <div key={index} className="mb-2">
-              <strong>{node.textContent}</strong>
-            </div>
-          );
-        } else {
-          sections.push(
-            <p key={index} dangerouslySetInnerHTML={{ __html: node.outerHTML }} />
-          );
-        }
-      }
-    });
-
-    return sections;
+  const formatContent = (content: string) => {
+    // Replace <p><strong> tags with <h4> for headings
+    content = content.replace(
+      /<p><strong>(.*?)<\/strong><\/p>/g,
+      "<h4>$1</h4>"
+    );
+    return parse(content);
   };
 
   return (
     <>
-      {termsAndConditionLoading && <Loading />}
-      <div className="terms-conditions-section py-5 bg-light">
-        <div className="container">
-          <div className="section-head text-center mb-5">
-            <h1 className="font-weight-bold">{title}</h1>
-          </div>
-          <div className="terms-conditions-content bg-white p-5 shadow-sm rounded">
-            <div
-              className="terms-conditions-heading mb-4"
-              dangerouslySetInnerHTML={{ __html: heading }}
-            />
-            <div className="terms-conditions-description">
-              {createSectionsFromDescription(description)}
+      {isLoading && <Loading />}
+      <div className={styles.termsAndCondition}>
+        {termsAndCondition?.data?.image && (
+          <div
+            className={`dez-bnr-inr overlay-black-middle ${styles.topImage}`}
+            style={{
+              backgroundImage: `url(${IMAGE_URL + termsAndCondition.data.image})`,
+            }}
+          >
+            <div className="container">
+              <div className="dez-bnr-inr-entry">
+                <h1 className={styles.bannerTitle}>
+                  {termsAndCondition?.data?.title}
+                </h1>
+                <div className="breadcrumb-row">
+                  <ul className="list-inline">
+                    <li>
+                      <Link href={"/"}>Home</Link>
+                    </li>
+                    <li>{termsAndCondition?.data?.title}</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
+        )}
+        <div className="container py-5 bg-light">
+          <Row className="justify-content-center">
+            <Col md={10}>
+              <Card className="border-0">
+                <Card.Body className={styles.cardBody}>
+                  <Card.Title
+                    className={`text-center mb-4 ${styles.cardTitle}`}
+                  >
+                    {termsAndCondition?.data?.title}
+                  </Card.Title>
+                  <div className={`mb-4 ${styles.contentSection}`}>
+                    {termsAndCondition?.data?.heading
+                      ? formatContent(termsAndCondition.data.heading)
+                      : null}
+                  </div>
+                  <div className={styles.contentSection}>
+                    {termsAndCondition?.data?.description
+                      ? formatContent(termsAndCondition.data.description)
+                      : null}
+                  </div>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </div>
-        <style jsx>{`
-          .terms-conditions-section {
-            padding: 60px 0;
-            background-color: #f3f4f6;
-          }
-          .section-head {
-            margin-bottom: 40px;
-          }
-          .section-head h1 {
-            font-size: 2.5rem;
-            color: #2a6310;
-          }
-          .terms-conditions-content {
-            padding: 40px;
-            background: #ffffff;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-          }
-          .terms-conditions-heading,
-          .terms-conditions-description {
-            margin-bottom: 20px;
-          }
-          .terms-conditions-description ul,
-          .terms-conditions-description ol {
-            padding-left: 20px;
-            list-style-type: disc;
-            color: #2a6310;
-          }
-          .terms-conditions-description ul li,
-          .terms-conditions-description ol li {
-            margin-bottom: 10px;
-          }
-          .terms-conditions-description ol {
-            list-style-type: decimal;
-          }
-          .terms-conditions-description ul ul,
-          .terms-conditions-description ol ul {
-            list-style-type: circle;
-            padding-left: 20px;
-          }
-          .terms-conditions-description a {
-            color: #0056b3;
-            text-decoration: underline;
-          }
-          .terms-conditions-description a:hover {
-            color: #004494;
-          }
-        `}</style>
       </div>
     </>
   );
 };
-
 export default TermsAndCondition;
