@@ -60,22 +60,22 @@ const JobMyResume: React.FC = () => {
                         src={`${IMAGE_URL + user?.user?.image}`}
                         alt="profile picture"
                         width={100}
-                        height={100}
+                        height={50}
                         onError={(e) =>
                           (e.currentTarget.src = "../../images/favicon.png")
                         } // Fallback image
-                        style={{ borderRadius: "50%" }}
+                        style={{ borderRadius: "50%", height:"100px" }}
                       />
                     ) : (
                       <Image
                         src={profileIcon}
                         alt="profile picture"
                         width={100}
-                        height={100}
+                        height={50}
                         onError={(e) =>
                           (e.currentTarget.src = "../../images/favicon.png")
                         } // Fallback image
-                        style={{ borderRadius: "50%" }}
+                        style={{ borderRadius: "50%" , height:"100px" }}
                       />
                     )}
                   </div>
