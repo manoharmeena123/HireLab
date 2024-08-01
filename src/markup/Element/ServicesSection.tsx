@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useGetServiceQuery } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
@@ -72,7 +71,7 @@ const ServicesSection: React.FC = () => {
           font-weight: 700 !important;
         }
         .service-item {
-          list-style-type: none;
+          list-style-type: disc !important; /* Ensure bullet points are displayed */
           transition: transform 0.2s, box-shadow 0.2s;
           text-align: left;
         }
@@ -89,12 +88,14 @@ const ServicesSection: React.FC = () => {
         }
         .list-group {
           padding-left: 20px;
+          list-style-position: inside; /* Ensure bullet points are inside the padding */
         }
         .list-group li {
           font-size: 16px !important;
           color: #333 !important;
           margin-bottom: 8px;
           background: none !important;
+          list-style-type: disc !important; /* Ensure bullet points are displayed */
         }
         .text-center {
           text-align: center !important;
