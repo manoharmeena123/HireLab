@@ -19,7 +19,7 @@ import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import Swal from "sweetalert2";
 interface OptionType {
   id: string;
   value: string;
@@ -30,18 +30,33 @@ const JobPosterSection = () => {
   const { token } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
   const router = useRouter();
-  const [updateProfile, { isLoading: profileLoading }] = useUpdateProfileMutation();
-  const { data: categoriesData, isLoading: categoriesDataLoading } = useGetCategoriesQuery();
+  const [updateProfile, { isLoading: profileLoading }] =
+    useUpdateProfileMutation();
+  const { data: categoriesData, isLoading: categoriesDataLoading } =
+    useGetCategoriesQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out of your account.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, log out!',
+      cancelButtonText: 'No, stay logged in'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire('Logged out!', 'You have been logged out successfully.', 'success');
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire('Logout failed', 'Failed to log out. Please try again.', 'error');
+      }
     }
   };
 
@@ -87,26 +102,49 @@ const JobPosterSection = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await updateProfile(profileData).unwrap();
-      toast.success(response?.message);
-      refetch();
-      console.log("Profile Updated Successfully", response);
-    } catch (error: any) {
-      console.error("Failed to update profile", error);
-      toast.error(error?.message);
+    
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You are about to update your profile.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'No, cancel'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await updateProfile(profileData).unwrap();
+        Swal.fire({
+          icon: 'success',
+          title: 'Profile Updated',
+          text: response?.message,
+        });
+        refetch();
+        console.log("Profile Updated Successfully", response);
+      } catch (error: any) {
+        console.error("Failed to update profile", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: error?.message,
+        });
+      }
     }
   };
 
-  const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
-    const selectedCategoryId = (selectedOption as OptionType)?.id || null;
-    setProfileData((prevState) => ({
-      ...prevState,
-      category_id: selectedCategoryId,
-    }));
-  };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  // const handleCategoryChange = (selectedOption: SingleValue<OptionType>) => {
+  //   const selectedCategoryId = (selectedOption as OptionType)?.id || null;
+  //   setProfileData((prevState) => ({
+  //     ...prevState,
+  //     category_id: selectedCategoryId,
+  //   }));
+  // };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setProfileData((prevState) => ({
       ...prevState,
@@ -147,7 +185,9 @@ const JobPosterSection = () => {
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
       const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find((option) => option.id === designationId);
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
       if (designation) {
         setDesignationLabel(designation.label);
       } else {
@@ -177,7 +217,10 @@ const JobPosterSection = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           ) : (
@@ -186,24 +229,30 @@ const JobPosterSection = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           )}
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
                           </h4>
                           <p className="m-b0">
-                            <Link href={"#"}>{designationLabel || "Not available"}</Link>
+                            <Link href={"#"}>
+                              {designationLabel || "Not available"}
+                            </Link>
                           </p>
                         </div>
                       </div>
                       <ul>
-                      
                         <li>
-                          <Link href="/profile" className="active">
+                          <Link href="/job-poster" className="active">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>{user?.user?.name} Profile</span>
                           </Link>
@@ -216,7 +265,10 @@ const JobPosterSection = () => {
                         </li>
                         <li>
                           <Link href="/post-job">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
                             <span>Post A job</span>
                           </Link>
                         </li>
@@ -232,10 +284,13 @@ const JobPosterSection = () => {
                             <span>Manage Jobs</span>
                           </Link>
                         </li>
-                        
+
                         <li>
-                          <Link href="/" onClick={handleLogout}>
-                            <i className="fa fa-sign-out" aria-hidden="true"></i>
+                          <Link href="#" onClick={handleLogout}>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
                             <span>Log Out</span>
                           </Link>
                         </li>
@@ -246,8 +301,13 @@ const JobPosterSection = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">{user?.user?.name}'s Profile</h5>
-                      <Link href={"/company-profile"} className="site-button right-arrow button-sm float-right">
+                      <h5 className="font-weight-700 pull-left text-uppercase">
+                        {user?.user?.name}'s Profile
+                      </h5>
+                      <Link
+                        href={"/company-profile"}
+                        className="site-button right-arrow button-sm float-right"
+                      >
                         Back
                       </Link>
                     </div>
@@ -306,38 +366,12 @@ const JobPosterSection = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Category</label>
-                            <Select
-                              styles={customStyles}
-                              value={categoryOptions?.find((option) => option.id === profileData.category_id)}
-                              onChange={handleCategoryChange}
-                              options={categoryOptions}
-                              placeholder="Select Category"
-                            />
-                          </div>
-                        </div>
-                        <div className="col-lg-12 col-md-12">
-                          <div className="form-group">
-                            <label>Description:</label>
-                            <CKEditor
-                              editor={ClassicEditor}
-                              data={profileData.description || ""}
-                              onChange={(event, editor) => {
-                                const data = editor.getData();
-                                setProfileData((prevState) => ({
-                                  ...prevState,
-                                  description: data,
-                                }));
-                              }}
-                            />
-                          </div>
-                        </div>
                       </div>
                       {/* Contact Information */}
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">Contact Information</h5>
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Contact Information
+                        </h5>
                       </div>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
@@ -408,7 +442,9 @@ const JobPosterSection = () => {
                       </div>
                       {/* Social Link */}
                       <div className="job-bx-title clearfix">
-                        <h5 className="font-weight-700 pull-left text-uppercase">Social Link</h5>
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Social Link
+                        </h5>
                       </div>
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
@@ -462,6 +498,37 @@ const JobPosterSection = () => {
                               placeholder="www.linkedin.com"
                             />
                           </div>
+                        </div>
+                      </div>
+
+                      {/* <div className="col-lg-6 col-md-6">
+                        <div className="form-group">
+                          <label>Category</label>
+                          <Select
+                            styles={customStyles}
+                            value={categoryOptions?.find(
+                              (option) => option.id === profileData.category_id
+                            )}
+                            onChange={handleCategoryChange}
+                            options={categoryOptions}
+                            placeholder="Select Category"
+                          />
+                        </div>
+                      </div> */}
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>Description:</label>
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={profileData.description || ""}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setProfileData((prevState) => ({
+                                ...prevState,
+                                description: data,
+                              }));
+                            }}
+                          />
                         </div>
                       </div>
                       <button type="submit" className="site-button m-b30">
