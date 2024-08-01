@@ -8,8 +8,8 @@ const TransactionSection = dynamic(() => import("@/markup/Element/Transaction"),
   loading: () => <Loading />,
 });
 
-const CvManagerSectionPage = () => {
+const TransactionSectionPage = () => {
   return <TransactionSection />;
 };
 
-export default CvManagerSectionPage;
+export default TransactionSectionPage;

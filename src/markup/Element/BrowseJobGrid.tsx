@@ -131,8 +131,8 @@ const BrowseJobGrid: React.FC = () => {
 
   const sortJobs = (jobs: Job[]): Job[] => {
     const now = new Date();
-    const twoMonthsAgo = new Date(now.getTime());
-    twoMonthsAgo.setMonth(now.getMonth() - 2);
+    const threeMonthsAgo = new Date(now.getTime());
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
     const oneMonthAgo = new Date(now.getTime());
     oneMonthAgo.setMonth(now.getMonth() - 1);
     const oneWeekAgo = new Date(now.getTime());
@@ -143,8 +143,8 @@ const BrowseJobGrid: React.FC = () => {
     oneDayAgo.setDate(now.getDate() - 1);
 
     switch (sortOption) {
-      case "last2Months":
-        return jobs.filter((job) => new Date(job.created_at) >= twoMonthsAgo);
+      case "last3Months":
+        return jobs.filter((job) => new Date(job.created_at) >= threeMonthsAgo);
       case "lastMonth":
         return jobs.filter((job) => new Date(job.created_at) >= oneMonthAgo);
       case "lastWeeks":
@@ -228,9 +228,9 @@ const BrowseJobGrid: React.FC = () => {
                         className="custom-btn"
                         onChange={(e) => setSortOption(e.target.value)}
                       >
-                        <option value="last2Months">Last 2 Months</option>
+                        <option value="last3Months">Last 3 Months</option>
                         <option value="lastMonth">Last Month</option>
-                        <option value="lastWeeks">Last Weeks</option>
+                        <option value="lastWeeks">Last Week</option>
                         <option value="last3Days">Last 3 Days</option>
                         <option value="lastDay">Last Day</option>
                       </select>

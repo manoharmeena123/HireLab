@@ -10,6 +10,7 @@ var teamImg = require("../../images/team/pic1.jpg");
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
+import Swal from "sweetalert2";
 
 const JobSavedSection = () => {
   const { user, refetch } = useLoggedInUser();
@@ -49,15 +50,35 @@ const JobSavedSection = () => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
-
   return (
     <>
       <div className="page-content bg-white">
@@ -133,13 +154,25 @@ const JobSavedSection = () => {
                           </Link>
                         </li>
                         <li>
-                        <Link href={"/transaction"}>
-                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
+                          <Link href={"/cv-manager"}>
+                            <i
+                              className="fa fa-id-card-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>CV Manager</span>
+                          </Link>
+                        </li>
                         <li>
-                          <Link href="/" onClick={handleLogout}>
+                          <Link href={"/transaction"}>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Transaction</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"

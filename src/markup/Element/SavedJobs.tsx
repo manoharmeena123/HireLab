@@ -22,6 +22,7 @@ interface Job {
 
 const SavedJobs = () => {
   const { push } = useRouter();
+  const router = useRouter();
   const {
     data: savedJob,
     refetch,
@@ -166,11 +167,22 @@ const SavedJobs = () => {
     <>
       {savedJobLoading && deleteSavedJobLoading && <Loading />}
       <div className="job-bx save-job browse-job table-job-bx clearfix">
-        <div className="job-bx-title clearfix">
+        <div className="row">
+          <div className="col-lg-12">
           <h5 className="font-weight-700 pull-left text-uppercase">
             {savedJob?.data.length} Saved Jobs
           </h5>
-          <div className="float-right">
+            <button
+              onClick={() => router.back()}
+              className="site-button right-arrow button-sm float-right"
+              style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+            >
+              Back
+            </button>
+          </div>
+        </div>
+        <div className="job-bx-title clearfix">
+          <div className="float-left">
             <input
               type="search"
               className="form-control"

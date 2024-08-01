@@ -261,7 +261,7 @@ const JobPosterSection = () => {
                         <li>
                           <Link href="/job-poster" className="active">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>{user?.user?.name} Profile</span>
+                            <span>Profile</span>
                           </Link>
                         </li>
                         <li>

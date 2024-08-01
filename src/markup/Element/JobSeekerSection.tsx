@@ -246,12 +246,13 @@ const JobSeekerSection = () => {
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         Basic Information
                       </h5>
-                      <Link
-                        href={"/"}
-                        className="site-button right-arrow button-sm float-right"
-                      >
-                        Back
-                      </Link>
+                      <button
+                      onClick={() => router.back()}
+                      className="site-button right-arrow button-sm float-right"
+                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                    >
+                      Back
+                    </button>
                     </div>
                     <form onSubmit={handleSubmit}>
                       <div className="row m-b30">

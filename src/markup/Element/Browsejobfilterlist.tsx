@@ -75,6 +75,37 @@ function Browsejobfilterlist() {
   const [view, setView] = useState<"list" | "grid">("grid");
   const itemsPerPage = 10;
 
+  const [sortOption, setSortOption] = useState<string>("last3Months");
+
+  const sortJobs = (jobs: any[]): any[] => {
+    const now = new Date();
+    const threeMonthsAgo = new Date(now.getTime());
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
+    const oneMonthAgo = new Date(now.getTime());
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+    const oneWeekAgo = new Date(now.getTime());
+    oneWeekAgo.setDate(now.getDate() - 7);
+    const threeDaysAgo = new Date(now.getTime());
+    threeDaysAgo.setDate(now.getDate() - 3);
+    const oneDayAgo = new Date(now.getTime());
+    oneDayAgo.setDate(now.getDate() - 1);
+
+    switch (sortOption) {
+      case "last3Months":
+        return jobs.filter((job) => new Date(job.created_at) >= threeMonthsAgo);
+      case "lastMonth":
+        return jobs.filter((job) => new Date(job.created_at) >= oneMonthAgo);
+      case "lastWeek":
+        return jobs.filter((job) => new Date(job.created_at) >= oneWeekAgo);
+      case "last3Days":
+        return jobs.filter((job) => new Date(job.created_at) >= threeDaysAgo);
+      case "lastDay":
+        return jobs.filter((job) => new Date(job.created_at) >= oneDayAgo);
+      default:
+        return jobs;
+    }
+  };
+
   const applyFilters = (jobs: any[]): any[] => {
     return jobs
       .filter((job) =>
@@ -105,14 +136,18 @@ function Browsejobfilterlist() {
   };
 
   const paginatedJobs = jobsData?.data
-    ? applyFilters(jobsData?.data).slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+    ? sortJobs(
+        applyFilters(jobsData?.data).slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        )
       )
     : ctcData?.data
-    ? applyFilters(ctcData?.data).slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
+    ? sortJobs(
+        applyFilters(ctcData?.data).slice(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage
+        )
       )
     : [];
 
@@ -127,6 +162,7 @@ function Browsejobfilterlist() {
     const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
+
   return (
     <>
       {isSectorLoading && isFilterLoading && <Loading />}
@@ -150,11 +186,15 @@ function Browsejobfilterlist() {
                     } Jobs Found`}</h5>
                     <div className="float-right">
                       <span className="select-title">Sort by freshness</span>
-                      <select className="custom-btn">
-                        <option>Last 2 Months</option>
-                        <option>Last Months</option>
-                        <option>Last Weeks</option>
-                        <option>Last 3 Days</option>
+                      <select
+                        className="custom-btn"
+                        onChange={(e) => setSortOption(e.target.value)}
+                      >
+                        <option value="last3Months">Last 3 Months</option>
+                        <option value="lastMonth">Last Month</option>
+                        <option value="lastWeek">Last Week</option>
+                        <option value="last3Days">Last 3 Days</option>
+                        <option value="lastDay">Last Day</option>
                       </select>
                       <div className="float-right p-tb5 p-r10">
                         <span

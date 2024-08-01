@@ -11,6 +11,8 @@ import profileIcon from "../../images/favicon.png";
 import Image from "next/image";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { useGetCvManagerQuery } from "@/app/my-resume/store/resume.query";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const managerBlog = [
   {
@@ -51,7 +53,7 @@ const CvManager = () => {
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
-
+  const router = useRouter();
   const [contacts, setContacts] = useState(managerBlog);
   // delete data
   const handleDeleteClick = (contactId: any) => {
@@ -62,12 +64,33 @@ const CvManager = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
 
@@ -176,7 +199,7 @@ const CvManager = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/" onClick={handleLogout}>
+                          <Link href="#" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"
@@ -191,6 +214,18 @@ const CvManager = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title clearfix">
+                      <div className="row">
+                        <div className="col-lg-12 mb-2">
+                          <button
+                            onClick={() => router.back()}
+                            className="site-button right-arrow button-sm float-right mb-1"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                          >
+                            Back
+                          </button>
+                        </div>
+                      </div>
+
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         CV Manager
                       </h5>

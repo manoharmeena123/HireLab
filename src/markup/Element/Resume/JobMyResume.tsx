@@ -20,11 +20,13 @@ import {
   useResumeProfileDataQuery,
   useGetResumeDataQuery,
 } from "@/app/my-resume/store/resume.query";
+import { useRouter } from "next/navigation"
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 const bnr = require("@/images/banner/bnr1.jpg");
 const profileIcon = require("@/images/favicon.png");
 
 const JobMyResume: React.FC = () => {
+  const router = useRouter();
   const { user } = useLoggedInUser();
   console.log("user", user);
   const [showBasicDetails, setShowBasicDetails] = useState(false);
@@ -40,7 +42,6 @@ const JobMyResume: React.FC = () => {
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const { data: resumeProfileData } = useResumeProfileDataQuery();
   const { data: resumeData, isLoading } = useGetResumeDataQuery();
-
 
   return (
     <>
@@ -64,7 +65,7 @@ const JobMyResume: React.FC = () => {
                         onError={(e) =>
                           (e.currentTarget.src = "../../images/favicon.png")
                         } // Fallback image
-                        style={{ borderRadius: "50%", height:"100px" }}
+                        style={{ borderRadius: "50%", height: "100px" }}
                       />
                     ) : (
                       <Image
@@ -75,7 +76,7 @@ const JobMyResume: React.FC = () => {
                         onError={(e) =>
                           (e.currentTarget.src = "../../images/favicon.png")
                         } // Fallback image
-                        style={{ borderRadius: "50%" , height:"100px" }}
+                        style={{ borderRadius: "50%", height: "100px" }}
                       />
                     )}
                   </div>
@@ -156,6 +157,17 @@ const JobMyResume: React.FC = () => {
         <div className="content-block">
           <div className="section-full browse-job content-inner-2">
             <div className="container">
+              <div className="row">
+                <div className="job-bx-title clearfix">
+                  <button
+                    onClick={() => router.back()}
+                    className="site-button right-arrow button-sm float-right"
+                    style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                  >
+                    Back
+                  </button>
+                </div>
+              </div>
               <div className="row">
                 <div className="col-xl-3 col-lg-4 col-md-4 col-sm-12 m-b30">
                   <ListingSidebar />

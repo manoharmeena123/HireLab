@@ -10,9 +10,11 @@ import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
-
+import Swal from "sweetalert2";
+import { useRouter } from 'next/navigation'
 
 const Transaction = () => {
+  const router = useRouter();
   const { user, refetch } = useLoggedInUser();
   const { removeToken } = useAuthToken();
   const [company, setCompany] = useState<boolean>(false);
@@ -89,12 +91,33 @@ const Transaction = () => {
   }, [user, designationOptions, refetch]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
   return (
@@ -169,7 +192,7 @@ const Transaction = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href={"/applied-jobs"}>
+                          <Link href={"/applied-job"}>
                             <i
                               className="fa fa-briefcase"
                               aria-hidden="true"
@@ -184,7 +207,7 @@ const Transaction = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href={"/cv-manager"} className="active">
+                          <Link href={"/cv-manager"} >
                             <i
                               className="fa fa-id-card-o"
                               aria-hidden="true"
@@ -193,7 +216,16 @@ const Transaction = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/" onClick={handleLogout}>
+                          <Link href={"/transaction"} className="active">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Transaction</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#" onClick={handleLogout}>
                             <i
                               className="fa fa-sign-out"
                               aria-hidden="true"
@@ -208,6 +240,17 @@ const Transaction = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title clearfix">
+                    <div className="row">
+                        <div className="col-lg-12 mb-2">
+                          <button
+                            onClick={() => router.back()}
+                            className="site-button right-arrow button-sm float-right mb-1"
+                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                          >
+                            Back
+                          </button>
+                        </div>
+                      </div>
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         TRANSACTIONS
                       </h5>
