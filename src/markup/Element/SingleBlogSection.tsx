@@ -470,9 +470,7 @@ const SingleBlogSection = () => {
                           <p className="form-submit">
                             <input
                               type="submit"
-                              defaultValue={
-                                user ? "Post Comment" : "Login to Post Comment"
-                              }
+                              defaultValue="Post Comment" 
                               className="submit site-button"
                               id="submit"
                               name="submit"
