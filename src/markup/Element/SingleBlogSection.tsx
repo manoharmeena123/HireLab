@@ -436,7 +436,6 @@ const SingleBlogSection = () => {
                                   placeholder="Author"
                                   id="author"
                                   required
-                                 
                                 />
                               </p>
                               <p className="comment-form-email">
@@ -449,7 +448,7 @@ const SingleBlogSection = () => {
                                   placeholder="Email"
                                   id="email"
                                   required
-                                  style={{padding:"7px 53px"}}
+                                  style={{ padding: "7px 53px" }}
                                 />
                               </p>
                               <p className="comment-form-url">
@@ -459,7 +458,7 @@ const SingleBlogSection = () => {
                                   name="url"
                                   placeholder="Website"
                                   id="url"
-                                  style={{padding:"7px 53px"}}
+                                  style={{ padding: "7px 53px" }}
                                 />
                               </p>
                             </>
