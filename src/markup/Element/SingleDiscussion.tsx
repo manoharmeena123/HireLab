@@ -9,7 +9,7 @@ import {
   useCreateCommentMutation,
   useGetCommentForQuetionMutation,
   useDeleteCommentByIdMutation,
-  useGetCommentForParentCommentMutation
+  useGetCommentForParentCommentMutation,
 } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
@@ -17,8 +17,7 @@ import { faComment, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommentSection } from "react-comments-section";
 import "react-comments-section/dist/index.css";
-import { useLoggedInUser } from '@/hooks/index';
-
+import { useLoggedInUser } from "@/hooks/index";
 interface Comment {
   userId: string;
   comId: string;
@@ -44,7 +43,6 @@ const SingleDiscussion = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [getCommentsForQuestion, { data: commentsData }] =
     useGetCommentForQuetionMutation();
-    console.log('commentsData', commentsData)
 
   useEffect(() => {
     if (query) {
@@ -52,6 +50,23 @@ const SingleDiscussion = () => {
     }
   }, [getSingleDiscussionByTitle, query]);
 
+  // JavaScript to remove reply buttons
+  useEffect(() => {
+    const removeReplyButtons = () => {
+      const replyButtons = document.querySelectorAll(".replyBtn");
+      replyButtons.forEach((button) => button.remove());
+    };
+    // Initial call to remove reply buttons
+    removeReplyButtons();
+    // Observer to handle dynamic updates
+    const observer = new MutationObserver(removeReplyButtons);
+    observer.observe(document.body, { childList: true, subtree: true });
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, []);
+
+
+  
   useEffect(() => {
     if (singleDiscussion && singleDiscussion.data) {
       const questionId = singleDiscussion.data.id.toString();
@@ -69,22 +84,24 @@ const SingleDiscussion = () => {
           userProfile: `${IMAGE_URL + comment?.user?.image}`,
           text: comment?.body,
           avatarUrl: `${IMAGE_URL + comment?.user?.image}`,
-          replies: formatComments(comment?.comments|| []), // Recursively format replies
+          replies: formatComments(comment?.comments || []), // Recursively format replies
         }));
       };
-      const formattedComments = formatComments(commentsData?.data.map((item: any) => item.comments).flat());
-      console.log('formattedComments', formattedComments)
+      const formattedComments = formatComments(
+        commentsData?.data.map((item: any) => item.comments).flat()
+      );
+      console.log("formattedComments", formattedComments);
       setComments(formattedComments);
     }
   }, [commentsData]);
 
   const handleCommentSubmit = async (data: any) => {
-    const { text, comId: parentId } = data;
+    const { text } = data;
     const question_id = singleDiscussion?.data?.id?.toString();
     const payload = {
       question_id,
       body: text,
-      parent_comment_id: parentId || null,
+      parent_comment_id: null,
     };
 
     try {
@@ -97,23 +114,10 @@ const SingleDiscussion = () => {
         userProfile: `${IMAGE_URL + user?.user?.image}`,
         text: text,
         avatarUrl: `${IMAGE_URL + user?.user?.image}`,
-        replies: [],
+        replies: [], // No replies for new comments
       };
 
-      if (parentId) {
-        const updatedComments = comments.map((comment) => {
-          if (comment.comId === parentId) {
-            return {
-              ...comment,
-              replies: [...comment.replies, newComment],
-            };
-          }
-          return comment;
-        });
-        setComments(updatedComments);
-      } else {
-        setComments([...comments, newComment]);
-      }
+      setComments([...comments, newComment]);
     } catch (error) {
       console.error("Failed to post comment", error);
     }
@@ -121,7 +125,7 @@ const SingleDiscussion = () => {
 
   const handleDeleteComment = async (commentId: any) => {
     const { comIdToDelete, parentOfDeleteId } = commentId;
-    console.log('commentId', commentId);
+    console.log("commentId", commentId);
     try {
       await deleteComment(comIdToDelete).unwrap();
       const deleteReplies: any = (replies: Comment[], commentId: string) => {
@@ -147,8 +151,7 @@ const SingleDiscussion = () => {
   };
 
   const handleEditComment = async (commentId: any) => {
-  console.log('edit comment');
-
+    console.log("edit comment");
   };
 
   if (isLoading) {
@@ -198,14 +201,10 @@ const SingleDiscussion = () => {
                       }}
                       commentData={comments}
                       onSubmitAction={handleCommentSubmit}
-                      onReplyAction={handleCommentSubmit}
-                      onEditAction={handleEditComment}
-                      currentData={(data: any) => {
-                        console.log("current data", data);
-                      }}
                       onDeleteAction={(commentId: string) =>
                         handleDeleteComment(commentId)
                       }
+                      onEditAction={handleEditComment}
                     />
                   </div>
                 </div>
