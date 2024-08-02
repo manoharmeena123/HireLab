@@ -20,7 +20,7 @@ const ServicesSection: React.FC = () => {
   return (
     <>
       {getServiceLoading && <Loading />}{" "}
-      <div className={styles.servicesSection}>
+      <div className={`bg-light ${styles.servicesSection}`}>
         {getServiceData?.data?.[0]?.image && (
           <div
             className={`dez-bnr-inr overlay-black-middle ${styles.topImage}`}
@@ -35,7 +35,7 @@ const ServicesSection: React.FC = () => {
             </div>
           </div>
         )}
-        <div className="container py-5 bg-light">
+        <div className="container py-5">
           <div className="row">
             <div className="col-12">
               {getServiceData?.data?.map((service: any, index: number) => (
