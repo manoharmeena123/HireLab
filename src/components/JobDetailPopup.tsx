@@ -16,6 +16,7 @@ import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import styles from "@/styles/JobDetailPopup.module.css";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formaterDate } from "@/utils/formateDate";
+import Link from "next/link";
 
 type JobDetailPopupType = {
   show: boolean;
@@ -177,8 +178,10 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
         <div className="mb-4">
           <h5>Job Posted By</h5>
           <div className="d-flex align-items-center">
-            <i className="fa fa-user mr-2" style={{ color: "#2A6310" }}></i>
-            <span>{job?.data?.user?.name}</span>
+            <Link href={"/job-poster-profile"}>
+              <i className="fa fa-user mr-2" style={{ color: "#2A6310" }}></i>
+              <span>{job?.data?.user?.name}</span>
+            </Link>
           </div>
         </div>
         <div className="mb-4">
@@ -215,7 +218,6 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
               >
                 {/* {job?.data?.location?.title || job?.data?.location} */}
                 {job?.data?.address}
-
               </span>
             </div>
           </div>

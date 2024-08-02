@@ -41,6 +41,9 @@ import "@pathofdev/react-tag-input/build/index.css";
 import Loading from "@/components/Loading";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
+import profileIcon from "../../images/favicon.png";
+import Swal from "sweetalert2";
 
 const JobEditSection = () => {
   const router = useRouter();
@@ -72,6 +75,10 @@ const JobEditSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -119,6 +126,7 @@ const JobEditSection = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [jobDescription, setJobDescription] = useState<string>("");
+  const [candidateRequirement, setCandidateRequirement] = useState<string>("");
 
   const handleMouseEnter = (
     index: number,
@@ -139,12 +147,33 @@ const JobEditSection = () => {
   };
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
 
@@ -185,28 +214,39 @@ const JobEditSection = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    try {
-      const response = await updateJob({
-        ...profileData,
-        id: jobId,
-        job_type: selectedJobType?.toString() || "",
-        experience: selectedTotalExperience?.toString() || "",
-        location: selectedLocation?.toString() || "",
-        compensation: selectedCompensation?.toString() || "",
-        additional_perk: selectedAdditionalPerks.join(","),
-      }).unwrap();
-      if (response.code === 200) {
-        toast.success("Job updated successfully!", { theme: "colored" });
-        router.push("/manage-job");
-      } else if (response.code === 401) {
-        toast.error(response.message, { theme: "colored" });
-      } else if (response.code === 404) {
-        dispatch(setPostJobErrors(response.errors));
-      } else {
-        console.error("Unexpected error format:", response);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to update this job?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, update it!",
+      cancelButtonText: "No, cancel",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await updateJob({
+          ...profileData,
+          id: jobId,
+          job_type: selectedJobType?.toString() || "",
+          experience: selectedTotalExperience?.toString() || "",
+          location: selectedLocation?.toString() || "",
+          compensation: selectedCompensation?.toString() || "",
+          additional_perk: selectedAdditionalPerks.join(","),
+        }).unwrap();
+        if (response.code === 200) {
+          toast.success("Job updated successfully!", { theme: "colored" });
+          router.push("/manage-job");
+        } else if (response.code === 401) {
+          toast.error(response.message, { theme: "colored" });
+        } else if (response.code === 404) {
+          dispatch(setPostJobErrors(response.errors));
+        } else {
+          console.error("Unexpected error format:", response);
+        }
+      } catch (err) {
+        console.error("Error updating job:", err);
       }
-    } catch (err) {
-      console.error("Error updating job:", err);
     }
   };
 
@@ -225,6 +265,33 @@ const JobEditSection = () => {
     }
     dispatch(setPostJobData({ [field]: option?.id }));
   };
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions, refetch]);
+
+  useEffect(() => {
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData, refetch]);
 
   useEffect(() => {
     if (jobId) {
@@ -259,6 +326,7 @@ const JobEditSection = () => {
               id: data.sector.toString(),
             });
             setJobDescription(data.job_description);
+            setCandidateRequirement(data.candidate_requirement);
           }
         })
         .catch((error) => {
@@ -325,49 +393,65 @@ const JobEditSection = () => {
                   <div className="candidate-info company-info">
                     <div className="candidate-detail text-center">
                       <div className="canditate-des">
-                        <Link href={"#"}>
+                        {user?.user?.image ? (
                           <Image
-                            src={`https://thinkdream.in/hirelab-api/public/images/${user?.user?.image}`}
-                            alt="Company Logo"
+                            src={`${IMAGE_URL + user?.user?.image}`}
+                            alt="profile picture"
                             width={300}
                             height={300}
+                            onError={(e) =>
+                              (e.currentTarget.src = "../../images/favicon.png")
+                            } // Fallback image
+                            style={{ borderRadius: "50%" }}
                           />
-                        </Link>
+                        ) : (
+                          <Image
+                            src={profileIcon}
+                            alt="profile picture"
+                            width={300}
+                            height={300}
+                            onError={(e) =>
+                              (e.currentTarget.src = "../../images/favicon.png")
+                            } // Fallback image
+                            style={{ borderRadius: "50%" }}
+                          />
+                        )}
                       </div>
                       <div className="candidate-title">
-                        <h4 className="m-b5">
-                          <Link href={"#"}>
-                            {user?.user?.name || "User Name"}
-                          </Link>
-                        </h4>
-                        <p className="m-b0">
-                          <Link href={"#"}>
-                            {user?.user?.designation || "Not available"}
-                          </Link>
-                        </p>
+                        <div className="">
+                          <h4 className="m-b5">
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
+                          </h4>
+                          <p className="m-b0">
+                            <Link href={"#"}>
+                              {designationLabel || "Not available"}
+                            </Link>
+                          </p>
+                        </div>
                       </div>
                     </div>
                     <ul>
-                    
                       <li>
                         <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span>{user?.user?.name} Profile</span>
+                          <span> Profile</span>
                         </Link>
                       </li>
                       <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
+                        <Link href="/dashboard-section">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          <span>Dashboard</span>
+                        </Link>
+                      </li>
                       <li>
                         <Link className="active" href="/post-job">
                           <i
                             className="fa fa-file-text-o"
                             aria-hidden="true"
                           ></i>
-                          <span>Post A job</span>
+                          <span>Update Job</span>
                         </Link>
                       </li>
                       <li>
@@ -382,9 +466,8 @@ const JobEditSection = () => {
                           <span>Manage Jobs</span>
                         </Link>
                       </li>
-                      
                       <li>
-                        <Link href="/" onClick={handleLogout}>
+                        <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
                         </Link>
@@ -399,13 +482,13 @@ const JobEditSection = () => {
                     <h5 className="font-weight-700 pull-left text-uppercase">
                       Update Job
                     </h5>
-                    <Link
-                      href={"/company-profile"}
+                    <button
+                      onClick={() => router.back()}
                       className="site-button right-arrow button-sm float-right"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
                       Back
-                    </Link>
+                    </button>
                   </div>
                   <form
                     method="post"
@@ -457,16 +540,21 @@ const JobEditSection = () => {
                           >
                             <option selected>select experience</option>
                             <option value="0">0 Years</option>
-                            <option value="1">1 Years</option>
+                            <option value="1">1 Year</option>
                             <option value="2">2 Years</option>
                             <option value="3">3 Years</option>
                             <option value="4">4 Years</option>
                             <option value="5">5 Years</option>
+                            <option value="6">6 Years</option>
+                            <option value="7">7 Years</option>
+                            <option value="8">8 Years</option>
+                            <option value="9">9 Years</option>
+                            <option value="10">10 Years</option>
                           </Form.Control>
+                          <span className="text-red-500 text-danger">
+                            {errors?.experience?.[0]}
+                          </span>
                         </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.experience?.[0]}
-                        </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
@@ -506,26 +594,7 @@ const JobEditSection = () => {
                           {errors?.job_type?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Tags</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            <div className="tags-container">
-                              <ReactTagInput
-                                tags={tags}
-                                onChange={(newTags: any) => setTags(newTags)}
-                                placeholder="Type tags and press Enter"
-                              />
-                            </div>
-                          </div>
-                          <span className="text-red-500 text-danger">
-                            {errors?.tags?.[0]}
-                          </span>
-                        </div>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Location</label>
@@ -564,22 +633,7 @@ const JobEditSection = () => {
                           {errors?.location?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Office Address/Landmark</label>
-                          <input
-                            type="text"
-                            name="address"
-                            value={profileData.address}
-                            onChange={handleInputChange}
-                            placeholder="Enter a address"
-                            className="form-control tags_input"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.address?.[0]}
-                        </span>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Compensation</label>
@@ -718,22 +772,7 @@ const JobEditSection = () => {
                           {errors?.joining_fee?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Candidate Requirement</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            name="candidate_requirement"
-                            value={profileData.candidate_requirement}
-                            placeholder="Requirement"
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.candidate_requirement?.[0]}
-                        </span>
-                      </div>
+
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Maximum Education</label>
@@ -826,6 +865,42 @@ const JobEditSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
+                          <label>Tags</label>
+                          <div
+                            className="job-time d-flex flex-wrap mr-auto"
+                            style={{ gap: "1rem" }}
+                          >
+                            <div className="tags-container">
+                              <ReactTagInput
+                                tags={tags}
+                                onChange={(newTags: any) => setTags(newTags)}
+                                placeholder="Type tags and press Enter"
+                              />
+                            </div>
+                          </div>
+                          <span className="text-red-500 text-danger">
+                            {errors?.tags?.[0]}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>Office Address/Landmark</label>
+                          <input
+                            type="text"
+                            name="address"
+                            value={profileData.address}
+                            onChange={handleInputChange}
+                            placeholder="Enter an address"
+                            className="form-control tags_input"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.address?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
                           <label>Ctc</label>
                           <Select
                             value={selectedSalary}
@@ -837,7 +912,7 @@ const JobEditSection = () => {
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.salary?.[0]}
+                          {errors?.ctc?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -858,18 +933,21 @@ const JobEditSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
-                          <label>Salary</label>
-                          <input
-                            type="number"
-                            className="form-control"
-                            name="salary"
-                            value={profileData.salary}
-                            placeholder="Enter salary in rupee"
-                            onChange={handleInputChange}
+                          <label>Candidate Requirement</label>
+                          <CKEditor
+                            editor={ClassicEditor}
+                            data={candidateRequirement}
+                            onChange={(event, editor) => {
+                              const data = editor.getData();
+                              setCandidateRequirement(data);
+                              dispatch(
+                                setPostJobData({ candidate_requirement: data })
+                              );
+                            }}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.salary?.[0]}
+                          {errors?.candidate_requirement?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -897,7 +975,7 @@ const JobEditSection = () => {
                       className="site-button m-b30"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
-                      {updateJobLoading ? "Loading..." : "Upload"}
+                      {updateJobLoading ? "Loading..." : "Update"}
                     </button>
                   </form>
                 </div>
@@ -934,5 +1012,3 @@ const JobEditSection = () => {
 };
 
 export default JobEditSection;
-
-
