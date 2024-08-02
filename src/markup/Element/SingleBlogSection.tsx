@@ -424,40 +424,65 @@ const SingleBlogSection = () => {
                           method="post"
                           onSubmit={handlePostComment}
                         >
-                          <p className="comment-form-author">
-                            <label htmlFor="author">
-                              Name <span className="required">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              defaultValue="Author"
-                              name="Author"
-                              placeholder="Author"
-                              id="author"
-                            />
-                          </p>
-                          <p className="comment-form-email">
-                            <label htmlFor="email">
-                              Email <span className="required">*</span>
-                            </label>
-                            <input
-                              type="text"
-                              defaultValue="email"
-                              placeholder="Email"
-                              name="email"
-                              id="email"
-                            />
-                          </p>
-                          <p className="comment-form-url">
-                            <label htmlFor="url">Website</label>
-                            <input
-                              type="text"
-                              defaultValue="url"
-                              placeholder="Website"
-                              name="url"
-                              id="url"
-                            />
-                          </p>
+                          {!user && (
+                            <>
+                              <p className="comment-form-author">
+                                <label htmlFor="author">
+                                  Name <span className="required">*</span>
+                                </label>
+                                <input
+                                  type="text"
+                                  name="author"
+                                  placeholder="Author"
+                                  id="author"
+                                  required
+                                 
+                                />
+                              </p>
+                              <p className="comment-form-email">
+                                <label htmlFor="email">
+                                  Email <span className="required">*</span>
+                                </label>
+                                <input
+                                  type="email"
+                                  name="email"
+                                  placeholder="Email"
+                                  id="email"
+                                  required
+                                  style={{padding:"7px 53px"}}
+                                />
+                              </p>
+                              <p className="comment-form-url">
+                                <label htmlFor="url">Website</label>
+                                <input
+                                  type="url"
+                                  name="url"
+                                  placeholder="Website"
+                                  id="url"
+                                  style={{padding:"7px 53px"}}
+                                />
+                              </p>
+                            </>
+                          )}
+                          {user && (
+                            <>
+                              <input
+                                type="hidden"
+                                name="author"
+                                value={user.name}
+                              />
+                              <input
+                                type="hidden"
+                                name="email"
+                                value={user.email}
+                              />
+                              <input
+                                type="hidden"
+                                name="url"
+                                value={user.website || ""}
+                              />
+                            </>
+                          )}
                           <p className="comment-form-comment">
                             <label htmlFor="comment">Comment</label>
                             <textarea
@@ -465,12 +490,13 @@ const SingleBlogSection = () => {
                               name="comment"
                               placeholder="Comment"
                               id="comment"
+                              required
                             ></textarea>
                           </p>
                           <p className="form-submit">
                             <input
                               type="submit"
-                              defaultValue="Post Comment" 
+                              value="Post Comment"
                               className="submit site-button"
                               id="submit"
                               name="submit"
