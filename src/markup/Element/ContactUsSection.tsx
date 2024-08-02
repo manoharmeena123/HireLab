@@ -4,6 +4,7 @@ import Link from "next/link";
 import PageTitle from "@/markup/Layout/PageTitle";
 import bnr from "../../../src/images/banner/bnr1.jpg";
 import { useGetSettingDataQuery, usePostSaveContactMutation } from "@/store/global-store/global.query";
+import Loading from "@/components/Loading";
 
 const Contact = () => {
   const { data, error, isLoading } = useGetSettingDataQuery();
@@ -14,14 +15,6 @@ const Contact = () => {
     message: "",
   });
   const [formError, setFormError] = useState<string | null>(null);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error loading settings</div>;
-  }
 
   const setting = data?.data;
 
@@ -47,6 +40,7 @@ const Contact = () => {
   
   return (
     <>
+    {isLoading && <Loading/>}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"

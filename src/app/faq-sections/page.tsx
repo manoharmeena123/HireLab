@@ -3,16 +3,16 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Loading from "@/components/Loading";
 
-const FreeJobAlertsSection = dynamic(
-  () => import("@/markup/Element/FreeJobAlerts"),
+const FaqSectionSection = dynamic(
+  () => import("@/markup/Element/FaqSection"),
   {
     ssr: false,
     loading: () => <Loading />,
   }
 );
 
-const FreeJobAlertsPage = () => {
-  return <FreeJobAlertsSection />;
+const FaqSectionPage = () => {
+  return <FaqSectionSection />;
 };
 
-export default FreeJobAlertsPage;
+export default FaqSectionPage;

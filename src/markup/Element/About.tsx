@@ -56,7 +56,7 @@ const Aboutus = () => {
           </div>
         </div>
       )}
-      <Container className={styles.container}>
+      <div className="py-1 bg-light">
         <Row className="justify-content-center">
           <Col md={10}>
             <Card className="border-0">
@@ -78,7 +78,7 @@ const Aboutus = () => {
             </Card>
           </Col>
         </Row>
-      </Container>
+      </div>
     </div>
   );
 };
