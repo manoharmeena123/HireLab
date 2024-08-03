@@ -6,6 +6,7 @@ import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
+import parse from "html-react-parser";
 
 const LatestDiscussions = () => {
   const { push } = useRouter();
@@ -99,6 +100,19 @@ const LatestDiscussions = () => {
           </h2>
         </div>
         <div className="d-flex">
+        <div className="head-counter-bx mr-4">
+            <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
+              {shouldAnimate && (
+                <CountUp
+                  start={0}
+                  end={questionsPosted}
+                  duration={2}
+                  preserveValue={true}
+                />
+              )}
+            </h2>
+            <h6 className="fw3">Job Posted</h6>
+          </div>
           <div className="head-counter-bx mr-4">
             <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
               {shouldAnimate && (
@@ -167,7 +181,7 @@ const LatestDiscussions = () => {
                   onClick={() => viewJobHandler(discussion?.question)}
                   className={styles.link}
                 >
-                  <Link href={""}> {discussion?.question}</Link>
+                  <Link href={""}> {discussion?.question?.replace(/-/g, " ")}</Link>
                 </h5>
 
                 <div
@@ -179,7 +193,7 @@ const LatestDiscussions = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {discussion?.description}
+                  {parse(discussion?.description)}
                 </div>
                 {discussion?.description.length > 80 && (
                   <Button

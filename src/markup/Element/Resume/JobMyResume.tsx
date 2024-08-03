@@ -43,6 +43,16 @@ const JobMyResume: React.FC = () => {
   const { data: resumeProfileData } = useResumeProfileDataQuery();
   const { data: resumeData, isLoading } = useGetResumeDataQuery();
 
+
+  const getProfileStrengthText = (profileStrength :any) => {
+    if (profileStrength <= 30) {
+      return "Poor";
+    } else if (profileStrength <= 70) {
+      return "Average";
+    } else {
+      return "Excellent";
+    }
+  };
   return (
     <>
       <div className="page-content">
@@ -83,13 +93,13 @@ const JobMyResume: React.FC = () => {
                   <div className="text-white browse-job text-left">
                     <h4 className="m-b0">
                       {user?.user?.name}
-                      <Link
+                      {/* <Link
                         href=""
                         onClick={() => setShowBasicDetails(true)}
                         className="m-l15 font-16 text-white"
                       >
                         <i className="fa fa-pencil"></i>
-                      </Link>
+                      </Link> */}
                     </h4>
                     {resumeData?.data.map((item: any, index: number) => (
                       <p className="m-b15">
@@ -116,7 +126,7 @@ const JobMyResume: React.FC = () => {
                     </ul>
                     <div className="progress-box m-t10">
                       <div className="progress-info">
-                        Profile Strength (Average)
+                      Profile Strength ({getProfileStrengthText(resumeProfileData?.data?.profile_strength)})
                         <span>
                           {resumeProfileData?.data?.profile_strength}%
                         </span>

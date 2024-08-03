@@ -83,7 +83,7 @@ const MembershipPlans = () => {
                     {text?.title}
                   </h4>
                   <p
-                    className="text-center my-2 pricingtable-description"
+                    className="text-left my-2 pricingtable-description"
                     dangerouslySetInnerHTML={parseHtml(text?.description)}
                   ></p>
                 </div>

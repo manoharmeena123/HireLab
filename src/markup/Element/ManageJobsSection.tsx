@@ -632,7 +632,7 @@ const ManageJobs = () => {
                                 <div className="nav-link mn-icon">
                                   <i className="fa fa-user"></i>
                                 </div>
-                                <h6 className="mb-0">{item?.name}</h6>
+                                <h6 className="mb-0">{item?.name || "N/A"}</h6>
                               </div>
                               <div className="col-8 d-flex application-btns-wrap">
                                 <Button

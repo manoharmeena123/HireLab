@@ -454,18 +454,21 @@ const SingleEvent = () => {
                       }}
                     >
                       <Button variant="success">Details</Button>
-                      <Button
+                      {/* <Button
                         variant="success"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleBuyPass(event);
                         }}
-                        disabled={processingEventId === event.id}
+                        disabled={
+                          processingEventId === event.id ||
+                          activeButton === "past"
+                        }
                       >
                         {processingEventId === event.id
                           ? "Processing..."
                           : "Buy Pass"}
-                      </Button>
+                      </Button> */}
                     </div>
                   </div>
                 </div>
