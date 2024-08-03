@@ -1,9 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import bnr from "../../images/banner/bnr1.jpg";
+import profileIcon from "../../images/favicon.png";
+import { Button } from "react-bootstrap";
 import {
   useGetSingleDiscussionByTitleMutation,
   useCreateCommentMutation,
@@ -18,6 +20,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CommentSection } from "react-comments-section";
 import "react-comments-section/dist/index.css";
 import { useLoggedInUser } from "@/hooks/index";
+
 interface Comment {
   userId: string;
   comId: string;
@@ -32,6 +35,7 @@ const SingleDiscussion = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const { user } = useLoggedInUser();
+  const router = useRouter();
 
   const [
     getSingleDiscussionByTitle,
@@ -65,8 +69,6 @@ const SingleDiscussion = () => {
     return () => observer.disconnect();
   }, []);
 
-
-  
   useEffect(() => {
     if (singleDiscussion && singleDiscussion.data) {
       const questionId = singleDiscussion.data.id.toString();
@@ -94,6 +96,81 @@ const SingleDiscussion = () => {
       setComments(formattedComments);
     }
   }, [commentsData]);
+
+  useEffect(() => {
+    const updatePostButton = () => {
+      const postButton: any = document.querySelector(".postBtn");
+      if (postButton) {
+        if (!user) {
+          postButton.textContent = "Login to post";
+          postButton.style.whiteSpace = "nowrap";
+          postButton.addEventListener("click", () => {
+            router.push("/login");
+          });
+        } else {
+          postButton.textContent = "Post";
+        }
+      }
+    };
+
+    const setPostCommentReadonly = () => {
+      const postCommentInput = document.querySelector(".postComment");
+      if (postCommentInput) {
+        if (!user?.user) {
+          postCommentInput.setAttribute("readonly", "true");
+        } else {
+          postCommentInput.removeAttribute("readonly");
+        }
+      }
+    };
+
+       const updateNoComDiv = () => {
+      const noComDiv: any = document.querySelector(".no-comDiv");
+      if (noComDiv) {
+        if (!user?.user) {
+          noComDiv.style.display = "none";
+        } else {
+          noComDiv.style.display = "block";
+        }
+      }
+    };
+
+    // Initial call to update elements
+    updatePostButton();
+    setPostCommentReadonly();
+    updateNoComDiv();
+
+    // Observer to handle dynamic updates
+    const observer = new MutationObserver(() => {
+      updatePostButton();
+      setPostCommentReadonly();
+      updateNoComDiv();
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, [user, router]);
+
+  useEffect(() => {
+    const updateProfileImages = () => {
+      const userImages = document.querySelectorAll(".userImg");
+      userImages.forEach((img: any) => {
+        if (!user) {
+          img.style.display = "none";
+        }
+      });
+    };
+
+    // Initial call to update profile images
+    updateProfileImages();
+    // Observer to handle dynamic updates
+    const observer = new MutationObserver(updateProfileImages);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, [user]);
 
   const handleCommentSubmit = async (data: any) => {
     const { text } = data;
@@ -159,7 +236,10 @@ const SingleDiscussion = () => {
   }
 
   if (isSuccess && singleDiscussion) {
-    const { question, description } = singleDiscussion.data;
+    // Remove hyphens from the question text
+    const formattedQuestion = singleDiscussion.data.question.replace(/-/g, " ");
+    const { description } = singleDiscussion.data;
+
     return (
       <>
         <div className="page-content bg-white">
@@ -185,7 +265,7 @@ const SingleDiscussion = () => {
             <div className="container">
               <div className="row">
                 <div className="col-lg-9 col-md-8 m-b10">
-                  <h2>{question}</h2>
+                  <h2>{formattedQuestion}</h2>
                   <p>{description}</p>
                   <div className="blog-post blog-single blog-style-1">
                     <CommentSection
@@ -206,6 +286,23 @@ const SingleDiscussion = () => {
                       }
                       onEditAction={handleEditComment}
                     />
+                    {comments.length === 0 && (
+                      <div className="no-comDiv">
+                        {user?.user ? (
+                          "No comments here. Be the first one to comment!"
+                        ) : (
+                            <div className="d-flex flex-column align-items-center justify-content-center text-center">
+                              <p>You have to log in first to post comments.</p>
+                              <Button
+                                className="btn mt-2 apply-saved-btn"
+                                onClick={() => router.push("/login")}
+                              >
+                                Login
+                              </Button>
+                            </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="col-lg-3 col-md-4 sticky-top">
@@ -215,6 +312,25 @@ const SingleDiscussion = () => {
                       <hr />
                     </div>
                     <div>
+                      <div className="sugg-comment-topic">
+                        <h6>How To Study in the Top College</h6>
+                        <div className="sugg-topic-card-detail">
+                          <div className="d-flex disc-date-suggest">
+                            <div className="">
+                              <span className="badge-category-bg"></span>
+                              <span>MBA</span>
+                            </div>
+                            <div>
+                              <span>Oct '23</span>
+                            </div>
+                          </div>
+                          <div className="disc-date-suggest">
+                            <span>12</span>
+                            <FontAwesomeIcon icon={faComment} />
+                          </div>
+                        </div>
+                      </div>
+                      <hr />
                       <div className="sugg-comment-topic">
                         <h6>How To Study in the Top College</h6>
                         <div className="sugg-topic-card-detail">
