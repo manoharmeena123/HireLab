@@ -100,6 +100,19 @@ const LatestDiscussions = () => {
           </h2>
         </div>
         <div className="d-flex">
+        <div className="head-counter-bx mr-4">
+            <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
+              {shouldAnimate && (
+                <CountUp
+                  start={0}
+                  end={questionsPosted}
+                  duration={2}
+                  preserveValue={true}
+                />
+              )}
+            </h2>
+            <h6 className="fw3">Job Posted</h6>
+          </div>
           <div className="head-counter-bx mr-4">
             <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
               {shouldAnimate && (
