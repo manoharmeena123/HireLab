@@ -6,6 +6,7 @@ import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
+import parse from "html-react-parser";
 
 const LatestDiscussions = () => {
   const { push } = useRouter();
@@ -167,7 +168,7 @@ const LatestDiscussions = () => {
                   onClick={() => viewJobHandler(discussion?.question)}
                   className={styles.link}
                 >
-                  <Link href={""}> {discussion?.question}</Link>
+                  <Link href={""}> {discussion?.question?.replace(/-/g, " ")}</Link>
                 </h5>
 
                 <div
@@ -179,7 +180,7 @@ const LatestDiscussions = () => {
                     overflow: "hidden",
                   }}
                 >
-                  {discussion?.description}
+                  {parse(discussion?.description)}
                 </div>
                 {discussion?.description.length > 80 && (
                   <Button

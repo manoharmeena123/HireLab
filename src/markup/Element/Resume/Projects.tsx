@@ -16,7 +16,7 @@ interface ProjectsProps {
 
 interface ProjectData {
   title: string;
-  project_employment: string;
+  // project_employment: string;
   client: string;
   project_status: string;
   start_from_year: string;
@@ -33,7 +33,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
 
   const [project, setProject] = useState<ProjectData>({
     title: "",
-    project_employment: "",
+    // project_employment: "",
     client: "",
     project_status: "",
     start_from_year: "",
@@ -53,7 +53,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
       if (existingProject) {
         setProject({
           title: existingProject.title,
-          project_employment: existingProject.project_employment,
+          // project_employment: existingProject.project_employment,
           client: existingProject.client,
           project_status: existingProject.project_status,
           start_from_year: existingProject.start_from_year,
@@ -83,7 +83,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
   const validateForm = () => {
     const {
       title,
-      project_employment,
+      // project_employment,
       client,
       project_status,
       start_from_year,
@@ -97,7 +97,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
 
     if (
       !title ||
-      !project_employment ||
+      // !project_employment ||
       !client ||
       !project_status ||
       !start_from_year ||
@@ -217,7 +217,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                       />
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
+                  {/* <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>
                         Tag this project with your Employment/Education
@@ -233,7 +233,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                         <option value="Class 10th">Class 10th</option>
                       </Form.Control>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Client</label>

@@ -109,7 +109,7 @@ interface EducationDataResponse {
 // project
 interface ProjectData {
   title: string;
-  project_employment: string;
+  // project_employment: string;
   client: string;
   project_status: string;
   start_from_year: string;
