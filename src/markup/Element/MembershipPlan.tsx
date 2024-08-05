@@ -7,7 +7,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 // Images
 const bnr7 = require("./../../images/background/plans.png");
 
-const MembershipPlans = () => {
+const MembershipPlans = (plan : number | string) => {
   const { data: membershipData } = useGetMembershipQuery();
   const [saveMemberShip] = useSaveMemberShipMutation();
   const { user } = useLoggedInUser();
@@ -27,7 +27,7 @@ const MembershipPlans = () => {
 
       try {
         await saveMemberShip(payload).unwrap();
-        router.push("/dashboard-section");
+        router.push(`/cart?plan=${membershipId}`);
       } catch (error) {
         console.error("Failed to save membership", error);
       }
