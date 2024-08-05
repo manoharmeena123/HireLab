@@ -335,7 +335,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: (data) => queries.createSingleBlogComment.query(data),
       invalidatesTags: ["SingleBlogComment"],
     }),
-    getSingleBlogCommentbyQuetionId: builder.mutation<any, any>({
+    getSingleBlogCommentbyQuetionId: builder.mutation<any, number>({
       query: (id) => queries.getSingleBlogCommentbyQuetionId.query(id),
       invalidatesTags: ["SingleBlogCommentById"],
     }),
