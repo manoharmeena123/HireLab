@@ -368,8 +368,8 @@ export const queries = {
 
   //api/get-blog-comments-for-parent-comment/16/24
   getSingleParentBlogCommentbyId: {
-    query: (quetionId: string, commentId: string) => ({
-      url: `api/get-blog-comments-for-parent-comment/${quetionId}/${commentId}`,
+    query: (questionId: any, commentId: any) => ({
+      url: `api/get-blog-comments-for-parent-comment/${questionId}/${commentId}`,
       method: "GET",
     }),
   },

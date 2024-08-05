@@ -341,10 +341,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     }),
     getSingleParentBlogCommentbyId: builder.mutation<
       any,
-      { quetionId: string; commentId: string }
+      { questionId: any; commentId: any }
     >({
-      query: ({ quetionId, commentId }) =>
-        queries.getSingleParentBlogCommentbyId.query(quetionId, commentId),
+      query: ({ questionId, commentId }) =>
+        queries.getSingleParentBlogCommentbyId.query(questionId, commentId),
       invalidatesTags: ["SingleParentBlogCommentById"],
     }),
   }),

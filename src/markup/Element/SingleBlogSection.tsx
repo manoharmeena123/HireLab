@@ -15,6 +15,8 @@ import {
 import { blogformatDate, truncateText } from "@/utils/formateDate";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 var bnr = require("./../../images/banner/bnr1.jpg");
 import profileIcon from "../../images/favicon.png";
 
@@ -24,23 +26,21 @@ const SingleBlogSection = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryTitle = searchParams.get("query");
-  const encodedTitle = encodeURIComponent(queryTitle as any).replace(
-    /%20/g,
-    "+"
-  );
+  const encodedTitle = encodeURIComponent(queryTitle as any).replace(/%20/g, "+");
 
+  const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
+  const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
   const [
     getBlogsDataById,
     { data: getSingleBlogData, isLoading: getSingleBlogDataLoading },
   ] = useGetBlogsDataByIdMutation();
 
-  const questionId = getSingleBlogData?.data?.[0]?.id;
-
   const [
     getSingleBlogCommentbyQuetionId,
     { data: singleBlogCommentData, isLoading: singleBlogCommentDataLoading },
   ] = useGetSingleBlogCommentbyQuetionIdMutation();
-  console.log("singleBlogCommentData", singleBlogCommentData);
+
   const [
     createSingleBlogComment,
     {
@@ -58,7 +58,8 @@ const SingleBlogSection = () => {
     },
   ] = useGetSingleParentBlogCommentbyIdMutation();
 
-  const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
+  
+  const questionId = getSingleBlogData?.data?.[0]?.id;
 
   useEffect(() => {
     if (encodedTitle) {
@@ -70,13 +71,13 @@ const SingleBlogSection = () => {
     if (questionId) {
       getSingleBlogCommentbyQuetionId(questionId);
     }
-  }, [questionId, getSingleBlogCommentbyQuetionId, createSingleBlogComment]);
+  }, [questionId, getSingleBlogCommentbyQuetionId]);
 
   useEffect(() => {
-    if (questionId) {
-      getSingleBlogCommentbyQuetionId(questionId);
+    if (questionId && replyToCommentId) {
+      getSingleParentBlogCommentbyId({ questionId: questionId, commentId: replyToCommentId });
     }
-  }, [questionId, createSingleBlogComment, createSingleBlogCommentData]);
+  }, [questionId, replyToCommentId, getSingleParentBlogCommentbyId]);
 
   const handleReadMore = (blogId: string) => {
     setExpandedBlogId(blogId);
@@ -86,8 +87,8 @@ const SingleBlogSection = () => {
     setExpandedBlogId(null);
   };
 
-  const handlePostComment = async (event: React.FormEvent<HTMLFormElement>) => {
-    // event.preventDefault();
+  const handlePostComment = async (event: React.FormEvent<HTMLFormElement>, parentCommentId: string | null = null) => {
+    event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
@@ -95,10 +96,33 @@ const SingleBlogSection = () => {
       const commentData = {
         question_id: questionId,
         body: formData.get("comment") as string,
-        parent_comment_id: null, // Set this accordingly if you have a reply functionality
+        parent_comment_id: null,
       };
       await createSingleBlogComment(commentData);
     }
+  };
+
+  const handleReplyPostComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!user) {
+      router.push("/login");
+    } else {
+      const formData = new FormData(event.currentTarget);
+      const commentData = {
+        question_id: questionId,
+        body: formData.get("comment") as string,
+        parent_comment_id: replyToCommentId,
+      };
+      await createSingleBlogComment(commentData);
+      setShowReplyModal(false);
+      setReplyToCommentId(null);
+      getSingleParentBlogCommentbyId({ questionId: questionId, commentId: replyToCommentId });
+    }
+  };
+
+  const handleReply = (commentId: string) => {
+    setReplyToCommentId(commentId);
+    setShowReplyModal(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -117,9 +141,38 @@ const SingleBlogSection = () => {
     return url || "#";
   };
 
+  const renderComments = (comments: any[], parentId: string | null = null) => {
+    return comments
+      .filter(comment => comment.parent_id === parentId)
+      .map(comment => (
+        <li key={comment.id} className="comment">
+          <div className="comment-body">
+            <div className="comment-author vcard">
+              <Image
+                className="avatar photo"
+                src={comment?.user?.image ? `${IMAGE_URL + comment?.user?.image}` : profileIcon}
+                alt="Profile Picture"
+                width={50}
+                height={50}
+              />
+              <cite className="fn">{comment?.user?.name}</cite> <span className="says">says:</span>
+            </div>
+            <div className="comment-meta">{formatDate(comment.created_at)}</div>
+            <p>{comment.body}</p>
+            <div className="reply">
+              <button className="site-button-link" onClick={() => handleReply(comment.id)}>
+                Reply
+              </button>
+            </div>
+            <ul className="children">{renderComments(comments, comment.id)}</ul>
+          </div>
+        </li>
+      ));
+  };
+
   return (
     <>
-      {(createCommentLoading && singleBlogCommentDataLoading )&& <Loading />}
+      {(createCommentLoading && singleBlogCommentDataLoading) && <Loading />}
       {getSingleBlogDataLoading && <Loading />}
       <div className="page-content bg-white">
         <div
@@ -145,27 +198,17 @@ const SingleBlogSection = () => {
             <div className="row">
               <div className="col-lg-8 col-md-7 m-b10">
                 {getSingleBlogData?.data?.map((item, index) => (
-                  <div
-                    key={index}
-                    className="blog-post blog-single blog-style-1"
-                  >
+                  <div key={index} className="blog-post blog-single blog-style-1">
                     <div className="dez-post-meta">
                       <ul className="d-flex align-items-center">
                         <li className="post-date">
                           <i className="fa fa-calendar"></i>
                           {blogformatDate(item?.created_at)}
                         </li>{" "}
-                        <li
-                          className="post-author"
-                          style={{ paddingLeft: "10px" }}
-                        >
-                          <i className="fa fa-user"></i>By{" "}
-                          <Link href={"#"}>demongo</Link>{" "}
+                        <li className="post-author" style={{ paddingLeft: "10px" }}>
+                          <i className="fa fa-user"></i>By <Link href={"#"}>demongo</Link>{" "}
                         </li>
-                        <li
-                          className="post-comment"
-                          style={{ paddingLeft: "10px" }}
-                        >
+                        <li className="post-comment" style={{ paddingLeft: "10px" }}>
                           <i className="fa fa-comments-o"></i>
                           <Link href={"#"}>5k</Link>{" "}
                         </li>
@@ -178,36 +221,20 @@ const SingleBlogSection = () => {
                     </div>
                     <div className="dez-post-media dez-img-effect zoom-slow m-t20">
                       <Link href={"#"}>
-                        <Image
-                          src={`${IMAGE_URL + item?.image}`}
-                          objectFit="contain"
-                          width={600}
-                          height={400}
-                          alt="Blog Image"
-                        />
+                        <Image src={`${IMAGE_URL + item?.image}`} objectFit="contain" width={600} height={400} alt="Blog Image" />
                       </Link>
                     </div>
 
                     <div className="dez-post-text">
                       <p>
-                        {expandedBlogId === item.id.toString()
-                          ? item?.description
-                          : truncateText(item?.description, 60)}
+                        {expandedBlogId === item.id.toString() ? item?.description : truncateText(item?.description, 60)}
                       </p>
                       {expandedBlogId === item.id.toString() ? (
-                        <Link
-                          href="#"
-                          onClick={handleReadLess}
-                          className="site-button-link"
-                        >
+                        <Link href="#" onClick={handleReadLess} className="site-button-link">
                           <span className="fw6">Read Less</span>
                         </Link>
                       ) : (
-                        <Link
-                          href="#"
-                          onClick={() => handleReadMore(item.id.toString())}
-                          className="site-button-link"
-                        >
+                        <Link href="#" onClick={() => handleReadMore(item.id.toString())} className="site-button-link">
                           <span className="fw6">Read More</span>
                         </Link>
                       )}
@@ -229,34 +256,22 @@ const SingleBlogSection = () => {
                           <h5 className="m-a0">Share Post</h5>
                         </li>
                         <li>
-                          <Link
-                            href={getSafeUrl(getSetting?.data?.facebook)}
-                            className="site-button facebook button-sm"
-                          >
+                          <Link href={getSafeUrl(getSetting?.data?.facebook)} className="site-button facebook button-sm">
                             <i className="fa fa-facebook"></i> Facebook
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            href={getSafeUrl(getSetting?.data?.twitter)}
-                            className="site-button google-plus button-sm"
-                          >
+                          <Link href={getSafeUrl(getSetting?.data?.twitter)} className="site-button google-plus button-sm">
                             <i className="fa fa-twitter"></i> Twitter
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            href={getSafeUrl(getSetting?.data?.linkedin)}
-                            className="site-button linkedin button-sm"
-                          >
+                          <Link href={getSafeUrl(getSetting?.data?.linkedin)} className="site-button linkedin button-sm">
                             <i className="fa fa-linkedin"></i> Linkedin
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            href={getSafeUrl(getSetting?.data?.instagram)}
-                            className="site-button instagram button-sm"
-                          >
+                          <Link href={getSafeUrl(getSetting?.data?.instagram)} className="site-button instagram button-sm">
                             <i className="fa fa-instagram"></i> Instagram
                           </Link>
                         </li>
@@ -270,132 +285,46 @@ const SingleBlogSection = () => {
                     <h2 className="comments-title">Comments</h2>
                     <div className="clearfix m-b20">
                       <ol className="comment-list">
-                        {singleBlogCommentData?.data[0]?.comments?.map(
-                          (comment: any, index: number) => (
-                            <li key={index} className="comment">
-                              <div className="comment-body">
-                                <div className="comment-author vcard">
-                                  <Image
-                                    className="avatar photo"
-                                    src={
-                                      comment?.user?.image
-                                        ? `${IMAGE_URL + comment?.user?.image}`
-                                        : profileIcon
-                                    }
-                                    alt="Profile Picture"
-                                    width={50}
-                                    height={50}
-                                  />
-                                  <cite className="fn">
-                                    {comment?.user?.name}
-                                  </cite>{" "}
-                                  <span className="says">says:</span>
-                                </div>
-                                <div className="comment-meta">
-                                  {formatDate(comment.created_at)}
-                                </div>
-                                <p>{comment.body}</p>
-                                <div className="reply">
-                                  <Link
-                                    href={"#"}
-                                    className="comment-reply-link"
-                                  >
-                                    Reply
-                                  </Link>
-                                </div>
-                              </div>
-                            </li>
-                          )
-                        )}
+                        {singleBlogCommentData?.data[0]?.comments && renderComments(singleBlogCommentData?.data[0]?.comments)}
                       </ol>
                       <div className="comment-respond" id="respond">
                         <h4 className="comment-reply-title" id="reply-title">
                           Leave a Reply{" "}
                           <small>
                             {" "}
-                            <Link
-                              href={"#"}
-                              style={{ display: "none" }}
-                              id="cancel-comment-reply-link"
-                              rel="nofollow"
-                            >
+                            <Link href={"#"} style={{ display: "none" }} id="cancel-comment-reply-link" rel="nofollow">
                               Cancel reply
                             </Link>{" "}
                           </small>{" "}
                         </h4>
                         {!user ? (
-                          <button
-                            className="site-button"
-                            onClick={() => router.push("/login")}
-                          >
+                          <button className="site-button" onClick={() => router.push("/login")}>
                             Login to post comment
                           </button>
                         ) : (
-                          <form
-                            className="comment-form"
-                            id="commentform"
-                            method="post"
-                            onSubmit={handlePostComment}
-                          >
+                          <form className="comment-form" id="commentform" method="post" onSubmit={handlePostComment}>
                             <p className="comment-form-author">
                               <label htmlFor="author">
                                 Name <span className="required">*</span>
                               </label>
-                              <input
-                                type="text"
-                                name="author"
-                                placeholder="Author"
-                                id="author"
-                                required
-                                value={user?.user.name}
-                                readOnly
-                              />
+                              <input type="text" name="author" placeholder="Author" id="author" required value={user?.user.name} readOnly />
                             </p>
                             <p className="comment-form-email">
                               <label htmlFor="email">
                                 Email <span className="required">*</span>
                               </label>
-                              <input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                id="email"
-                                required
-                                value={user?.user.email}
-                                readOnly
-                                style={{ padding: "7px 53px" }}
-                              />
+                              <input type="email" name="email" placeholder="Email" id="email" required value={user?.user.email} readOnly style={{ padding: "7px 53px" }} />
                             </p>
                             <p className="comment-form-url">
                               <label htmlFor="url">Website</label>
-                              <input
-                                type="url"
-                                name="url"
-                                placeholder="Website"
-                                id="url"
-                                value={user?.user?.website || ""}
-                                readOnly
-                                style={{ padding: "7px 53px" }}
-                              />
+                              <input type="url" name="url" placeholder="Website" id="url" value={user?.user?.website || ""} readOnly style={{ padding: "7px 53px" }} />
                             </p>
                             <p className="comment-form-comment">
                               <label htmlFor="comment">Comment</label>
-                              <textarea
-                                rows={8}
-                                name="comment"
-                                placeholder="Comment"
-                                id="comment"
-                                required
-                              ></textarea>
+                              <textarea rows={8} name="comment" placeholder="Comment" id="comment" required></textarea>
                             </p>
                             <p className="form-submit">
-                              <input
-                                type="submit"
-                                value="Post Comment"
-                                className="submit site-button"
-                                id="submit"
-                                name="submit"
-                              />
+                              <input type="submit" value="Post Comment" className="submit site-button" id="submit" name="submit" />
                             </p>
                           </form>
                         )}
@@ -411,6 +340,39 @@ const SingleBlogSection = () => {
           </div>
         </div>
       </div>
+      <Modal show={showReplyModal} onHide={() => setShowReplyModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reply to Comment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form className="comment-form" method="post" onSubmit={handleReplyPostComment}>
+            <p className="comment-form-author">
+              <label htmlFor="author">
+                Name <span className="required">*</span>
+              </label>
+              <input type="text" name="author" placeholder="Author" id="author" required value={user?.user.name} readOnly />
+            </p>
+            <p className="comment-form-email">
+              <label htmlFor="email">
+                Email <span className="required">*</span>
+              </label>
+              <input type="email" name="email" placeholder="Email" id="email" required value={user?.user.email} readOnly style={{ padding: "7px 53px" }} />
+            </p>
+            <p className="comment-form-comment">
+              <label htmlFor="comment">Comment</label>
+              <textarea rows={8} name="comment" placeholder="Comment" id="comment" required></textarea>
+            </p>
+            <p className="form-submit">
+              <input type="submit" value="Post Reply" className="submit site-button" id="submit" name="submit" />
+            </p>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReplyModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
