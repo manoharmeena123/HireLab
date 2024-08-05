@@ -4,10 +4,7 @@ import Link from "next/link";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
 import {
-  CATEGORY_URL,
-  CHECK_CREDENTIALS,
-  UPDATE_PROFILE,
-  IMAGE_URL,
+  IMAGE_URL
 } from "@/lib/apiEndPoints";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -50,7 +47,7 @@ const CompanyProfile = () => {
 
       axios
         .post(
-          CHECK_CREDENTIALS,
+          
           {},
           {
             headers: {
@@ -143,7 +140,7 @@ const CompanyProfile = () => {
     setLoading(true);
 
     axios
-      .post(UPDATE_PROFILE, formData, {
+      .post( formData, {
         headers: {
           // Authorization: `Bearer ${userSession?.user?.data?.token}`,
           Accept: "application/json",
