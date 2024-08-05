@@ -31,12 +31,13 @@ import {
   SettingResponse,
   BannerResponse,
   SaveContactData,
- SaveContactDataResponse,
+  SaveContactDataResponse,
   WritableServiceResponse,
   WritableReferralResponse,
   WritableSupportResponse,
   WritableRefundPolicyResponse,
-  WritableCtcStaticTextResponse
+  WritableCtcStaticTextResponse,
+  WritableSingleBlogCommentPost,
 } from "@/types/index";
 
 import { hirelabApiSlice } from "@/rtk/base-query";
@@ -95,7 +96,10 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Support",
     "RefundPolicy",
     "CtcText",
-    "Grievances"
+    "Grievances",
+    "SingleBlogComment",
+    "SingleBlogCommentById",
+    "SingleParentBlogCommentById",
   ],
 });
 
@@ -113,7 +117,7 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getEvents.query,
       providesTags: ["Events"],
     }),
-    getEventText :builder.query<WritableCtcStaticTextResponse, void>({
+    getEventText: builder.query<WritableCtcStaticTextResponse, void>({
       query: queries.getEventText.query,
       providesTags: ["EventText"],
     }),
@@ -156,9 +160,9 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getCtcDataById.query,
       invalidatesTags: ["CTCDataById"],
     }),
-    getCtcText : builder.query<WritableCtcStaticTextResponse, void>({
-      query : queries.getCtcText.query,
-     providesTags: ["CtcText"]
+    getCtcText: builder.query<WritableCtcStaticTextResponse, void>({
+      query: queries.getCtcText.query,
+      providesTags: ["CtcText"],
     }),
     getCollage: builder.query<WritableCollegeResponse, void>({
       query: queries.getCollage.query,
@@ -294,10 +298,12 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getBanner.query,
       providesTags: ["Banner"],
     }),
-    postSaveContact: builder.mutation<SaveContactDataResponse, SaveContactData>({
-      query: (data) => queries.postSaveContact.query(data),
-      invalidatesTags: ["SaveContacts"],
-    }),
+    postSaveContact: builder.mutation<SaveContactDataResponse, SaveContactData>(
+      {
+        query: (data) => queries.postSaveContact.query(data),
+        invalidatesTags: ["SaveContacts"],
+      }
+    ),
     getService: builder.query<WritableServiceResponse, void>({
       query: queries.getService.query,
       providesTags: ["Service"],
@@ -318,10 +324,29 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getRefundPolicy.query,
       providesTags: ["RefundPolicy"],
     }),
-    getGrievances : builder.query<WritableRefundPolicyResponse,void>({
-      query : queries.getGrievances.query,
-      providesTags :["Grievances"]
-    })
+    getGrievances: builder.query<WritableRefundPolicyResponse, void>({
+      query: queries.getGrievances.query,
+      providesTags: ["Grievances"],
+    }),
+    createSingleBlogComment: builder.mutation<
+      any,
+      WritableSingleBlogCommentPost
+    >({
+      query: (data) => queries.createSingleBlogComment.query(data),
+      invalidatesTags: ["SingleBlogComment"],
+    }),
+    getSingleBlogCommentbyQuetionId: builder.mutation<any, any>({
+      query: (id) => queries.getSingleBlogCommentbyQuetionId.query(id),
+      invalidatesTags: ["SingleBlogCommentById"],
+    }),
+    getSingleParentBlogCommentbyId: builder.mutation<
+      any,
+      { quetionId: string; commentId: string }
+    >({
+      query: ({ quetionId, commentId }) =>
+        queries.getSingleParentBlogCommentbyId.query(quetionId, commentId),
+      invalidatesTags: ["SingleParentBlogCommentById"],
+    }),
   }),
 
   overrideExisting: true,
@@ -370,7 +395,7 @@ export const {
   useGetUpComingEventsQuery,
   useGetPastEventsQuery,
   useGetSettingsQuery,
-  useGetBannerQuery, 
+  useGetBannerQuery,
   usePostSaveContactMutation,
   useGetServiceQuery,
   useGetSingleServiceMutation,
@@ -379,6 +404,9 @@ export const {
   useGetRefundPolicyQuery,
   useGetCtcTextQuery,
   useGetEventTextQuery,
-  useGetGrievancesQuery
+  useGetGrievancesQuery,
+  useCreateSingleBlogCommentMutation,
+  useGetSingleBlogCommentbyQuetionIdMutation,
+  useGetSingleParentBlogCommentbyIdMutation,
 } = globalApi;
 export default globalApi;

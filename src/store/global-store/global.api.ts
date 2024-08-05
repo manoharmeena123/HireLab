@@ -5,6 +5,7 @@ import {
   WritableBuyPassData,
   CreateCommentType,
   SaveContactData,
+  WritableSingleBlogCommentPost
 } from "@/types/index";
 
 export const queries = {
@@ -56,11 +57,11 @@ export const queries = {
       method: "GET",
     }),
   },
-  getCtcText :{
-    query :()=>({
-      url : `api/page/ctc`,
-      method : "GET"
-    })
+  getCtcText: {
+    query: () => ({
+      url: `api/page/ctc`,
+      method: "GET",
+    }),
   },
   getCollage: {
     query: () => ({
@@ -175,11 +176,11 @@ export const queries = {
       method: "GET",
     }),
   },
-  getEventText :{
-    query :()=>({
-      url : `api/page/Meetups-and-Events`,
-      method : "GET"
-    })
+  getEventText: {
+    query: () => ({
+      url: `api/page/Meetups-and-Events`,
+      method: "GET",
+    }),
   },
   getUpComingEvents: {
     query: () => ({
@@ -258,58 +259,57 @@ export const queries = {
     }),
   },
 
-  getBanner : {
-    query : ()=>({
-      url : `/api/page/banner`,
-      method : 'GET'
-    })
+  getBanner: {
+    query: () => ({
+      url: `/api/page/banner`,
+      method: "GET",
+    }),
   },
 
-  getService :{
-    query : () =>({
-      url : `api/services`,
-      method : 'GET'
-    })
+  getService: {
+    query: () => ({
+      url: `api/services`,
+      method: "GET",
+    }),
   },
-  getSingleService :{
-    query : (title : string)=>({
-      url : `api/services/${title}`,
-      method : 'GET'
-    })
+  getSingleService: {
+    query: (title: string) => ({
+      url: `api/services/${title}`,
+      method: "GET",
+    }),
   },
 
   //api/page/referral-terms
 
-   getReferralTerms : {
-    query : () => ({
-      url : `/api/page/referral-terms`,
-      method : 'GET'
-    })
-   },
+  getReferralTerms: {
+    query: () => ({
+      url: `/api/page/referral-terms`,
+      method: "GET",
+    }),
+  },
 
-   // api/page/support
-   getSupport : {
-    query : () => ({
-      url : `/api/page/support`,
-      method : 'GET'
-    })
-   },
+  // api/page/support
+  getSupport: {
+    query: () => ({
+      url: `/api/page/support`,
+      method: "GET",
+    }),
+  },
 
-   //api/page/refund-policy
-   getRefundPolicy : {
-    query : () => ({
-      url : `/api/page/refund-policy`,
-      method : 'GET'
-    })
-   },
-   //api/page/grievances
-   getGrievances :{
-    query :()=>({
-      url : `/api/page/grievances`,
-      method : 'GET'
-    })
-   },
-
+  //api/page/refund-policy
+  getRefundPolicy: {
+    query: () => ({
+      url: `/api/page/refund-policy`,
+      method: "GET",
+    }),
+  },
+  //api/page/grievances
+  getGrievances: {
+    query: () => ({
+      url: `/api/page/grievances`,
+      method: "GET",
+    }),
+  },
 
   //Post===================================================================================>
 
@@ -320,7 +320,7 @@ export const queries = {
       body: data,
     }),
   },
-    
+
   postApplyJob: {
     query: (id: ApplyJobData) => ({
       url: "api/apply-job",
@@ -350,6 +350,27 @@ export const queries = {
       body: data,
     }),
   },
+  ///api/create-blog-comment
+  createSingleBlogComment: {
+    query: (data: WritableSingleBlogCommentPost) => ({
+      url: `api/create-blog-comment`,
+      method: "POST",
+      body: data,
+    }),
+  },
+  ///api/get-blog-comments-for-question/
+  getSingleBlogCommentbyQuetionId: {
+    query: (id: number) => ({
+      url: `api/get-blog-comments-for-question/${id}`,
+      method: "GET",
+    }),
+  },
 
-
+  //api/get-blog-comments-for-parent-comment/16/24
+  getSingleParentBlogCommentbyId: {
+    query: (quetionId: string, commentId: string) => ({
+      url: `api/get-blog-comments-for-parent-comment/${quetionId}/${commentId}`,
+      method: "GET",
+    }),
+  },
 };

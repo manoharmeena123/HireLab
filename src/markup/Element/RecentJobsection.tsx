@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -9,6 +9,7 @@ import {
   useGetJobsQuery,
   useGetCtcDataQuery,
   useGetTestimonialsQuery,
+  useGetSavedJobQuery,
 } from "@/store/global-store/global.query";
 import { RecentJobData } from "@/types/index";
 import { formaterDate } from "@/utils/formateDate";
@@ -20,41 +21,38 @@ import parse from "html-react-parser";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const RecentJobsection = () => {
-  const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
+  const { data: recentJob, isLoading } = useGetRecentJobsQuery();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
-  const [likedJobs, setLikedJobs] = useState<string[]>([]);
   const dispatch = useDispatch();
   const { push } = useRouter();
   const { user } = useLoggedInUser();
   const { data: ctcData } = useGetCtcDataQuery();
   const { data: testimonialData } = useGetTestimonialsQuery();
+  const { data: savedJob, refetch: savedJobRefetch } = useGetSavedJobQuery();
   const lastTestimonial = testimonialData?.data?.slice(-1)[0];
-  
+
+  const savedJobsMap = new Map(savedJob?.data?.map((job: any) => [job.id.toString(), true]));
+
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
 
-  // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
-    // Check if user is logged in
     if (!user) {
       push("/login");
       return;
     }
 
-    // Check if already liking or unliking
     if (isSaving || isDeleting) {
-      return; // If already saving or deleting, do nothing
+      return;
     }
 
-    // Toggle liked state
-    if (likedJobs.includes(jobId)) {
-      // Unlike job
+    if (savedJobsMap.has(jobId)) {
       try {
         await deleteJob(jobId);
-        setLikedJobs(likedJobs.filter((id) => id !== jobId));
+        await savedJobRefetch();
         dispatch(fetchRecentJobsStart());
         Swal.fire({
           icon: "success",
@@ -66,16 +64,15 @@ const RecentJobsection = () => {
         console.error("Error deleting job:", error);
         Swal.fire({
           icon: "error",
-          title: "Error in Deleted Job",
+          title: "Error in Deleting Job",
           text: "Failed to delete job.",
           confirmButtonText: "OK",
         });
       }
     } else {
-      // Like job
       try {
         await saveJob({ job_id: jobId });
-        setLikedJobs([...likedJobs, jobId]);
+        await savedJobRefetch();
         dispatch(fetchRecentJobsStart());
         Swal.fire({
           icon: "success",
@@ -84,7 +81,7 @@ const RecentJobsection = () => {
           timer: 1500,
         });
       } catch (error) {
-        console.error("Error liking job:", error);
+        console.error("Error saving job:", error);
         Swal.fire({
           icon: "error",
           title: "Error in Saving Job",
@@ -94,8 +91,6 @@ const RecentJobsection = () => {
       }
     }
   };
-
-  const { data: JobDetails, refetch } = useGetJobsQuery();
 
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
@@ -176,7 +171,7 @@ const RecentJobsection = () => {
                       </div>
                       <label
                         className={`like-btn ${
-                          likedJobs.includes(item.id.toString()) ? "liked" : ""
+                          savedJobsMap.has(item.id.toString()) ? "liked" : ""
                         }`}
                         onClick={() => handleLikeToggle(item.id.toString())}
                       >

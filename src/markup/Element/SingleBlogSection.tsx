@@ -5,7 +5,13 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useGetBlogsDataByIdMutation, useGetSettingsQuery } from "@/store/global-store/global.query";
+import {
+  useGetBlogsDataByIdMutation,
+  useGetSettingsQuery,
+  useGetSingleBlogCommentbyQuetionIdMutation,
+  useCreateSingleBlogCommentMutation,
+  useGetSingleParentBlogCommentbyIdMutation,
+} from "@/store/global-store/global.query";
 import { blogformatDate, truncateText } from "@/utils/formateDate";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
@@ -22,12 +28,37 @@ const SingleBlogSection = () => {
     /%20/g,
     "+"
   );
+
   const [
     getBlogsDataById,
     { data: getSingleBlogData, isLoading: getSingleBlogDataLoading },
   ] = useGetBlogsDataByIdMutation();
+
+  const questionId = getSingleBlogData?.data?.[0]?.id;
+
+  const [
+    getSingleBlogCommentbyQuetionId,
+    { data: singleBlogCommentData, isLoading: singleBlogCommentDataLoading },
+  ] = useGetSingleBlogCommentbyQuetionIdMutation();
+  console.log("singleBlogCommentData", singleBlogCommentData);
+  const [
+    createSingleBlogComment,
+    {
+      data: createSingleBlogCommentData,
+      isLoading: createCommentLoading,
+      error: createCommentError,
+    },
+  ] = useCreateSingleBlogCommentMutation();
+
+  const [
+    getSingleParentBlogCommentbyId,
+    {
+      data: singleParentBlogCommentData,
+      isLoading: singleParentBlogCommentDataLoading,
+    },
+  ] = useGetSingleParentBlogCommentbyIdMutation();
+
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
-  const [comments, setComments] = useState<any[]>([]);
 
   useEffect(() => {
     if (encodedTitle) {
@@ -36,11 +67,16 @@ const SingleBlogSection = () => {
   }, [getBlogsDataById, encodedTitle]);
 
   useEffect(() => {
-    const storedComments = localStorage.getItem("comments");
-    if (storedComments) {
-      setComments(JSON.parse(storedComments));
+    if (questionId) {
+      getSingleBlogCommentbyQuetionId(questionId);
     }
-  }, []);
+  }, [questionId, getSingleBlogCommentbyQuetionId, createSingleBlogComment]);
+
+  useEffect(() => {
+    if (questionId) {
+      getSingleBlogCommentbyQuetionId(questionId);
+    }
+  }, [questionId, createSingleBlogComment, createSingleBlogCommentData]);
 
   const handleReadMore = (blogId: string) => {
     setExpandedBlogId(blogId);
@@ -50,25 +86,18 @@ const SingleBlogSection = () => {
     setExpandedBlogId(null);
   };
 
-  const handlePostComment = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handlePostComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    // event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
       const formData = new FormData(event.currentTarget);
       const commentData = {
-        id: comments.length + 1,
-        name: user?.user.name,
-        email: user?.user.email,
-        website: user?.user?.website || "",
-        comment: formData.get("comment"),
-        date: new Date().toISOString(),
-        image: user?.user.image,
+        question_id: questionId,
+        body: formData.get("comment") as string,
+        parent_comment_id: null, // Set this accordingly if you have a reply functionality
       };
-      const updatedComments = [...comments, commentData];
-      setComments(updatedComments);
-      localStorage.setItem("comments", JSON.stringify(updatedComments));
-      event.currentTarget.reset();
+      await createSingleBlogComment(commentData);
     }
   };
 
@@ -90,6 +119,7 @@ const SingleBlogSection = () => {
 
   return (
     <>
+      {(createCommentLoading && singleBlogCommentDataLoading )&& <Loading />}
       {getSingleBlogDataLoading && <Loading />}
       <div className="page-content bg-white">
         <div
@@ -240,38 +270,43 @@ const SingleBlogSection = () => {
                     <h2 className="comments-title">Comments</h2>
                     <div className="clearfix m-b20">
                       <ol className="comment-list">
-                        {comments.map((comment, index) => (
-                          <li key={index} className="comment">
-                            <div className="comment-body">
-                              <div className="comment-author vcard">
-                                <Image
-                                  className="avatar photo"
-                                  src={
-                                    comment.image
-                                      ? `${IMAGE_URL + comment.image}`
-                                      : profileIcon
-                                  }
-                                  alt="Profile Picture"
-                                  width={50}
-                                  height={50}
-                                />
-                                <cite className="fn">{comment.name}</cite>{" "}
-                                <span className="says">says:</span>
+                        {singleBlogCommentData?.data[0]?.comments?.map(
+                          (comment: any, index: number) => (
+                            <li key={index} className="comment">
+                              <div className="comment-body">
+                                <div className="comment-author vcard">
+                                  <Image
+                                    className="avatar photo"
+                                    src={
+                                      comment?.user?.image
+                                        ? `${IMAGE_URL + comment?.user?.image}`
+                                        : profileIcon
+                                    }
+                                    alt="Profile Picture"
+                                    width={50}
+                                    height={50}
+                                  />
+                                  <cite className="fn">
+                                    {comment?.user?.name}
+                                  </cite>{" "}
+                                  <span className="says">says:</span>
+                                </div>
+                                <div className="comment-meta">
+                                  {formatDate(comment.created_at)}
+                                </div>
+                                <p>{comment.body}</p>
+                                <div className="reply">
+                                  <Link
+                                    href={"#"}
+                                    className="comment-reply-link"
+                                  >
+                                    Reply
+                                  </Link>
+                                </div>
                               </div>
-                              <div className="comment-meta">
-                                <Link href={"#"}>
-                                  {formatDate(comment.date)}
-                                </Link>{" "}
-                              </div>
-                              <p>{comment.comment}</p>
-                              <div className="reply">
-                                <Link href={"#"} className="comment-reply-link">
-                                  Reply
-                                </Link>
-                              </div>
-                            </div>
-                          </li>
-                        ))}
+                            </li>
+                          )
+                        )}
                       </ol>
                       <div className="comment-respond" id="respond">
                         <h4 className="comment-reply-title" id="reply-title">
