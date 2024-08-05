@@ -1,3 +1,4 @@
+import { WritableDraft } from "immer";
 export interface Blog {
   id: number;
   parent_id: number;
@@ -79,7 +80,7 @@ interface Sector {
   updated_at: string;
 }
 
-interface SectorResponse {
+export interface SectorResponse {
   code: number;
   success: string;
   message: string;
@@ -88,3 +89,15 @@ interface SectorResponse {
 
 
 
+interface SingleBlogCommentPost {
+    question_id : any;
+    body : any;
+    parent_comment_id?:string | null
+
+}
+
+type WritableSingleBlogCommentPost = WritableDraft<SingleBlogCommentPost>;
+
+export {
+  WritableSingleBlogCommentPost
+}

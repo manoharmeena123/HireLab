@@ -15,6 +15,8 @@ export interface PostJobType {
   total_experience: string;
   job_description: string;
   ctc: string;
+  city :string;
+  state :string;
   tags: string;
   sector: string;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
@@ -37,6 +39,8 @@ export interface UpdatePostJobType {
   job_description: string;
   ctc: string;
   tags: string;
+  city :string;
+  state :string;
   sector: string;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
@@ -63,6 +67,8 @@ export interface PostJobResponse {
     updated_at: string;
     created_at: string;
     ctc: string;
+    city :string;
+    state :string;
     tags: string;
     id: number;
     sector: string;
@@ -85,6 +91,8 @@ export interface PostJobState {
   total_experience: string;
   job_description: string;
   ctc: string;
+  city :string;
+  state :string;
   tags: string;
   sector: string;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;

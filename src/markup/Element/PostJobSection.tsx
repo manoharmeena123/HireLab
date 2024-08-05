@@ -898,6 +898,36 @@ const PostJobSection = () => {
                       </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
+                          <label>City</label>
+                          <input
+                            type="text"
+                            name="city"
+                            onChange={handleInputChange}
+                            placeholder="Enter City"
+                            className="form-control tags_input"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.city?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
+                          <label>State</label>
+                          <input
+                            type="text"
+                            name="state"
+                            onChange={handleInputChange}
+                            placeholder="Enter State"
+                            className="form-control tags_input"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.state?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-12 col-md-12">
+                        <div className="form-group">
                           <label>Office Address/Landmark</label>
                           <input
                             type="text"
