@@ -7,7 +7,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 // Images
 const bnr7 = require("./../../images/background/plans.png");
 
-const MembershipPlans = (plan : number | string) => {
+const MembershipPlans = (plan : any) => {
   const { data: membershipData } = useGetMembershipQuery();
   const [saveMemberShip] = useSaveMemberShipMutation();
   const { user } = useLoggedInUser();
