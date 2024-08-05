@@ -4,49 +4,52 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import bnr from "../../images/banner/bnr1.jpg";
+import { blogformatDate } from "@/utils/formateDate";
 import profileIcon from "../../images/favicon.png";
-import { Button } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import {
   useGetSingleDiscussionByTitleMutation,
   useCreateCommentMutation,
   useGetCommentForQuetionMutation,
   useDeleteCommentByIdMutation,
   useGetCommentForParentCommentMutation,
+  useGetSettingsQuery,
 } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
-import { faComment, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CommentSection } from "react-comments-section";
-import "react-comments-section/dist/index.css";
 import { useLoggedInUser } from "@/hooks/index";
+import Sidebar from "../../markup/Element/Sidebar";
 
-interface Comment {
-  userId: string;
-  comId: string;
-  fullName: string;
-  userProfile: string;
-  text: string;
-  avatarUrl: string;
-  replies: Comment[];
-}
-
-const SingleDiscussion = () => {
+const SingleBlogSection = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const { user } = useLoggedInUser();
   const router = useRouter();
+  const { data: getSetting } = useGetSettingsQuery();
+
+  const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
+  const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const [
     getSingleDiscussionByTitle,
     { data: singleDiscussion, isLoading, isError, isSuccess, error },
   ] = useGetSingleDiscussionByTitleMutation();
 
+  const questionId = singleDiscussion?.data?.id;
+  const [
+    getCommentForQuetion,
+    { data: commentsData, isLoading: commentsLoading },
+  ] = useGetCommentForQuetionMutation();
+
   const [createComment] = useCreateCommentMutation();
-  const [deleteComment] = useDeleteCommentByIdMutation();
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [getCommentsForQuestion, { data: commentsData }] =
-    useGetCommentForQuetionMutation();
+  const [getCommentForParentComment] = useGetCommentForParentCommentMutation();
+
+  useEffect(() => {
+    if (questionId) {
+      getCommentForQuetion(questionId);
+    }
+  }, [questionId, getCommentForQuetion]);
 
   useEffect(() => {
     if (query) {
@@ -54,407 +57,382 @@ const SingleDiscussion = () => {
     }
   }, [getSingleDiscussionByTitle, query]);
 
-  // JavaScript to remove reply buttons
   useEffect(() => {
-    const removeReplyButtons = () => {
-      const replyButtons = document.querySelectorAll(".replyBtn");
-      replyButtons.forEach((button) => button.remove());
-    };
-    // Initial call to remove reply buttons
-    removeReplyButtons();
-    // Observer to handle dynamic updates
-    const observer = new MutationObserver(removeReplyButtons);
-    observer.observe(document.body, { childList: true, subtree: true });
-    // Cleanup observer on component unmount
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (singleDiscussion && singleDiscussion.data) {
-      const questionId = singleDiscussion.data.id.toString();
-      getCommentsForQuestion(questionId);
-    }
-  }, [singleDiscussion, getCommentsForQuestion]);
-
-  useEffect(() => {
-    if (commentsData && commentsData.data) {
-      const formatComments = (comments: any[]): any[] => {
-        return comments.map((comment) => ({
-          userId: comment?.user?.id,
-          comId: comment?.id?.toString(),
-          fullName: comment?.user?.name,
-          userProfile: `${IMAGE_URL + comment?.user?.image}`,
-          text: comment?.body,
-          avatarUrl: `${IMAGE_URL + comment?.user?.image}`,
-          replies: formatComments(comment?.comments || []), // Recursively format replies
-        }));
-      };
-      const formattedComments = formatComments(
-        commentsData?.data.map((item: any) => item.comments).flat()
-      );
-      console.log("formattedComments", formattedComments);
-      setComments(formattedComments);
-    }
-  }, [commentsData]);
-
-  useEffect(() => {
-    const updatePostButton = () => {
-      const postButton: any = document.querySelector(".postBtn");
-      if (postButton) {
-        if (!user) {
-          postButton.textContent = "Login to post";
-          postButton.style.whiteSpace = "nowrap";
-          postButton.addEventListener("click", () => {
-            router.push("/login");
-          });
-        } else {
-          postButton.textContent = "Post";
-        }
-      }
-    };
-
-    const setPostCommentReadonly = () => {
-      const postCommentInput = document.querySelector(".postComment");
-      if (postCommentInput) {
-        if (!user?.user) {
-          postCommentInput.setAttribute("readonly", "true");
-        } else {
-          postCommentInput.removeAttribute("readonly");
-        }
-      }
-    };
-
-       const updateNoComDiv = () => {
-      const noComDiv: any = document.querySelector(".no-comDiv");
-      if (noComDiv) {
-        if (!user?.user) {
-          noComDiv.style.display = "none";
-        } else {
-          noComDiv.style.display = "block";
-        }
-      }
-    };
-
-    // Initial call to update elements
-    updatePostButton();
-    setPostCommentReadonly();
-    updateNoComDiv();
-
-    // Observer to handle dynamic updates
-    const observer = new MutationObserver(() => {
-      updatePostButton();
-      setPostCommentReadonly();
-      updateNoComDiv();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Cleanup observer on component unmount
-    return () => observer.disconnect();
-  }, [user, router]);
-
-  useEffect(() => {
-    const updateProfileImages = () => {
-      const userImages = document.querySelectorAll(".userImg");
-      userImages.forEach((img: any) => {
-        if (!user) {
-          img.style.display = "none";
-        }
+    if (query && replyToCommentId) {
+      getCommentForParentComment({
+        questionId: query,
+        commentId: replyToCommentId,
       });
-    };
+    }
+  }, [query, replyToCommentId, getCommentForParentComment]);
 
-    // Initial call to update profile images
-    updateProfileImages();
-    // Observer to handle dynamic updates
-    const observer = new MutationObserver(updateProfileImages);
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    // Cleanup observer on component unmount
-    return () => observer.disconnect();
-  }, [user]);
-
-  const handleCommentSubmit = async (data: any) => {
-    const { text } = data;
-    const question_id = singleDiscussion?.data?.id?.toString();
-    const payload = {
-      question_id,
-      body: text,
-      parent_comment_id: null,
-    };
-
-    try {
-      const res = await createComment(payload).unwrap();
-
-      const newComment = {
-        userId: user?.user.id,
-        comId: res.id.toString(),
-        fullName: user?.user.name,
-        userProfile: `${IMAGE_URL + user?.user?.image}`,
-        text: text,
-        avatarUrl: `${IMAGE_URL + user?.user?.image}`,
-        replies: [], // No replies for new comments
+  const handlePostComment = async (
+    event: React.FormEvent<HTMLFormElement>,
+    parentCommentId: string | null = null
+  ) => {
+    event.preventDefault();
+    if (!user) {
+      router.push("/login");
+    } else {
+      const formData = new FormData(event.currentTarget);
+      const commentData = {
+        question_id: questionId,
+        body: formData.get("comment") as string,
+        parent_comment_id: null,
       };
-
-      setComments([...comments, newComment]);
-    } catch (error) {
-      console.error("Failed to post comment", error);
+      await createComment(commentData);
+      // Refresh comments
+      getCommentForQuetion(questionId);
     }
   };
 
-  const handleDeleteComment = async (commentId: any) => {
-    const { comIdToDelete, parentOfDeleteId } = commentId;
-    console.log("commentId", commentId);
-    try {
-      await deleteComment(comIdToDelete).unwrap();
-      const deleteReplies: any = (replies: Comment[], commentId: string) => {
-        return replies
-          .filter((reply) => reply.comId !== commentId)
-          .map((reply) => ({
-            ...reply,
-            replies: deleteReplies(reply.replies, commentId),
-          }));
+  const handleReplyPostComment = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    if (!user) {
+      router.push("/login");
+    } else {
+      const formData = new FormData(event.currentTarget);
+      const commentData = {
+        question_id: questionId,
+        body: formData.get("comment") as string,
+        parent_comment_id: replyToCommentId,
       };
-
-      const updatedComments = comments
-        .filter((comment) => comment.comId !== commentId)
-        .map((comment) => ({
-          ...comment,
-          replies: deleteReplies(comment.replies, commentId),
-        }));
-
-      setComments(updatedComments);
-    } catch (error) {
-      console.error("Failed to delete comment", error);
+      await createComment(commentData);
+         // Refresh comments
+      getCommentForQuetion(questionId);
+      setShowReplyModal(false);
+      setReplyToCommentId(null);
+      getCommentForParentComment({
+        questionId: questionId,
+        commentId: replyToCommentId,
+      });
     }
   };
 
-  const handleEditComment = async (commentId: any) => {
-    console.log("edit comment");
+  const handleReply = (commentId: string) => {
+    setReplyToCommentId(commentId);
+    setShowReplyModal(true);
   };
 
-  if (isLoading) {
+  const formatDate = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
+  const renderComments = (comments: any[], parentId: string | null = null) => {
+    return comments
+      .filter((comment) => comment.parent_id === parentId)
+      .map((comment) => (
+        <li key={comment.id} className="comment">
+          <div className="comment-body">
+            <div className="comment-author vcard">
+              <Image
+                className="avatar photo"
+                src={
+                  comment?.user?.image
+                    ? `${IMAGE_URL + comment?.user?.image}`
+                    : profileIcon
+                }
+                alt="Profile Picture"
+                width={50}
+                height={50}
+              />
+              <cite className="fn">{comment?.user?.name}</cite>{" "}
+              <span className="says">says:</span>
+            </div>
+            <div className="dez-post-meta">
+              {" "}
+              <ul className="d-flex align-items-center">
+                <li className="post-date">
+                  {" "}
+                  <i className="fa fa-calendar">{""}</i>
+                  {formatDate(comment.created_at)}
+                </li>
+              </ul>
+            </div>
+
+            <p>{comment.body}</p>
+            {user?.user && (
+              <div className="reply">
+                <button
+                  className="site-button-link"
+                  onClick={() => handleReply(comment.id)}
+                >
+                  Reply
+                </button>
+              </div>
+            )}
+            <ul className="children">{renderComments(comments, comment.id)}</ul>
+          </div>
+        </li>
+      ));
+  };
+
+  if (isLoading || commentsLoading) {
     return <Loading />;
   }
 
-  if (isSuccess && singleDiscussion) {
-    // Remove hyphens from the question text
-    const formattedQuestion = singleDiscussion.data.question.replace(/-/g, " ");
-    const { description } = singleDiscussion.data;
+  const formattedQuestion = singleDiscussion?.data?.question.replace(/-/g, " ");
+  const description = singleDiscussion?.data?.description;
+  const getSafeUrl = (url: string | null | undefined) => {
+    return url || "#";
+  };
 
-    return (
-      <>
-        <div className="page-content bg-white">
-          <div
-            className="dez-bnr-inr overlay-black-middle"
-            style={{ backgroundImage: `url(${bnr.src})` }}
-          >
-            <div className="container">
-              <div className="dez-bnr-inr-entry">
-                <h1 className="text-white">Discussion Details</h1>
-                <div className="breadcrumb-row">
-                  <ul className="list-inline">
-                    <li>
-                      <Link href="/">Home</Link>
-                    </li>
-                    <li>Discussion Details</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="content-area">
-            <div className="container">
-              <div className="row">
-                <div className="col-lg-9 col-md-8 m-b10">
-                  <h2>{formattedQuestion}</h2>
-                  <p>{description}</p>
-                  <div className="blog-post blog-single blog-style-1">
-                    <CommentSection
-                      currentUser={{
-                        currentUserId: `${user?.user.id}`,
-                        currentUserImg: `${IMAGE_URL + user?.user?.image}`,
-                        currentUserProfile: `${IMAGE_URL + user?.user?.image}`,
-                        currentUserFullName: `${user?.user.name}`,
-                      }}
-                      logIn={{
-                        loginLink: "/login",
-                        signupLink: "/signup",
-                      }}
-                      commentData={comments}
-                      onSubmitAction={handleCommentSubmit}
-                      onDeleteAction={(commentId: string) =>
-                        handleDeleteComment(commentId)
-                      }
-                      onEditAction={handleEditComment}
-                    />
-                    {comments.length === 0 && (
-                      <div className="no-comDiv">
-                        {user?.user ? (
-                          "No comments here. Be the first one to comment!"
-                        ) : (
-                            <div className="d-flex flex-column align-items-center justify-content-center text-center">
-                              <p>You have to log in first to post comments.</p>
-                              <Button
-                                className="btn mt-2 apply-saved-btn"
-                                onClick={() => router.push("/login")}
-                              >
-                                Login
-                              </Button>
-                            </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <div className="col-lg-3 col-md-4 sticky-top">
-                  <div className="suggested-topics-wrap shadow p-3">
-                    <div>
-                      <h5>Suggested Topics</h5>
-                      <hr />
-                    </div>
-                    <div>
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                      <hr />
-                      <div className="sugg-comment-topic">
-                        <h6>How To Study in the Top College</h6>
-                        <div className="sugg-topic-card-detail">
-                          <div className="d-flex disc-date-suggest">
-                            <div className="">
-                              <span className="badge-category-bg"></span>
-                              <span>MBA</span>
-                            </div>
-                            <div>
-                              <span>Oct '23</span>
-                            </div>
-                          </div>
-                          <div className="disc-date-suggest">
-                            <span>12</span>
-                            <FontAwesomeIcon icon={faComment} />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="my-5">
-                      <p className="suggested-topics-message">
-                        <b>Want to read more? Browse other topics in </b>
-                        <Link
-                          className="badge-wrapper bullet d-inline-block"
-                          href="/c/mba/373"
-                        >
-                          <div className="">
-                            <span className="badge-category-bg"></span>
-                            <span>MBA</span>
-                          </div>
-                        </Link>{" "}
-                        or{" "}
-                        <Link href="/latest" style={{ color: "blue" }}>
-                          view latest topics
-                        </Link>
-                        .
-                      </p>
-                    </div>
-                  </div>
-                </div>
+  return (
+    <>
+      <div className="page-content bg-white">
+        <div
+          className="dez-bnr-inr overlay-black-middle"
+          style={{ backgroundImage: `url(${bnr.src})` }}
+        >
+          <div className="container">
+            <div className="dez-bnr-inr-entry">
+              <h1 className="text-white">Blog Details</h1>
+              <div className="breadcrumb-row">
+                <ul className="list-inline">
+                  <li>
+                    <Link href="/">Home</Link>
+                  </li>
+                  <li>Blog Details</li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
-      </>
-    );
-  }
-  return null;
+        <div className="content-area">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-8 col-md-7 m-b10">
+                <div className="blog-post blog-single blog-style-1">
+                  <div className="dez-post-meta">
+                    <ul className="d-flex align-items-center">
+                      <li className="post-date">
+                        <i className="fa fa-calendar"></i>
+                        {blogformatDate(new Date().toISOString())}
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="dez-post-title">
+                    <h4 className="post-title m-t0">{formattedQuestion}</h4>
+                  </div>
+                  <div className="dez-post-text">
+                    <p>{description}</p>
+                  </div>
+                  <div className="dez-divider bg-gray-dark op4">
+                    <i className="icon-dot c-square"></i>
+                  </div>
+                  <div className="share-details-btn">
+                    <ul>
+                      <li>
+                        <h5 className="m-a0">Share Post</h5>
+                      </li>
+                      <li>
+                        <Link
+                          href={getSafeUrl(getSetting?.data?.facebook)}
+                          className="site-button facebook button-sm"
+                        >
+                          <i className="fa fa-facebook"></i> Facebook
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={getSafeUrl(getSetting?.data?.twitter)}
+                          className="site-button google-plus button-sm"
+                        >
+                          <i className="fa fa-twitter"></i> Twitter
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={getSafeUrl(getSetting?.data?.linkedin)}
+                          className="site-button linkedin button-sm"
+                        >
+                          <i className="fa fa-linkedin"></i> Linkedin
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href={getSafeUrl(getSetting?.data?.instagram)}
+                          className="site-button instagram button-sm"
+                        >
+                          <i className="fa fa-instagram"></i> Instagram
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="clear" id="comment-list">
+                  <div className="comments-area" id="comments">
+                    <h2 className="comments-title">Comments</h2>
+                    <div className="clearfix m-b20">
+                      <ol className="comment-list">
+                        {commentsData?.data[0]?.comments &&
+                          renderComments(commentsData?.data[0]?.comments)}
+                      </ol>
+                      <div className="comment-respond" id="respond">
+                        <h4 className="comment-reply-title" id="reply-title">
+                          Leave a Reply{" "}
+                          <small>
+                            {" "}
+                            <Link
+                              href={"#"}
+                              style={{ display: "none" }}
+                              id="cancel-comment-reply-link"
+                              rel="nofollow"
+                            >
+                              Cancel reply
+                            </Link>{" "}
+                          </small>{" "}
+                        </h4>
+                        {!user ? (
+                          <button
+                            className="site-button"
+                            onClick={() => router.push("/login")}
+                          >
+                            Login to post comment
+                          </button>
+                        ) : (
+                          <form
+                            className="comment-form"
+                            id="commentform"
+                            method="post"
+                            onSubmit={handlePostComment}
+                          >
+                            <p className="comment-form-author">
+                              <label htmlFor="author">
+                                Name <span className="required">*</span>
+                              </label>
+                              <input
+                                type="text"
+                                name="author"
+                                placeholder="Author"
+                                id="author"
+                                required
+                                value={user?.user.name}
+                                readOnly
+                              />
+                            </p>
+                            <p className="comment-form-email">
+                              <label htmlFor="email">
+                                Email <span className="required">*</span>
+                              </label>
+                              <input
+                                type="email"
+                                name="email"
+                                placeholder="Email"
+                                id="email"
+                                required
+                                value={user?.user.email}
+                                readOnly
+                                style={{ padding: "7px 53px" }}
+                              />
+                            </p>
+                            <p className="comment-form-url">
+                              <label htmlFor="url">Website</label>
+                              <input
+                                type="url"
+                                name="url"
+                                placeholder="Website"
+                                id="url"
+                                value={user?.user?.website || ""}
+                                readOnly
+                                style={{ padding: "7px 53px" }}
+                              />
+                            </p>
+                            <p className="comment-form-comment">
+                              <label htmlFor="comment">Comment</label>
+                              <textarea
+                                rows={8}
+                                name="comment"
+                                placeholder="Comment"
+                                id="comment"
+                                required
+                              ></textarea>
+                            </p>
+                            <p className="form-submit">
+                              <input
+                                type="submit"
+                                value="Post Comment"
+                                className="submit site-button"
+                                id="submit"
+                                name="submit"
+                              />
+                            </p>
+                          </form>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4 col-md-5 sticky-top">
+                <Sidebar />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Modal show={showReplyModal} onHide={() => setShowReplyModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reply to Comment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form
+            className="comment-form"
+            method="post"
+            onSubmit={handleReplyPostComment}
+          >
+            {/* <p className="comment-form-author">
+              <label htmlFor="author">
+                Name <span className="required">*</span>
+              </label>
+              <input type="text" name="author" placeholder="Author" id="author" required value={user?.user.name} readOnly />
+            </p>
+            <p className="comment-form-email">
+              <label htmlFor="email">
+                Email <span className="required">*</span>
+              </label>
+              <input type="email" name="email" placeholder="Email" id="email" required value={user?.user.email} readOnly style={{ padding: "7px 53px" }} />
+            </p> */}
+            <p className="comment-form-comment">
+              <label htmlFor="comment">Comment</label>
+              <textarea
+                rows={2}
+                name="comment"
+                placeholder="Comment"
+                id="comment"
+                required
+              ></textarea>
+            </p>
+            <p className="form-submit">
+              <input
+                type="submit"
+                value="Post Reply"
+                className="submit site-button"
+                id="submit"
+                name="submit"
+              />
+            </p>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowReplyModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 };
 
-export default SingleDiscussion;
+export default SingleBlogSection;

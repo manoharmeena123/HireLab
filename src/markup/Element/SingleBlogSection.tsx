@@ -15,7 +15,7 @@ import {
 import { blogformatDate, truncateText } from "@/utils/formateDate";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal, Button } from 'react-bootstrap';
 var bnr = require("./../../images/banner/bnr1.jpg");
 import profileIcon from "../../images/favicon.png";
@@ -50,13 +50,7 @@ const SingleBlogSection = () => {
     },
   ] = useCreateSingleBlogCommentMutation();
 
-  const [
-    getSingleParentBlogCommentbyId,
-    {
-      data: singleParentBlogCommentData,
-      isLoading: singleParentBlogCommentDataLoading,
-    },
-  ] = useGetSingleParentBlogCommentbyIdMutation();
+  const [getSingleParentBlogCommentbyId] = useGetSingleParentBlogCommentbyIdMutation();
 
   
   const questionId = getSingleBlogData?.data?.[0]?.id;
@@ -157,13 +151,25 @@ const SingleBlogSection = () => {
               />
               <cite className="fn">{comment?.user?.name}</cite> <span className="says">says:</span>
             </div>
-            <div className="comment-meta">{formatDate(comment.created_at)}</div>
-            <p>{comment.body}</p>
-            <div className="reply">
-              <button className="site-button-link" onClick={() => handleReply(comment.id)}>
-                Reply
-              </button>
+            <div className="dez-post-meta">
+              <ul className="d-flex align-items-center">
+                <li className="post-date">
+                  <i className="fa fa-calendar">{""}</i>
+                  {formatDate(comment.created_at)}
+                </li>
+              </ul>
             </div>
+            <p>{comment.body}</p>
+            {user?.user && (
+              <div className="reply">
+                <button
+                  className="site-button-link"
+                  onClick={() => handleReply(comment.id)}
+                >
+                  Reply
+                </button>
+              </div>
+            )}
             <ul className="children">{renderComments(comments, comment.id)}</ul>
           </div>
         </li>
@@ -205,13 +211,6 @@ const SingleBlogSection = () => {
                           <i className="fa fa-calendar"></i>
                           {blogformatDate(item?.created_at)}
                         </li>{" "}
-                        <li className="post-author" style={{ paddingLeft: "10px" }}>
-                          <i className="fa fa-user"></i>By <Link href={"#"}>demongo</Link>{" "}
-                        </li>
-                        <li className="post-comment" style={{ paddingLeft: "10px" }}>
-                          <i className="fa fa-comments-o"></i>
-                          <Link href={"#"}>5k</Link>{" "}
-                        </li>
                       </ul>
                     </div>
                     <div className="dez-post-title">
@@ -346,7 +345,7 @@ const SingleBlogSection = () => {
         </Modal.Header>
         <Modal.Body>
           <form className="comment-form" method="post" onSubmit={handleReplyPostComment}>
-            <p className="comment-form-author">
+            {/* <p className="comment-form-author">
               <label htmlFor="author">
                 Name <span className="required">*</span>
               </label>
@@ -357,10 +356,10 @@ const SingleBlogSection = () => {
                 Email <span className="required">*</span>
               </label>
               <input type="email" name="email" placeholder="Email" id="email" required value={user?.user.email} readOnly style={{ padding: "7px 53px" }} />
-            </p>
+            </p> */}
             <p className="comment-form-comment">
               <label htmlFor="comment">Comment</label>
-              <textarea rows={8} name="comment" placeholder="Comment" id="comment" required></textarea>
+              <textarea rows={2} name="comment" placeholder="Comment" id="comment" required></textarea>
             </p>
             <p className="form-submit">
               <input type="submit" value="Post Reply" className="submit site-button" id="submit" name="submit" />

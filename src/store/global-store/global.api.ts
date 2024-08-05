@@ -234,13 +234,13 @@ export const queries = {
     }),
   },
   getCommentForQuetion: {
-    query: (id: string) => ({
+    query: (id: any) => ({
       url: `api/get-comments-for-question/${id}`,
       method: "GET",
     }),
   },
   getCommentForParentComment: {
-    query: (quetionId: string, commentId: string) => ({
+    query: (quetionId: any, commentId: any) => ({
       url: `api/get-comments-for-parent-comment/${quetionId}/${commentId}`,
       method: "GET",
     }),

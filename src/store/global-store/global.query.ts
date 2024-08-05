@@ -274,17 +274,17 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query: queries.getBanner.query,
       providesTags: ["Banner"],
     }),
-    getCommentForQuetion: builder.mutation<any, string>({
+    getCommentForQuetion: builder.mutation<any, any>({
       query: (questionId) => queries.getCommentForQuetion.query(questionId),
       invalidatesTags: ["GetCommentForQuetion"],
     }),
-    deleteCommentById: builder.mutation<any, string>({
+    deleteCommentById: builder.mutation<any, any>({
       query: (commentId) => queries.deleteCommentById.query(commentId),
       invalidatesTags: ["DeleteCommentById"],
     }),
     getCommentForParentComment: builder.mutation<
       any,
-      { questionId: string; commentId: string }
+      { questionId: any; commentId: any }
     >({
       query: ({ questionId, commentId }) =>
         queries.getCommentForParentComment.query(questionId, commentId),
