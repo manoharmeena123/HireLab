@@ -13899,6 +13899,45 @@ ul.accordion-list {
   align-items: center;
   color: #2a6310;
 }
+.cart-content{
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+ }
+.cart-input-wrap{
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+  min-height: 50px;
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem; 
+    flex-wrap: wrap;
+}
+.cart-input-wrap div{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.cart-total-wrap{
+  min-height: 100px;
+}
+.cart-total{
+  display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    flex-wrap: wrap; 
+}
+.subtotal{
+  font-size: 12px; 
+}
+.checkout-btn{
+  border: 1px solid #2a6310;
+  color: Black;
+}
+.checkout-btn:hover{
+  background: #2a6310;
+  color: white;
+}
 @media (min-width:992px) and (max-width:1250px) {
   .fullwidth .header-nav .nav > li > a {
     font-size: 10px;
