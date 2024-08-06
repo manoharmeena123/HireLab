@@ -7,7 +7,6 @@ import Logout from "./Logout";
 import Image from "next/image";
 import logo2 from "./../../images/Untitled_picture.png";
 var bnr3 = require("./../../images/background/bg3.jpg");
-import Profile from "../../app/profile/page.sx";
 
 // import Register from './register';
 class Header extends Component {

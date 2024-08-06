@@ -7,7 +7,7 @@ const CartSection = dynamic(
   () => import("@/markup/Element/CartSection"),
   {
     ssr: false,
-    loading: () => <CartSection />,
+    loading: () => <Loading />,
   }
 );
 

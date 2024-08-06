@@ -7,6 +7,8 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { blogformatDate, truncateText } from "@/utils/formateDate";
 import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
+import parse from "html-react-parser";
+
 // Images
 var bnr = require("./../../images/banner/bnr1.jpg");
 
@@ -56,13 +58,15 @@ const BlogDetailGrid = () => {
                   <div className="blog-post blog-grid blog-style-1">
                     <div className="dez-post-media dez-img-effect radius-sm">
                       <Link href={"/blog-details"}>
-                        <Image
-                          src={`${IMAGE_URL + item?.image}`}
-                          alt=""
-                          width={250}
-                          height={200}
-                          style={{ objectFit: "cover", width: "100%", height: "auto" }}
-                        />
+                        <div className="image-wrapper" style={{marginBottom:"-80px"}}>
+                          <Image
+                            src={`${IMAGE_URL + item?.image}`}
+                            alt={item?.title}
+                             width={300}
+                             height={200}
+                           style={{height:'70%'}}
+                          />
+                        </div>
                       </Link>
                     </div>
                     <div className="dez-info">
@@ -72,19 +76,18 @@ const BlogDetailGrid = () => {
                             <i className="fa fa-calendar"></i>
                             {blogformatDate(item?.created_at)}{" "}
                           </li>
-                          <li className="post-comment">
-                            <i className="fa fa-comments-o"></i>
-                            <Link href={"#"}>5k</Link>{" "}
-                          </li>
                         </ul>
                       </div>
                       <div className="dez-post-title">
-                        <h5 className="post-title font-20" onClick={() => viewBlogHandler(item?.title)}>
+                        <h5
+                          className="post-title font-20"
+                          onClick={() => viewBlogHandler(item?.title)}
+                        >
                           <Link href={"#"}>{item?.title}</Link>
                         </h5>
                       </div>
                       <div className="dez-post-text">
-                        <p>{truncateText(item?.description, 30)}</p>
+                        <p>{parse(truncateText(item?.description, 30))}</p>
                       </div>
                       <div className="dez-post-readmore blog-share">
                         <span
@@ -130,6 +133,14 @@ const BlogDetailGrid = () => {
           </div>
         </div>
       </div>
+      <style jsx>{`
+        .image-wrapper {
+          position: relative;
+          width: 100%;
+          height: 300px; /* Adjust the height as needed */
+          overflow: hidden;
+        }
+      `}</style>
     </>
   );
 };

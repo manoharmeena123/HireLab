@@ -311,6 +311,20 @@ export const queries = {
     }),
   },
 
+  //api/get-blog-category 
+  getCategoryJobs :{
+   query :() =>({
+     url : "api/get-blog-category",
+     method : "GET"
+   })
+  },
+  ///api/recent-blogs
+  getRecentBlogs :{
+    query :() =>({
+      url : "api/recent-blogs",
+      method : "GET"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {
@@ -373,4 +387,11 @@ export const queries = {
       method: "GET",
     }),
   },
+  // api/get-blogs-by-category/15
+  getCategoryJobById :{
+    query : (id: any) =>({
+      url : `api/get-blogs-by-category/${id}`,
+      method : "GET"
+    })
+  }
 };

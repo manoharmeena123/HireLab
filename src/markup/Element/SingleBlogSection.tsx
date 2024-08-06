@@ -5,6 +5,8 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
+import parse from "html-react-parser";
+
 import {
   useGetBlogsDataByIdMutation,
   useGetSettingsQuery,
@@ -12,7 +14,7 @@ import {
   useCreateSingleBlogCommentMutation,
   useGetSingleParentBlogCommentbyIdMutation,
 } from "@/store/global-store/global.query";
-import { blogformatDate, truncateText } from "@/utils/formateDate";
+import { blogformatDate, truncateText,blogformatsDate } from "@/utils/formateDate";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
 import { Modal, Button } from "react-bootstrap";
@@ -179,7 +181,7 @@ const SingleBlogSection = () => {
               <ul className="d-flex align-items-center">
                 <li className="post-date">
                   <i className="fa fa-calendar">{""}</i>
-                  {formatDate(comment.created_at)}
+                  {blogformatsDate(comment?.created_at)}
                 </li>
               </ul>
             </div>
@@ -245,11 +247,11 @@ const SingleBlogSection = () => {
                         <Link href={"/blog-details"}>{item?.title}</Link>
                       </h4>
                     </div>
-                    <div className="dez-post-media dez-img-effect zoom-slow m-t20">
+                    <div className="dez-post-media dez-img-effect m-t20">
                       <Link href={"#"}>
                         <Image
                           src={`${IMAGE_URL + item?.image}`}
-                          objectFit="contain"
+                          objectFit="fill"
                           width={600}
                           height={400}
                           alt="Blog Image"
@@ -260,8 +262,8 @@ const SingleBlogSection = () => {
                     <div className="dez-post-text">
                       <p>
                         {expandedBlogId === item.id.toString()
-                          ? item?.description
-                          : truncateText(item?.description, 60)}
+                          ? parse(item?.description)
+                          : parse(truncateText(item?.description, 60))}
                       </p>
                       {expandedBlogId === item.id.toString() ? (
                         <Link

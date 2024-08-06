@@ -31,7 +31,7 @@ const Accordsidebar: React.FC<AccordsidebarProps> = ({
   };
   const [activeIndex, setActiveIndex] = useState(null);
   const [value, setValue] = useState([30, 60]);
-
+ console.log('value', value)
   const handleClick = (index: any) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
