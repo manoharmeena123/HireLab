@@ -1,6 +1,5 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import Env from "@/lib/Env";
+import React, { ChangeEvent, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "@/app/login/store/login.query";
@@ -10,19 +9,15 @@ import {
   selectLoginErrors,
 } from "@/app/login/store/login.selectors";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import styles from "@/styles/Login.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import MembershipPlans from "./MembershipPlan";
 import { Button } from "react-bootstrap";
-import { useSearchParams } from "next/navigation";
-
 
 const CartSection = () => {
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
- 
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const authState = useSelector(selectLoginState);
@@ -30,13 +25,7 @@ const CartSection = () => {
   const [loading, setLoading] = useState(false);
 
   const plan = searchParams.get("plan") || "";
-  console.log('plan',plan);
-  
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    dispatch(setAuthState({ [name]: value }));
-  };
 
   return (
     <div className={styles["page-wraper"]}>
@@ -56,7 +45,7 @@ const CartSection = () => {
                     <div className="d-flex flex-column" style={{ gap: "1rem" }}>
                       <div className="cart-input-wrap">
                         <div>
-                          <input type="radio" name="month" id="" />
+                          <input type="radio" name="month" id="month" />
                           <label htmlFor="month" className="mb-0">
                             1 Month
                           </label>
@@ -79,13 +68,12 @@ const CartSection = () => {
                         </h6>
                       </div>
                     </div>
-                  <hr />
-                  <div>
-                    <Button className="w-100 checkout-btn" variant=""><i className="fa fa-box"></i>Continue to Checkout</Button>
-                  </div>
+                    <hr />
+                    <div>
+                      <Button className="w-100 checkout-btn" variant=""><i className="fa fa-box"></i>Continue to Checkout</Button>
+                    </div>
                   </div> 
                 </div>
-                
               </div>
             </div>
             <div className="col-lg-9 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll  left-bottom shadow">

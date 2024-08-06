@@ -70,7 +70,7 @@ const SingleBlogSection = () => {
     event: React.FormEvent<HTMLFormElement>,
     parentCommentId: string | null = null
   ) => {
-    event.preventDefault();
+    // event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
@@ -80,16 +80,18 @@ const SingleBlogSection = () => {
         body: formData.get("comment") as string,
         parent_comment_id: null,
       };
-      await createComment(commentData);
+      const res = await createComment(commentData);
       // Refresh comments
-      getCommentForQuetion(questionId);
+      if (res?.data?.code == 200) {
+        getCommentForQuetion(questionId);
+      }
     }
   };
 
   const handleReplyPostComment = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
-    event.preventDefault();
+    // event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
@@ -99,9 +101,11 @@ const SingleBlogSection = () => {
         body: formData.get("comment") as string,
         parent_comment_id: replyToCommentId,
       };
-      await createComment(commentData);
-         // Refresh comments
-      getCommentForQuetion(questionId);
+      const res = await createComment(commentData);
+      // Refresh comments
+      if (res?.data?.code == 200) {
+        getCommentForQuetion(questionId);
+      }
       setShowReplyModal(false);
       setReplyToCommentId(null);
       getCommentForParentComment({
@@ -308,47 +312,53 @@ const SingleBlogSection = () => {
                             method="post"
                             onSubmit={handlePostComment}
                           >
-                            <p className="comment-form-author">
-                              <label htmlFor="author">
-                                Name <span className="required">*</span>
-                              </label>
-                              <input
-                                type="text"
-                                name="author"
-                                placeholder="Author"
-                                id="author"
-                                required
-                                value={user?.user.name}
-                                readOnly
-                              />
-                            </p>
-                            <p className="comment-form-email">
-                              <label htmlFor="email">
-                                Email <span className="required">*</span>
-                              </label>
-                              <input
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                id="email"
-                                required
-                                value={user?.user.email}
-                                readOnly
-                                style={{ padding: "7px 53px" }}
-                              />
-                            </p>
-                            <p className="comment-form-url">
-                              <label htmlFor="url">Website</label>
-                              <input
-                                type="url"
-                                name="url"
-                                placeholder="Website"
-                                id="url"
-                                value={user?.user?.website || ""}
-                                readOnly
-                                style={{ padding: "7px 53px" }}
-                              />
-                            </p>
+                            {user?.user &&
+                              !(
+                                <>
+                                  <p className="comment-form-author">
+                                    <label htmlFor="author">
+                                      Name <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      type="text"
+                                      name="author"
+                                      placeholder="Author"
+                                      id="author"
+                                      required
+                                      value={user?.user.name}
+                                      readOnly
+                                    />
+                                  </p>
+                                  <p className="comment-form-email">
+                                    <label htmlFor="email">
+                                      Email <span className="required">*</span>
+                                    </label>
+                                    <input
+                                      type="email"
+                                      name="email"
+                                      placeholder="Email"
+                                      id="email"
+                                      required
+                                      value={user?.user.email}
+                                      readOnly
+                                      style={{ padding: "7px 53px" }}
+                                    />
+                                  </p>
+                                  <p className="comment-form-url">
+                                    <label htmlFor="url">Website</label>
+                                    <input
+                                      type="url"
+                                      name="url"
+                                      placeholder="Website"
+                                      id="url"
+                                      value={user?.user?.website || ""}
+                                      readOnly
+                                      style={{ padding: "7px 53px" }}
+                                    />
+                                  </p>
+                                </>
+                              )}
+
                             <p className="comment-form-comment">
                               <label htmlFor="comment">Comment</label>
                               <textarea
