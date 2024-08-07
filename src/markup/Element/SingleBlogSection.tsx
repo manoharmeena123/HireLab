@@ -262,8 +262,8 @@ const SingleBlogSection = () => {
                     <div className="dez-post-text">
                       <p>
                         {expandedBlogId === item.id.toString()
-                          ? parse(item?.description)
-                          : parse(truncateText(item?.description, 60))}
+                          ? parse(item?.description || "")
+                          : parse(truncateText(item?.description, 60)) || ""}
                       </p>
                       {expandedBlogId === item.id.toString() ? (
                         <Link

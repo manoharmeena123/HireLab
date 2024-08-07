@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import bnr from "../../images/banner/bnr1.jpg";
-import { blogformatDate } from "@/utils/formateDate";
+import { blogformatDate, truncateText } from "@/utils/formateDate";
 import profileIcon from "../../images/favicon.png";
 import { Button, Modal } from "react-bootstrap";
 import {
@@ -19,6 +19,7 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
 import { useLoggedInUser } from "@/hooks/index";
 import Sidebar from "../../markup/Element/Sidebar";
+import parse from "html-react-parser";
 
 const SingleBlogSection = () => {
   const searchParams = useSearchParams();
@@ -27,6 +28,7 @@ const SingleBlogSection = () => {
   const router = useRouter();
   const { data: getSetting } = useGetSettingsQuery();
 
+  const [isExpanded, setIsExpanded] = useState(false);
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
@@ -181,18 +183,26 @@ const SingleBlogSection = () => {
       ));
   };
 
-  if (isLoading || commentsLoading) {
-    return <Loading />;
-  }
-
-  const formattedQuestion = singleDiscussion?.data?.question?.replace(/-/g, " ");
+  const formattedQuestion = singleDiscussion?.data?.question?.replace(
+    /-/g,
+    " "
+  );
+  const truncatedDescription = truncateText(
+    singleDiscussion?.data?.description || "",
+    60
+  );
   const description = singleDiscussion?.data?.description;
   const getSafeUrl = (url: string | null | undefined) => {
     return url || "#";
   };
 
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
     <>
+      {(isLoading || commentsLoading) && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -229,7 +239,24 @@ const SingleBlogSection = () => {
                     <h4 className="post-title m-t0">{formattedQuestion}</h4>
                   </div>
                   <div className="dez-post-text">
-                    <p>{description}</p>
+                    <p>
+                      {isExpanded
+                        ? parse(description || "")
+                        : parse(truncatedDescription)}
+                      {description && description.split(" ").length > 60 && (
+                        <span
+                          onClick={toggleDescription}
+                          style={{
+                            color: "#2a6310",
+                            padding: "0",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {isExpanded ? " Read Less" : " Read More"}
+                        </span>
+                      )}
+                    </p>
                   </div>
                   <div className="dez-divider bg-gray-dark op4">
                     <i className="icon-dot c-square"></i>

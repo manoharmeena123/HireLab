@@ -21,7 +21,7 @@ const {push} = useRouter()
   
   const { data: discussionData, isLoading : discussionLoading} = useGetDiscussionQuery();
   const blogsToDisplay = discussionData?.data;
-
+  
   return (
     <>
       {(discussionLoading) && <Loading />}
@@ -80,7 +80,7 @@ const {push} = useRouter()
                           className="post-title font-20"
                           onClick={() => viewBlogHandler(item?.question)}
                         >
-                          <Link href={"#"}>{item?.question}</Link>
+                          <Link href={"#"}>{item?.question.replace(/-/g, " ")}</Link>
                         </h5>
                       </div>
                       <div className="dez-post-text">
