@@ -2,27 +2,32 @@ import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/LatestDiscussions.module.css";
-import { useGetDiscussionQuery } from "@/store/global-store/global.query";
+import { useGetDiscussionQuery,useGetCountsQuery } from "@/store/global-store/global.query";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
 import parse from "html-react-parser";
+import Loading from "@/components/Loading";
 
 const LatestDiscussions = () => {
   const { push } = useRouter();
+  const sectionRef = useRef(null);
   const [questionsPosted, setQuestionsPosted] = useState(0);
+  const [jobPosted, setJobPosted] = useState(0);
   const [answersGiven, setAnswersGiven] = useState(0);
   const [totalForum, setTotalForum] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [shouldAnimate, setShouldAnimate] = useState(false); // Add state to trigger animation
 
-  const initialQuestionsPosted = 1800;
-  const initialAnswersGiven = 1789;
-  const initialTotalForum = 1801;
+  const { data: discussionData, isLoading : discussionLoading} = useGetDiscussionQuery();
+  const { data : getCounts , isLoading: getCountsLoading } = useGetCountsQuery()
 
-  const { data: discussionData } = useGetDiscussionQuery();
-  const sectionRef = useRef(null);
+  const initialJobPosted = getCounts?.data?.job_posted;
+  const initialQuestionsPosted = getCounts?.data?.question_posted;
+  const initialAnswersGiven = getCounts?.data?.answers_given;
+  const initialTotalForum = getCounts?.data?.total_forum;;
 
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -55,6 +60,7 @@ const LatestDiscussions = () => {
       setTotalForum(0);
 
       setTimeout(() => {
+        setJobPosted(initialJobPosted)
         setQuestionsPosted(initialQuestionsPosted);
         setAnswersGiven(initialAnswersGiven);
         setTotalForum(initialTotalForum);
@@ -92,7 +98,9 @@ const LatestDiscussions = () => {
   };
 
   return (
-    <div className="container" ref={sectionRef}>
+    <>
+    {(getCountsLoading && discussionLoading) && ( <Loading/>) }
+      <div className="container" ref={sectionRef}>
       <div className="section-head d-flex justify-content-between align-items-center mb-4">
         <div className="me-sm-auto">
           <h2 style={{ fontWeight: "600" }} className="mb-2">
@@ -105,7 +113,7 @@ const LatestDiscussions = () => {
               {shouldAnimate && (
                 <CountUp
                   start={0}
-                  end={questionsPosted}
+                  end={jobPosted}
                   duration={2}
                   preserveValue={true}
                 />
@@ -224,6 +232,8 @@ const LatestDiscussions = () => {
         ))}
       </div>
     </div>
+    </>
+  
   );
 };
 

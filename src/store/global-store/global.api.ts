@@ -325,6 +325,19 @@ export const queries = {
       method : "GET"
     })
   },
+  // api/page/create-account
+  createAccount :{
+    query :()=>({
+      url : "api/page/create-account",
+      method : "GET"
+    })
+  },
+  getCounts :{
+    query :() =>({
+      url : "api/get-counts",
+      method : "GET"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

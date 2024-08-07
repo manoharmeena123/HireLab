@@ -38,9 +38,6 @@ const Owltestimonial = () => {
     ],
   };
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading testimonials.</div>;
-
   return (
     <Slider className="blog-carousel-center owl-carousel owl-none" {...settings}>
       {testimonialData?.data?.map((item: any, index: number) => (
