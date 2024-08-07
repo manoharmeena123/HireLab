@@ -1,33 +1,45 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useGetBlogsDataQuery } from "@/store/global-store/global.query";
+import { useGetBlogsDataQuery, useGetCategoryJobByIdMutation } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { blogformatDate, truncateText } from "@/utils/formateDate";
-import { useRouter } from "next/navigation";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
-
+import { useSearchParams, useRouter } from "next/navigation";
 // Images
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 const BlogDetailGrid = () => {
   const { push } = useRouter();
+  const searchParams = useSearchParams();
+  const queryId = searchParams.get("query");
+  const [getCategoryJobById, { data: getCategoryJobsData, isLoading }] = useGetCategoryJobByIdMutation();
   const {
     data: blogsData,
     error,
     isLoading: blogsDataLoading,
   } = useGetBlogsDataQuery("");
 
+  useEffect(() => {
+    if (queryId) {
+      getCategoryJobById(queryId as any);
+    }
+  }, [getCategoryJobById, queryId]);
+  
+  console.log('getCategoryJobsData', getCategoryJobsData)
+
   const viewBlogHandler = (title: string) => {
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-blog?query=${encodedTitle}`);
   };
 
+  const blogsToDisplay = queryId ? getCategoryJobsData?.data : blogsData?.data;
+
   return (
     <>
-      {blogsDataLoading && <Loading />}
+      {(blogsDataLoading || isLoading) && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -50,7 +62,7 @@ const BlogDetailGrid = () => {
         <div className="content-area">
           <div className="container">
             <div className="dez-blog-grid-3 row" id="masonry">
-              {blogsData?.data?.map((item, index) => (
+              {blogsToDisplay?.map((item :any, index :number) => (
                 <div
                   className="post card-container col-lg-4 col-md-6 col-sm-6"
                   key={index}

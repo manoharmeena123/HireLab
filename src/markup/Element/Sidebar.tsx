@@ -16,7 +16,7 @@ const Sidebar = () => {
   const { data: recentBlogData } = useGetRecentBlogsQuery();
 
   const viewJobHandler = (id: number) => {
-    router.push(`/category-jobs?query=${id}`);
+    router.push(`/blogs?query=${id}`);
   };
 
   const viewBlogHandler = (title: string) => {
