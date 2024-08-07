@@ -165,7 +165,8 @@ const LatestDiscussions = () => {
       <div className="row align-items-center mb-4">
         <div className="col"></div>
         <div className="col text-right">
-          <button
+          <Link href={"/view-all-discussion"}>   
+            <Button
             className="site-button button-md"
             style={{
               backgroundColor: "#2A6310",
@@ -174,7 +175,9 @@ const LatestDiscussions = () => {
             }}
           >
             View All
-          </button>
+          </Button>
+          </Link>
+     
         </div>
       </div>
       <div className="row">

@@ -185,7 +185,7 @@ const SingleBlogSection = () => {
     return <Loading />;
   }
 
-  const formattedQuestion = singleDiscussion?.data?.question.replace(/-/g, " ");
+  const formattedQuestion = singleDiscussion?.data?.question?.replace(/-/g, " ");
   const description = singleDiscussion?.data?.description;
   const getSafeUrl = (url: string | null | undefined) => {
     return url || "#";
