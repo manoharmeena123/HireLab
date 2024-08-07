@@ -18,20 +18,7 @@ const MembershipPlans = ({ plan }: any) => {
   };
 
   const handleGetStarted = async (membershipId: any) => {
-    console.log("membershipId", membershipId);
-    if (user?.user?.id) {
-      const payload = {
-        user_id: user.user.id.toString(),
-        membership_id: membershipId.toString(),
-      };
-
-      try {
-        await saveMemberShip(payload).unwrap();
-        router.push(`/cart?plan=${membershipId}`);
-      } catch (error) {
-        console.error("Failed to save membership", error);
-      }
-    }
+    router.push(`/cart?plan=${membershipId}`);
   };
 
   return (
