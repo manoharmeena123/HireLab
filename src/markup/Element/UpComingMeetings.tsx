@@ -44,7 +44,7 @@ const UpComingMeetings = () => {
 
   const handleIconClick = async (index: number, event: any) => {
     if (!user) {
-      push("/login");
+      push(`/login?page=/`);
       return;
     }
 

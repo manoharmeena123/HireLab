@@ -95,13 +95,13 @@ const MembershipPlans = ({ plan }: any) => {
                         <span className="p-lr30 button-text">Get Started</span>
                       </button>
                     ) : (
-                      <Link href="/login">
-                        <button className="site-button radius-xl white-hover">
+                      <button    
+                        className="site-button radius-xl white-hover" 
+                        onClick={() => router.push(`/login?page=/`)}>
                           <span className="p-lr30 button-text">
                             Login to Get Started
                           </span>
                         </button>
-                      </Link>
                     )}
                   </div>
                 </div>
