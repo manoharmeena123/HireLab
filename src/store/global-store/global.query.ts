@@ -104,7 +104,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "RecentBlogs",
     "CategoryJobById",
     "CreateAccount",
-    "Counts"
+    "Counts",
+    "AddLikeDiscussion"
   ],
 });
 
@@ -371,6 +372,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getCounts : builder.query<any, void>({
       query: queries.getCounts.query,
       providesTags: ["Counts"],
+    }),
+    addLikeDiscussion :builder.mutation<any, {discussion_id:any}>({
+     query :(id) => queries.addLikeDiscussion.query(id),
+      invalidatesTags: ["AddLikeDiscussion"],
     })
   }),
 
@@ -437,6 +442,7 @@ export const {
   useGetRecentBlogsQuery,
   useGetCategoryJobByIdMutation,
   useCreateAccountQuery,
-  useGetCountsQuery
+  useGetCountsQuery,
+  useAddLikeDiscussionMutation
 } = globalApi;
 export default globalApi;

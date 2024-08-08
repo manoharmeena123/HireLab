@@ -240,8 +240,6 @@ const globalSlice = createSlice({
     state.saveContactLoading = false;
     state.saveContactError = action.payload;
   },
-    
-
   },
 });
 

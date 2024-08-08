@@ -406,5 +406,13 @@ export const queries = {
       url : `api/get-blogs-by-category/${id}`,
       method : "GET"
     })
-  }
+  },
+  // api/like-discussion
+  addLikeDiscussion :{
+    query : (discussion_id:any) =>({
+      url : "api/like-discussion",
+      method : "POST",
+      body : discussion_id
+    })
+  },
 };
