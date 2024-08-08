@@ -364,7 +364,7 @@ const SingleBlogSection = () => {
                         {!user ? (
                           <button
                             className="site-button"
-                            onClick={() => router.push("/login")}
+                            onClick={() => router.push(`/login?page=single-blog?query=${queryTitle}`)}
                           >
                             Login to post comment
                           </button>

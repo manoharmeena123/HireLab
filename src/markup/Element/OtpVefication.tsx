@@ -18,8 +18,7 @@ import { toast } from "react-toastify";
 import styles from "@/styles/SendOtp.module.css";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { VerifyOtp } from "@/app/send-otp/types/index";
-import { signIn } from "next-auth/react";
-import Env from "@/lib/Env";
+import { useSearchParams, useRouter } from "next/navigation";
 import { navigateSource } from "@/lib/action";
 const bnr = require("./../../images/background/bg6.jpg");
 
@@ -28,6 +27,8 @@ interface RegisterData {
 }
 
 const OtpVefication = () => {
+  const searchParams = useSearchParams();
+  const queryTitle = searchParams.get("page");
   const dispatch = useDispatch();
   const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
   const verifyOtpState = useSelector(selectVerifyOtpState);
@@ -38,7 +39,7 @@ const OtpVefication = () => {
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
   const [parsedDatas, setParsedDatas] = useState<RegisterData | null>(null);
-
+  const endpoint = queryTitle ? `${queryTitle}` : '/dashboard-section';
   // Parse localStorage data
   useEffect(() => {
     const data = localStorage.getItem("registerData");
@@ -82,14 +83,7 @@ const OtpVefication = () => {
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
-        navigateSource("/dashboard-section")
-        // await signIn("credentials", {
-        //   otp: { ...verifyOtpState },
-        //   mobile_number: loginState?.mobile_number || parsedData?.mobile_number,
-        //   redirect: true,
-        //   callbackUrl: `${Env.APP_URL}` || "http://localhost:3000",
-        // });
-        // Handle success logic here
+          navigateSource(endpoint)
       } else if (res.code === 401) {
         toast.error("Invalid OTP!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {

@@ -13,17 +13,23 @@ import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import styles from "@/styles/Login.module.css";
-import { useRouter } from "next/navigation";
+import { navigateSource } from "@/lib/action";
+import { useSearchParams, useRouter } from "next/navigation";
 
 const bnr = require("./../../images/background/bg6.jpg");
 
 const Login = () => {
+  const searchParams = useSearchParams();
+  const queryTitle = searchParams.get("page");
   const dispatch = useDispatch();
   const router = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const authState = useSelector(selectLoginState);
   const errors = useSelector(selectLoginErrors);
   const [loading, setLoading] = useState(false);
+
+  const endpoint = queryTitle ? `/send-otp?page=${queryTitle}` : '/send-otp';
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -35,7 +41,8 @@ const Login = () => {
         console.log("res", res);
         toast.success(res?.message, { theme: "colored" });
         // Redirect to /send-otp page
-        router.push("/send-otp");
+          // navigateSource(endpoint)
+          navigateSource(endpoint);
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
