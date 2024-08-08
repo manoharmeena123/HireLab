@@ -86,7 +86,7 @@ const CartSection = () => {
                         </div>
                         <div>
                           <strong>
-                            &#8377;{selectedPlan?.monthly_price}/mo
+                            &#8377;{selectedPlan?.monthly_price}/months
                           </strong>
                         </div>
                       </div>
