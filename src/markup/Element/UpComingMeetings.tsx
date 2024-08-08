@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useGetEventsQuery,useGetEventTextQuery } from "@/store/global-store/global.query";
+import {
+  useGetEventsQuery,
+  useGetEventTextQuery,
+} from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import Pagination from "./Pagination";
@@ -17,7 +20,7 @@ import Swal from "sweetalert2";
 const UpComingMeetings = () => {
   const { push } = useRouter();
   const { data: eventsData, isLoading, isError } = useGetEventsQuery();
-  const { data :eventText } =useGetEventTextQuery()
+  const { data: eventText } = useGetEventTextQuery();
   const { user } = useLoggedInUser();
   const [saveEvent] = useSaveEventMutation();
   const { data: myEventData } = useMyEventsQuery();
@@ -28,7 +31,9 @@ const UpComingMeetings = () => {
 
   useEffect(() => {
     if (user && myEventData?.data) {
-      const savedEventIds = myEventData.data.map((event: any) => event.event_id);
+      const savedEventIds = myEventData.data.map(
+        (event: any) => event.event_id
+      );
       const indexes = eventsData?.data?.reduce(
         (acc: number[], event: any, index: number) => {
           if (savedEventIds.includes(event.id)) {
@@ -107,7 +112,8 @@ const UpComingMeetings = () => {
 
   // Calculate items to display
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = eventsData?.data?.slice(startIndex, startIndex + itemsPerPage) || [];
+  const currentItems =
+    eventsData?.data?.slice(startIndex, startIndex + itemsPerPage) || [];
 
   // Handle page change
   const handlePageChange = (page: number) => {
