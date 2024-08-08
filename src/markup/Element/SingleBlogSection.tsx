@@ -14,7 +14,11 @@ import {
   useCreateSingleBlogCommentMutation,
   useGetSingleParentBlogCommentbyIdMutation,
 } from "@/store/global-store/global.query";
-import { blogformatDate, truncateText,blogformatsDate } from "@/utils/formateDate";
+import {
+  blogformatDate,
+  truncateText,
+  blogformatsDate,
+} from "@/utils/formateDate";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
 import { Modal, Button } from "react-bootstrap";
@@ -89,11 +93,12 @@ const SingleBlogSection = () => {
     event: React.FormEvent<HTMLFormElement>,
     parentCommentId: string | null = null
   ) => {
-    // event.preventDefault();
+    event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
-      const formData = new FormData(event.currentTarget);
+      try {
+          const formData = new FormData(event.currentTarget);
       const commentData = {
         question_id: questionId,
         body: formData.get("comment") as string,
@@ -101,9 +106,11 @@ const SingleBlogSection = () => {
       };
       const res = await createSingleBlogComment(commentData);
       toast.success(res?.data?.message, { theme: "colored" });
-      console.log("first", res);
       if (res?.data?.code == 200) {
         getSingleBlogCommentbyQuetionId(questionId as any);
+      }
+      } catch (error :any) {
+        toast.success(error?.data?.message, { theme: "colored" });
       }
     }
   };
@@ -111,8 +118,8 @@ const SingleBlogSection = () => {
   const handleReplyPostComment = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
-    // event.preventDefault();
-    if (!user) {
+    event.preventDefault();
+    if (!user?.user) {
       router.push("/login");
     } else {
       const formData = new FormData(event.currentTarget);
@@ -154,6 +161,10 @@ const SingleBlogSection = () => {
 
   const getSafeUrl = (url: string | null | undefined) => {
     return url || "#";
+  };
+
+  const handleLoginToPost = () => {
+    router.push(`/login?page=single-blog?query=${queryTitle}`);
   };
 
   const renderComments = (comments: any[], parentId: string | null = null) => {
@@ -361,10 +372,10 @@ const SingleBlogSection = () => {
                             </Link>{" "}
                           </small>{" "}
                         </h4>
-                        {!user ? (
+                        {!user?.user ? (
                           <button
                             className="site-button"
-                            onClick={() => router.push(`/login?page=single-blog?query=${queryTitle}`)}
+                            onClick={handleLoginToPost}
                           >
                             Login to post comment
                           </button>

@@ -72,7 +72,7 @@ const SingleBlogSection = () => {
     event: React.FormEvent<HTMLFormElement>,
     parentCommentId: string | null = null
   ) => {
-    // event.preventDefault();
+    event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
@@ -93,7 +93,7 @@ const SingleBlogSection = () => {
   const handleReplyPostComment = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
-    // event.preventDefault();
+    event.preventDefault();
     if (!user) {
       router.push("/login");
     } else {
