@@ -5,7 +5,7 @@ import {
   WritableBuyPassData,
   CreateCommentType,
   SaveContactData,
-  WritableSingleBlogCommentPost
+  WritableSingleBlogCommentPost,
 } from "@/types/index";
 
 export const queries = {
@@ -246,12 +246,17 @@ export const queries = {
     }),
   },
   deleteCommentById: {
-    query: (id: string) => ({
+    query: (id: any) => ({
       url: `api/delete-comment/${id}`,
       method: "GET",
     }),
   },
-
+  deleteBlogCommentById: {
+    query: (id: any) => ({
+      url: `api/delete-blog-comment/${id}`,
+      method: "GET",
+    }),
+  },
   getSettings: {
     query: () => ({
       url: "api/get-setting",
@@ -311,32 +316,32 @@ export const queries = {
     }),
   },
 
-  //api/get-blog-category 
-  getCategoryJobs :{
-   query :() =>({
-     url : "api/get-blog-category",
-     method : "GET"
-   })
+  //api/get-blog-category
+  getCategoryJobs: {
+    query: () => ({
+      url: "api/get-blog-category",
+      method: "GET",
+    }),
   },
   ///api/recent-blogs
-  getRecentBlogs :{
-    query :() =>({
-      url : "api/recent-blogs",
-      method : "GET"
-    })
+  getRecentBlogs: {
+    query: () => ({
+      url: "api/recent-blogs",
+      method: "GET",
+    }),
   },
   // api/page/create-account
-  createAccount :{
-    query :()=>({
-      url : "api/page/create-account",
-      method : "GET"
-    })
+  createAccount: {
+    query: () => ({
+      url: "api/page/create-account",
+      method: "GET",
+    }),
   },
-  getCounts :{
-    query :() =>({
-      url : "api/get-counts",
-      method : "GET"
-    })
+  getCounts: {
+    query: () => ({
+      url: "api/get-counts",
+      method: "GET",
+    }),
   },
   //Post===================================================================================>
 
@@ -401,18 +406,18 @@ export const queries = {
     }),
   },
   // api/get-blogs-by-category/15
-  getCategoryJobById :{
-    query : (id: any) =>({
-      url : `api/get-blogs-by-category/${id}`,
-      method : "GET"
-    })
+  getCategoryJobById: {
+    query: (id: any) => ({
+      url: `api/get-blogs-by-category/${id}`,
+      method: "GET",
+    }),
   },
   // api/like-discussion
-  addLikeDiscussion :{
-    query : (discussion_id:any) =>({
-      url : "api/like-discussion",
-      method : "POST",
-      body : discussion_id
-    })
+  addLikeDiscussion: {
+    query: (discussion_id: any) => ({
+      url: "api/like-discussion",
+      method: "POST",
+      body: discussion_id,
+    }),
   },
 };

@@ -6,13 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import parse from "html-react-parser";
-
+import Swal from "sweetalert2";
 import {
   useGetBlogsDataByIdMutation,
   useGetSettingsQuery,
   useGetSingleBlogCommentbyQuetionIdMutation,
   useCreateSingleBlogCommentMutation,
   useGetSingleParentBlogCommentbyIdMutation,
+  useDeleteBlogCommentByIdMutation
 } from "@/store/global-store/global.query";
 import {
   blogformatDate,
@@ -25,7 +26,8 @@ import { Modal, Button } from "react-bootstrap";
 var bnr = require("./../../images/banner/bnr1.jpg");
 import profileIcon from "../../images/favicon.png";
 import { toast } from "react-toastify";
-import { AnyARecord } from "dns";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash,faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
 
 const SingleBlogSection = () => {
   const { data: getSetting } = useGetSettingsQuery();
@@ -58,7 +60,7 @@ const SingleBlogSection = () => {
 
   const [getSingleParentBlogCommentbyId] =
     useGetSingleParentBlogCommentbyIdMutation();
-
+const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
   const questionId = getSingleBlogData?.data?.[0]?.id;
 
   useEffect(() => {
@@ -151,6 +153,35 @@ const SingleBlogSection = () => {
     }
   };
 
+  const handleEditComment = (commentId: string) => {
+    // Implement edit functionality or open an edit modal
+    console.log("Edit comment with ID:", commentId);
+  };
+
+  const handleDeleteComment = async (id: any) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteBlogCommentById(id);
+          if (res?.data?.code === 200) {
+            toast.success(res?.data?.message, { theme: "colored" });
+            getSingleBlogCommentbyQuetionId(questionId as any);
+          }
+        } catch (error: any) {
+          toast.error(error?.data?.message, { theme: "colored" });
+        }
+      }
+    });
+  };
+  
   const handleReply = (commentId: string) => {
     setReplyToCommentId(commentId);
     setShowReplyModal(true);
@@ -208,12 +239,32 @@ const SingleBlogSection = () => {
             <p>{comment.body}</p>
             {user?.user && (
               <div className="reply">
-                <button
+                {/* <button
                   className="site-button-link"
                   onClick={() => handleReply(comment.id)}
                 >
                   Reply
-                </button>
+                </button> */}
+                <FontAwesomeIcon
+                  icon={faReply}
+                  onClick={() => handleReply(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
+                {comment?.user?.id == user?.user?.id && (
+                  <>   
+                  <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={() => handleEditComment(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={() => handleDeleteComment(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
+                />
+                  </>
+               
+                )}
               </div>
             )}
             <ul className="children">{renderComments(comments, comment.id)}</ul>

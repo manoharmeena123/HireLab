@@ -21,6 +21,9 @@ import { useLoggedInUser } from "@/hooks/index";
 import Sidebar from "../../markup/Element/Sidebar";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrash,faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
+import Swal from "sweetalert2";
 
 const SingleBlogSection = () => {
   const searchParams = useSearchParams();
@@ -47,6 +50,7 @@ const SingleBlogSection = () => {
 
   const [createComment] = useCreateCommentMutation();
   const [getCommentForParentComment] = useGetCommentForParentCommentMutation();
+  const [deleteCommentById] = useDeleteCommentByIdMutation();
 
   useEffect(() => {
     if (questionId) {
@@ -78,24 +82,23 @@ const SingleBlogSection = () => {
       router.push("/login");
     } else {
       try {
-          const form = event.currentTarget; 
-      const formData = new FormData(event.currentTarget);
-      const commentData = {
-        question_id: questionId,
-        body: formData.get("comment") as string,
-        parent_comment_id: null,
-      };
-      const res = await createComment(commentData);
-      toast.success(res?.data?.message, { theme: "colored" });
-      // Refresh comments
-      if (res?.data?.code == 200) {
-        getCommentForQuetion(questionId);
-        form.reset(); 
-      }
-      } catch (error :any) {
+        const form = event.currentTarget;
+        const formData = new FormData(event.currentTarget);
+        const commentData = {
+          question_id: questionId,
+          body: formData.get("comment") as string,
+          parent_comment_id: null,
+        };
+        const res = await createComment(commentData);
+        toast.success(res?.data?.message, { theme: "colored" });
+        // Refresh comments
+        if (res?.data?.code == 200) {
+          getCommentForQuetion(questionId);
+          form.reset();
+        }
+      } catch (error: any) {
         toast.error(error?.data?.message, { theme: "colored" });
       }
-    
     }
   };
 
@@ -107,36 +110,65 @@ const SingleBlogSection = () => {
       router.push("/login");
     } else {
       try {
-        const form = event.currentTarget; 
-         const formData = new FormData(event.currentTarget);
-      const commentData = {
-        question_id: questionId,
-        body: formData.get("comment") as string,
-        parent_comment_id: replyToCommentId,
-      };
-      const res = await createComment(commentData);
-      toast.success(res?.data?.message, { theme: "colored" });
-      // Refresh comments
-      if (res?.data?.code == 200) {
-        getCommentForQuetion(questionId);
-      }
-      setShowReplyModal(false);
-      setReplyToCommentId(null);
-      getCommentForParentComment({
-        questionId: questionId,
-        commentId: replyToCommentId,
-      });
-      form.reset(); 
-      } catch (error :any) {
+        const form = event.currentTarget;
+        const formData = new FormData(event.currentTarget);
+        const commentData = {
+          question_id: questionId,
+          body: formData.get("comment") as string,
+          parent_comment_id: replyToCommentId,
+        };
+        const res = await createComment(commentData);
+        toast.success(res?.data?.message, { theme: "colored" });
+        // Refresh comments
+        if (res?.data?.code == 200) {
+          getCommentForQuetion(questionId);
+        }
+        setShowReplyModal(false);
+        setReplyToCommentId(null);
+        getCommentForParentComment({
+          questionId: questionId,
+          commentId: replyToCommentId,
+        });
+        form.reset();
+      } catch (error: any) {
         toast.error(error?.data?.message, { theme: "colored" });
       }
-     
     }
   };
 
   const handleReply = (commentId: string) => {
     setReplyToCommentId(commentId);
     setShowReplyModal(true);
+  };
+
+  const handleDeleteComment = async (id:any) => {
+    console.log('commentId', id)
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+    try {
+      const res = await deleteCommentById(id);
+      if (res?.data?.code === 200) {
+        toast.success(res?.data?.message, { theme: "colored" });
+        getCommentForQuetion(questionId);
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message, { theme: "colored" });
+    }
+  }
+});
+  };
+
+  const handleEditComment = (commentId: string) => {
+    // Implement edit functionality or open an edit modal
+    console.log("Edit comment with ID:", commentId);
   };
 
   const formatDate = (dateString: string) => {
@@ -186,12 +218,33 @@ const SingleBlogSection = () => {
             <p>{comment.body}</p>
             {user?.user && (
               <div className="reply">
-                <button
+                {/* <button
                   className="site-button-link"
                   onClick={() => handleReply(comment.id)}
                 >
                   Reply
-                </button>
+                </button> */}
+                <FontAwesomeIcon
+                  icon={faReply}
+                  onClick={() => handleReply(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
+                {comment?.user?.id == user?.user?.id && (
+                  <>   
+                  <FontAwesomeIcon
+                  icon={faEdit}
+                  onClick={() => handleEditComment(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
+                <FontAwesomeIcon
+                  icon={faTrash}
+                  onClick={() => handleDeleteComment(comment.id)}
+                  style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
+                />
+                  </>
+               
+                )}
+                
               </div>
             )}
             <ul className="children">{renderComments(comments, comment.id)}</ul>
@@ -345,7 +398,11 @@ const SingleBlogSection = () => {
                         {!user ? (
                           <button
                             className="site-button"
-                            onClick={() => router.push(`/login?page=single-discussion?query=${query}`)}
+                            onClick={() =>
+                              router.push(
+                                `/login?page=single-discussion?query=${query}`
+                              )
+                            }
                           >
                             Login to post comment
                           </button>
@@ -375,7 +432,8 @@ const SingleBlogSection = () => {
                                   </p>
                                   <p className="comment-form-email">
                                     <label htmlFor="email">
-                                      Email <span className="required">*</span>
+                                      Email{" "}
+                                      <span className="required">*</span>
                                     </label>
                                     <input
                                       type="email"
@@ -446,18 +504,6 @@ const SingleBlogSection = () => {
             method="post"
             onSubmit={handleReplyPostComment}
           >
-            {/* <p className="comment-form-author">
-              <label htmlFor="author">
-                Name <span className="required">*</span>
-              </label>
-              <input type="text" name="author" placeholder="Author" id="author" required value={user?.user.name} readOnly />
-            </p>
-            <p className="comment-form-email">
-              <label htmlFor="email">
-                Email <span className="required">*</span>
-              </label>
-              <input type="email" name="email" placeholder="Email" id="email" required value={user?.user.email} readOnly style={{ padding: "7px 53px" }} />
-            </p> */}
             <p className="comment-form-comment">
               <label htmlFor="comment">Comment</label>
               <textarea
