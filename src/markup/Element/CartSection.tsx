@@ -7,6 +7,7 @@ import Loading from "@/components/Loading";
 import { useSaveMemberShipMutation } from "@/app/my-resume/store/resume.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Swal from "sweetalert2";
+import Script from 'next/script';
 
 const CartSection = () => {
   const router = useRouter();
@@ -44,10 +45,72 @@ const CartSection = () => {
             user_id: user.user.id.toString(),
             membership_id: selectedPlan.id.toString(),
           };
-
+  
           try {
-            await saveMemberShip(payload).unwrap();
-            router.push(`/dashboard-section`);
+            // await saveMemberShip(payload).unwrap();
+  
+            // Create an order ID
+            const response = await fetch('/api/order', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                amount: 600 * 100,
+                currency: 'INR',
+              }),
+            });
+  
+            const { orderId } = await response.json();
+  
+            // Start the Razorpay payment
+            const options: RazorpayOptions = {
+              key: `rzp_test_6Yk0yEiSfOEYXv`,
+              amount: 600 * 100,
+              currency: 'INR',
+              name: selectedPlan.title,
+              description: 'Membership Purchase',
+              order_id: orderId,
+              handler: async function (response: any) {
+                // Handle payment success
+                const data = {
+                  orderCreationId: orderId,
+                  razorpayPaymentId: response.razorpay_payment_id,
+                  razorpayOrderId: response.razorpay_order_id,
+                  razorpaySignature: response.razorpay_signature,
+                };
+  
+                const verifyResponse = await fetch('/api/verify', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(data),
+                });
+  
+                const result = await verifyResponse.json();
+                if (result.isOk) {
+                  alert("Payment succeeded");
+                  router.push('/dashboard-section');
+                } else {
+                  alert("Payment verification failed");
+                }
+              },
+              prefill: {
+                name: user.user.name,
+                email: user.user.email,
+              },
+              theme: {
+                color: '#3399cc',
+              },
+            };
+  
+            const paymentObject = new window.Razorpay(options);
+            paymentObject.on('payment.failed', function (response: any) {
+              alert(response.error.description);
+            });
+            paymentObject.open();
+  
           } catch (error) {
             console.error("Failed to save membership", error);
           }
@@ -55,8 +118,13 @@ const CartSection = () => {
       });
     }
   };
+  
   return (
     <>
+    <Script
+        id="razorpay-checkout-js"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
       {membershipLoading && <Loading />}
       <div>
         <div className="browse-job login-style3">
