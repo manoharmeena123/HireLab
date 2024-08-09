@@ -43,6 +43,9 @@ const SingleBlogSection = () => {
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [currentCommentId, setCurrentCommentId] = useState<string | null>(null);
+  const [currentCommentText, setCurrentCommentText] = useState<string>("");
   const [
     getBlogsDataById,
     { data: getSingleBlogData, isLoading: getSingleBlogDataLoading },
@@ -153,9 +156,12 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
     }
   };
 
-  const handleEditComment = (commentId: string) => {
+  const handleEditComment = (commentId: string,commentText:string) => {
     // Implement edit functionality or open an edit modal
-    console.log("Edit comment with ID:", commentId);
+    console.log("Edit comment with ID:", commentId,commentText);
+    setCurrentCommentId(commentId);
+    setCurrentCommentText(commentText);
+    setShowEditModal(true);
   };
 
   const handleDeleteComment = async (id: any) => {
@@ -207,6 +213,25 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
     router.push(`/login?page=single-blog?query=${queryTitle}`);
   };
 
+  const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // if (currentCommentId && currentCommentText.trim() !== "") {
+    //   try {
+    //     const res = await updateComment({
+    //       id: currentCommentId,
+    //       body: currentCommentText,
+    //     });
+    //     if (res?.data?.code === 200) {
+    //       toast.success(res?.data?.message, { theme: "colored" });
+    //       getCommentForQuetion(questionId);
+    //       setShowEditModal(false);
+    //     }
+    //   } catch (error: any) {
+    //     toast.error(error?.data?.message, { theme: "colored" });
+    //   }
+    // }
+  };
+
   const renderComments = (comments: any[], parentId: string | null = null) => {
     return comments
       .filter((comment) => comment.parent_id === parentId)
@@ -254,7 +279,7 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
                   <>   
                   <FontAwesomeIcon
                   icon={faEdit}
-                  onClick={() => handleEditComment(comment.id)}
+                  onClick={() => handleEditComment(comment?.id, comment?.body)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
                 <FontAwesomeIcon
@@ -354,14 +379,6 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
                         </Link>
                       )}
                     </div>
-                    {/* <div className="dez-post-tags clear">
-                      <div className="post-tags">
-                        <Link href={"#"}>Child </Link>
-                        <Link href={"#"}>Eduction </Link>
-                        <Link href={"#"}>Money </Link>
-                        <Link href={"#"}>Resturent </Link>
-                      </div>
-                    </div> */}
                     <div className="dez-divider bg-gray-dark op4">
                       <i className="icon-dot c-square"></i>
                     </div>
@@ -570,6 +587,47 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowReplyModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+       {/* Edit Modal */}
+       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Comment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form
+            className="comment-form"
+            method="post"
+            onSubmit={handleUpdateComment}
+          >
+            <p className="comment-form-comment">
+              <label htmlFor="comment">Comment</label>
+              <textarea
+                rows={2}
+                name="comment"
+                placeholder="Comment"
+                id="comment"
+                required
+                value={currentCommentText}
+                onChange={(e) => setCurrentCommentText(e.target.value)}
+              ></textarea>
+            </p>
+            <p className="form-submit">
+              <input
+                type="submit"
+                value="Update Comment"
+                className="submit site-button"
+                id="submit"
+                name="submit"
+              />
+            </p>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Close
           </Button>
         </Modal.Footer>
