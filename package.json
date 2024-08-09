@@ -11,8 +11,9 @@
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^42.0.1",
     "@ckeditor/ckeditor5-react": "^8.0.0",
-    "@fortawesome/fontawesome-svg-core": "^6.5.2",
-    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/fontawesome-svg-core": "^6.6.0",
+    "@fortawesome/free-regular-svg-icons": "^6.6.0",
+    "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@pathofdev/react-tag-input": "^1.0.7",
     "@react-google-maps/api": "^2.19.3",

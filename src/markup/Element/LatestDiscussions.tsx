@@ -2,15 +2,25 @@ import React, { useEffect, useRef, useState } from "react";
 import CountUp from "react-countup";
 import { useRouter } from "next/navigation";
 import styles from "@/styles/LatestDiscussions.module.css";
-import { useGetDiscussionQuery, useGetCountsQuery, useAddLikeDiscussionMutation } from "@/store/global-store/global.query";
+import {
+  useGetDiscussionQuery,
+  useGetCountsQuery,
+  useAddLikeDiscussionMutation,
+} from "@/store/global-store/global.query";
+import { useLoggedInUser } from "@/hooks/useLoggedInUser"
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
 import parse from "html-react-parser";
 import Loading from "@/components/Loading";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as faHeartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartRegular } from "@fortawesome/free-regular-svg-icons";
+import { faComment as faCommentRegular } from "@fortawesome/free-regular-svg-icons"; // Import the regular comment icon
 
 const LatestDiscussions = () => {
+  const { user } = useLoggedInUser();
   const { push } = useRouter();
   const sectionRef = useRef(null);
   const [questionsPosted, setQuestionsPosted] = useState(0);
@@ -18,9 +28,15 @@ const LatestDiscussions = () => {
   const [answersGiven, setAnswersGiven] = useState(0);
   const [totalForum, setTotalForum] = useState(0);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
-  const [shouldAnimate, setShouldAnimate] = useState(false); // Add state to trigger animation
-  const [addLikeDiscussion, { data: addLikeDiscussionData, isLoading: likeLoading }] = useAddLikeDiscussionMutation();
-  const { data: discussionData, isLoading: discussionLoading } = useGetDiscussionQuery();
+  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [likedDiscussions, setLikedDiscussions] = useState<Set<number>>(
+    new Set()
+  );
+
+  const [addLikeDiscussion, { isLoading: likeLoading }] =
+    useAddLikeDiscussionMutation();
+  const { data: discussionData, isLoading: discussionLoading } =
+    useGetDiscussionQuery();
   const { data: getCounts, isLoading: getCountsLoading } = useGetCountsQuery();
 
   const initialJobPosted = getCounts?.data?.job_posted;
@@ -39,7 +55,7 @@ const LatestDiscussions = () => {
           }
         });
       },
-      { threshold: 0.1 } // Adjust threshold as needed
+      { threshold: 0.1 }
     );
 
     if (sectionRef.current) {
@@ -66,14 +82,16 @@ const LatestDiscussions = () => {
         setTotalForum(initialTotalForum);
       }, 0);
     }
-  }, [shouldAnimate, initialJobPosted, initialQuestionsPosted, initialAnswersGiven, initialTotalForum]);
+  }, [
+    shouldAnimate,
+    initialJobPosted,
+    initialQuestionsPosted,
+    initialAnswersGiven,
+    initialTotalForum,
+  ]);
 
   const toggleDescription = (index: number) => {
-    if (expandedIndex === index) {
-      setExpandedIndex(null); // Collapse if clicked again
-    } else {
-      setExpandedIndex(index); // Expand clicked description
-    }
+    setExpandedIndex(expandedIndex === index ? null : index); // Only expand the clicked item, collapse any other expanded item
   };
 
   const viewJobHandler = (title: any) => {
@@ -82,19 +100,36 @@ const LatestDiscussions = () => {
   };
 
   const handleLike = async (discussionId: number) => {
-    try {
-      const res = await addLikeDiscussion({ discussion_id: discussionId }).unwrap();
-      toast.success(res.message, {theme :"colored"})
-      // You might want to refetch discussions or update the local state to reflect the new like count
-    } catch (error :any) {
-      toast.success(error.message, {theme :"colored"})
+    if(!user?.user){
+      push("/login");
+    }else{
+       try {
+      const res = await addLikeDiscussion({
+        discussion_id: discussionId,
+      }).unwrap();
+      toast.success(res.message, { theme: "colored" });
+
+      // Update local state to reflect like change immediately
+      setLikedDiscussions((prev) => {
+        const updatedLikes = new Set(prev);
+        if (updatedLikes.has(discussionId)) {
+          updatedLikes.delete(discussionId); // Unlike
+        } else {
+          updatedLikes.add(discussionId); // Like
+        }
+        return updatedLikes;
+      });
+    } catch (error: any) {
+      toast.error(error.message, { theme: "colored" });
       console.error("Failed to like discussion:", error);
     }
+    }
+   
   };
 
   return (
     <>
-      {(getCountsLoading && discussionLoading) && <Loading />}
+      {getCountsLoading && discussionLoading && <Loading />}
       <div className="container" ref={sectionRef}>
         <div className="section-head d-flex justify-content-between align-items-center mb-4">
           <div className="me-sm-auto">
@@ -175,65 +210,100 @@ const LatestDiscussions = () => {
           </div>
         </div>
         <div className="row">
-          {discussionData?.data?.map((discussion: any, index: number) => (
-            <div key={index} className="col-lg-4 col-md-6 mb-4">
-              <div className={`card ${styles.discussionCard}`}>
-                <div className="card-body">
-                  <p className="text-muted mb-2">
-                    {formatDateTime(discussion?.created_at)}
-                  </p>
-                  <h5
-                    onClick={() => viewJobHandler(discussion?.question)}
-                    className={styles.link}
-                  >
-                    <Link href={""}>
-                      {discussion?.question?.replace(/-/g, " ")}
-                    </Link>
-                  </h5>
+          {discussionData?.data
+            ?.slice(0, 3)
+            .map((discussion: any, index: number) => (
+              <div key={index} className="col-lg-4 col-md-6 mb-4">
+                <div
+                  className={`card ${styles.discussionCard} ${
+                    expandedIndex === index ? styles.expanded : ""
+                  }`}
+                >
+                  <div className="card-body d-flex flex-column">
+                    <p className="text-muted mb-2">
+                      {formatDateTime(discussion?.created_at)}
+                    </p>
+                    <h5
+                      onClick={() => viewJobHandler(discussion?.question)}
+                      className={styles.link}
+                    >
+                      <Link href={""}>
+                        {discussion?.question?.replace(/-/g, " ")}
+                      </Link>
+                    </h5>
 
-                  <div
-                    className={`card-text ${styles.description} ${
-                      expandedIndex === index ? styles.expanded : ""
-                    }`}
-                    style={{
-                      maxHeight: expandedIndex === index ? "none" : "100px",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {parse(discussion?.description)}
-                  </div>
-                  {discussion?.description.length > 80 && (
-                    <Button
-                      variant="link"
-                      onClick={() => toggleDescription(index)}
+                    <div
+                      className={`card-text ${styles.description} ${
+                        expandedIndex === index ? styles.expanded : ""
+                      }`}
                       style={{
-                        color: "#2a6310",
-                        padding: "0",
-                        textDecoration: "underline",
+                        maxHeight: expandedIndex === index ? "none" : "100px",
+                        overflow: "hidden",
+                        flexGrow: 1,
                       }}
                     >
-                      {expandedIndex === index ? "Read Less" : "Read More"}
-                    </Button>
-                  )}
-                  <div className="d-flex justify-content-between align-items-center mt-3">
-                    <div className="d-flex align-items-center">
-                      <span className="ml-2">by {discussion?.user?.name}</span>
+                      {parse(discussion?.description)}
                     </div>
-                    <div className="d-flex">
-                      <span
-                        className="mr-3"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => handleLike(discussion.id)}
+                    {discussion?.description.length > 80 && (
+                      <Button
+                        variant="link"
+                        onClick={() => toggleDescription(index)}
+                        className="read-more-btn"
+                        style={{
+                          color: "#2a6310",
+                          padding: "0px",
+                          paddingBottom: "5px",
+                          textDecoration: "underline",
+                          alignSelf: "flex-start",
+                        }}
                       >
-                        <i className="fa fa-heart"></i> {discussion?.likes}
-                      </span>
-                      <span className="mr-3">💬 {discussion?.comments}</span>
+                        {expandedIndex === index ? "Read Less" : "Read More"}
+                      </Button>
+                    )}
+                    <div className="d-flex justify-content-between align-items-center mt-auto">
+                      <div className="d-flex align-items-center">
+                        <span className="ml-2">
+                          by {discussion?.user?.name}
+                        </span>
+                      </div>
+                      <div className="d-flex">
+                        <span
+                          className="mr-3"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => handleLike(discussion.id)}
+                        >
+                          <FontAwesomeIcon
+                            icon={
+                              likedDiscussions.has(discussion.id)
+                                ? faHeartSolid
+                                : faHeartRegular
+                            }
+                            color={
+                              likedDiscussions.has(discussion.id)
+                                ? "red"
+                                : "black"
+                            }
+                            size="lg" // Increase the size of the heart icon
+                          />{" "}
+                          {discussion?.likes}
+                        </span>
+                        <span
+                          className="mr-3"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => viewJobHandler(discussion?.question)}
+                        >
+                          <FontAwesomeIcon
+                            icon={faCommentRegular}
+                            size="lg" // Use the same size as the heart icon
+                          />{" "}
+                          {discussion?.comments}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </>
