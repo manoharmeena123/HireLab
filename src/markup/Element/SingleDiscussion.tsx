@@ -20,6 +20,7 @@ import Loading from "@/components/Loading";
 import { useLoggedInUser } from "@/hooks/index";
 import Sidebar from "../../markup/Element/Sidebar";
 import parse from "html-react-parser";
+import { toast } from "react-toastify";
 
 const SingleBlogSection = () => {
   const searchParams = useSearchParams();
@@ -76,6 +77,8 @@ const SingleBlogSection = () => {
     if (!user) {
       router.push("/login");
     } else {
+      try {
+          const form = event.currentTarget; 
       const formData = new FormData(event.currentTarget);
       const commentData = {
         question_id: questionId,
@@ -83,10 +86,16 @@ const SingleBlogSection = () => {
         parent_comment_id: null,
       };
       const res = await createComment(commentData);
+      toast.success(res?.data?.message, { theme: "colored" });
       // Refresh comments
       if (res?.data?.code == 200) {
         getCommentForQuetion(questionId);
+        form.reset(); 
       }
+      } catch (error :any) {
+        toast.error(error?.data?.message, { theme: "colored" });
+      }
+    
     }
   };
 
@@ -97,13 +106,16 @@ const SingleBlogSection = () => {
     if (!user) {
       router.push("/login");
     } else {
-      const formData = new FormData(event.currentTarget);
+      try {
+        const form = event.currentTarget; 
+         const formData = new FormData(event.currentTarget);
       const commentData = {
         question_id: questionId,
         body: formData.get("comment") as string,
         parent_comment_id: replyToCommentId,
       };
       const res = await createComment(commentData);
+      toast.success(res?.data?.message, { theme: "colored" });
       // Refresh comments
       if (res?.data?.code == 200) {
         getCommentForQuetion(questionId);
@@ -114,6 +126,11 @@ const SingleBlogSection = () => {
         questionId: questionId,
         commentId: replyToCommentId,
       });
+      form.reset(); 
+      } catch (error :any) {
+        toast.error(error?.data?.message, { theme: "colored" });
+      }
+     
     }
   };
 

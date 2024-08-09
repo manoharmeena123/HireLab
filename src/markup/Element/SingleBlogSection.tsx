@@ -25,6 +25,7 @@ import { Modal, Button } from "react-bootstrap";
 var bnr = require("./../../images/banner/bnr1.jpg");
 import profileIcon from "../../images/favicon.png";
 import { toast } from "react-toastify";
+import { AnyARecord } from "dns";
 
 const SingleBlogSection = () => {
   const { data: getSetting } = useGetSettingsQuery();
@@ -98,8 +99,9 @@ const SingleBlogSection = () => {
       router.push("/login");
     } else {
       try {
-          const formData = new FormData(event.currentTarget);
-      const commentData = {
+        const form = event.currentTarget; 
+        const formData = new FormData(event.currentTarget);
+        const commentData = {
         question_id: questionId,
         body: formData.get("comment") as string,
         parent_comment_id: null,
@@ -108,6 +110,7 @@ const SingleBlogSection = () => {
       toast.success(res?.data?.message, { theme: "colored" });
       if (res?.data?.code == 200) {
         getSingleBlogCommentbyQuetionId(questionId as any);
+        form.reset(); 
       }
       } catch (error :any) {
         toast.success(error?.data?.message, { theme: "colored" });
@@ -122,6 +125,8 @@ const SingleBlogSection = () => {
     if (!user?.user) {
       router.push("/login");
     } else {
+      try {
+      const form = event.currentTarget; 
       const formData = new FormData(event.currentTarget);
       const commentData = {
         question_id: questionId,
@@ -138,6 +143,10 @@ const SingleBlogSection = () => {
       });
       if (res?.data?.code == 200) {
         getSingleBlogCommentbyQuetionId(questionId as any);
+        form.reset(); 
+      }
+      } catch (error :any) {
+        toast.error(error?.data?.message, { theme: "colored" });
       }
     }
   };
