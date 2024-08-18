@@ -1,0 +1,113 @@
+.form {
+  display: flex !important;
+  align-items: center !important;
+  padding: 10px !important;
+  position: fixed !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  background-color: #f0f0f0 !important;
+  border-top: 1px solid #ddd !important;
+  z-index: 100 !important; /* Ensures form stays on top */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1) !important; /* Adds a subtle shadow */
+}
+
+.emojiIcon {
+  position: relative !important;
+  cursor: pointer !important;
+  font-size: 20px !important;
+  color: #888 !important;
+  margin-right: 10px !important;
+  transition: color 0.3s ease !important; /* Smooth color change on hover */
+}
+
+.emojiIcon:hover {
+  color: #555 !important; /* Darker color on hover */
+}
+
+.emojiPickerWrapper {
+  position: absolute !important;
+  bottom: 50px !important;
+  left: 0 !important;
+  z-index: 1000 !important;
+  background-color: #fff !important;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+}
+
+.fileInput {
+  display: none !important;
+  margin-bottom: -2px !important;
+}
+
+.input {
+  flex: 1 !important;
+  padding: 10px 15px !important;
+  border-radius: 20px !important;
+  border: 1px solid #ddd !important;
+  outline: none !important;
+  font-size: 16px !important;
+  transition: border-color 0.3s ease !important; /* Smooth border color change */
+}
+
+.input:focus {
+  border-color: #0b93f6 !important; /* Blue border on focus */
+}
+
+.sendButton {
+  background-color: transparent !important;
+  border: none !important;
+  color: #0b93f6 !important;
+  font-size: 20px !important;
+  margin-left: 10px !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important; /* Button "pop" effect on click */
+}
+
+.sendButton:active {
+  transform: scale(0.9) !important; /* Slightly reduce size on click */
+}
+
+.imagePreviewContainer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 10px !important;
+  position: relative !important;
+  padding: 10px !important;
+  background-color: #f9f9f9 !important; /* Light background for preview */
+  border-radius: 8px !important;
+  border: 1px solid #ddd !important;
+}
+
+.imagePreview {
+  max-width: 200px !important;
+  max-height: 200px !important;
+  border-radius: 8px !important;
+  object-fit: cover !important; /* Ensures the image fits well */
+  transition: transform 0.3s ease !important;
+}
+
+.imagePreview:hover {
+  transform: scale(1.05) !important; /* Slight zoom on hover */
+}
+
+.removeImageButton {
+  position: absolute !important;
+  top: 5px !important;
+  right: 5px !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border: none !important;
+  color: #fff !important;
+  border-radius: 50% !important;
+  cursor: pointer !important;
+  padding: 5px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.3s ease !important; /* Smooth background change */
+}
+
+.removeImageButton:hover {
+  background-color: rgba(255, 0, 0, 0.8) !important; /* Red background on hover */
+}

@@ -1,0 +1,32 @@
+/* UserInfo.module.css */
+.userInfo {
+    padding: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
+.user {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+  }
+  
+.user img {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+  }
+  
+.icons {
+    display: flex !important;
+    gap: 20px !important;
+  }
+  
+.icons img {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+    filter: brightness(0) saturate(100%) invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%) !important;
+}

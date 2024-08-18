@@ -1,0 +1,104 @@
+/* Detail.module.css */
+.detail {
+    flex: 1 !important;
+  }
+  
+  .detail .user {
+    padding: 30px 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 15px !important;
+    border-bottom: 1px solid #dddddd35 !important;
+  }
+  
+  .detail .user img {
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+  }
+  
+  .detail .info {
+    padding: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 25px !important;
+  }
+  
+  .detail .info .option {}
+  
+  .detail .info .option .title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
+  .detail .info .option .title img {
+    width: 30px !important;
+    height: 30px !important;
+    background-color: rgba(17, 25, 40, 0.3) !important;
+    padding: 10px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+  }
+  
+  .detail .info .option .photos {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    margin-top: 20px !important;
+  }
+  
+  .detail .info .option .photos .photoItem {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  
+  .detail .info .option .photos .photoItem .photoDetail {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+  }
+  
+  .detail .info .option .photos .photoItem .photoDetail img {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 5px !important;
+    object-fit: cover !important;
+  }
+  
+  .detail .info .option .photos .photoItem .photoDetail span {
+    font-size: 14px !important;
+    color: lightgray !important;
+    font-weight: 300 !important;
+  }
+  
+  .detail .info .option .photos .photoItem .icon {
+    width: 30px !important;
+    height: 30px !important;
+    background-color: rgba(17, 25, 40, 0.3) !important;
+    padding: 10px !important;
+    border-radius: 50% !important;
+    cursor: pointer !important;
+  }
+  
+  .detail .info button {
+    padding: 15px !important;
+    background-color: rgba(230, 74, 105, 0.553) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+  }
+  
+  .detail .info button:hover {
+    background-color: rgba(220, 20, 60, 0.796) !important;
+  }
+  
+  .detail .info button.logout {
+    padding: 10px !important;
+    background-color: #1a73e8 !important;
+  }
+  

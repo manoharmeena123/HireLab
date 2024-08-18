@@ -1,0 +1,79 @@
+/* ChatList.module.css */
+.chatList {
+  flex: 1 !important;
+  overflow: scroll !important;
+}
+
+.chatList .search {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 20px !important;
+}
+
+.chatList .search .searchBar {
+  flex: 1 !important;
+  background-color: rgba(17, 25, 40, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+}
+
+.chatList .search .searchBar input {
+  background-color: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: white !important;
+  flex: 1 !important;
+}
+
+.chatList .search .searchBar img {
+  width: 20px !important;
+  height: 20px !important;
+  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%) !important;
+  /* This filter will make the image black */
+}
+
+.chatList .search .add {
+  width: 36px !important;
+  height: 36px !important;
+  background-color: rgba(17, 25, 40, 0.5) !important;
+  padding: 10px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%) !important;
+  /* This filter will make the image black */
+}
+
+.chatList .item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 20px !important;
+  cursor: pointer !important;
+  border-bottom: 1px solid #dddddd35 !important;
+}
+
+.chatList .item img {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.chatList .item .texts {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.chatList .item .texts span {
+  font-weight: 500 !important;
+}
+
+.chatList .item .texts p {
+  font-size: 14px !important;
+  font-weight: 300 !important;
+}

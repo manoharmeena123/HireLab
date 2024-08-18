@@ -1,0 +1,59 @@
+/* Login.module.css */
+.login {
+  width: 80vw !important;
+  height: 90vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  gap: 40px !important;
+  background-color: #f8f9fa !important;
+  align-content: center !important;
+}
+
+.item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 20px !important;
+  max-width: 400px !important;
+  width: 100% !important;
+  align-content: center !important;
+
+}
+
+.item h2 {
+  font-size: 24px !important;
+  color: #202124 !important;
+  font-weight: 400 !important;
+}
+
+.submitButton {
+  width: 100% !important;
+  padding: 10px !important;
+  border: 1px solid #dadce0 !important;
+  background-color: #ffffff !important;
+  color: #3c4043 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.submitButton img {
+  height: 24px !important;
+}
+
+.submitButton:hover {
+  background-color: #f1f3f4 !important;
+}
+
+.submitButton:disabled {
+  cursor: not-allowed !important;
+  background-color: #e8eaed !important;
+}

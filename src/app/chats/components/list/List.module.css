@@ -1,0 +1,7 @@
+/* List.module.css */
+.list {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  

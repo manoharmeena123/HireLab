@@ -1,0 +1,149 @@
+/* components/Notifications.module.css */
+.notification {
+    background-color: #ffffff;
+    border-left: 5px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    overflow: hidden;
+    padding: 15px;
+    position: relative;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .notification:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    border-left: 5px solid #2a6310;
+  }
+  
+  .iconWrapper {
+    background-color: #2a6310;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .icon {
+    color: #ffffff;
+    font-size: 18px;
+  }
+  
+  .messageContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .message {
+    font-size: 1rem;
+    margin: 0;
+    font-weight: 500;
+    color: #333;
+    margin-left: 10px;
+  }
+  
+  .time {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 5px;
+  }
+  
+  .dropdownMenu {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdownToggle {
+    padding: 0;
+    color: #888;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdownToggle::after {
+    display: none; /* Hides the default arrow */
+  }
+  
+  .popoverContent {
+    min-width: 200px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    padding: 5px 0;
+    z-index: 1000;
+  }
+  
+  .popoverContent .dropdown-item {
+    font-size: 0.9rem;
+    color: #333;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .popoverContent .dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .popoverContent .dropdown-item i {
+    margin-right: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .notification {
+      padding: 10px;
+    }
+  
+    .iconWrapper {
+      width: 35px;
+      height: 35px;
+    }
+  
+    .icon {
+      font-size: 16px;
+    }
+  
+    .message {
+      font-size: 0.95rem;
+      margin-left: 5px;
+    }
+  
+    .dropdownMenu {
+      top: 5px;
+      right: 5px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .notification {
+      padding: 8px;
+    }
+  
+    .iconWrapper {
+      width: 30px;
+      height: 30px;
+    }
+  
+    .icon {
+      font-size: 14px;
+    }
+  
+    .message {
+      font-size: 0.9rem;
+      margin-left: 5px;
+    }
+  
+    .dropdownMenu {
+      top: 3px;
+      right: 3px;
+    }
+  }
+  
