@@ -13938,6 +13938,13 @@ ul.accordion-list {
   background: #2a6310;
   color: white;
 }
+@media (max-width:1200px) {
+  .ctc-jobs-wrap{
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: scroll;
+  }
+}
 @media (min-width:992px) and (max-width:1250px) {
   .fullwidth .header-nav .nav > li > a {
     font-size: 10px;
@@ -14023,11 +14030,7 @@ ul.accordion-list {
   .section-head{
 flex-direction: column;
   }
-  .ctc-jobs-wrap{
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
-  }
+  
   .ds-mp-wrap{
     display: flex;
     gap: 1rem;
