@@ -45,7 +45,7 @@ function Jobdetail() {
         <div className="content-block">
           <div className="section-full content-inner">
             <div className="container">
-              <div className="row recent-job-details justify-content-between p-4">
+              <div className="row recent-job-details p-4">
                 {recentJob?.data?.slice(0, 4).map((item, index) => (
                   <div className=" p-0" key={index}>
                     <div className="blog-grid h-100" style={{width:"255px"}}>

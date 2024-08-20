@@ -1453,6 +1453,9 @@
 }
 .post-job-bx.browse-job-grid {
   margin: 0 -15px;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
 }
 .post-job-bx.browse-job-grid > li {
   padding: 0 15px;

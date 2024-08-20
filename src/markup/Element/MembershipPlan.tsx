@@ -205,21 +205,15 @@ const MembershipPlans = ({ plan }: any) => {
         }
         @media (max-width: 1200px) {
           .display-property {
-            grid-template-columns: repeat(2, 1fr);
+            overflow-x: scroll;
+            padding-left: 1rem;
+            display:flex;
           }
         }
         @media (max-width: 576px) {
-          .display-property {
-            grid-template-columns: 1fr;
-            overflow-x: scroll;
-            padding-left: 1rem;
-          }
           .member-ship-div {
             min-width: 350px;
             min-height: auto;
-          }
-          .display-property {
-            display: flex;
           }
         }
       `}</style>
