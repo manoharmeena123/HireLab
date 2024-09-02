@@ -1,8 +1,14 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { useGetSettingsQuery} from "@/store/global-store/global.query";
 
 const Footer = () => {
+  const { data: getSetting } = useGetSettingsQuery();
+  console.log('getSetting', getSetting)
+  const getSafeUrl = (url: string | null | undefined) => {
+    return url || "#";
+  };
   return (
     <footer className="site-footer">
       <div className="footer-top">
@@ -54,23 +60,23 @@ const Footer = () => {
                 <ul className="list-inline m-a0">
                   <li>
                     <Link
-                      href={""}
+                           href={getSafeUrl(getSetting?.data?.facebook)}
                       className="site-button white facebook circle "
                     >
                       <i className="fa fa-facebook"></i>
                     </Link>
                   </li>
-                  <li>
+                  {/* <li>
                     <Link
                       href={""}
                       className="site-button white google-plus circle "
                     >
                       <i className="fa fa-google-plus"></i>
                     </Link>
-                  </li>
+                  </li> */}
                   <li>
                     <Link
-                      href={""}
+                       href={getSafeUrl(getSetting?.data?.linkedin)}
                       className="site-button white linkedin circle "
                     >
                       <i className="fa fa-linkedin"></i>
@@ -78,7 +84,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href={""}
+                     href={getSafeUrl(getSetting?.data?.instagram)}
                       className="site-button white instagram circle "
                     >
                       <i className="fa fa-instagram"></i>
@@ -86,7 +92,7 @@ const Footer = () => {
                   </li>
                   <li>
                     <Link
-                      href={""}
+                        href={getSafeUrl(getSetting?.data?.twitter)}
                       className="site-button white twitter circle "
                     >
                       <i className="fa fa-twitter"></i>

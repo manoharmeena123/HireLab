@@ -62,24 +62,26 @@ const BlogDetailGrid = () => {
         <div className="content-area">
           <div className="container">
             <div className="dez-blog-grid-3 row" id="masonry">
-              {blogsToDisplay?.map((item :any, index :number) => (
+              {blogsToDisplay?.map((item: any, index: number) => (
                 <div
                   className="post card-container col-lg-4 col-md-6 col-sm-6"
                   key={index}
                 >
                   <div className="blog-post blog-grid blog-style-1">
                     <div className="dez-post-media dez-img-effect radius-sm">
-                      <Link href={"/blog-details"}>
-                        <div className="image-wrapper" style={{marginBottom:"-80px"}}>
-                          <Image
-                            src={`${IMAGE_URL + item?.image}`}
-                            alt={item?.title}
-                             width={300}
-                             height={200}
-                           style={{height:'70%'}}
-                          />
-                        </div>
-                      </Link>
+                      <div
+                        className="image-wrapper"
+                        style={{ marginBottom: "-80px" }}
+                        onClick={() => viewBlogHandler(item?.title)} // Added onClick handler
+                      >
+                        <Image
+                          src={`${IMAGE_URL + item?.image}`}
+                          alt={item?.title}
+                          width={300}
+                          height={200}
+                          style={{ height: "70%" }}
+                        />
+                      </div>
                     </div>
                     <div className="dez-info">
                       <div className="dez-post-meta">
@@ -151,6 +153,7 @@ const BlogDetailGrid = () => {
           width: 100%;
           height: 300px; /* Adjust the height as needed */
           overflow: hidden;
+          cursor: pointer; /* Change cursor to pointer */
         }
       `}</style>
     </>

@@ -12,16 +12,25 @@ export const useAuthToken = () => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    const storedToken = getCookie(TOKEN_KEY);
-    const storedUser = localStorage.getItem(USER_KEY);
-    
-    if (storedToken) {
-      setToken(storedToken);
-    }
+    // Check if we are in a browser environment
+    if (typeof window !== 'undefined') {
+      const storedToken = getCookie(TOKEN_KEY);
+      const storedUser = localStorage.getItem(USER_KEY);
 
-    if (storedUser) {
-      const parsedUser = JSON.parse(storedUser);
-      setUser(parsedUser);
+      if (storedToken) {
+        setToken(storedToken);
+      }
+
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+        } catch (error) {
+          console.error("Failed to parse stored user data:", error);
+          // Optionally remove the invalid item from localStorage
+          localStorage.removeItem(USER_KEY);
+        }
+      }
     }
   }, []);
 
@@ -29,7 +38,9 @@ export const useAuthToken = () => {
     setToken(newToken);
     setUser(userData);
     setCookie(TOKEN_KEY, newToken, { secure: true });
-    localStorage.setItem(USER_KEY, JSON.stringify(userData));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(USER_KEY, JSON.stringify(userData));
+    }
   };
 
   const removeToken = () => {
@@ -37,10 +48,12 @@ export const useAuthToken = () => {
       setToken(null);
       setUser(null);
       removeCookie(TOKEN_KEY);
-      localStorage.removeItem(USER_KEY);
-      toast.success("Logout Successfully")
-    } catch (error:any) {
-      toast.error(error.message)
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(USER_KEY);
+      }
+      toast.success("Logout Successfully");
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 
@@ -51,4 +64,3 @@ export const useAuthToken = () => {
     removeToken,
   };
 };
-
