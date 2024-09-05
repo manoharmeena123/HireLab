@@ -11,12 +11,17 @@ import minus from '@/images/chat/minus.png';
 import plus from '@/images/chat/plus.png';
 import search from '@/images/chat/search.png';
 import avatar from '@/images/chat/avatar.png'
+import { useSearchParams } from "next/navigation";
 
 const ChatList = () => {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId");
+  const email = searchParams.get("email");
+  console.log('searchParams',jobId, email)
   const [chats, setChats] = useState([]);
   const [addMode, setAddMode] = useState(false);
   const [input, setInput] = useState("");
-
+console.log('input+++', input)
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
 

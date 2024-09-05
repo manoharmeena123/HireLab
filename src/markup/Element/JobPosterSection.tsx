@@ -308,8 +308,8 @@ const JobPosterSection = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">
-                        {user?.user?.name}'s Profile
+                      <h5 className="font-weight-700 pull-left">
+                        {user?.user?.name.split('',7) || "User"}'s Profile
                       </h5>
                       <button
                         onClick={() => router.back()}

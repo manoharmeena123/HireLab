@@ -9,6 +9,7 @@ import { doc, setDoc, collection, query, where, getDocs } from "firebase/firesto
 import styles from "./Login.module.css"; // Import the CSS module
 import GoogleSignin from "@/images/chat/google.png"; // Replace with your correct path
 import Image  from 'next/image'
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
 
@@ -61,7 +62,7 @@ const Login = () => {
       <div className={styles.item}>
         <h2>Sign In with Google</h2>
         <button onClick={handleGoogleSignIn} disabled={loading} className={styles.submitButton}>
-          <Image src={GoogleSignin} width={20} height={20} alt="Google Logo" />
+          <Image src={GoogleSignin} width={20} height={20}  objectFit={"contain"} alt="Google Logo" />
           {loading ? "Loading..." : "Sign In with Google"}
         </button>
       </div>
