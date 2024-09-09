@@ -15,6 +15,7 @@ import { useUserStore } from "../../lib/userStore";
 import upload from "../../lib/upload";
 import { format } from "timeago.js";
 import Image from "next/image";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 // Import your images here
 import phoneIcon from "@/images/chat/phone.png";
@@ -38,7 +39,7 @@ const Chat = () => {
   const { currentUser } = useUserStore();
   const { chatId, user, isCurrentUserBlocked, isReceiverBlocked } =
     useChatStore();
-
+ console.log('useChatStore', user)
   const endRef = useRef(null);
 
   useEffect(() => {
@@ -131,7 +132,13 @@ const Chat = () => {
     <div className={styles.chat}>
       <div className={styles.top}>
         <div className={styles.user}>
-          <Image src={user?.avatar || avatar} alt="User Avatar" width={60} height={60} />
+          <Image
+            src={avatar}
+            // src={user?.avatar ? `${IMAGE_URL}${user.avatar}` : avatar}
+            alt="User Avatar"
+            width={60}
+            height={60}
+          />
           <div className={styles.texts}>
             <h4>{user?.username}</h4>
             {/* <p>Lorem ipsum dolor, sit amet.</p> */}
@@ -155,17 +162,27 @@ const Chat = () => {
           >
             <div className={styles.texts}>
               {message.img && (
-                <Image src={message.img} alt="Message Image" width={200} height={200} />
+                <Image
+                  src={message.img}
+                  alt="Message Image"
+                  width={200}
+                  height={200}
+                />
               )}
               <p>{message.text}</p>
               <span>{format(message.createdAt.toDate())}</span>
             </div>
           </div>
         ))}
-        {img.url && (
+        {img?.url && (
           <div className={`${styles.message} ${styles.own}`}>
             <div className={styles.texts}>
-              <Image src={img.url} alt="Attached Image" width={200} height={200} />
+              <Image
+                src={img?.url}
+                alt="Attached Image"
+                width={200}
+                height={200}
+              />
             </div>
           </div>
         )}
@@ -182,8 +199,8 @@ const Chat = () => {
             style={{ display: "none" }}
             onChange={handleImg}
           />
-          <Image src={cameraIcon} alt="Camera" width={20} height={20} />
-          <Image src={micIcon} alt="Microphone" width={20} height={20} />
+          {/* <Image src={cameraIcon} alt="Camera" width={20} height={20} />
+          <Image src={micIcon} alt="Microphone" width={20} height={20} /> */}
         </div>
         <input
           type="text"

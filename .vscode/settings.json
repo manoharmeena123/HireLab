@@ -5,5 +5,7 @@
     ],
     "files.associations": {
         "plyconfig.json": "jsonc"
-    }
+    },
+    "git.enabled": true,
+    "git.decorations.enabled": true
 }
