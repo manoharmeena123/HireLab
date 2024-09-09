@@ -5,21 +5,37 @@ import { db } from "./firebase";
 export const useUserStore = create((set) => ({
   currentUser: null,
   isLoading: true,
-  fetchUserInfo: async (uid) => {
-    if (!uid) return set({ currentUser: null, isLoading: false });
+  
+  // Function to fetch user info from Firestore using the user's ID
+  fetchUserInfo: async (id) => {
+    if (!id) {
+      console.warn("No user ID provided");
+      return set({ currentUser: null, isLoading: false });
+    }
 
     try {
-      const docRef = doc(db, "users", uid);
+      set({ isLoading: true }); // Set loading state to true
+
+      // Ensure the ID is a string before passing it to `doc`
+      const docRef = doc(db, "users", id.toString());
       const docSnap = await getDoc(docRef);
-      console.log('docSnap', docSnap)
+
       if (docSnap.exists()) {
-        set({ currentUser: docSnap.data(), isLoading: false });
+        const userData = docSnap.data();
+        console.log("User data fetched from Firestore:", userData);
+
+        // Update the Zustand store with the fetched user data
+        set({ currentUser: userData, isLoading: false });
       } else {
+        console.warn("User not found in Firestore for ID:", id);
         set({ currentUser: null, isLoading: false });
       }
     } catch (err) {
-      console.log(err);
-      return set({ currentUser: null, isLoading: false });
+      console.error("Error fetching user info from Firestore:", err);
+      set({ currentUser: null, isLoading: false });
     }
   },
+
+  // Optional reset function to clear the current user and loading state
+  resetUser: () => set({ currentUser: null, isLoading: false }),
 }));

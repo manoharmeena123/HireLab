@@ -49,7 +49,7 @@ const Detail = () => {
             <Image src={arrowUp} alt="Arrow Up" width={30} height={30} />
           </div>
         </div>
-        <div className={styles.option}>
+        {/* <div className={styles.option}>
           <div className={styles.title}>
             <span>Chat Settings</span>
             <Image src={arrowUp} alt="Arrow Up" width={30} height={30} />
@@ -60,7 +60,7 @@ const Detail = () => {
             <span>Privacy & help</span>
             <Image src={arrowUp} alt="Arrow Up" width={30} height={30} />
           </div>
-        </div>
+        </div> */}
         <div className={styles.option}>
           <div className={styles.title}>
             <span>Shared photos</span>

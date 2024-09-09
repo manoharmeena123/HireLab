@@ -32,8 +32,7 @@
 .chatList .search .searchBar img {
   width: 20px !important;
   height: 20px !important;
-  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%) !important;
-  /* This filter will make the image black */
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%) !important;
 }
 
 .chatList .search .add {
@@ -43,8 +42,7 @@
   padding: 10px !important;
   border-radius: 10px !important;
   cursor: pointer !important;
-  filter: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(0%) contrast(100%) !important;
-  /* This filter will make the image black */
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%) !important;
 }
 
 .chatList .item {
@@ -76,4 +74,103 @@
 .chatList .item .texts p {
   font-size: 14px !important;
   font-weight: 300 !important;
+}
+
+
+/* AddUser.module.css */
+.addUser {
+  width: 100% !important;
+  max-width: 500px !important;
+  height: auto !important;
+  padding: 30px !important;
+  background-color: rgba(17, 25, 40, 0.781) !important;
+  border-radius: 10px !important;
+  position: relative !important;
+  margin: 20px auto !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.addUser form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.addUser form input {
+  padding: 15px !important;
+  border-radius: 8px !important;
+  border: 1px solid #ccc !important;
+  outline: none !important;
+  background-color: white !important;
+  font-size: 16px !important;
+}
+
+.addUser form button {
+  padding: 15px !important;
+  border-radius: 8px !important;
+  background-color: #1a73e8 !important;
+  color: white !important;
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.addUser form button:hover {
+  background-color: #155bb5 !important;
+}
+
+.addUser .user {
+  margin-top: 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  border: 1px solid #ccc !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+}
+
+.addUser .user .detail {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+}
+
+.addUser .user .detail img {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.addUser .user .actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+
+.addUser .user button {
+  padding: 10px !important;
+  border-radius: 8px !important;
+  background-color: #1a73e8 !important;
+  color: white !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+}
+
+.addUser .user button:hover {
+  background-color: #155bb5 !important;
+}
+
+.alreadyAdded {
+  color: #ff4d4f !important; /* Red color to indicate warning or error */
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: left !important;
+  background-color: rgba(255, 77, 79, 0.1) !important; /* Light red background */
+  padding: 8px !important;
+  border-radius: 8px !important;
 }

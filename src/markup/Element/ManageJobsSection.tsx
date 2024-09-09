@@ -164,9 +164,6 @@ const ManageJobs = () => {
       }
     }
   };
-  if (jobsLoading) {
-    <Loading />;
-  }
 
   const viewJobHandler = (id: number) => {
     push(`/job-edit?jobId=${id}`);
@@ -244,8 +241,14 @@ const ManageJobs = () => {
       }
     }
   };
+
+  const handleChatClick = (item :any)=>{
+    // console.log('first',item)
+    push(`/chats?jobId=${item?.id}&email=${item?.email}`); 
+  }
   return (
     <>
+    {jobsLoading && <Loading/>}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -650,7 +653,7 @@ const ManageJobs = () => {
                                   REJECT
                                 </Button>
                                 <Button variant="success">VIEW PROFILE</Button>
-                                <Button variant="success">CHAT</Button>
+                                <Button variant="success" onClick={()=> handleChatClick(item)}>CHAT</Button>
                               </div>
                             </div>
                           ))

@@ -5,7 +5,6 @@ import { useGetSettingsQuery} from "@/store/global-store/global.query";
 
 const Footer = () => {
   const { data: getSetting } = useGetSettingsQuery();
-  console.log('getSetting', getSetting)
   const getSafeUrl = (url: string | null | undefined) => {
     return url || "#";
   };

@@ -36,6 +36,7 @@ import {
   useGetSectorQuery,
   useGetJobByIdMutation,
 } from "@/store/global-store/global.query";
+import { useGetManageJobQuery } from '@/app/manage-job/store/manage-job.query'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
 import Loading from "@/components/Loading";
@@ -75,7 +76,12 @@ const JobEditSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-
+    const {
+      data: jobsData,
+      error: jobsError,
+      isLoading: jobsLoading,
+      refetch: manageRefetch,
+    } = useGetManageJobQuery();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
@@ -236,6 +242,7 @@ const JobEditSection = () => {
         }).unwrap();
         if (response.code === 200) {
           toast.success("Job updated successfully!", { theme: "colored" });
+          manageRefetch()
           router.push("/manage-job");
         } else if (response.code === 401) {
           toast.error(response.message, { theme: "colored" });
