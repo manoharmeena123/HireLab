@@ -13,7 +13,8 @@ import {
   useGetSingleBlogCommentbyQuetionIdMutation,
   useCreateSingleBlogCommentMutation,
   useGetSingleParentBlogCommentbyIdMutation,
-  useDeleteBlogCommentByIdMutation
+  useDeleteBlogCommentByIdMutation,
+  useUpdateBlogCommentMutation
 } from "@/store/global-store/global.query";
 import {
   blogformatDate,
@@ -39,7 +40,7 @@ const SingleBlogSection = () => {
     /%20/g,
     "+"
   );
-
+const [updateBlogComment] =useUpdateBlogCommentMutation()
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
@@ -215,21 +216,22 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
 
   const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // if (currentCommentId && currentCommentText.trim() !== "") {
-    //   try {
-    //     const res = await updateComment({
-    //       id: currentCommentId,
-    //       body: currentCommentText,
-    //     });
-    //     if (res?.data?.code === 200) {
-    //       toast.success(res?.data?.message, { theme: "colored" });
-    //       getCommentForQuetion(questionId);
-    //       setShowEditModal(false);
-    //     }
-    //   } catch (error: any) {
-    //     toast.error(error?.data?.message, { theme: "colored" });
-    //   }
-    // }
+    if (currentCommentId && currentCommentText.trim() !== "") {
+      try {
+        const res = await updateBlogComment({
+          question_id : questionId,
+          id: currentCommentId,
+          body: currentCommentText,
+        });
+        if (res?.data?.code === 200) {
+          toast.success(res?.data?.message, { theme: "colored" });
+          getSingleBlogCommentbyQuetionId(questionId as any);
+          setShowEditModal(false);
+        }
+      } catch (error: any) {
+        toast.error(error?.data?.message, { theme: "colored" });
+      }
+    }
   };
 
   const renderComments = (comments: any[], parentId: string | null = null) => {

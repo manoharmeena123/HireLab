@@ -106,7 +106,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "CreateAccount",
     "Counts",
     "AddLikeDiscussion",
-    "DeleteBlogComment"
+    "DeleteBlogComment",
+    "UpdateBlogComment"
   ],
 });
 
@@ -119,6 +120,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getBlogsDataById: builder.mutation<BlogResponse, string>({
       query: (id) => queries.getBlogsById.query(id),
       invalidatesTags: ["BlogsbyId"],
+    }),
+    updateBlogComment : builder.mutation<any,any>({
+      query :(data)=> queries.updateBlogComment.query(data),
+      invalidatesTags: ["UpdateBlogComment"],
     }),
     getEvents: builder.query<EventResponse, void>({
       query: queries.getEvents.query,
@@ -449,6 +454,7 @@ export const {
   useCreateAccountQuery,
   useGetCountsQuery,
   useAddLikeDiscussionMutation,
-  useDeleteBlogCommentByIdMutation
+  useDeleteBlogCommentByIdMutation,
+  useUpdateBlogCommentMutation
 } = globalApi;
 export default globalApi;

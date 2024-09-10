@@ -21,6 +21,13 @@ export const queries = {
       method: "GET",
     }),
   },
+  updateBlogComment :{
+    query :(data :any)=>({
+      url :`api/update-blog-comment`,
+      method :"POST",
+      body :data
+    })
+  },
   getEvents: {
     query: () => ({
       url: "api/upcoming-events",
