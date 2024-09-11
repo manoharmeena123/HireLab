@@ -45,8 +45,6 @@ function Browsejobfilterlist() {
   const [getFilterJob, { isLoading: isFilterLoading, data: jobsData }] =
     useGetFilterJobMutation();
 
-  console.log("jobsData", jobsData, jobId);
-  console.log("ctcData", ctcData);
   useEffect(() => {
     if (jobId) {
       getJobs(jobId);
@@ -76,6 +74,7 @@ function Browsejobfilterlist() {
   const itemsPerPage = 10;
 
   const [sortOption, setSortOption] = useState<string>("last3Months");
+  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]); // Dynamic CTC range slider value
 
   const sortJobs = (jobs: any[]): any[] => {
     const now = new Date();
@@ -106,45 +105,67 @@ function Browsejobfilterlist() {
     }
   };
 
+  // Helper function to extract the numeric range from the CTC title
+  const extractCtcRange = (title: string): [number, number] => {
+    const [min, max] = title
+      .replace("lac", "") // Remove the "lac" string
+      .split("-")         // Split by the dash (-) to get the range
+      .map((str) => parseInt(str.trim())); // Convert to numbers
+    return [min, max];
+  };
+
+  // Function to get CTC title by its ID
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
+
+  // Apply filters and include CTC range logic
   const applyFilters = (jobs: any[]): any[] => {
+    const [minCtc, maxCtc] = ctcRange;
+
     return jobs
       .filter((job) =>
         filters.experience.length
-          ? filters?.experience?.includes(job?.experience?.title)
+          ? filters.experience.includes(job.experience.title)
           : true
       )
       .filter((job) =>
         filters.location.length
-          ? filters.location.includes(job?.location?.title)
+          ? filters.location.includes(job.location.title)
           : true
       )
       .filter((job) =>
         filters.education.length
-          ? filters.education.includes(job?.education?.name ?? "")
+          ? filters.education.includes(job.education.name ?? "")
           : true
       )
       .filter((job) =>
         filters.cities.length
-          ? filters.cities.some((city) => job?.address?.includes(city))
+          ? filters.cities.some((city) => job.address.includes(city))
           : true
       )
       .filter((job) =>
         filters.jobTitles.length
-          ? filters.jobTitles.includes(job?.job_title)
+          ? filters.jobTitles.includes(job.job_title)
           : true
-      );
+      )
+      .filter((job) => {
+        // Get the CTC title from the job (assuming job.ctc contains the ID)
+        const ctcItem = ctcDatas?.data?.find((item) => item.id == job.ctc);
+        if (!ctcItem) return false;
+
+        // Extract CTC range from the title
+        const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
+
+        // Filter jobs where the job's CTC range falls within the selected slider range
+        return ctcMin >= minCtc && ctcMax <= maxCtc;
+      });
   };
 
   const paginatedJobs = jobsData?.data
     ? sortJobs(
         applyFilters(jobsData?.data).slice(
-          (currentPage - 1) * itemsPerPage,
-          currentPage * itemsPerPage
-        )
-      )
-    : ctcData?.data
-    ? sortJobs(
-        applyFilters(ctcData?.data).slice(
           (currentPage - 1) * itemsPerPage,
           currentPage * itemsPerPage
         )
@@ -157,10 +178,6 @@ function Browsejobfilterlist() {
 
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
-  };
-  const getCtcTitleById = (id: any) => {
-    const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
-    return ctcItem ? ctcItem.title : "N/A";
   };
 
   return (
@@ -178,7 +195,12 @@ function Browsejobfilterlist() {
           <div className="section-full browse-job p-b50">
             <div className="container">
               <div className="row">
-                <Accordsidebar filters={filters} setFilters={setFilters} />
+                <Accordsidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  ctcRange={ctcRange}
+                  setCtcRange={setCtcRange}
+                />
                 <div className="col-xl-9 col-lg-8 col-md-7">
                   <div className="job-bx-title clearfix">
                     <h5 className="font-weight-700 pull-left text-uppercase">{`${
@@ -236,7 +258,6 @@ function Browsejobfilterlist() {
                                       onClick={() => viewJobHandler(item.id)}
                                     >
                                       <Link href={"/job-detail"}>
-                                        {" "}
                                         {item?.job_title}
                                       </Link>
                                     </h4>
@@ -263,10 +284,11 @@ function Browsejobfilterlist() {
                                       <span>{item?.location?.title}</span>
                                     </Link>
                                   </div>
-
                                   <div className="salary-bx">
-                                    <span>42000 - 55000</span>
-                                    <br />
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
                                   </div>
                                 </div>
                                 <div className="posted-info clearfix">
@@ -298,7 +320,6 @@ function Browsejobfilterlist() {
                                       className="browse-card-head"
                                     >
                                       <Link href={"/job-detail"}>
-                                        {" "}
                                         {item?.job_title}
                                       </Link>
                                       <label className="like-btn">
@@ -329,7 +350,6 @@ function Browsejobfilterlist() {
                                       <span>{item?.location?.title}</span>
                                     </Link>
                                   </div>
-
                                   <div className="salary-bx">
                                     <span className="ctc-badge">
                                       <i className="fa fa-money"></i>{" "}
@@ -345,10 +365,6 @@ function Browsejobfilterlist() {
                                     {formatDateAgo(item?.created_at)}
                                   </p>
                                 </div>
-                                {/* <label className="like-btn">
-                                  <input type="checkbox" />
-                                  <span className="checkmark"></span>
-                                </label> */}
                               </div>
                             </li>
                           ))}

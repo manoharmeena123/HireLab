@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { Accordion } from "react-bootstrap";
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
 
@@ -16,11 +15,15 @@ interface Filters {
 interface AccordsidebarProps {
   filters: Filters;
   setFilters: (filters: Filters) => void;
+  ctcRange: [number, number]; // Pass initial range from Browsejobfilterlist
+  setCtcRange: (range: [number, number]) => void; // Function to update the CTC range in Browsejobfilterlist
 }
 
 const Accordsidebar: React.FC<AccordsidebarProps> = ({
   filters,
   setFilters,
+  ctcRange,
+  setCtcRange,
 }) => {
   const handleFilterChange = (type: keyof Filters, value: string) => {
     const currentValues = filters[type] || [];
@@ -29,10 +32,10 @@ const Accordsidebar: React.FC<AccordsidebarProps> = ({
       : [...currentValues, value];
     setFilters({ ...filters, [type]: newValues });
   };
-  const [activeIndex, setActiveIndex] = useState(null);
-  const [value, setValue] = useState([30, 60]);
- console.log('value', value)
-  const handleClick = (index: any) => {
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const handleClick = (index: number) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
@@ -44,16 +47,8 @@ const Accordsidebar: React.FC<AccordsidebarProps> = ({
       cities: [],
       jobTitles: [],
     });
+    setCtcRange([10, 50]); // Reset the CTC range to the full range
   };
-
-  const cities = [
-    "Indore",
-    "Delhi",
-    "Katni",
-    "Surat",
-    "Ahmedabad",
-    "Gandhinagar",
-  ];
 
   return (
     <div className="col-xl-3 col-lg-4 col-md-5 m-b30">
@@ -78,10 +73,15 @@ const Accordsidebar: React.FC<AccordsidebarProps> = ({
               className={`answer ${activeIndex === 5 ? "show" : ""} pt-4`}
               style={{ minHeight: "100px" }}
             >
-              <RangeSlider value={value} onInput={setValue} />
+              <RangeSlider
+                value={ctcRange}
+                onInput={setCtcRange}
+                min={10}
+                max={50}
+              />
               <div className="d-flex justify-content-between gap-1 mt-2">
-                <span>{value[0]}</span>
-                <span>{value[1]}</span>
+                <span>{ctcRange[0]} Lac</span>
+                <span>{ctcRange[1]} Lac</span>
               </div>
             </div>
           </li>
