@@ -45,6 +45,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import profileIcon from "../../images/favicon.png";
 import Swal from "sweetalert2";
+import { addNotificationToFirestore } from "@/app/notifications/firebaseConfig"; // Import the function
 
 const JobEditSection = () => {
   const router = useRouter();
@@ -240,13 +241,15 @@ const JobEditSection = () => {
           compensation: selectedCompensation?.toString() || "",
           additional_perk: selectedAdditionalPerks.join(","),
         }).unwrap();
-        if (response.code === 200) {
+        if (response.code == 200) {
           toast.success("Job updated successfully!", { theme: "colored" });
+          await addNotificationToFirestore("Job updated", `job has been updated`);
           manageRefetch()
           router.push("/manage-job");
-        } else if (response.code === 401) {
+        } else if (response.code == 401) {
           toast.error(response.message, { theme: "colored" });
-        } else if (response.code === 404) {
+        } else if (response.code == 404) {
+          toast.error(response.message, { theme: "colored" });
           dispatch(setPostJobErrors(response.errors));
         } else {
           console.error("Unexpected error format:", response);

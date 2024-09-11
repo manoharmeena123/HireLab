@@ -40,6 +40,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
+import { addNotificationToFirestore } from "@/app/notifications/firebaseConfig"; // Import the function
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -181,20 +182,21 @@ const PostJobSection = () => {
     if (result.isConfirmed) {
       try {
         const response = await postJob(profileData).unwrap();
-        if (response.code === 200) {
+        if (response.code == 200) {
           Swal.fire({
             icon: "success",
             title: "Job Posted",
             text: response?.message,
           });
           router.push("/manage-job");
-        } else if (response.code === 401) {
+          await addNotificationToFirestore("New Job Posted", `job has been posted`);
+        } else if (response.code == 401) {
           Swal.fire({
             icon: "error",
             title: "Unauthorized",
             text: response?.message,
           });
-        } else if (response.code === 404) {
+        } else if (response.code == 404) {
           console.error("Error posting job:", response);
           Swal.fire({
             icon: "error",
