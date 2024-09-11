@@ -4,13 +4,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
+// Firebase configuration (ensure you replace with your own keys)
 const firebaseConfig = {
   apiKey: `AIzaSyAikKUKM6xBwAuaCFmJSv_ChhWkBUCzClY`,
-  authDomain:`hirelab-push-notification.firebaseapp.com`,
+  authDomain: `hirelab-push-notification.firebaseapp.com`,
   projectId: `hirelab-push-notification`,
-  storageBucket:`hirelab-push-notification.appspot.com`,
-  messagingSenderId:`987031827435`,
-  appId:`1:987031827435:web:205e2afacbaf6a099bdfae`
+  storageBucket: `hirelab-push-notification.appspot.com`,
+  messagingSenderId: `987031827435`,
+  appId: `1:987031827435:web:205e2afacbaf6a099bdfae`,
 };
 
 // Initialize Firebase
@@ -22,6 +23,12 @@ let messaging: ReturnType<typeof getMessaging> | null = null;
 
 if (typeof window !== "undefined" && "serviceWorker" in navigator) {
   try {
+    // Register the service worker if not already registered
+    navigator.serviceWorker.register('/firebase-messaging-sw.js').then((registration) => {
+      console.log("Service Worker registered with scope:", registration.scope);
+    });
+
+    // Initialize Firebase Messaging
     messaging = getMessaging(firebaseApp);
   } catch (error) {
     console.error("Error initializing Firebase Messaging", error);
@@ -37,6 +44,7 @@ export const getFirebaseToken = async (): Promise<string | null> => {
 
   try {
     const token = await getToken(messaging, { vapidKey: "BEsxReWpk85bYQeQydVcWxggwcOb9aiZUqo2GFSxMcIGQKHHLnBJNnCP45J1YasyD6o49DV7TpOKk2z0ZoT44_8" });
+    console.log("Firebase token:", token);
     return token;
   } catch (error) {
     console.error("Error getting Firebase token", error);
@@ -44,14 +52,16 @@ export const getFirebaseToken = async (): Promise<string | null> => {
   }
 };
 
-// Function to handle foreground message (client-side only)
+// Function to handle foreground messages (client-side only)
 export const onForegroundMessage = (): Promise<any> => {
   return new Promise((resolve, reject) => {
     if (!messaging) {
-      return reject(new Error("Firebase Messaging is not available in this environment"));
+      reject("Firebase Messaging is not available in this environment");
+    } else {
+      onMessage(messaging, (payload) => {
+        resolve(payload);
+      });
     }
-
-    onMessage(messaging, (payload) => resolve(payload));
   });
 };
 
@@ -70,6 +80,11 @@ export const addNotificationToFirestore = async (title: string, message: string)
 };
 
 export const fetchNotificationsFromFirestore = async () => {
-  const querySnapshot = await getDocs(collection(db, "notifications"));
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const querySnapshot = await getDocs(collection(db, "notifications"));
+    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error("Error fetching notifications from Firestore:", error);
+    return [];
+  }
 };

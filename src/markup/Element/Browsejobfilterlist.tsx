@@ -308,7 +308,7 @@ function Browsejobfilterlist() {
                           ))}
                         </ul>
                       ) : (
-                        <ul className="post-job-bx browse-job-grid row">
+                        <ul className="post-job-bx browse-job-grid row"  style={{display:"flex", flexWrap :"wrap"}}>
                           {paginatedJobs.map((item, index) => (
                             <li className="col-lg-6" key={index}>
                               <div className="post-bx">
