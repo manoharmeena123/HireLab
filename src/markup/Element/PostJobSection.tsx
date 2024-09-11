@@ -428,15 +428,15 @@ const PostJobSection = () => {
                     </div>
                     <ul>
                       <li>
-                        <Link href="/job-poster">
-                          <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span>{user?.user?.name} Profile</span>
+                        <Link href="/manage-job">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          <span>Dashboard</span>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/dashboard-section">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Dashboard</span>
+                        <Link href="/job-poster">
+                          <i className="fa fa-user-o" aria-hidden="true"></i>
+                          <span>Profile</span>
                         </Link>
                       </li>
                       <li>
@@ -454,12 +454,12 @@ const PostJobSection = () => {
                           <span>Credit Earned</span>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href="/manage-job">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
                           <span>Manage Jobs</span>
                         </Link>
-                      </li>
+                      </li> */}
 
                       <li>
                         <Link href="#" onClick={handleLogout}>

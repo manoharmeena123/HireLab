@@ -139,6 +139,12 @@ const Profilesidebar = ({ refetch }: any) => {
           </div>
           <ul>
             <li>
+              <Link href="/dashboard-section">
+              <i className="fa fa-heart-o" aria-hidden="true"></i>
+              <span>Dashboard</span>
+             </Link>
+           </li>
+            <li>
               <Link href="profile" className="active">
                 <i className="fa fa-user-o" aria-hidden="true"></i>
                 <span>Profile</span>

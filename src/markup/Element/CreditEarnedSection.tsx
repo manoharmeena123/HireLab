@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Modal } from "react-bootstrap";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
@@ -153,17 +153,16 @@ const CreditEarned = () => {
                         </div>
                       </div>
                       <ul>
-                      
                         <li>
-                          <Link href="/job-poster">
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>{user?.user?.name} Profile</span>
+                          <Link href="/manage-job">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
+                          <Link href="/job-poster">
+                            <i className="fa fa-user-o" aria-hidden="true"></i>
+                            <span>Profile</span>
                           </Link>
                         </li>
 
@@ -184,13 +183,13 @@ const CreditEarned = () => {
                           </Link>
                         </li>
 
-                        <li>
+                        {/* <li>
                           <Link href="/manage-job">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Manage Jobs</span>
                           </Link>
-                        </li>
-                        
+                        </li> */}
+
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i
@@ -211,13 +210,13 @@ const CreditEarned = () => {
                         CREDIT EARNED
                       </h5>
                       <div className="float-right">
-                      <button
-                      onClick={() => router.back()}
-                      className="site-button right-arrow button-sm float-right"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      Back
-                    </button>
+                        <button
+                          onClick={() => router.back()}
+                          className="site-button right-arrow button-sm float-right"
+                          style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                        >
+                          Back
+                        </button>
                       </div>
                     </div>
                     <div>
@@ -269,10 +268,19 @@ const CreditEarned = () => {
                             <td className="job-name">
                               <Link href={"#"}>{item.description}</Link>
                             </td>
-                            <td className={`application ${item.credit < 0 ? 'text-red' : 'text-primary'}`}>
-                            {item.credit} {item.credit < 0 ? 'Debited' : 'Credits'}
+                            <td
+                              className={`application ${
+                                item.credit < 0 ? "text-red" : "text-primary"
+                              }`}
+                            >
+                              {item.credit}{" "}
+                              {item.credit < 0 ? "Debited" : "Credits"}
                             </td>
-                            <td className={`application ${item.credit < 0 ? 'text-red' : 'text-primary'}`}>
+                            <td
+                              className={`application ${
+                                item.credit < 0 ? "text-red" : "text-primary"
+                              }`}
+                            >
                               {item.status}
                             </td>
                             <td className="expired pending">{item.date} </td>

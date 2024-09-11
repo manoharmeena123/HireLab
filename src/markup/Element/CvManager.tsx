@@ -144,6 +144,12 @@ const CvManager = () => {
                         </div>
                       </div>
                       <ul>
+                      <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                          </Link>
+                        </li>
                         <li>
                           <Link href={"/job-poster"}>
                             <i className="fa fa-user-o" aria-hidden="true"></i>
