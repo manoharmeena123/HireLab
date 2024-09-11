@@ -163,9 +163,9 @@ function Browsejobfilterlist() {
       });
   };
 
-  const paginatedJobs = jobsData?.data
+  const paginatedJobs = jobsData?.data || ctcData?.data
     ? sortJobs(
-        applyFilters(jobsData?.data).slice(
+        applyFilters(jobsData?.data || ctcData?.data).slice(
           (currentPage - 1) * itemsPerPage,
           currentPage * itemsPerPage
         )

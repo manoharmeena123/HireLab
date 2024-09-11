@@ -65,6 +65,9 @@ const BrowseJobGrid: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
+  // New state for CTC range filter
+  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]);
+
   useEffect(() => {
     if (savedJobsData) {
       console.log('Saved Jobs Data:', savedJobsData);
@@ -158,7 +161,17 @@ const BrowseJobGrid: React.FC = () => {
     }
   };
 
-  const applyFilters = (jobs: any[]): any[] => {
+  // Helper function to extract the numeric range from the CTC title
+  const extractCtcRange = (title: string): [number, number] => {
+    const [min, max] = title
+      .replace("lac", "")
+      .split("-")
+      .map((str) => parseInt(str.trim()));
+    return [min, max];
+  };
+
+  // Apply filters and include CTC range logic
+  const applyFilters = (jobs: Job[]): Job[] => {
     return jobs
       .filter((job) =>
         filters.experience.length
@@ -186,7 +199,13 @@ const BrowseJobGrid: React.FC = () => {
         filters?.jobTitles?.length
           ? filters.jobTitles.includes(job?.job_title)
           : true
-      );
+      )
+      .filter((job) => {
+        const ctcItem = ctcDatas?.data?.find((item) => item.id == job.ctc);
+        if (!ctcItem) return false;
+        const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
+        return ctcMin >= ctcRange[0] && ctcMax <= ctcRange[1];
+      });
   };
 
   const sortedAndFilteredJobs = sortJobs(applyFilters(getAlljobs?.data || []));
@@ -216,7 +235,12 @@ const BrowseJobGrid: React.FC = () => {
           <div className="section-full bg-white browse-job p-b50">
             <div className="container">
               <div className="row">
-                <Accordsidebar filters={filters} setFilters={setFilters} />
+                <Accordsidebar
+                  filters={filters}
+                  setFilters={setFilters}
+                  ctcRange={ctcRange}
+                  setCtcRange={setCtcRange} // Pass CTC range and setter
+                />
                 <div className="col-xl-9 col-lg-8 col-md-7">
                   <div className="job-bx-title clearfix">
                     <h5 className="font-weight-700 pull-left text-uppercase">
