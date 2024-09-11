@@ -171,7 +171,7 @@ const BrowseJobGrid: React.FC = () => {
   };
 
   // Apply filters and include CTC range logic
-  const applyFilters = (jobs: Job[]): Job[] => {
+  const applyFilters = (jobs: any[]): any[] => {
     return jobs
       .filter((job) =>
         filters.experience.length
@@ -201,7 +201,7 @@ const BrowseJobGrid: React.FC = () => {
           : true
       )
       .filter((job) => {
-        const ctcItem = ctcDatas?.data?.find((item) => item.id == job.ctc);
+        const ctcItem = ctcDatas?.data?.find((item :any) => item.id == job.ctc);
         if (!ctcItem) return false;
         const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
         return ctcMin >= ctcRange[0] && ctcMax <= ctcRange[1];
