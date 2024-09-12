@@ -34,7 +34,7 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
     usePostApplyJobMutation();
   const [loadingJobs, setLoadingJobs] = useState<string[]>([]);
   const { user } = useLoggedInUser();
-  console.log(job);
+  // console.log(job);
 
   const handleLikeToggle = async (jobId: string) => {
     if (isSaving || isDeleting) {
@@ -121,7 +121,9 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
   const sanitizedDescription = DOMPurify.sanitize(
     job?.data?.job_description || ""
   );
-
+  const handleLoginToApply= () => {
+    router.push(`/login?page=job-detail?jobId=${job?.data?.id}`);
+  };
   return (
     <div className="container p-4">
       <div className="shadow p-4 rounded">
@@ -148,14 +150,25 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
         </div>
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
           <div className="mt-3 mt-md-0">
-            <Button
-              className="btn mr-2 apply-saved-btn"
-              // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
-              onClick={() => handleApplyJob(job?.data?.id.toString())}
-              disabled={loadingJobs.includes(job?.data?.id.toString())}
-            >
-              {user ? "Apply Job" : "Login to apply"}
-            </Button>
+            {user ? (
+              <Button
+                className="btn mr-2 apply-saved-btn"
+                // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
+                onClick={() => handleApplyJob(job?.data?.id.toString())}
+                disabled={loadingJobs.includes(job?.data?.id.toString())}
+              >
+                Apply Job
+              </Button>
+            ) : (
+              <Button
+                className="btn mr-2 apply-saved-btn"
+                // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
+                onClick={() => handleLoginToApply()}
+                disabled={loadingJobs.includes(job?.data?.id.toString())}
+              >
+                Login to apply
+              </Button>
+            )}
             <Button
               className="btn btn-outline apply-saved-btn"
               onClick={() => handleLikeToggle(job?.data?.id.toString())}
