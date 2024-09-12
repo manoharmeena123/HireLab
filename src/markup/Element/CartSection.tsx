@@ -14,6 +14,7 @@ const CartSection = () => {
   const searchParams = useSearchParams();
   const { data: membershipData, isLoading: membershipLoading } =
     useGetMembershipQuery();
+    console.log('membershipData', membershipData)
   const planId = searchParams.get("plan");
   const [saveMemberShip] = useSaveMemberShipMutation();
   const { user } = useLoggedInUser();
@@ -56,7 +57,7 @@ const CartSection = () => {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                amount: 600 * 100,
+                amount: Number(selectedPlan?.price) * 100,
                 currency: 'INR',
               }),
             });

@@ -6,6 +6,7 @@ import Jobfindbox from "@/markup/Element/Jobfindbox";
 import Accordsidebar from "@/markup/Element/Accordsidebar";
 import { useRouter } from "next/navigation";
 import {
+  useGetJobsQuery,
   useGetSectorQuery,
   useGetFilterJobMutation,
   useGetCtcDataByIdMutation,
@@ -40,6 +41,7 @@ function Browsejobfilterlist() {
   const [getJobs, { data: ctcData, isLoading: isCtcLoading }] =
     useGetCtcDataByIdMutation();
   const { data: ctcDatas } = useGetCtcDataQuery();
+  const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
 
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading, data: jobsData }] =
@@ -163,9 +165,9 @@ function Browsejobfilterlist() {
       });
   };
 
-  const paginatedJobs = jobsData?.data || ctcData?.data
+  const paginatedJobs = jobsData?.data || ctcData?.data || getAlljobs?.data
     ? sortJobs(
-        applyFilters(jobsData?.data || ctcData?.data).slice(
+        applyFilters(jobsData?.data || ctcData?.data || getAlljobs?.data).slice(
           (currentPage - 1) * itemsPerPage,
           currentPage * itemsPerPage
         )

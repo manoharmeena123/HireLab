@@ -10,6 +10,9 @@ import {
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
   usePostApplyJobMutation,
+  useGetAppliedJobsQuery,
+  useGetCtcDataQuery,
+  useGetSavedJobQuery,
 } from "@/store/global-store/global.query";
 import { useDispatch } from "react-redux";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
@@ -21,9 +24,10 @@ import Link from "next/link";
 type JobDetailPopupType = {
   show: boolean;
   job: any;
+  getJobs: any;
 };
 
-const JobDetailPopup = ({ job }: JobDetailPopupType) => {
+const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { data: recentJob, isLoading, isError } = useGetRecentJobsQuery();
@@ -34,36 +38,51 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
     usePostApplyJobMutation();
   const [loadingJobs, setLoadingJobs] = useState<string[]>([]);
   const { user } = useLoggedInUser();
-  // console.log(job);
+
+  const { data: appliedJob, refetch } = useGetAppliedJobsQuery();
+  const { data: getCtcData, isLoading: getCtcDataLoading } =
+    useGetCtcDataQuery();
+
+  const {
+    data: savedJob,
+    refetch: savedJobRefetch,
+    isLoading: savedJobLoading,
+  } = useGetSavedJobQuery();
 
   const handleLikeToggle = async (jobId: string) => {
     if (isSaving || isDeleting) {
       return;
     }
 
-    if (likedJobs.includes(jobId)) {
+    const isJobSaved = savedJob?.data?.some((saved: any) => saved.id == jobId);
+
+    if (isJobSaved) {
       try {
+        // Unsaving the job
         await deleteJob(jobId);
+        savedJobRefetch();
         setLikedJobs(likedJobs.filter((id) => id !== jobId));
         dispatch(fetchRecentJobsStart());
         Swal.fire({
           icon: "success",
-          title: "Job Deleted Successfully!",
+          title: "Job Unsaved Successfully!",
           showConfirmButton: false,
           timer: 1500,
         });
       } catch (error) {
-        console.error("Error deleting job:", error);
+        console.error("Error unsaving job:", error);
         Swal.fire({
           icon: "error",
-          title: "Error in Deleted Job",
-          text: "Failed to delete job.",
+          title: "Error in Unsaving Job",
+          text: "Failed to unsave job.",
           confirmButtonText: "OK",
         });
       }
     } else {
       try {
+        // Saving the job
         await saveJob({ job_id: jobId });
+        savedJobRefetch();
         setLikedJobs([...likedJobs, jobId]);
         dispatch(fetchRecentJobsStart());
         Swal.fire({
@@ -99,6 +118,8 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
       setLoadingJobs([...loadingJobs, jobId]);
       const { data } = await applyJob({ job_id: jobId });
       if (data?.success) {
+        getJobs(jobId);
+        refetch();
         Swal.fire({
           icon: "success",
           title: "Success!",
@@ -121,9 +142,22 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
   const sanitizedDescription = DOMPurify.sanitize(
     job?.data?.job_description || ""
   );
-  const handleLoginToApply= () => {
+  const handleLoginToApply = () => {
     router.push(`/login?page=job-detail?jobId=${job?.data?.id}`);
   };
+
+  const isJobApplied = appliedJob?.data?.some(
+    (applied: any) => applied.id === job?.data?.id
+  );
+
+  // Find the CTC title based on the job's CTC ID
+  const getCtcTitle = (ctcId: string | number) => {
+    const ctc = getCtcData?.data?.find(
+      (ctcItem: any) => ctcItem.id === Number(ctcId)
+    );
+    return ctc ? ctc.title : "CTC not available";
+  };
+
   return (
     <div className="container p-4">
       <div className="shadow p-4 rounded">
@@ -151,41 +185,99 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4">
           <div className="mt-3 mt-md-0">
             {user ? (
-              <Button
-                className="btn mr-2 apply-saved-btn"
-                // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
-                onClick={() => handleApplyJob(job?.data?.id.toString())}
-                disabled={loadingJobs.includes(job?.data?.id.toString())}
-              >
-                Apply Job
-              </Button>
+              isJobApplied ? (
+                <Button
+                  className="btn mr-2 apply-saved-btn"
+                  style={{
+                    backgroundColor: "#2A6310",
+                    borderColor: "#2A6310",
+                    color: "#fff",
+                  }}
+                  disabled
+                >
+                  Applied
+                </Button>
+              ) : (
+                <Button
+                  className="btn mr-2 apply-saved-btn"
+                  onClick={() => handleApplyJob(job?.data?.id.toString())}
+                  disabled={loadingJobs.includes(job?.data?.id.toString())}
+                  style={{
+                    backgroundColor: "#2A6310",
+                    borderColor: "#2A6310",
+                    color: "#fff",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#1E4A08";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "#2A6310";
+                  }}
+                >
+                  Apply Job
+                </Button>
+              )
             ) : (
               <Button
                 className="btn mr-2 apply-saved-btn"
-                // style={{ backgroundColor: "#2A6310", borderColor: "#2A6310" }}
                 onClick={() => handleLoginToApply()}
                 disabled={loadingJobs.includes(job?.data?.id.toString())}
+                style={{
+                  backgroundColor: "#2A6310",
+                  borderColor: "#2A6310",
+                  color: "#fff",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#1E4A08";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#2A6310";
+                }}
               >
                 Login to apply
               </Button>
             )}
-            <Button
-              className="btn btn-outline apply-saved-btn"
-              onClick={() => handleLikeToggle(job?.data?.id.toString())}
-              style={{
-                backgroundColor: likedJobs.includes(job?.data?.id?.toString())
-                  ? "#2A6310"
-                  : "",
-                borderColor: "#2A6310",
-                color: likedJobs.includes(job?.data?.id?.toString())
-                  ? "#fff"
-                  : "",
-              }}
-            >
-              {likedJobs.includes(job?.data?.id?.toString())
-                ? "Saved"
-                : "Save Job"}
-            </Button>
+
+            {/* Conditional Save Job button */}
+            {savedJob?.data?.some((saved: any) => saved.id === job?.data?.id) ? (
+              <Button
+                className="btn mr-2 apply-saved-btn"
+                onClick={() => handleLikeToggle(job?.data?.id.toString())}
+                style={{
+                  backgroundColor: "#2A6310",
+                  borderColor: "#2A6310",
+                  color: "#fff",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#1E4A08";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#2A6310";
+                }}
+              >
+                Saved
+              </Button>
+            ) : (
+              <Button
+                className="btn mr-2 apply-saved-btn"
+                onClick={() => handleLikeToggle(job?.data?.id.toString())}
+                style={{
+                  backgroundColor: "#fff",
+                  borderColor: "#2A6310",
+                  color: "#2A6310",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#2A6310";
+                  e.currentTarget.style.color = "#fff";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#fff";
+                  e.currentTarget.style.color = "#2A6310";
+                }}
+              >
+                Save Job
+              </Button>
+            )}
           </div>
         </div>
         <div className="mb-4">
@@ -229,7 +321,6 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
                 className="badge badge-light p-2"
                 style={{ color: "#2A6310" }}
               >
-                {/* {job?.data?.location?.title || job?.data?.location} */}
                 {job?.data?.address}
               </span>
             </div>
@@ -264,21 +355,6 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
               </span>
             </div>
           </div>
-          {/* <div className="mb-4">
-            <h5>Shift and Schedule</h5>
-            <div className="d-flex align-items-center">
-              <i
-                className="fa fa-clock-o mr-2"
-                style={{ color: "#2A6310" }}
-              ></i>
-              <span
-                className="badge badge-light p-2"
-                style={{ color: "#2A6310" }}
-              >
-                Rotational shift
-              </span>
-            </div>
-          </div> */}
         </div>
         <div className="mb-4">
           <h5>Full Job Description</h5>
@@ -287,25 +363,6 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
             dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
           ></div>
         </div>
-        {/* key responsibility */}
-        {/* <div className="mb-4">
-          <h5>Key Responsibilities</h5>
-          <ul
-            className={styles.responsibilities}
-            style={{ paddingLeft: "1rem" }}
-          >
-            <li>Develop new user-facing features using React.js</li>
-            <li>
-              Build reusable components and front-end libraries for future use
-            </li>
-            <li>Translate designs and wireframes into high-quality code</li>
-            <li>
-              Optimize components for maximum performance across a vast array of
-              web-capable devices and browsers
-            </li>
-            <li>Collaborate with other team members and stakeholders</li>
-          </ul>
-        </div> */}
         <div className="mb-4">
           <h5>Requirements</h5>
           <ul className={styles.requirements} style={{ paddingLeft: "1rem" }}>
@@ -334,7 +391,7 @@ const JobDetailPopup = ({ job }: JobDetailPopupType) => {
           <div className="mb-4">
             <h5>CTC</h5>
             <ul className={styles.jobLocation} style={{ paddingLeft: "1rem" }}>
-              <li>{job?.data?.ctc} LPA</li>
+              <li>{getCtcTitle(job?.data?.ctc)}</li>
             </ul>
           </div>
         )}
