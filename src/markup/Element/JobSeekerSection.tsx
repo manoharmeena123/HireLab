@@ -10,6 +10,7 @@ import {
   useGetCollageQuery,
   useGetIndustryQuery,
   useGetDesignationQuery,
+  useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
 import { WritableProfileFormData } from "@/app/job-seeker/types/index";
 import { toast } from "react-toastify";
@@ -34,12 +35,16 @@ const JobSeekerSection = () => {
     useGetIndustryQuery();
   const { data: designationData, isLoading: designationDataLoading } =
     useGetDesignationQuery();
+  const { data: getCtcData, isLoading: getCtcDataLoading } = useGetCtcDataQuery();
+  
   const [selectedCollege, setSelectedCollege] =
     useState<SingleValue<OptionType> | null>(null);
   const [selectedIndustry, setSelectedIndustry] =
     useState<SingleValue<OptionType> | null>(null);
   const [selectedDesignation, setSelectedDesignation] =
     useState<SingleValue<OptionType> | null>(null);
+  const [selectedCtc, setSelectedCtc] = useState<SingleValue<OptionType> | null>(null); // New for CTC
+
   const [postProfile] = usePostProfileMutation();
   const [resumeName, setResumeName] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
@@ -83,6 +88,13 @@ const JobSeekerSection = () => {
           id: designation.id.toString(),
         })) || [];
 
+      const ctcOptions: OptionType[] =
+        getCtcData?.data?.map((ctc) => ({
+          value: ctc.title,
+          label: ctc.title,
+          id: ctc.id.toString(),
+        })) || [];
+
       setProfileForm({
         name: user.user.name || "",
         email: user.user.email || "",
@@ -114,6 +126,11 @@ const JobSeekerSection = () => {
           (option) => option.id === user.user.designation_id?.toString()
         ) || null
       );
+      setSelectedCtc(
+        ctcOptions.find(
+          (option) => option.id === user.user.expected_ctc?.toString()
+        ) || null
+      ); // Set selected CTC
 
       if (user.user.resume) {
         setResumeName(user.user.resume);
@@ -123,7 +140,7 @@ const JobSeekerSection = () => {
         setImagePreviewUrl(`${IMAGE_URL}/${user.user.image}`);
       }
     }
-  }, [user, collageData, industryData, designationData]);
+  }, [user, collageData, industryData, designationData, getCtcData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -211,6 +228,13 @@ const JobSeekerSection = () => {
       id: designation.id.toString(),
     })) || [];
 
+  const ctcOptions: OptionType[] =
+    getCtcData?.data?.map((ctc) => ({
+      value: ctc.title,
+      label: ctc.title,
+      id: ctc.id.toString(),
+    })) || [];
+
   const resumeUrl: any =
     profileForm.resume && profileForm.resume instanceof File
       ? URL.createObjectURL(profileForm?.resume)
@@ -231,7 +255,7 @@ const JobSeekerSection = () => {
 
   return (
     <>
-      {collageDataLoading && industryDataLoading && designationDataLoading && (
+      {collageDataLoading && industryDataLoading && designationDataLoading && getCtcDataLoading && (
         <Loading />
       )}
       <div className="page-content bg-white">
@@ -247,12 +271,12 @@ const JobSeekerSection = () => {
                         Basic Information
                       </h5>
                       <button
-                      onClick={() => router.back()}
-                      className="site-button right-arrow button-sm float-right"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      Back
-                    </button>
+                        onClick={() => router.back()}
+                        className="site-button right-arrow button-sm float-right"
+                        style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                      >
+                        Back
+                      </button>
                     </div>
                     <form onSubmit={handleSubmit}>
                       <div className="row m-b30">
@@ -370,13 +394,16 @@ const JobSeekerSection = () => {
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Expected CTC:</label>
-                            <input
-                              type="text"
-                              className="form-control"
-                              placeholder="Enter Expected CTC (in lakhs)"
-                              name="expected_ctc"
-                              value={profileForm.expected_ctc || ""}
-                              onChange={handleInputChange}
+                            <Select
+                              styles={customStyles}
+                              value={ctcOptions.find(
+                                (option) => option.id === profileForm.expected_ctc
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("expected_ctc", option)
+                              }
+                              options={ctcOptions}
+                              placeholder="Select Expected CTC"
                             />
                           </div>
                         </div>
@@ -474,7 +501,7 @@ const JobSeekerSection = () => {
             </div>
           </div>
         </div>
-      </div>{" "}
+      </div>
     </>
   );
 };
