@@ -377,7 +377,7 @@ function Browsejobfilterlist() {
                           currentPage={currentPage}
                           itemsPerPage={itemsPerPage}
                           totalItems={
-                            jobsData?.data.length || ctcData?.data?.length || 0
+                            jobsData?.data.length || ctcData?.data?.length || getAlljobs?.data || 0
                           }
                           onPageChange={setCurrentPage}
                         />
