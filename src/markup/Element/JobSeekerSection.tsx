@@ -8,7 +8,7 @@ import Select, { SingleValue } from "react-select";
 import { usePostProfileMutation } from "@/app/job-seeker/store/job-seeker.query";
 import {
   useGetCollageQuery,
-  useGetIndustryQuery,
+  useGetSectorQuery,
   useGetDesignationQuery,
   useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
@@ -31,8 +31,8 @@ const JobSeekerSection = () => {
   const router = useRouter();
   const { data: collageData, isLoading: collageDataLoading } =
     useGetCollageQuery();
-  const { data: industryData, isLoading: industryDataLoading } =
-    useGetIndustryQuery();
+  const { data: getSectorData, isLoading: getSectorDataLoading } =
+  useGetSectorQuery();
   const { data: designationData, isLoading: designationDataLoading } =
     useGetDesignationQuery();
   const { data: getCtcData, isLoading: getCtcDataLoading } = useGetCtcDataQuery();
@@ -74,10 +74,10 @@ const JobSeekerSection = () => {
           id: college.id.toString(),
         })) || [];
 
-      const industryOptions: OptionType[] =
-        industryData?.data?.map((industry) => ({
-          value: industry.title,
-          label: industry.title,
+      const getSectorDataOptions: OptionType[] =
+      getSectorData?.data?.map((industry) => ({
+          value: industry.name,
+          label: industry.name,
           id: industry.id.toString(),
         })) || [];
 
@@ -117,7 +117,7 @@ const JobSeekerSection = () => {
         ) || null
       );
       setSelectedIndustry(
-        industryOptions.find(
+        getSectorDataOptions.find(
           (option) => option.id === user.user.industry_id?.toString()
         ) || null
       );
@@ -140,7 +140,7 @@ const JobSeekerSection = () => {
         setImagePreviewUrl(`${IMAGE_URL}/${user.user.image}`);
       }
     }
-  }, [user, collageData, industryData, designationData, getCtcData]);
+  }, [user, collageData, getSectorData, designationData, getCtcData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
@@ -214,10 +214,10 @@ const JobSeekerSection = () => {
       id: college.id.toString(),
     })) || [];
 
-  const industryOptions: OptionType[] =
-    industryData?.data?.map((industry) => ({
-      value: industry.title,
-      label: industry.title,
+  const getSectorDataOptions: OptionType[] =
+  getSectorData?.data?.map((industry) => ({
+      value: industry.name,
+      label: industry.name,
       id: industry.id.toString(),
     })) || [];
 
@@ -255,7 +255,7 @@ const JobSeekerSection = () => {
 
   return (
     <>
-      {collageDataLoading && industryDataLoading && designationDataLoading && getCtcDataLoading && (
+      {collageDataLoading && getSectorDataLoading && designationDataLoading && getCtcDataLoading && (
         <Loading />
       )}
       <div className="page-content bg-white">
@@ -425,13 +425,13 @@ const JobSeekerSection = () => {
                             <label>Industry:</label>
                             <Select
                               styles={customStyles}
-                              value={industryOptions.find(
+                              value={getSectorDataOptions.find(
                                 (option) => option.id === profileForm.industry
                               )}
                               onChange={(option) =>
                                 handleSelectChange("industry", option)
                               }
-                              options={industryOptions}
+                              options={getSectorDataOptions}
                               placeholder="Select Industry"
                             />
                           </div>

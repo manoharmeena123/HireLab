@@ -56,6 +56,7 @@ const ManageJobs = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Set the number of items per page
 
   const handleDeleteJob = async (jobId: number) => {
     const result = await Swal.fire({
@@ -82,7 +83,13 @@ const ManageJobs = () => {
   };
   const [acceptJobCandidate] = useAcceptJobCandidateMutation();
   const [rejectJobCandidate] = useRejectJobCandidateMutation();
-  const flattenedJobsData = jobsData?.data?.flat() || [];
+
+  // Paginate jobs data
+  const paginatedJobsData =
+    jobsData?.data?.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    ) || [];
 
   const handleEditJob = async (selectedJob: any) => {
     try {
@@ -242,13 +249,13 @@ const ManageJobs = () => {
     }
   };
 
-  const handleChatClick = (item :any)=>{
-    // console.log('first',item)
-    push(`/chats?jobId=${item?.id}&email=${item?.email}`); 
-  }
+  const handleChatClick = (item: any) => {
+    push(`/chats?jobId=${item?.id}&email=${item?.email}`);
+  };
+
   return (
     <>
-    {jobsLoading && <Loading/>}
+      {jobsLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -268,7 +275,7 @@ const ManageJobs = () => {
                               onError={(e) =>
                                 (e.currentTarget.src =
                                   "../../images/favicon.png")
-                              } // Fallback image
+                              }
                               style={{ borderRadius: "50%" }}
                             />
                           ) : (
@@ -280,7 +287,7 @@ const ManageJobs = () => {
                               onError={(e) =>
                                 (e.currentTarget.src =
                                   "../../images/favicon.png")
-                              } // Fallback image
+                              }
                               style={{ borderRadius: "50%" }}
                             />
                           )}
@@ -311,7 +318,6 @@ const ManageJobs = () => {
                             <span>Profile</span>
                           </Link>
                         </li>
-
                         <li>
                           <Link href="/post-job">
                             <i
@@ -321,21 +327,12 @@ const ManageJobs = () => {
                             <span>Post A job</span>
                           </Link>
                         </li>
-
                         <li>
                           <Link href="/credit-earned">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Credit Earned</span>
                           </Link>
                         </li>
-
-                        {/* <li>
-                          <Link href="/manage-job" className="active">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Manage Jobs</span>
-                          </Link>
-                        </li> */}
-
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i
@@ -360,18 +357,17 @@ const ManageJobs = () => {
                   <div className="col-xl-9 col-lg-8 m-b30">
                     <div className="job-bx browse-job clearfix">
                       <div className="job-bx-title clearfix">
-                          <h5 className="font-weight-700 pull-left text-uppercase">
-                          Manage jobs
-                          </h5>
-                          <button
-                            onClick={() => router.back()}
-                            className="site-button right-arrow button-sm float-right"
-                            style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                          >
-                            Back
-                          </button>
-                        </div>
-
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          {`${jobsData?.data?.length || 0} Jobs Found`}
+                        </h5>
+                        <button
+                          onClick={() => router.back()}
+                          className="site-button right-arrow button-sm float-right"
+                          style={{ fontFamily: "__Inter_Fallback_aaf875" }}
+                        >
+                          Back
+                        </button>
+                      </div>
                       <table className="table-job-bx cv-manager company-manage-job">
                         <thead>
                           <tr>
@@ -391,19 +387,18 @@ const ManageJobs = () => {
                             </th>
                             <th>Job Title</th>
                             <th>Applications</th>
-                            {/* <th>Date</th> */}
                             <th>Status</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {flattenedJobsData?.length === 0 ? (
+                          {paginatedJobsData?.length === 0 ? (
                             <tr>
                               <td colSpan={4} className="text-center">
                                 No job Found
                               </td>
                             </tr>
                           ) : (
-                            flattenedJobsData?.map((job, index) => (
+                            paginatedJobsData?.map((job :any, index) => (
                               <tr key={index}>
                                 <td className="feature">
                                   <div className="custom-control custom-checkbox">
@@ -441,30 +436,21 @@ const ManageJobs = () => {
                                 <td className=" text-primary">
                                   ({job?.applicant_count})Applications
                                 </td>
-                                {/* <td className="expired pending">
-                                {formatDate(job?.created_at)}
-                              </td> */}
                                 <td
                                   className="job-links "
                                   style={{ paddingTop: "1.5rem" }}
                                 >
                                   <div
                                     className="nav-link mn-icon"
-                                    onClick={
-                                      () => viewApplicationHandler(job.id)
-                                      // setSelectedJob(job);
-                                      // setShow(true);
+                                    onClick={() =>
+                                      viewApplicationHandler(job.id)
                                     }
                                   >
                                     <i className="fa fa-eye"></i>
                                   </div>
                                   <div
                                     className="nav-link mn-icon"
-                                    onClick={
-                                      () => viewJobHandler(job.id)
-                                      // setSelectedJob(job);
-                                      // setShow(true);
-                                    }
+                                    onClick={() => viewJobHandler(job.id)}
                                   >
                                     <i className="fa fa-edit"></i>
                                   </div>
@@ -482,64 +468,10 @@ const ManageJobs = () => {
                       </table>
                       <Pagination
                         currentPage={currentPage}
-                        itemsPerPage={8}
-                        totalItems={11}
-                        onPageChange={setCurrentPage} // onPageChange={handlePageChange}
+                        itemsPerPage={itemsPerPage}
+                        totalItems={jobsData?.data?.length || 0}
+                        onPageChange={setCurrentPage}
                       />
-
-                      <Modal
-                        show={company}
-                        onHide={() => setCompany(false)}
-                        className="modal fade modal-bx-info"
-                      >
-                        <div className="modal-dialog my-0" role="document">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <div className="logo-img">
-                                <img
-                                  alt=""
-                                  src={require("./../../images/logo/icon2.png")}
-                                />
-                              </div>
-                              <h5 className="modal-title">
-                                {selectedJob?.company_name}
-                              </h5>
-                              <button
-                                type="button"
-                                className="close"
-                                onClick={() => setCompany(false)}
-                              >
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div className="modal-body">
-                              <ul>
-                                <li>
-                                  <strong>Job Title :</strong>
-                                  <p> {selectedJob?.job_title} </p>
-                                </li>
-                                <li>
-                                  <strong>Experience :</strong>
-                                  <p>{selectedJob?.user?.experience} Years</p>
-                                </li>
-                                <li>
-                                  <strong>Description :</strong>
-                                  <p>{selectedJob?.user?.description}</p>
-                                </li>
-                              </ul>
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-secondary"
-                                onClick={() => setCompany(false)}
-                              >
-                                Close
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </Modal>
                     </div>
                   </div>
                 ) : (
@@ -547,9 +479,9 @@ const ManageJobs = () => {
                     <div className="job-bx browse-job clearfix">
                       <table className="table-job-bx cv-manager company-manage-job">
                         <tbody>
-                          {flattenedJobsData
-                            ?.filter((appl) => appl.id === applicationviewid)
-                            .map((job, index) => (
+                          {paginatedJobsData
+                            ?.filter((appl :any) => appl.id === applicationviewid)
+                            .map((job :any, index) => (
                               <tr key={job.id}>
                                 <td className="feature">
                                   <div
@@ -564,7 +496,6 @@ const ManageJobs = () => {
                                     className="nav-link"
                                     onClick={() => {
                                       setSelectedJob(job);
-                                      // setCompany(true);
                                     }}
                                   >
                                     <span>{job.job_title}</span>
@@ -592,7 +523,6 @@ const ManageJobs = () => {
                                     ({job?.applicant_count}) Applications
                                   </Button>
                                 </td>
-                                {/* <td className="expired pending">Pending</td> */}
                                 <td
                                   className="job-links"
                                   style={{ paddingTop: "1.5rem" }}
@@ -653,18 +583,17 @@ const ManageJobs = () => {
                                   REJECT
                                 </Button>
                                 <Button variant="success">VIEW PROFILE</Button>
-                                <Button variant="success" onClick={()=> handleChatClick(item)}>CHAT</Button>
+                                <Button
+                                  variant="success"
+                                  onClick={() => handleChatClick(item)}
+                                >
+                                  CHAT
+                                </Button>
                               </div>
                             </div>
                           ))
                         )}
                       </div>
-                      {/* <Pagination
-                        currentPage={1}
-                        itemsPerPage={8}
-                        totalItems={11}
-                        // onPageChange={handlePageChange}
-                      /> */}
                     </div>
                   </div>
                 )}
