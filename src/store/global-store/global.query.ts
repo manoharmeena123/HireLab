@@ -107,7 +107,12 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "Counts",
     "AddLikeDiscussion",
     "DeleteBlogComment",
-    "UpdateBlogComment"
+    "UpdateBlogComment",
+    "CreateDiscussion",
+    "DeleteDiscussion",
+    "UpdateDiscussion",
+    "UserlistDiscussion",
+    "RecentJobSeekerJob"
   ],
 });
 
@@ -386,7 +391,28 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     addLikeDiscussion :builder.mutation<any, {discussion_id:any}>({
      query :(id) => queries.addLikeDiscussion.query(id),
       invalidatesTags: ["AddLikeDiscussion"],
+    }),
+    createDiscussion : builder.mutation<any,any>({
+      query : (data) => queries.createDiscussion.query(data),
+      invalidatesTags: ["CreateDiscussion"],
+    }),
+    deleteDiscussion : builder.mutation<any,any>({
+      query :(id) => queries.deleteDiscussion.query(id),
+      invalidatesTags: ["DeleteDiscussion"],
+    }),
+    updateDiscussion : builder.mutation<any,any>({
+      query : (data) => queries.updateDiscussion.query(data),
+      invalidatesTags: ["UpdateDiscussion"],
+    }),
+    userListDiscussion : builder.query<any, any>({
+      query : queries.userlistDiscussion.query,
+      providesTags: ["UserlistDiscussion"],
+    }),
+    recentJobSeekerJob :builder.query<any,any>({
+      query : queries.recentJobSeekerJob.query,
+      providesTags: ["RecentJobSeekerJob"],
     })
+
   }),
 
   overrideExisting: true,
@@ -455,6 +481,11 @@ export const {
   useGetCountsQuery,
   useAddLikeDiscussionMutation,
   useDeleteBlogCommentByIdMutation,
-  useUpdateBlogCommentMutation
+  useUpdateBlogCommentMutation,
+  useCreateDiscussionMutation,
+  useDeleteDiscussionMutation,
+  useUpdateDiscussionMutation,
+  useUserListDiscussionQuery,
+  useRecentJobSeekerJobQuery
 } = globalApi;
 export default globalApi;

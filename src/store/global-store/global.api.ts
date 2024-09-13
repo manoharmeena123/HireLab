@@ -7,6 +7,7 @@ import {
   SaveContactData,
   WritableSingleBlogCommentPost,
 } from "@/types/index";
+import { url } from "inspector";
 
 export const queries = {
   getBlogs: {
@@ -87,6 +88,12 @@ export const queries = {
       url: "api/get-discussions",
       method: "GET",
     }),
+  },
+  userlistDiscussion :{
+    query: () => ({
+      url :`api/list-discussions`,
+      method : "GET",
+    })
   },
   getJobs: {
     query: () => ({
@@ -350,6 +357,12 @@ export const queries = {
       method: "GET",
     }),
   },
+  recentJobSeekerJob :{
+    query :()=>({
+      url :"api/recent-jobs-for-job-seeker",
+      method : "GET"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {
@@ -427,4 +440,24 @@ export const queries = {
       body: discussion_id,
     }),
   },
+  createDiscussion :{
+    query :(payload :any)=>({
+      url: "api/create-discussion",
+      method: "POST",
+      body: payload   
+    })
+  },
+  deleteDiscussion :{
+    query :(id : any)=>({
+      url: `api/delete-discussion/${id}`,
+      method: "GET",
+    })
+  },
+  updateDiscussion :{
+    query :(data :any)=>({
+      url :"api/update-discussion",
+      method :'POST',
+      body :data
+    })
+  }
 };

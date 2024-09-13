@@ -48,8 +48,6 @@ const CartSection = () => {
           };
   
           try {
-            // await saveMemberShip(payload).unwrap();
-  
             // Create an order ID
             const response = await fetch('/api/order', {
               method: 'POST',
@@ -67,7 +65,7 @@ const CartSection = () => {
             // Start the Razorpay payment
             const options: RazorpayOptions = {
               key: `rzp_test_6Yk0yEiSfOEYXv`,
-              amount: 600 * 100,
+              amount: Number(selectedPlan?.price) * 100,
               currency: 'INR',
               name: selectedPlan.title,
               description: 'Membership Purchase',
@@ -90,8 +88,11 @@ const CartSection = () => {
                 });
   
                 const result = await verifyResponse.json();
+                console.log('verifyResponse', result);
                 if (result.isOk) {
+                  await saveMemberShip(payload).unwrap();
                   alert("Payment succeeded");
+
                   router.push('/dashboard-section');
                 } else {
                   alert("Payment verification failed");
