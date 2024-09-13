@@ -100,14 +100,14 @@ const OtpVefication = () => {
     try {
       const res = await verifyOtp(payload as VerifyOtp).unwrap();
       if (res?.code === 200 && res?.data) {
-        toast.success("Otp verified successfully", { theme: "colored" });
+        toast.success(res?.message, { theme: "colored" });
 
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
         navigateSource(endpoint);
       } else if (res.code === 401) {
-        toast.error("Invalid OTP!", { theme: "colored" });
+        toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
         dispatch(
           setVerifyOtpErrors({
