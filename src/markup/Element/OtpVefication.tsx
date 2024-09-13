@@ -1,4 +1,3 @@
-// src/app/send-otp/Register2.tsx
 "use client";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
@@ -36,10 +35,17 @@ const OtpVefication = () => {
   const { saveToken } = useAuthToken();
   const loginState = useSelector(selectLoginState);
   const registerState = useSelector(selectRegisterState);
+
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
   const [parsedDatas, setParsedDatas] = useState<RegisterData | null>(null);
-  const endpoint = queryTitle ? `${queryTitle}` : '/dashboard-section';
+
+  // State to store OTP input and manage length
+  const [otp, setOtp] = useState<string>("");
+  const [otpError, setOtpError] = useState<string | null>(null);
+
+  const endpoint = queryTitle ? `${queryTitle}` : "/dashboard-section";
+
   // Parse localStorage data
   useEffect(() => {
     const data = localStorage.getItem("registerData");
@@ -62,11 +68,26 @@ const OtpVefication = () => {
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    dispatch(setVerifyOtpState({ [name]: value }));
+
+    // Restrict OTP input to 6 digits
+    if (value.length <= 6) {
+      setOtp(value);
+      dispatch(setVerifyOtpState({ [name]: value }));
+      setOtpError(null); // Clear any error when input is valid
+    } else {
+      setOtpError("OTP cannot be more than 6 digits.");
+    }
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    // Validate OTP length before proceeding
+    if (otp.length !== 6) {
+      setOtpError("OTP must be exactly 6 digits.");
+      return;
+    }
+
     const payload = {
       ...verifyOtpState,
       mobile_number:
@@ -74,16 +95,17 @@ const OtpVefication = () => {
         parsedData?.mobile_number ||
         parsedDatas?.mobile_number,
     };
+
     console.log("payload", payload);
     try {
       const res = await verifyOtp(payload as VerifyOtp).unwrap();
       if (res?.code === 200 && res?.data) {
-        toast.success("Otp verified successFull", { theme: "colored" });
+        toast.success("Otp verified successfully", { theme: "colored" });
 
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
-          navigateSource(endpoint)
+        navigateSource(endpoint);
       } else if (res.code === 401) {
         toast.error("Invalid OTP!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
@@ -129,14 +151,6 @@ const OtpVefication = () => {
                       className={`dez-form p-b30 ${styles["rubik-font"]}`}
                       onSubmit={handleSubmit}
                     >
-                      <div>
-                        {/* <div className="mb-3">
-                          <img
-                            src="./../../images/Hire Labs_Final logo.png"
-                            alt="Logo 1"
-                          />
-                        </div> */}
-                      </div>
                       <h3
                         style={{ fontWeight: "600" }}
                         className="form-title m-t0"
@@ -154,10 +168,19 @@ const OtpVefication = () => {
                         <input
                           type="number"
                           name="otp"
+                          value={otp}
                           onChange={handleInputChange}
-                          className={`form-control ${styles["lato-font"]}`}
+                          className={`form-control ${styles["lato-font"]} mb-2`}
                           placeholder="Enter OTP"
+                          maxLength={6} // Additional safeguard
                         />
+                        {/* Error message for invalid OTP input */}
+                        {otpError && (
+                          <span className="text-red-500 text-danger">
+                            {otpError}
+                          </span>
+                        )}
+                        {/* Error from server validation */}
                         <span className="text-red-500 text-danger">
                           {errors?.otp?.[0]}
                         </span>

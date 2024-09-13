@@ -289,7 +289,7 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
             </Link>
           </div>
         </div>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <Button
             className={styles.btnCustom}
             style={{
@@ -308,7 +308,7 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
           >
             Connect Now
           </Button>
-        </div>
+        </div> */}
         <div className="d-flex jd-split-wrap">
           <div className="mb-4">
             <h5>Location</h5>
