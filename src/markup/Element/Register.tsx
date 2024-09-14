@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, FormEvent } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "@/app/register/store/register.query";
@@ -26,8 +26,54 @@ const RegisterSection = () => {
   const authState = useSelector(selectRegisterState);
   const errors = useSelector(selectRegisterErrors);
 
+  // Local state for validation errors
+  const [validationErrors, setValidationErrors] = useState({
+    name: "",
+    email: "",
+    mobile_number: "",
+  });
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = {
+      name: "",
+      email: "",
+      mobile_number: "",
+    };
+
+    // Validate name (only letters)
+    const nameRegex = /^[A-Za-z\s]+$/;
+    if (!nameRegex.test(authState.name)) {
+      newErrors.name = "Name can only contain letters and spaces.";
+      isValid = false;
+    }
+
+    // Validate email (basic email validation)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(authState.email)) {
+      newErrors.email = "Please enter a valid email address.";
+      isValid = false;
+    }
+
+    // Validate mobile number (only 10 digits)
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(authState.mobile_number)) {
+      newErrors.mobile_number = "Mobile number must be exactly 10 digits.";
+      isValid = false;
+    }
+
+    setValidationErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    // Validate the form before submitting
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const res = await register(authState).unwrap();
       if (res.code === 200) {
@@ -47,6 +93,12 @@ const RegisterSection = () => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(setAuthState({ [name]: value }));
+
+    // Clear validation errors when typing
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
   };
 
   return (
@@ -78,7 +130,7 @@ const RegisterSection = () => {
                       className="dez-form p-b30"
                       method="post"
                       onSubmit={handleSubmit}
-                      style={{width:"100%"}}
+                      style={{ width: "100%" }}
                     >
                       <h3
                         className={`${styles["form-title"]} ${styles["rubik-font"]}`}
@@ -99,7 +151,7 @@ const RegisterSection = () => {
                           onChange={handleInputChange}
                         />
                         <span className={`${styles["text-danger"]}`}>
-                          {errors?.name?.[0]}
+                          {validationErrors.name || errors?.name?.[0]}
                         </span>
                       </div>
                       <div className="form-group">
@@ -110,7 +162,7 @@ const RegisterSection = () => {
                           onChange={handleInputChange}
                         />
                         <span className={`${styles["text-danger"]}`}>
-                          {errors?.email?.[0]}
+                          {validationErrors.email || errors?.email?.[0]}
                         </span>
                       </div>
                       <div className="form-group">
@@ -122,7 +174,7 @@ const RegisterSection = () => {
                           placeholder="Mobile Number"
                         />
                         <span className={`${styles["text-danger"]}`}>
-                          {errors?.mobile_number?.[0]}
+                          {validationErrors.mobile_number || errors?.mobile_number?.[0]}
                         </span>
                       </div>
                       <div className="form-group w-full d-flex justify-content-center">
@@ -134,11 +186,11 @@ const RegisterSection = () => {
                           {isLoading ? "Loading..." : "Register"}
                         </button>
                       </div>
-                    <div className={`${styles["create-div"]}`}>
+                      <div className={`${styles["create-div"]}`}>
                         <p
                           className={`${styles["lato-font"]} ${styles["no-wrap"]}`}
                         >
-                          If you have already account?{" "}
+                          If you already have an account?{" "}
                           <Link
                             href="/login"
                             className={styles["forgot-password-link"]}
@@ -148,42 +200,6 @@ const RegisterSection = () => {
                         </p>
                       </div>
                     </form>
-                    {/* <div
-                      className={styles["lato-font"]}
-                      style={{ marginTop: "0px" }}
-                    >
-                      <h5
-                        className={styles["lato-font"]}
-                        style={{
-                          fontSize: "15px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          name=""
-                          id=""
-                          className={styles["custom-checkbox"]}
-                        />{" "}
-                        I agree to the{" "}
-                        <span style={{ color: "blue" }}>Terms of Service</span>{" "}
-                        & <span style={{ color: "blue" }}>Privacy Policy</span>
-                      </h5>
-                      <Link
-                        className="site-button outline gray button-md"
-                        data-toggle="tab"
-                        href="/"
-                        style={{ marginTop: "20px" }}
-                      >
-                        <p className={styles["lato-font"]}>Back</p>
-                      </Link>
-                      <button
-                        className="site-button pull-right button-md"
-                        style={{ marginTop: "20px" }}
-                      >
-                        <p className={styles["lato-font"]}>Submit</p>
-                      </button>
-                    </div> */}
                     <div className="text-center bottom"></div>
                   </div>
                 </div>

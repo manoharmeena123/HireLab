@@ -1,6 +1,5 @@
 "use client";
-import React, { ChangeEvent, FormEvent, useState } from "react";
-import Env from "@/lib/Env";
+import React, { ChangeEvent, FormEvent, useState, useEffect } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useLoginMutation } from "@/app/login/store/login.query";
@@ -10,8 +9,6 @@ import {
   selectLoginErrors,
 } from "@/app/login/store/login.selectors";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
-import { useAuthToken } from "@/hooks/useAuthToken";
 import styles from "@/styles/Login.module.css";
 import { navigateSource } from "@/lib/action";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -26,23 +23,78 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const authState = useSelector(selectLoginState);
   const errors = useSelector(selectLoginErrors);
+
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [mobileNumberError, setMobileNumberError] = useState<string | null>(
+    null
+  );
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const endpoint = queryTitle ? `/send-otp?page=${queryTitle}` : '/send-otp';
+  const endpoint = queryTitle ? `/send-otp?page=${queryTitle}` : "/send-otp";
+
+  // On component mount, check if "Remember Me" was previously selected
+  useEffect(() => {
+    const rememberedMobile = localStorage.getItem("rememberedMobile");
+    const rememberMeChecked = localStorage.getItem("rememberMe") === "true";
+    if (rememberedMobile && rememberMeChecked) {
+      setMobileNumber(rememberedMobile);
+      dispatch(setAuthState({ mobile_number: rememberedMobile }));
+      setRememberMe(true);
+    }
+  }, [dispatch]);
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    if (name === "mobile_number") {
+      // Allow only numbers and limit to 10 digits
+      const cleanedValue = value.replace(/\D/g, ""); // Remove non-numeric characters
+      if (cleanedValue.length <= 10) {
+        setMobileNumber(cleanedValue);
+        setMobileNumberError(null); // Clear error if input is valid
+        dispatch(setAuthState({ [name]: cleanedValue }));
+      } else {
+        setMobileNumberError("Mobile number must be exactly 10 digits.");
+      }
+    } else {
+      dispatch(setAuthState({ [name]: value }));
+    }
+  };
+
+  const handleRememberMeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = e.target;
+    setRememberMe(checked);
+    if (!checked) {
+      // If "Remember Me" is unchecked, remove the mobile number from localStorage
+      localStorage.removeItem("rememberedMobile");
+      localStorage.removeItem("rememberMe");
+    }
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    // Validate mobile number before submission
+    if (mobileNumber.length !== 10) {
+      setMobileNumberError("Mobile number must be exactly 10 digits.");
+      return;
+    }
+
+    if (rememberMe) {
+      // Save mobile number to localStorage if "Remember Me" is checked
+      localStorage.setItem("rememberedMobile", mobileNumber);
+      localStorage.setItem("rememberMe", "true");
+    }
+
     setLoading(true);
     try {
       const res = await login(authState).unwrap();
-      localStorage.setItem('logindata', JSON.stringify(authState));
+      localStorage.setItem("logindata", JSON.stringify(authState));
       setLoading(false);
       if (res.code === 200 && res?.data) {
-        console.log("res", res);
         toast.success(res?.message, { theme: "colored" });
-        // Redirect to /send-otp page
-          // navigateSource(endpoint)
-          navigateSource(endpoint);
+        navigateSource(endpoint);
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
@@ -53,11 +105,6 @@ const Login = () => {
       console.error("Login failed:", err);
       toast.error("Login failed. Please try again.");
     }
-  };
-
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    dispatch(setAuthState({ [name]: value }));
   };
 
   return (
@@ -82,24 +129,6 @@ const Login = () => {
                   >
                     <div id="login" className="tab-pane active">
                       <div className="width-main-div">
-                        {/* <div>
-                          <div className="mb-3">
-                            <img
-                              src="/images/logo1__2_-removebg-preview.png"
-                              alt="Logo 1"
-                            />
-                            <img
-                              src="/images/logo2__2_-removebg-preview.png"
-                              alt="Logo 2"
-                            />
-                          </div>
-                        </div> */}
-                        {/* <h3
-                          className={`form-title m-t0 ${styles["rubik-font"]}`}
-                          style={{ fontWeight: "700"}}
-                        >
-                          <span style={{color:'#2a6310' }}>Welcome</span> Back!
-                        </h3> */}
                         <h3
                           className={`form-title m-t0 ${styles["rubik-font"]}`}
                           style={{ fontWeight: "600" }}
@@ -114,12 +143,20 @@ const Login = () => {
                         </p>
                         <div className={`form-group ${styles["width-form"]}`}>
                           <input
-                            type="number"
+                            type="text"
                             name="mobile_number"
+                            value={mobileNumber}
                             onChange={handleInputChange}
                             className={`form-control w-full ${styles["lato-font"]}`}
                             placeholder="Mobile Number"
+                            maxLength={10} // Limit input length to 10 characters
                           />
+                          {/* Display error if the mobile number is invalid */}
+                          {mobileNumberError && (
+                            <span className="text-red-500 text-danger">
+                              {mobileNumberError}
+                            </span>
+                          )}
                           <span className="text-red-500 text-danger">
                             {errors?.mobile_number?.[0]}
                           </span>
@@ -129,6 +166,8 @@ const Login = () => {
                                 type="checkbox"
                                 className="form-check-input"
                                 id="rememberMe"
+                                checked={rememberMe}
+                                onChange={handleRememberMeChange}
                               />
                               <label
                                 className="form-check-label"
@@ -137,14 +176,6 @@ const Login = () => {
                                 Remember Me
                               </label>
                             </div>
-                            {/* <div className={styles["forget-div"]}>
-                              <Link
-                                href="/forgot-password"
-                                className={styles["forgot-password-link"]}
-                              >
-                                Forgot Password?
-                              </Link>
-                            </div> */}
                           </div>
                         </div>
                       </div>
