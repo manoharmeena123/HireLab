@@ -4,7 +4,10 @@ import Link from "next/link";
 import { Modal } from "react-bootstrap";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
-import { useGetDesignationQuery, useMyTransactionsQuery } from "@/store/global-store/global.query";
+import {
+  useGetDesignationQuery,
+  useMyTransactionsQuery,
+} from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
@@ -34,7 +37,11 @@ const Transaction = () => {
   // Get current transactions based on pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentTransactions = transactiondata?.data?.user_points?.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const currentTransactions =
+    transactiondata?.data?.user_points?.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    ) || [];
 
   // Handle page change
   const handlePageChange = (page: number) => {
@@ -57,7 +64,9 @@ const Transaction = () => {
     if (user && user.user?.designation_id !== null) {
       // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find((option) => option.id === designationId);
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
       if (designation) {
         setDesignationLabel(designation.label);
       } else {
@@ -83,10 +92,18 @@ const Transaction = () => {
         await logout().unwrap();
         removeToken();
         navigateSource("/");
-        Swal.fire("Logged out!", "You have been logged out successfully.", "success");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
       } catch (error) {
         console.error("Logout failed:", error);
-        Swal.fire("Logout failed", "Failed to log out. Please try again.", "error");
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
       }
     }
   };
@@ -110,7 +127,10 @@ const Transaction = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           ) : (
@@ -119,7 +139,10 @@ const Transaction = () => {
                               alt="profile picture"
                               width={300}
                               height={300}
-                              onError={(e) => (e.currentTarget.src = "../../images/favicon.png")} // Fallback image
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
                               style={{ borderRadius: "50%" }}
                             />
                           )}
@@ -127,10 +150,14 @@ const Transaction = () => {
                         <div className="candidate-title">
                           <div className="">
                             <h4 className="m-b5">
-                              <Link href={"#"}>David Matin</Link>
+                              <Link href={"#"}>
+                                {user?.user?.name || "User Name"}
+                              </Link>
                             </h4>
                             <p className="m-b0">
-                              <Link href={"#"}>Web developer</Link>
+                              <Link href={"#"}>
+                                {designationLabel || "Not available"}
+                              </Link>
                             </p>
                           </div>
                         </div>
@@ -140,18 +167,70 @@ const Transaction = () => {
                         <li>
                           <Link href="/dashboard-section">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
+                            Dashboard
                           </Link>
                         </li>
                         <li>
+                          <Link href="/profile">
+                            <i className="fa fa-user-o" aria-hidden="true"></i>
+                            Profile
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/my-resume">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            My Resume
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/saved-jobs">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            Saved Jobs
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/applied-job">
+                            <i
+                              className="fa fa-briefcase"
+                              aria-hidden="true"
+                            ></i>
+                            Applied Jobs
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/job-alert">
+                            <i className="fa fa-bell-o" aria-hidden="true"></i>
+                            Job Alerts
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/cv-manager">
+                            <i
+                              className="fa fa-id-card-o"
+                              aria-hidden="true"
+                            ></i>
+                            CV Manager
+                          </Link>
+                        </li>
+
+                        <li>
                           <Link href="/transaction" className="active">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
                             <span>Transaction</span>
                           </Link>
                         </li>
                         <li>
                           <Link href="#" onClick={handleLogout}>
-                            <i className="fa fa-sign-out" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
                             <span>Log Out</span>
                           </Link>
                         </li>
@@ -162,10 +241,13 @@ const Transaction = () => {
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx browse-job clearfix">
                     <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">TRANSACTIONS</h5>
+                      <h5 className="font-weight-700 pull-left text-uppercase">
+                        TRANSACTIONS
+                      </h5>
                     </div>
                     <h3>
-                      <span style={{ color: "blue" }}>{totalItems}</span> Transactions
+                      <span style={{ color: "blue" }}>{totalItems}</span>{" "}
+                      Transactions
                     </h3>
                     <table className="table-job-bx cv-manager company-manage-job">
                       <thead>
@@ -182,13 +264,28 @@ const Transaction = () => {
                             <td className="job-name">
                               <Link href={"#"}>{item?.notes}</Link>
                             </td>
-                            <td className={`application ${Number(item.point) < 0 ? "text-red" : "text-primary"}`}>
-                              {item.point} {Number(item.point) < 0 ? "Debited" : "Credited"}
+                            <td
+                              className={`application ${
+                                item?.type == "debit"
+                                  ? "text-red"
+                                  : "text-primary"
+                              }`}
+                            >
+                              {item.point}{" "}
+                              { item?.type == "debit"? "Debited" : "Credited"}
                             </td>
-                            <td className={`application ${Number(item.point) < 0 ? "text-red" : "text-primary"}`}>
+                            <td
+                              className={`application ${
+                                item?.type == "debit"
+                                  ? "text-red"
+                                  : "text-primary"
+                              }`}
+                            >
                               {item.point}
                             </td>
-                            <td className="expired pending">{formaterDate(item.created_at)}</td>
+                            <td className="expired pending">
+                              {formaterDate(item.created_at)}
+                            </td>
                           </tr>
                         ))}
                       </tbody>

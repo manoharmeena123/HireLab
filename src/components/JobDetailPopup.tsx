@@ -109,6 +109,27 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
     ?.filter((req: any) => req.length > 0);
 
   const handleApplyJob = async (jobId: string) => {
+    // Check if user has membership
+    if (!user?.user?.membership) {
+      Swal.fire({
+        title: "No Membership Plan",
+        text: "You don't have any membership plan to apply for jobs. Would you like to buy one?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Buy Subscription",
+        cancelButtonText: "Go Back to Job",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redirect to the subscription page (cart)
+          router.push("/cart");
+        } else {
+          // Stay on the job details page
+          return;
+        }
+      });
+      return;
+    }
+
     if (!user) {
       router.push("/login");
       return;
@@ -289,26 +310,6 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
             </Link>
           </div>
         </div>
-        {/* <div className="mb-4">
-          <Button
-            className={styles.btnCustom}
-            style={{
-              backgroundColor: "transparent",
-              borderColor: "#2A6310",
-              color: "#2A6310",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#2A6310";
-              e.currentTarget.style.color = "#fff";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "transparent";
-              e.currentTarget.style.color = "#2A6310";
-            }}
-          >
-            Connect Now
-          </Button>
-        </div> */}
         <div className="d-flex jd-split-wrap">
           <div className="mb-4">
             <h5>Location</h5>

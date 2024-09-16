@@ -5,59 +5,40 @@ import { Modal } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import {
+  useGetDesignationQuery,
+  useMyTransactionsQuery,
+} from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import Swal from "sweetalert2";
+import { formaterDate } from "@/utils/formateDate"; // Reusing formaterDate function
+import Pagination from "./Pagination"; // Existing Pagination Component
 
 const CreditEarned = () => {
   const router = useRouter();
   const { user, refetch } = useLoggedInUser();
   const { removeToken } = useAuthToken();
-  const [company, setCompany] = useState<boolean>(false);
   const { data: designationData } = useGetDesignationQuery(); // Fetch designation data
+  const { data: transactionData } = useMyTransactionsQuery(); // Fetch transactions data from API
   const [logout] = useLogoutMutation();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
-  const dummyData = [
-    {
-      id: 1,
-      description: "Credit for job post: Social Media Expert",
-      credit: 100,
-      date: "2023-07-01",
-      status: "Credited",
-    },
-    {
-      id: 2,
-      description: "Debit for job application: Web Designer",
-      credit: -50,
-      date: "2023-07-05",
-      status: "Debited",
-    },
-    {
-      id: 3,
-      description: "Credit for job post: Finance Accountant",
-      credit: 200,
-      date: "2023-07-10",
-      status: "Credited",
-    },
-    {
-      id: 4,
-      description: "Debit for job application: Social Media Expert",
-      credit: -30,
-      date: "2023-07-15",
-      status: "Debited",
-    },
-    {
-      id: 5,
-      description: "Credit for job post: Web Designer",
-      credit: 150,
-      date: "2023-07-20",
-      status: "Credited",
-    },
-  ];
+  // Pagination States
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5; // Number of items per page
+
+  // Calculate pagination data
+  const totalItems = transactionData?.data?.user_points?.length || 0;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // Paginated transactions
+  const paginatedTransactions = transactionData?.data?.user_points?.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   useEffect(() => {
     // Map designation options
@@ -73,7 +54,6 @@ const CreditEarned = () => {
 
   useEffect(() => {
     if (user && user.user?.designation_id !== null) {
-      // Only proceed if user and designation_id are not null
       const designationId = user.user.designation_id.toString();
       const designation = designationOptions.find(
         (option) => option.id === designationId
@@ -118,6 +98,12 @@ const CreditEarned = () => {
       }
     }
   };
+
+  // Handle page change in the pagination component
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <>
       <div className="page-content bg-white">
@@ -183,13 +169,6 @@ const CreditEarned = () => {
                           </Link>
                         </li>
 
-                        {/* <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Manage Jobs</span>
-                          </Link>
-                        </li> */}
-
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i
@@ -222,7 +201,10 @@ const CreditEarned = () => {
                     <div>
                       <h3>
                         Wallet{" "}
-                        <span style={{ color: "blue" }}>6700 Credits</span>
+                        <span style={{ color: "blue" }}>
+                          {transactionData?.data?.user_points.length || 0}{" "}
+                          Credits
+                        </span>
                       </h3>
                     </div>
                     <table className="table-job-bx cv-manager company-manage-job">
@@ -249,7 +231,7 @@ const CreditEarned = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {dummyData.map((item) => (
+                        {paginatedTransactions?.map((item: any) => (
                           <tr key={item.id}>
                             <td className="feature">
                               <div className="custom-control custom-checkbox">
@@ -266,107 +248,42 @@ const CreditEarned = () => {
                               </div>
                             </td>
                             <td className="job-name">
-                              <Link href={"#"}>{item.description}</Link>
+                              <Link href={"#"}>{item?.notes}</Link>
                             </td>
                             <td
                               className={`application ${
-                                item.credit < 0 ? "text-red" : "text-primary"
+                                item?.type == "debit"
+                                  ? "text-red"
+                                  : "text-primary"
                               }`}
                             >
-                              {item.credit}{" "}
-                              {item.credit < 0 ? "Debited" : "Credits"}
+                              {item.point}{" "}
+                              {item.type == "debit" ? "Debited" : "Credits"}
                             </td>
                             <td
                               className={`application ${
-                                item.credit < 0 ? "text-red" : "text-primary"
+                                item?.type == "debit" 
+                                  ? "text-red"
+                                  : "text-primary"
                               }`}
                             >
-                              {item.status}
+                              {item.type == "debit"? "Debited" : "Credited"}
                             </td>
-                            <td className="expired pending">{item.date} </td>
+                            <td className="expired pending">
+                              {formaterDate(item.created_at)}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                    <div className="pagination-bx m-t30 float-right">
-                      <ul className="pagination">
-                        <li className="previous">
-                          <Link href={"#"}>
-                            <i className="ti-arrow-left"></i> Prev
-                          </Link>
-                        </li>
-                        <li className="active">
-                          <Link href={"#"}>1</Link>
-                        </li>
-                        <li>
-                          <Link href={"#"}>2</Link>
-                        </li>
-                        <li>
-                          <Link href={"#"}>3</Link>
-                        </li>
-                        <li className="next">
-                          <Link href={"#"}>
-                            Next <i className="ti-arrow-right"></i>
-                          </Link>
-                        </li>
-                      </ul>
-                    </div>
 
-                    <Modal
-                      show={company}
-                      onHide={setCompany}
-                      className="modal fade modal-bx-info"
-                    >
-                      <div className="modal-dialog my-0" role="document">
-                        <div className="modal-content">
-                          <div className="modal-header">
-                            <div className="logo-img">
-                              <img
-                                alt=""
-                                src={require("./../../images/logo/icon2.png")}
-                              />
-                            </div>
-                            <h5 className="modal-title">Company Name</h5>
-                            <button
-                              type="button"
-                              className="close"
-                              onClick={() => setCompany(false)}
-                            >
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div className="modal-body">
-                            <ul>
-                              <li>
-                                <strong>Job Title :</strong>
-                                <p> Web Developer – PHP, HTML, CSS </p>
-                              </li>
-                              <li>
-                                <strong>Experience :</strong>
-                                <p>5 Year 3 Months</p>
-                              </li>
-                              <li>
-                                <strong>Description :</strong>
-                                <p>
-                                  Lorem Ipsum is simply dummy text of the
-                                  printing and typesetting industry has been the
-                                  industry's standard dummy text ever since.
-                                </p>
-                              </li>
-                            </ul>
-                          </div>
-                          <div className="modal-footer">
-                            <button
-                              type="button"
-                              className="btn btn-secondary"
-                              onClick={() => setCompany(false)}
-                            >
-                              Close
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </Modal>
+                    {/* Pagination Component */}
+                    <Pagination
+                      currentPage={currentPage}
+                      itemsPerPage={itemsPerPage}
+                      totalItems={totalItems}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                 </div>
               </div>
@@ -377,4 +294,5 @@ const CreditEarned = () => {
     </>
   );
 };
+
 export default CreditEarned;

@@ -70,7 +70,6 @@ const CartSection = () => {
               description: 'Membership Purchase',
               order_id: orderId,
               handler: async function (response: any) {
-                alert("hello")
                 console.log('response', response)
                 // Handle payment success
                 const data = {

@@ -202,11 +202,11 @@ const Profilesidebar = ({
                   Transaction
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href='/switch-plan'>
                 <i className="fa fa-exchange-alt" aria-hidden='true'>Switch plan</i>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="#" onClick={handleLogout}>
                   <i className="fa fa-sign-out" aria-hidden="true"></i>
