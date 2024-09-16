@@ -363,6 +363,12 @@ export const queries = {
       method : "GET"
     })
   },
+  myTransactions :{
+    query :() => ({
+      url :"api/my-transcations",
+      method :"GET"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

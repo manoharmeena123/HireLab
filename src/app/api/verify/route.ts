@@ -5,7 +5,7 @@ const generatedSignature = (
   razorpayOrderId: string,
   razorpayPaymentId: string
 ) => {
-  const keySecret = process.env.RAZORPAY_KEY_SECRET!;
+  const keySecret = 'CBYC2OdZUkKDTJWldzClqINs';
   const sig = crypto
     .createHmac('sha256', keySecret)
     .update(`${razorpayOrderId}|${razorpayPaymentId}`)

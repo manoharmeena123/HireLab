@@ -59,7 +59,6 @@ const CartSection = () => {
                 currency: 'INR',
               }),
             });
-  
             const { orderId } = await response.json();
   
             // Start the Razorpay payment
@@ -71,6 +70,8 @@ const CartSection = () => {
               description: 'Membership Purchase',
               order_id: orderId,
               handler: async function (response: any) {
+                alert("hello")
+                console.log('response', response)
                 // Handle payment success
                 const data = {
                   orderCreationId: orderId,
@@ -78,6 +79,7 @@ const CartSection = () => {
                   razorpayOrderId: response.razorpay_order_id,
                   razorpaySignature: response.razorpay_signature,
                 };
+                console.log('data', data)
   
                 const verifyResponse = await fetch('/api/verify', {
                   method: 'POST',

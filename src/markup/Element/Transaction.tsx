@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Modal } from "react-bootstrap";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Image from "next/image";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import { useGetDesignationQuery,useMyTransactionsQuery } from "@/store/global-store/global.query";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
@@ -22,7 +22,8 @@ const Transaction = () => {
   const [logout] = useLogoutMutation();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
-
+ const {data : transactiondata } =useMyTransactionsQuery()
+ console.log('transactiondata', transactiondata)
   const dummyData = [
     {
       id: 1,

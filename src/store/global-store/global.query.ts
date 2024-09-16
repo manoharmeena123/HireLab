@@ -112,7 +112,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "DeleteDiscussion",
     "UpdateDiscussion",
     "UserlistDiscussion",
-    "RecentJobSeekerJob"
+    "RecentJobSeekerJob",
+    "MyTransactions"
   ],
 });
 
@@ -411,7 +412,11 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     recentJobSeekerJob :builder.query<any,any>({
       query : queries.recentJobSeekerJob.query,
       providesTags: ["RecentJobSeekerJob"],
-    })
+    }),
+    myTransactions : builder.query<any,any>({
+      query : queries.myTransactions.query,
+      providesTags: ["MyTransactions"],
+    }),
 
   }),
 
@@ -486,6 +491,7 @@ export const {
   useDeleteDiscussionMutation,
   useUpdateDiscussionMutation,
   useUserListDiscussionQuery,
-  useRecentJobSeekerJobQuery
+  useRecentJobSeekerJobQuery,
+  useMyTransactionsQuery
 } = globalApi;
 export default globalApi;

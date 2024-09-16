@@ -81,6 +81,8 @@ const RegisterSection = () => {
         dispatch(saveRegisterData(authState)); // Save the register data in store
         toast.success(res?.message, { theme: "colored" });
         navigateSource("/send-otp");
+      }else if(res.code == 500 ){
+        toast.success(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data) {
         dispatch(setErrors(res.data.error));
       }
