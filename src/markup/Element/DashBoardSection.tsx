@@ -237,7 +237,7 @@ const DashboardSection = () => {
 
   return (
     <>
-      {recentLoading && eventLoading && <Loading />}
+      {recentLoading && eventLoading && discussionLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white browse-job p-b50">

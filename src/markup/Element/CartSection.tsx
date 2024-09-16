@@ -160,10 +160,20 @@ const CartSection = () => {
                             &#8377;{selectedPlan?.monthly_price}/months
                           </strong>
                         </div>
+                        <hr />
                       </div>
+                    <div>
+                      <Button
+                        className="w-100 checkout-btn"
+                        variant=""
+                        onClick={handleContinueToCheckout}
+                      >
+                        <i className="fa fa-box"></i> Continue to Checkout
+                      </Button>
+                    </div>
                     </div>
                   </div>
-                  <div className="cart-total-wrap shadow bg-white p-3 mt-3 rounded">
+                  {/* <div className="cart-total-wrap shadow bg-white p-3 mt-3 rounded">
                     <div className="cart-total d-flex justify-content-between">
                       <strong>1 Item</strong>
                       <div className="align-items-end">
@@ -191,7 +201,7 @@ const CartSection = () => {
                         <i className="fa fa-box"></i> Continue to Checkout
                       </Button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="col-lg-8 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll left-bottom shadow rounded">

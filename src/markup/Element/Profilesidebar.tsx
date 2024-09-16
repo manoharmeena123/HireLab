@@ -195,6 +195,15 @@ const Profilesidebar = ({
               </li>
               <li>
                 <Link
+                  href="/switch-plan"
+                  onClick={(e) => handleNavigation(e, "/cv-manager")}
+                >
+               <i className="fa fa-money" aria-hidden="true"></i>
+                 Switch Plan
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/transaction"
                   onClick={(e) => handleNavigation(e, "/transaction")}
                 >

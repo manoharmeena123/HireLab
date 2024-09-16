@@ -206,6 +206,13 @@ const CreditEarned = () => {
                           Credits
                         </span>
                       </h3>
+                      <h6>
+                        Your Remainning credit {" "}
+                        <span style={{ color: "blue" }}>
+                          {user?.user?.membership?.credit || 0}{" "}
+                          Credits
+                        </span>
+                      </h6>
                     </div>
                     <table className="table-job-bx cv-manager company-manage-job">
                       <thead>
