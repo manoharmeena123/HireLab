@@ -82,7 +82,7 @@ const RegisterSection = () => {
         toast.success(res?.message, { theme: "colored" });
         navigateSource("/send-otp");
       }else if(res.code == 500 ){
-        toast.success(res?.message, { theme: "colored" });
+        toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data) {
         dispatch(setErrors(res.data.error));
       }

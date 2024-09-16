@@ -228,7 +228,9 @@ const DashboardSection = () => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
-
+  const handleGetStarted = async (membershipId: any) => {
+    push(`/cart?plan=${membershipId}`);
+  };
   return (
     <>
       {recentLoading && eventLoading && <Loading />}
@@ -363,8 +365,10 @@ const DashboardSection = () => {
                             minWidth: "230px",
                             position: "relative",
                             height: "auto",
+                            cursor :"pointer"
                           }}
                           key={index}
+                          onClick={() => handleGetStarted(item?.id)}
                         >
                           <div className="quote-info">
                             <div className="d-flex align-items-center relative">
