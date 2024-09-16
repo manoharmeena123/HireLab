@@ -14,52 +14,33 @@ import { useAuthToken } from "@/hooks/useAuthToken";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
+import { Modal, Button } from "react-bootstrap"; // Importing modal from react-bootstrap
 
-const Profilesidebar = ({ refetch }: any) => {
+const Profilesidebar = ({
+  refetch,
+  isProfileComplete,
+}: {
+  refetch: any;
+  isProfileComplete: boolean;
+}) => {
   const router = useRouter();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
-  const { removeToken, token } = useAuthToken();
-  const {
-    user,
-    isLoading: userLoading,
-    error: userError,
-    refetch: userrefetch,
-  } = useLoggedInUser();
-  const {
-    data: designationData,
-    isLoading: designationLoading,
-    error: designationError,
-  } = useGetDesignationQuery();
+  const { removeToken } = useAuthToken();
+  const { user, isLoading: userLoading } = useLoggedInUser();
+  const { data: designationData, isLoading: designationLoading } =
+    useGetDesignationQuery();
 
-  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
+  const [showModal, setShowModal] = useState(false); // Modal control for incomplete profile
 
   useEffect(() => {
-    if (designationData?.data) {
-      const options = designationData.data.map((designation: any) => ({
-        value: designation.title,
-        label: designation.title,
-        id: designation.id.toString(),
-      }));
-      setDesignationOptions(options);
-    }
-  }, [designationData, refetch]);
-
-  useEffect(() => {
-    if (user && user.user?.designation_id !== null) {
-      const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find(
-        (option) => option.id === designationId
+    if (user && designationData?.data) {
+      const designation = designationData.data.find(
+        (d: any) => d.id.toString() === user?.user?.designation_id?.toString()
       );
-      if (designation) {
-        setDesignationLabel(designation.label);
-      } else {
-        setDesignationLabel("Designation not found");
-      }
-    } else {
-      setDesignationLabel("Designation not available");
+      setDesignationLabel(designation?.title || "Designation not found");
     }
-  }, [user, designationOptions, refetch]);
+  }, [user, designationData]);
 
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -92,110 +73,161 @@ const Profilesidebar = ({ refetch }: any) => {
     }
   };
 
+  const handleNavigation = (e: any, url: string) => {
+    if (!isProfileComplete) {
+      e.preventDefault(); // Prevent navigation
+      setShowModal(true); // Show modal if profile is incomplete
+    }
+  };
+
   if (userLoading || designationLoading || isLoggingOut) {
     return <Loading />;
   }
 
   return (
-    <div className="col-xl-3 col-lg-4 m-b30">
-      <div className="sticky-top">
-        <div className="candidate-info">
-          <div className="candidate-detail text-center">
-            <div className="canditate-des">
-              {user?.user?.image ? (
-                <Image
-                  src={`${IMAGE_URL + user?.user?.image}`}
-                  alt="profile picture"
-                  width={300}
-                  height={300}
-                  onError={(e) =>
-                    (e.currentTarget.src = "../../images/favicon.png")
-                  } // Fallback image
-                  style={{ borderRadius: "50%" }}
-                />
-              ) : (
-                <Image
-                  src={profileIcon}
-                  alt="profile picture"
-                  width={300}
-                  height={300}
-                  onError={(e) =>
-                    (e.currentTarget.src = "../../images/favicon.png")
-                  } // Fallback image
-                  style={{ borderRadius: "50%" }}
-                />
-              )}
-            </div>
-            <div className="candidate-title">
-              <div className="">
-                <h4 className="m-b5">
-                  <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
-                </h4>
-                <p className="m-b0">
-                  <Link href={"#"}>{designationLabel || "Not available"}</Link>
-                </p>
+    <>
+      <div className="col-xl-3 col-lg-4 m-b30">
+        <div className="sticky-top">
+          <div className="candidate-info">
+            <div className="candidate-detail text-center">
+              <div className="canditate-des">
+                {user?.user?.image ? (
+                  <Image
+                    src={`${IMAGE_URL + user?.user?.image}`}
+                    alt="profile picture"
+                    width={300}
+                    height={300}
+                    onError={(e) =>
+                      (e.currentTarget.src = "../../images/favicon.png")
+                    }
+                    style={{ borderRadius: "50%" }}
+                  />
+                ) : (
+                  <Image
+                    src={profileIcon}
+                    alt="profile picture"
+                    width={300}
+                    height={300}
+                    onError={(e) =>
+                      (e.currentTarget.src = "../../images/favicon.png")
+                    }
+                    style={{ borderRadius: "50%" }}
+                  />
+                )}
+              </div>
+              <div className="candidate-title">
+                <div className="">
+                  <h4 className="m-b5">
+                    <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
+                  </h4>
+                  <p className="m-b0">
+                    <Link href={"#"}>
+                      {designationLabel || "Not available"}
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
+            <ul>
+              <li>
+                <Link
+                  href="/dashboard-section"
+                  onClick={(e) => handleNavigation(e, "/dashboard-section")}
+                >
+                  <i className="fa fa-heart-o" aria-hidden="true"></i>
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/profile"
+                  onClick={(e) => handleNavigation(e, "/profile")}
+                  className="active"
+                >
+                  <i className="fa fa-user-o" aria-hidden="true"></i>
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/my-resume"
+                  onClick={(e) => handleNavigation(e, "/my-resume")}
+                >
+                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                  My Resume
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/saved-jobs"
+                  onClick={(e) => handleNavigation(e, "/saved-jobs")}
+                >
+                  <i className="fa fa-heart-o" aria-hidden="true"></i>
+                  Saved Jobs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/applied-job"
+                  onClick={(e) => handleNavigation(e, "/applied-job")}
+                >
+                  <i className="fa fa-briefcase" aria-hidden="true"></i>
+                  Applied Jobs
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/job-alert"
+                  onClick={(e) => handleNavigation(e, "/job-alert")}
+                >
+                  <i className="fa fa-bell-o" aria-hidden="true"></i>
+                  Job Alerts
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/cv-manager"
+                  onClick={(e) => handleNavigation(e, "/cv-manager")}
+                >
+                  <i className="fa fa-id-card-o" aria-hidden="true"></i>
+                  CV Manager
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/transaction"
+                  onClick={(e) => handleNavigation(e, "/transaction")}
+                >
+                  <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                  Transaction
+                </Link>
+              </li>
+              <li>
+                <Link href="#" onClick={handleLogout}>
+                  <i className="fa fa-sign-out" aria-hidden="true"></i>
+                  Log Out
+                </Link>
+              </li>
+            </ul>
           </div>
-          <ul>
-            <li>
-              <Link href="/dashboard-section">
-              <i className="fa fa-heart-o" aria-hidden="true"></i>
-              <span>Dashboard</span>
-             </Link>
-           </li>
-            <li>
-              <Link href="profile" className="active">
-                <i className="fa fa-user-o" aria-hidden="true"></i>
-                <span>Profile</span>
-              </Link>
-            </li>
-            <li>
-              <Link href="my-resume">
-                <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                <span>My Resume</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"/saved-jobs"}>
-                <i className="fa fa-heart-o" aria-hidden="true"></i>
-                <span>Saved Jobs</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"/applied-job"}>
-                <i className="fa fa-briefcase" aria-hidden="true"></i>
-                <span>Applied Jobs</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"/job-alert"}>
-                <i className="fa fa-bell-o" aria-hidden="true"></i>
-                <span>Job Alerts</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"/cv-manager"}>
-                <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                <span>CV Manager</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"/transaction"}>
-                <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                <span>Transaction</span>
-              </Link>
-            </li>
-            <li>
-              <Link href={"#"} onClick={handleLogout}>
-                <i className="fa fa-sign-out" aria-hidden="true"></i>
-                <span>Log Out</span>
-              </Link>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
+
+      {/* Modal Popup for Incomplete Profile */}
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Complete Your Profile</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Please complete your profile details before proceeding.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={() => setShowModal(false)}>
+            Okay
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 

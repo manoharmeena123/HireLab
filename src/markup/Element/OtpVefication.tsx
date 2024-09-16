@@ -44,7 +44,7 @@ const OtpVefication = () => {
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
 
-  const endpoint = queryTitle ? `${queryTitle}` : "/dashboard-section";
+  const endpoint = queryTitle ? `${queryTitle}` : "/job-seeker";
 
   // Parse localStorage data
   useEffect(() => {
@@ -96,7 +96,7 @@ const OtpVefication = () => {
         parsedDatas?.mobile_number,
     };
 
-    console.log("payload", payload);
+    // console.log("payload", payload);
     try {
       const res = await verifyOtp(payload as VerifyOtp).unwrap();
       if (res?.code === 200 && res?.data) {
