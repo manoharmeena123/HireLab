@@ -23,6 +23,7 @@ import { RecentJobData } from "@/types/index";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
+import Pagination from "./Pagination"; // Importing your existing Pagination component
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 var bnr = require("./../../images/banner/bnr1.jpg");
 
@@ -64,7 +65,7 @@ const DashboardSection = () => {
   const [deleteDiscussion] = useDeleteDiscussionMutation();
   const [updateDiscussion] = useUpdateDiscussionMutation();
 
-  // State for modal control and form data for creating and editing
+  // State for modal control and form data for creating and editing discussions
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
@@ -79,6 +80,20 @@ const DashboardSection = () => {
     question: "",
     description: "",
   });
+
+  // State for pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of jobs per page
+
+  // Paginate jobs
+  const totalJobs = recentJob?.data?.length || 0;
+  const indexOfLastJob = currentPage * itemsPerPage;
+  const indexOfFirstJob = indexOfLastJob - itemsPerPage;
+  const currentJobs = recentJob?.data?.slice(indexOfFirstJob, indexOfLastJob) || [];
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   const handleDeleteDiscussion = async (discussionId: string) => {
     Swal.fire({
@@ -144,12 +159,9 @@ const DashboardSection = () => {
 
   // Function to toggle like state
   const handleLikeToggle = async (jobId: string) => {
-    if (isSaving || isDeleting) {
-      return; // If already saving or deleting, do nothing
-    }
+    if (isSaving || isDeleting) return;
 
     if (likedJobs.includes(jobId)) {
-      // Unlike job
       try {
         await deleteJob(jobId);
         setLikedJobs(likedJobs.filter((id) => id !== jobId));
@@ -170,7 +182,6 @@ const DashboardSection = () => {
         });
       }
     } else {
-      // Like job
       try {
         await saveJob({ job_id: jobId });
         setLikedJobs([...likedJobs, jobId]);
@@ -191,15 +202,6 @@ const DashboardSection = () => {
         });
       }
     }
-  };
-
-  const handleShowEditModal = (item: any) => {
-    setEditFormData({
-      id: item.id,
-      question: item.question,
-      description: item.description,
-    });
-    setShowEditModal(true); // Open the edit modal
   };
 
   const handleFormChange = (
@@ -228,9 +230,11 @@ const DashboardSection = () => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
+
   const handleGetStarted = async (membershipId: any) => {
     push(`/cart?plan=${membershipId}`);
   };
+
   return (
     <>
       {recentLoading && eventLoading && <Loading />}
@@ -240,96 +244,72 @@ const DashboardSection = () => {
             <div className="ds-wrap">
               <div className="row">
                 <div className="col-lg-9">
-                  <h3
-                    className="text-center mt-5"
-                    style={{ fontWeight: "600px", fontSize: "bold" }}
-                  >
+                  <h3 className="text-center mt-5" style={{ fontWeight: "600px", fontSize: "bold" }}>
                     Recent Jobs
                   </h3>
                   <div>
-                    <ul
-                      className="post-job-bx"
-                      style={{
-                        padding: "5px",
-                      }}
-                    >
-                      {recentJob?.data?.map(
-                        (item: RecentJobData, index: number) => (
-                          <li key={index}>
-                            {item && (
-                              <div className="post-bx">
-                                <div className="d-flex m-b30">
-                                  <div className="job-post-info">
-                                    <h4
-                                      style={{ cursor: "pointer" }}
-                                      className="text-secondry"
-                                      onClick={() => viewJobHandler(item.id)}
-                                    >
-                                      <Link href="">{item?.job_title}</Link>
-                                    </h4>
-                                    <ul>
-                                      <li>
-                                        <i className="fa fa-map-marker"></i>
-                                        {item?.address}
-                                      </li>
-                                      <li>
-                                        <i className="fa fa-bookmark-o"></i>
-                                        {item?.location?.title}
-                                      </li>
-                                      <li>
-                                        <i className="fa fa-clock-o"></i>{" "}
-                                        Published{" "}
-                                        {formaterDate(item?.created_at)}
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div className="job-time m-t15 m-b10">
-                                  {item.tags &&
-                                    item.tags.split(",").map((tag, index) => (
-                                      <Link
-                                        key={index}
-                                        href="#"
-                                        className="mr-1"
-                                      >
-                                        <span>{tag.trim()}</span>
-                                      </Link>
-                                    ))}
-                                </div>
-
-                                <div className="d-flex">
-                                  <div className="job-time mr-auto">
-                                    <Link href="">
-                                      <span>{item?.location?.title}</span>
-                                    </Link>
-                                  </div>
-
-                                  <div className="salary-bx">
-                                    <span className="ctc-badge">
-                                      <i className="fa fa-money"></i>{" "}
-                                      {getCtcTitleById(item.ctc)}
-                                    </span>
-                                  </div>
-                                </div>
-                                <label
-                                  className={`like-btn ${
-                                    likedJobs.includes(item.id.toString())
-                                      ? "liked"
-                                      : ""
-                                  }`}
-                                  onClick={() =>
-                                    handleLikeToggle(item.id.toString())
-                                  }
-                                >
-                                  <input type="checkbox" />
-                                  <span className="checkmark"></span>
-                                </label>
+                    <ul className="post-job-bx" style={{ padding: "5px" }}>
+                      {currentJobs?.map((item: RecentJobData, index: number) => (
+                        <li key={index}>
+                          <div className="post-bx">
+                            <div className="d-flex m-b30">
+                              <div className="job-post-info">
+                                <h4 style={{ cursor: "pointer" }} className="text-secondry" onClick={() => viewJobHandler(item.id)}>
+                                  <Link href="">{item?.job_title}</Link>
+                                </h4>
+                                <ul>
+                                  <li>
+                                    <i className="fa fa-map-marker"></i>
+                                    {item?.address}
+                                  </li>
+                                  <li>
+                                    <i className="fa fa-bookmark-o"></i>
+                                    {item?.location?.title}
+                                  </li>
+                                  <li>
+                                    <i className="fa fa-clock-o"></i> Published {formaterDate(item?.created_at)}
+                                  </li>
+                                </ul>
                               </div>
-                            )}
-                          </li>
-                        )
-                      )}
+                            </div>
+                            <div className="job-time m-t15 m-b10">
+                              {item.tags &&
+                                item.tags.split(",").map((tag, index) => (
+                                  <Link key={index} href="#" className="mr-1">
+                                    <span>{tag.trim()}</span>
+                                  </Link>
+                                ))}
+                            </div>
+                            <div className="d-flex">
+                              <div className="job-time mr-auto">
+                                <Link href="">
+                                  <span>{item?.location?.title}</span>
+                                </Link>
+                              </div>
+                              <div className="salary-bx">
+                                <span className="ctc-badge">
+                                  <i className="fa fa-money"></i> {getCtcTitleById(item.ctc)}
+                                </span>
+                              </div>
+                            </div>
+                            <label
+                              className={`like-btn ${likedJobs.includes(item.id.toString()) ? "liked" : ""}`}
+                              onClick={() => handleLikeToggle(item.id.toString())}
+                            >
+                              <input type="checkbox" />
+                              <span className="checkmark"></span>
+                            </label>
+                          </div>
+                        </li>
+                      ))}
                     </ul>
+                    {/* Pagination component */}
+                    <Pagination
+                      currentPage={currentPage}
+                      itemsPerPage={itemsPerPage}
+                      totalItems={totalJobs}
+                      onPageChange={handlePageChange}
+                    />
                   </div>
                 </div>
                 <div className="col-lg-3">
@@ -365,7 +345,7 @@ const DashboardSection = () => {
                             minWidth: "230px",
                             position: "relative",
                             height: "auto",
-                            cursor :"pointer"
+                            cursor: "pointer",
                           }}
                           key={index}
                           onClick={() => handleGetStarted(item?.id)}
