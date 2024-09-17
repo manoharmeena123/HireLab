@@ -14,7 +14,7 @@ import {
   useDeleteCommentByIdMutation,
   useGetCommentForParentCommentMutation,
   useGetSettingsQuery,
-  useUpdateDiscussionCommentMutation
+  useUpdateDiscussionCommentMutation,
 } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
@@ -23,7 +23,7 @@ import Sidebar from "../../markup/Element/Sidebar";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash,faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
+import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
 import Swal from "sweetalert2";
 
 const SingleBlogSection = () => {
@@ -32,7 +32,7 @@ const SingleBlogSection = () => {
   const { user } = useLoggedInUser();
   const router = useRouter();
   const { data: getSetting } = useGetSettingsQuery();
- const [updateDiscussionComment] =useUpdateDiscussionCommentMutation()
+  const [updateDiscussionComment] = useUpdateDiscussionCommentMutation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
@@ -144,45 +144,47 @@ const SingleBlogSection = () => {
     setShowReplyModal(true);
   };
 
-  const handleDeleteComment = async (id:any) => {
-    console.log('commentId', id)
+  const handleDeleteComment = async (id: any) => {
+    console.log("commentId", id);
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-    try {
-      const res = await deleteCommentById(id);
-      if (res?.data?.code === 200) {
-        toast.success(res?.data?.message, { theme: "colored" });
-        getCommentForQuetion(questionId);
+        try {
+          const res = await deleteCommentById(id);
+          if (res?.data?.code === 200) {
+            toast.success(res?.data?.message, { theme: "colored" });
+            getCommentForQuetion(questionId);
+          }
+        } catch (error: any) {
+          toast.error(error?.data?.message, { theme: "colored" });
+        }
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message, { theme: "colored" });
-    }
-  }
-});
+    });
   };
 
-  const handleEditComment = (commentId: string,commentText:string) => {
+  const handleEditComment = (commentId: string, commentText: string) => {
     // Implement edit functionality or open an edit modal
-    console.log("Edit comment with ID:", commentId,commentText);
+    console.log("Edit comment with ID:", commentId, commentText);
     setCurrentCommentId(commentId);
     setCurrentCommentText(commentText);
     setShowEditModal(true);
   };
 
-  const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateComment = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     if (currentCommentId && currentCommentText.trim() !== "") {
       try {
         const res = await updateDiscussionComment({
-          question_id :questionId,
+          question_id: questionId,
           id: currentCommentId,
           body: currentCommentText,
         });
@@ -249,21 +251,25 @@ const SingleBlogSection = () => {
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
                 {comment?.user?.id == user?.user?.id && (
-                  <>   
-                  <FontAwesomeIcon
-                  icon={faEdit}
-                  onClick={() => handleEditComment(comment.id, comment?.body)}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
-                />
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => handleDeleteComment(comment.id)}
-                  style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
-                />
+                  <>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      onClick={() =>
+                        handleEditComment(comment.id, comment?.body)
+                      }
+                      style={{ cursor: "pointer", marginLeft: "10px" }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={() => handleDeleteComment(comment.id)}
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: "10px",
+                        color: "red",
+                      }}
+                    />
                   </>
-               
                 )}
-                
               </div>
             )}
             <ul className="children">{renderComments(comments, comment.id)}</ul>
@@ -393,116 +399,125 @@ const SingleBlogSection = () => {
 
                 <div className="clear" id="comment-list">
                   <div className="comments-area" id="comments">
-                    <h2 className="comments-title">Comments</h2>
-                    <div className="clearfix m-b20">
-                      <ol className="comment-list">
-                        {commentsData?.data[0]?.comments &&
-                          renderComments(commentsData?.data[0]?.comments)}
-                      </ol>
-                      <div className="comment-respond" id="respond">
-                        <h4 className="comment-reply-title" id="reply-title">
-                          Leave a Reply{" "}
-                          <small>
-                            {" "}
-                            <Link
-                              href={"#"}
-                              style={{ display: "none" }}
-                              id="cancel-comment-reply-link"
-                              rel="nofollow"
+                    {commentsData?.data?.is_show == 0 && (
+                      <>
+                        {" "}
+                        <h2 className="comments-title">Comments</h2>
+                        <div className="clearfix m-b20">
+                          <ol className="comment-list">
+                            {commentsData?.data[0]?.comments &&
+                              renderComments(commentsData?.data[0]?.comments)}
+                          </ol>
+                          <div className="comment-respond" id="respond">
+                            <h4
+                              className="comment-reply-title"
+                              id="reply-title"
                             >
-                              Cancel reply
-                            </Link>{" "}
-                          </small>{" "}
-                        </h4>
-                        {!user ? (
-                          <button
-                            className="site-button"
-                            onClick={() =>
-                              router.push(
-                                `/login?page=single-discussion?query=${query}`
-                              )
-                            }
-                          >
-                            Login to post comment
-                          </button>
-                        ) : (
-                          <form
-                            className="comment-form"
-                            id="commentform"
-                            method="post"
-                            onSubmit={handlePostComment}
-                          >
-                            {user?.user &&
-                              !(
-                                <>
-                                  <p className="comment-form-author">
-                                    <label htmlFor="author">
-                                      Name <span className="required">*</span>
-                                    </label>
-                                    <input
-                                      type="text"
-                                      name="author"
-                                      placeholder="Author"
-                                      id="author"
-                                      required
-                                      value={user?.user.name}
-                                      readOnly
-                                    />
-                                  </p>
-                                  <p className="comment-form-email">
-                                    <label htmlFor="email">
-                                      Email{" "}
-                                      <span className="required">*</span>
-                                    </label>
-                                    <input
-                                      type="email"
-                                      name="email"
-                                      placeholder="Email"
-                                      id="email"
-                                      required
-                                      value={user?.user.email}
-                                      readOnly
-                                      style={{ padding: "7px 53px" }}
-                                    />
-                                  </p>
-                                  <p className="comment-form-url">
-                                    <label htmlFor="url">Website</label>
-                                    <input
-                                      type="url"
-                                      name="url"
-                                      placeholder="Website"
-                                      id="url"
-                                      value={user?.user?.website || ""}
-                                      readOnly
-                                      style={{ padding: "7px 53px" }}
-                                    />
-                                  </p>
-                                </>
-                              )}
+                              Leave a Reply{" "}
+                              <small>
+                                {" "}
+                                <Link
+                                  href={"#"}
+                                  style={{ display: "none" }}
+                                  id="cancel-comment-reply-link"
+                                  rel="nofollow"
+                                >
+                                  Cancel reply
+                                </Link>{" "}
+                              </small>{" "}
+                            </h4>
+                            {!user ? (
+                              <button
+                                className="site-button"
+                                onClick={() =>
+                                  router.push(
+                                    `/login?page=single-discussion?query=${query}`
+                                  )
+                                }
+                              >
+                                Login to post comment
+                              </button>
+                            ) : (
+                              <form
+                                className="comment-form"
+                                id="commentform"
+                                method="post"
+                                onSubmit={handlePostComment}
+                              >
+                                {user?.user &&
+                                  !(
+                                    <>
+                                      <p className="comment-form-author">
+                                        <label htmlFor="author">
+                                          Name{" "}
+                                          <span className="required">*</span>
+                                        </label>
+                                        <input
+                                          type="text"
+                                          name="author"
+                                          placeholder="Author"
+                                          id="author"
+                                          required
+                                          value={user?.user.name}
+                                          readOnly
+                                        />
+                                      </p>
+                                      <p className="comment-form-email">
+                                        <label htmlFor="email">
+                                          Email{" "}
+                                          <span className="required">*</span>
+                                        </label>
+                                        <input
+                                          type="email"
+                                          name="email"
+                                          placeholder="Email"
+                                          id="email"
+                                          required
+                                          value={user?.user.email}
+                                          readOnly
+                                          style={{ padding: "7px 53px" }}
+                                        />
+                                      </p>
+                                      <p className="comment-form-url">
+                                        <label htmlFor="url">Website</label>
+                                        <input
+                                          type="url"
+                                          name="url"
+                                          placeholder="Website"
+                                          id="url"
+                                          value={user?.user?.website || ""}
+                                          readOnly
+                                          style={{ padding: "7px 53px" }}
+                                        />
+                                      </p>
+                                    </>
+                                  )}
 
-                            <p className="comment-form-comment">
-                              <label htmlFor="comment">Comment</label>
-                              <textarea
-                                rows={8}
-                                name="comment"
-                                placeholder="Comment"
-                                id="comment"
-                                required
-                              ></textarea>
-                            </p>
-                            <p className="form-submit">
-                              <input
-                                type="submit"
-                                value="Post Comment"
-                                className="submit site-button"
-                                id="submit"
-                                name="submit"
-                              />
-                            </p>
-                          </form>
-                        )}
-                      </div>
-                    </div>
+                                <p className="comment-form-comment">
+                                  <label htmlFor="comment">Comment</label>
+                                  <textarea
+                                    rows={8}
+                                    name="comment"
+                                    placeholder="Comment"
+                                    id="comment"
+                                    required
+                                  ></textarea>
+                                </p>
+                                <p className="form-submit">
+                                  <input
+                                    type="submit"
+                                    value="Post Comment"
+                                    className="submit site-button"
+                                    id="submit"
+                                    name="submit"
+                                  />
+                                </p>
+                              </form>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -551,8 +566,8 @@ const SingleBlogSection = () => {
         </Modal.Footer>
       </Modal>
 
-           {/* Edit Modal */}
-           <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+      {/* Edit Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Comment</Modal.Title>
         </Modal.Header>

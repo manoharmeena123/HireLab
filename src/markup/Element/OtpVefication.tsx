@@ -28,7 +28,7 @@ interface RegisterData {
   }
 }
 interface LoginData {
-  loggedInUser :{
+  data :{
     otp : string;
     mobile_number: string;
   }
@@ -95,8 +95,9 @@ const OtpVefication = () => {
 
   // Validate OTP length for both user input (otp) and parsedData
   const parsedOtp = parsedData?.data?.otp.toString().length;
-  console.log('parsedOtp', parsedOtp)
-  if ((otp.length !== 6 && !parsedOtp) || (parsedOtp && parsedOtp !== 6)) {
+  const parsedOtps = parsedDatas?.data?.otp.toString().length;
+  console.log('parsedOtps', parsedOtps)
+  if ((otp.length !== 6 && !parsedOtp && !parsedDatas) || (parsedOtp && parsedOtp !== 6 && !parsedDatas && !otp) || (parsedOtps && parsedOtps !== 6 && !parsedData && !otp)) {
     setOtpError("OTP must be exactly 6 digits.");
     return;
   }
@@ -105,8 +106,8 @@ const OtpVefication = () => {
       mobile_number:
         loginState?.mobile_number ||
         parsedData?.data?.mobile_number ||
-        parsedDatas?.loggedInUser?.mobile_number,
-        otp :parsedData?.data?.otp || parsedDatas?.loggedInUser?.otp
+        parsedDatas?.data?.mobile_number,
+        otp :parsedData?.data?.otp || parsedDatas?.data?.otp
  
     };
 
@@ -121,6 +122,7 @@ const OtpVefication = () => {
         }
          // Remove registerData from localStorage
         localStorage.removeItem("registerData");
+        localStorage.removeItem("logindata");
         navigateSource(endpoint);
       } else if (res.code === 401) {
         toast.error(res?.message, { theme: "colored" });
@@ -184,7 +186,7 @@ const OtpVefication = () => {
                         <input
                           type="number"
                           name="otp"
-                          value={parsedData?.data?.otp || otp}
+                          value={parsedData?.data?.otp || parsedDatas?.data?.otp || otp}
                           onChange={handleInputChange}
                           className={`form-control ${styles["lato-font"]} mb-2`}
                           placeholder="Enter OTP"

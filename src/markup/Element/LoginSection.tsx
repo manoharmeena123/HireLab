@@ -90,7 +90,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await login(authState).unwrap();
-      localStorage.setItem("logindata", JSON.stringify(authState));
+      localStorage.setItem("logindata", JSON.stringify(res));
       setLoading(false);
       if (res.code === 200 && res?.data) {
         toast.success(res?.message, { theme: "colored" });

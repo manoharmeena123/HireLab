@@ -291,7 +291,6 @@ const LatestDiscussions = () => {
                           />{" "}
                           {discussion?.likes}
                         </span> */}
-                        {discussion?.is_show == 1 && (
                           <span
                             className="mr-3"
                             style={{
@@ -316,7 +315,6 @@ const LatestDiscussions = () => {
                             />{" "}
                             {discussion?.comments_count}
                           </span>
-                        )}
                       </div>
                     </div>
                   </div>
