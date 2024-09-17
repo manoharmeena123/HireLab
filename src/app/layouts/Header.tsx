@@ -232,7 +232,7 @@ const Header = () => {
                       <Link href="/job-seeker">Profile</Link>
                     </li>
                     <li className="">
-                      <Link href="/job-poster">Post Job</Link>
+                      <Link href="/post-job">Post Job</Link>
                     </li>
                     <li className="">
                       <Link href="/">Meetup</Link>
