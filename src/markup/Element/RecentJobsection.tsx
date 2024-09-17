@@ -192,14 +192,14 @@ const RecentJobsection = () => {
                   <Link className="site-button button-sm mr-auto" href="">
                     <i className="ti-arrow-left"></i> Prev
                   </Link>
-                  <Link className="site-button button-sm" href="">
+                  <Link className="site-button button-sm" href="#">
                     Next <i className="ti-arrow-right"></i>
                   </Link>
                 </div>
               </div>
             </div>
             <div className="col-lg-3">
-              <div className="sticky-top">
+              <div className="sticky-top">xt
                 <div className="candidates-are-sys m-b30">
                   {lastTestimonial && (
                     <div className="candidates-bx">

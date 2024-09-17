@@ -465,5 +465,12 @@ export const queries = {
       method :'POST',
       body :data
     })
+  },
+  updateDiscussionComment :{
+    query :(data :any)=>({
+      url : "api/update-comment",
+      method :"POST",
+      body : data
+    })
   }
 };

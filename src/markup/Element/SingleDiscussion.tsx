@@ -14,6 +14,7 @@ import {
   useDeleteCommentByIdMutation,
   useGetCommentForParentCommentMutation,
   useGetSettingsQuery,
+  useUpdateDiscussionCommentMutation
 } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
@@ -31,7 +32,7 @@ const SingleBlogSection = () => {
   const { user } = useLoggedInUser();
   const router = useRouter();
   const { data: getSetting } = useGetSettingsQuery();
-
+ const [updateDiscussionComment] =useUpdateDiscussionCommentMutation()
   const [isExpanded, setIsExpanded] = useState(false);
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
@@ -178,21 +179,22 @@ const SingleBlogSection = () => {
 
   const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // if (currentCommentId && currentCommentText.trim() !== "") {
-    //   try {
-    //     const res = await updateComment({
-    //       id: currentCommentId,
-    //       body: currentCommentText,
-    //     });
-    //     if (res?.data?.code === 200) {
-    //       toast.success(res?.data?.message, { theme: "colored" });
-    //       getCommentForQuetion(questionId);
-    //       setShowEditModal(false);
-    //     }
-    //   } catch (error: any) {
-    //     toast.error(error?.data?.message, { theme: "colored" });
-    //   }
-    // }
+    if (currentCommentId && currentCommentText.trim() !== "") {
+      try {
+        const res = await updateDiscussionComment({
+          question_id :questionId,
+          id: currentCommentId,
+          body: currentCommentText,
+        });
+        if (res?.data?.code === 200) {
+          toast.success(res?.data?.message, { theme: "colored" });
+          getCommentForQuetion(questionId);
+          setShowEditModal(false);
+        }
+      } catch (error: any) {
+        toast.error(error?.data?.message, { theme: "colored" });
+      }
+    }
   };
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {

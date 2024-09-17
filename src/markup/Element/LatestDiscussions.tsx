@@ -133,9 +133,11 @@ const LatestDiscussions = () => {
       <div className="container" ref={sectionRef}>
         <div className="section-head d-flex justify-content-between align-items-center mb-4">
           <div className="me-sm-auto">
-            <h2 style={{ fontWeight: "600" }} className="mb-2">
+            <Link href={"/view-all-discussion"}>
+            <h2 style={{ fontWeight: "600", cursor:"pointer" }} className="mb-2">
               Latest discussion
             </h2>
+            </Link>
           </div>
           <div className="d-flex">
             <div className="head-counter-bx mr-4">

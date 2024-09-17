@@ -235,7 +235,7 @@ const Header = () => {
                       <Link href="/post-job">Post Job</Link>
                     </li>
                     <li className="">
-                      <Link href="/">Meetup</Link>
+                      <Link href="/single-event">Meetup</Link>
                     </li>
                   </>
                 ) : (

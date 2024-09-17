@@ -66,7 +66,7 @@ function Jobdetail() {
                               <span>{item.address} </span>
                             </li>
                             <li className="post-author">
-                              <i className="ti-user" style={{margin:'0 11px 0 0'}}></i>
+                              <i className="fa fa-bookmark-o" style={{margin:'0 11px 0 0'}}></i>
                               <Link href={"#"}>
                                 {item?.user?.company_name || "company name"}
                               </Link>{" "}

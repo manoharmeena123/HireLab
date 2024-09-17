@@ -113,7 +113,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "UpdateDiscussion",
     "UserlistDiscussion",
     "RecentJobSeekerJob",
-    "MyTransactions"
+    "MyTransactions",
+    "UpdateDiscussionComment"
   ],
 });
 
@@ -417,7 +418,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query : queries.myTransactions.query,
       providesTags: ["MyTransactions"],
     }),
-
+    updateDiscussionComment : builder.mutation<any,any>({
+      query :(data) => queries.updateDiscussionComment.query(data),
+      invalidatesTags: ["UpdateDiscussionComment"],
+    })
   }),
 
   overrideExisting: true,
@@ -492,6 +496,7 @@ export const {
   useUpdateDiscussionMutation,
   useUserListDiscussionQuery,
   useRecentJobSeekerJobQuery,
-  useMyTransactionsQuery
+  useMyTransactionsQuery,
+  useUpdateDiscussionCommentMutation
 } = globalApi;
 export default globalApi;
