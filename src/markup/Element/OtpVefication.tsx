@@ -22,7 +22,17 @@ import { navigateSource } from "@/lib/action";
 const bnr = require("./../../images/background/bg6.jpg");
 
 interface RegisterData {
-  mobile_number: string;
+  data :{
+    otp :string;
+    mobile_number: string;
+  }
+}
+interface LoginData {
+  loggedInUser :{
+    otp : string;
+    mobile_number: string;
+  }
+
 }
 
 const OtpVefication = () => {
@@ -38,8 +48,8 @@ const OtpVefication = () => {
 
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
-  const [parsedDatas, setParsedDatas] = useState<RegisterData | null>(null);
-
+  const [parsedDatas, setParsedDatas] = useState<LoginData | null>(null);
+   console.log('parsedDatas', parsedDatas)
   // State to store OTP input and manage length
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
@@ -57,9 +67,10 @@ const OtpVefication = () => {
     if (data) {
       try {
         const parsedData = JSON.parse(data);
+        console.log('parsedData', parsedData)
 
         setParsedData(parsedData);
-        console.log("Parsed Data:", parsedDatas?.mobile_number);
+        console.log("Parsed Data:", parsedData?.data?.mobile_number);
       } catch (error) {
         console.error("Error parsing register data from localStorage", error);
       }
@@ -82,18 +93,21 @@ const OtpVefication = () => {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    // Validate OTP length before proceeding
-    if (otp.length !== 6) {
-      setOtpError("OTP must be exactly 6 digits.");
-      return;
-    }
-
+  // Validate OTP length for both user input (otp) and parsedData
+  const parsedOtp = parsedData?.data?.otp.toString().length;
+  console.log('parsedOtp', parsedOtp)
+  if ((otp.length !== 6 && !parsedOtp) || (parsedOtp && parsedOtp !== 6)) {
+    setOtpError("OTP must be exactly 6 digits.");
+    return;
+  }
     const payload = {
       ...verifyOtpState,
       mobile_number:
         loginState?.mobile_number ||
-        parsedData?.mobile_number ||
-        parsedDatas?.mobile_number,
+        parsedData?.data?.mobile_number ||
+        parsedDatas?.loggedInUser?.mobile_number,
+        otp :parsedData?.data?.otp || parsedDatas?.loggedInUser?.otp
+ 
     };
 
     // console.log("payload", payload);
@@ -105,6 +119,8 @@ const OtpVefication = () => {
         if (res?.data?.token) {
           saveToken(res.data.token, res.data);
         }
+         // Remove registerData from localStorage
+        localStorage.removeItem("registerData");
         navigateSource(endpoint);
       } else if (res.code === 401) {
         toast.error(res?.message, { theme: "colored" });
@@ -168,7 +184,7 @@ const OtpVefication = () => {
                         <input
                           type="number"
                           name="otp"
-                          value={otp}
+                          value={parsedData?.data?.otp || otp}
                           onChange={handleInputChange}
                           className={`form-control ${styles["lato-font"]} mb-2`}
                           placeholder="Enter OTP"

@@ -299,13 +299,13 @@ const SingleBlogSection = () => {
         >
           <div className="container">
             <div className="dez-bnr-inr-entry">
-              <h1 className="text-white">Blog Details</h1>
+              <h1 className="text-white">Discussion Details</h1>
               <div className="breadcrumb-row">
                 <ul className="list-inline">
                   <li>
                     <Link href="/">Home</Link>
                   </li>
-                  <li>Blog Details</li>
+                  <li>Discussion Details</li>
                 </ul>
               </div>
             </div>
@@ -314,7 +314,7 @@ const SingleBlogSection = () => {
         <div className="content-area">
           <div className="container">
             <div className="row">
-              <div className="col-lg-8 col-md-7 m-b10">
+              <div className="col-lg-12 col-md-8 m-b10">
                 <div className="blog-post blog-single blog-style-1">
                   <div className="dez-post-meta">
                     <ul className="d-flex align-items-center">
@@ -506,9 +506,9 @@ const SingleBlogSection = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-5 sticky-top">
+              {/* <div className="col-lg-4 col-md-5 sticky-top">
                 <Sidebar />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -20,6 +20,7 @@ import styles from "@/styles/JobDetailPopup.module.css";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formaterDate } from "@/utils/formateDate";
 import Link from "next/link";
+import parse from "html-react-parser";
 
 type JobDetailPopupType = {
   show: boolean;
@@ -368,7 +369,7 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
           <h5>Requirements</h5>
           <ul className={styles.requirements} style={{ paddingLeft: "1rem" }}>
             {requirements?.map((requirement: any, index: number) => (
-              <li key={index}>{requirement}</li>
+              <li key={index}>{parse(requirement)}</li>
             ))}
           </ul>
         </div>

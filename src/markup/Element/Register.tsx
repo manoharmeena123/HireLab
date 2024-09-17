@@ -77,7 +77,7 @@ const RegisterSection = () => {
     try {
       const res = await register(authState).unwrap();
       if (res.code === 200) {
-        localStorage.setItem("registerData", JSON.stringify(authState));
+        localStorage.setItem("registerData", JSON.stringify(res));
         dispatch(saveRegisterData(authState)); // Save the register data in store
         toast.success(res?.message, { theme: "colored" });
         navigateSource("/send-otp");

@@ -269,7 +269,7 @@ const LatestDiscussions = () => {
                         </span>
                       </div>
                       <div className="d-flex">
-                        <span
+                        {/* <span
                           className="mr-3"
                           style={{ cursor: "pointer" }}
                           onClick={() => handleLike(discussion.id)}
@@ -288,7 +288,7 @@ const LatestDiscussions = () => {
                             size="lg" // Increase the size of the heart icon
                           />{" "}
                           {discussion?.likes}
-                        </span>
+                        </span> */}
                         <span
                           className="mr-3"
                           style={{ cursor: "pointer" }}

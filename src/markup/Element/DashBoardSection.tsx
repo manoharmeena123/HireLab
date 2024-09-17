@@ -255,7 +255,7 @@ const DashboardSection = () => {
   };
 
   const viewDiscussionHandler = (title: string) => {
-    const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
+    const encodedTitle = encodeURIComponent(title.trim()).replace(/%20/g, "-");
     push(`/single-discussion?query=${encodedTitle}`);
   };
 
