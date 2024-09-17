@@ -7,7 +7,7 @@ import {
   useGetCountsQuery,
   useAddLikeDiscussionMutation,
 } from "@/store/global-store/global.query";
-import { useLoggedInUser } from "@/hooks/useLoggedInUser"
+import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formatDateTime } from "@/utils/formateDate";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
@@ -100,31 +100,30 @@ const LatestDiscussions = () => {
   };
 
   const handleLike = async (discussionId: number) => {
-    if(!user?.user){
+    if (!user?.user) {
       push("/login");
-    }else{
-       try {
-      const res = await addLikeDiscussion({
-        discussion_id: discussionId,
-      }).unwrap();
-      toast.success(res.message, { theme: "colored" });
+    } else {
+      try {
+        const res = await addLikeDiscussion({
+          discussion_id: discussionId,
+        }).unwrap();
+        toast.success(res.message, { theme: "colored" });
 
-      // Update local state to reflect like change immediately
-      setLikedDiscussions((prev) => {
-        const updatedLikes = new Set(prev);
-        if (updatedLikes.has(discussionId)) {
-          updatedLikes.delete(discussionId); // Unlike
-        } else {
-          updatedLikes.add(discussionId); // Like
-        }
-        return updatedLikes;
-      });
-    } catch (error: any) {
-      toast.error(error.message, { theme: "colored" });
-      console.error("Failed to like discussion:", error);
+        // Update local state to reflect like change immediately
+        setLikedDiscussions((prev) => {
+          const updatedLikes = new Set(prev);
+          if (updatedLikes.has(discussionId)) {
+            updatedLikes.delete(discussionId); // Unlike
+          } else {
+            updatedLikes.add(discussionId); // Like
+          }
+          return updatedLikes;
+        });
+      } catch (error: any) {
+        toast.error(error.message, { theme: "colored" });
+        console.error("Failed to like discussion:", error);
+      }
     }
-    }
-   
   };
 
   return (
@@ -134,9 +133,12 @@ const LatestDiscussions = () => {
         <div className="section-head d-flex justify-content-between align-items-center mb-4">
           <div className="me-sm-auto">
             <Link href={"/view-all-discussion"}>
-            <h2 style={{ fontWeight: "600", cursor:"pointer" }} className="mb-2">
-              Latest discussion
-            </h2>
+              <h2
+                style={{ fontWeight: "600", cursor: "pointer" }}
+                className="mb-2"
+              >
+                Latest discussion
+              </h2>
             </Link>
           </div>
           <div className="d-flex">
@@ -289,17 +291,32 @@ const LatestDiscussions = () => {
                           />{" "}
                           {discussion?.likes}
                         </span> */}
-                        <span
-                          className="mr-3"
-                          style={{ cursor: "pointer" }}
-                          onClick={() => viewJobHandler(discussion?.question)}
-                        >
-                          <FontAwesomeIcon
-                            icon={faCommentRegular}
-                            size="lg" // Use the same size as the heart icon
-                          />{" "}
-                          {discussion?.comments}
-                        </span>
+                        {discussion?.is_show == 1 && (
+                          <span
+                            className="mr-3"
+                            style={{
+                              cursor: "pointer",
+                              padding: "5px 10px",
+                              borderRadius: "4px",
+                              backgroundColor: "transparent", // Default background
+                              transition: "background-color 0.3s ease", // Smooth transition for hover effect
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = "#f0f0f0"; // Change background on hover
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor =
+                                "transparent"; // Revert background on hover out
+                            }}
+                            onClick={() => viewJobHandler(discussion?.question)}
+                          >
+                            <FontAwesomeIcon
+                              icon={faCommentRegular}
+                              size="lg" // Use the same size as the heart icon
+                            />{" "}
+                            {discussion?.comments_count}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
