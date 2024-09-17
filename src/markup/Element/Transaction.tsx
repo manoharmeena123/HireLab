@@ -215,7 +215,14 @@ const Transaction = () => {
                             CV Manager
                           </Link>
                         </li>
-
+                        <li>
+                          <Link
+                            href="/switch-plan"
+                          >
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
+                          </Link>
+                        </li>
                         <li>
                           <Link href="/transaction" className="active">
                             <i

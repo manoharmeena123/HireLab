@@ -58,15 +58,35 @@ const AppliedJobSection = () => {
   }, [user, designationOptions]);
 
   const handleLogout = async () => {
-    try {
-      await logout().unwrap();
-      removeToken();
-      navigateSource("/");
-    } catch (error) {
-      console.error("Logout failed:", error);
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out!",
+      cancelButtonText: "No, stay logged in",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await logout().unwrap();
+        removeToken();
+        navigateSource("/");
+        Swal.fire(
+          "Logged out!",
+          "You have been logged out successfully.",
+          "success"
+        );
+      } catch (error) {
+        console.error("Logout failed:", error);
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
+      }
     }
   };
-
   const handleDeleteJob = async (jobId: string) => {
     try {
       const result = await MySwal.fire({
@@ -170,13 +190,21 @@ const AppliedJobSection = () => {
                         </Link>
                       </li>
                       <li>
+                          <Link
+                            href={"/switch-plan"}
+                          >
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
+                          </Link>
+                        </li>
+                      <li>
                         <Link href={"/transaction"}>
                           <i className="fa fa-file-text-o" aria-hidden="true"></i>
                           <span>Transaction</span>
                         </Link>
                       </li>
                       <li>
-                        <Link href={"./"} onClick={handleLogout}>
+                        <Link href={"#"} onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
                           <span>Log Out</span>
                         </Link>

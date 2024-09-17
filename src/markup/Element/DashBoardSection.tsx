@@ -25,6 +25,7 @@ import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import Pagination from "./Pagination"; // Importing your existing Pagination component
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 // Type for creating discussion form data
@@ -72,7 +73,7 @@ const DashboardSection = () => {
   const [createFormData, setCreateFormData] = useState<CreateFormData>({
     question: "",
     description: "",
-    status: "",
+    status: "1", // Default value for status
   });
 
   const [editFormData, setEditFormData] = useState<EditFormData>({
@@ -134,20 +135,42 @@ const DashboardSection = () => {
 
   const handleCreateDiscussion = async () => {
     try {
-      await createDiscussion(createFormData);
-      refetch();
+     const res :any =  await createDiscussion(createFormData);
+     console.log('first', res)
+     if(res?.data?.code == 200){
+          refetch();
       Swal.fire({
         icon: "success",
         title: "Discussion Created Successfully!",
         showConfirmButton: false,
         timer: 1500,
       });
+      setCreateFormData({
+        question: "",
+        description: "",
+        status: "1", // Reset form fields to initial values
+      }); // Clear the form fields after successful submission
       setShowCreateModal(false); // Close modal after submission
-    } catch (error) {
+     }else if (res?.data?.code == 404){
       Swal.fire({
         icon: "error",
         title: "Error Creating Discussion",
-        text: "Failed to create discussion.",
+        text: res?.data?.data?.error?.question,
+        confirmButtonText: "OK",
+      });
+      setCreateFormData({
+        question: "",
+        description: "",
+        status: "1", // Reset form fields to initial values
+      }); // Clear the form fields after successful submission
+      setShowCreateModal(false);
+     }
+  
+    } catch (error :any) {
+      Swal.fire({
+        icon: "error",
+        title: "Error Creating Discussion",
+        text: error?.message,
         confirmButtonText: "OK",
       });
     }
@@ -202,6 +225,16 @@ const DashboardSection = () => {
         });
       }
     }
+  };
+
+  // Set edit form data when user clicks on the edit button
+  const handleShowEditModal = (discussion: any) => {
+    setEditFormData({
+      id: discussion.id,
+      question: discussion.question,
+      description: discussion.description,
+    });
+    setShowEditModal(true); // Open edit modal
   };
 
   const handleFormChange = (
@@ -636,55 +669,45 @@ const DashboardSection = () => {
         `}</style>
       </div>
 
-      {/* Modal for creating a discussion */}
-      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ask a Question</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Question</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={createFormData.question}
-                onChange={(e) => handleFormChange(e, "create")}
-                placeholder="Enter your question"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={createFormData.description}
-                onChange={(e) => handleFormChange(e, "create")}
-                placeholder="Enter description"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Status</Form.Label>
-              <Form.Control
-                type="text"
-                name="status"
-                value={createFormData.status}
-                onChange={(e) => handleFormChange(e, "create")}
-                placeholder="Enter status"
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCreateDiscussion}>
-            Submit
-          </Button>
-        </Modal.Footer>
-      </Modal>
+     {/* Modal for creating a discussion */}
+     <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Ask a Question</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Question</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="question"
+                  value={createFormData.question}
+                  onChange={(e) => handleFormChange(e, "create")}
+                  placeholder="Enter your question"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="description"
+                  value={createFormData.description}
+                  onChange={(e) => handleFormChange(e, "create")}
+                  placeholder="Enter description"
+                />
+              </Form.Group>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleCreateDiscussion}>
+              Submit
+            </Button>
+          </Modal.Footer>
+        </Modal>
 
       {/* Modal for editing a discussion */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>

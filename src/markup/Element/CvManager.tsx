@@ -172,7 +172,7 @@ const CvManager = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href={"/applied-jobs"}>
+                          <Link href={"/applied-job"}>
                             <i
                               className="fa fa-briefcase"
                               aria-hidden="true"
@@ -193,6 +193,14 @@ const CvManager = () => {
                               aria-hidden="true"
                             ></i>
                             <span>CV Manager</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href={"/switch-plan"}
+                          >
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
                           </Link>
                         </li>
                         <li>

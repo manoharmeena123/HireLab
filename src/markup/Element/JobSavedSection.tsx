@@ -169,6 +169,14 @@ const JobSavedSection = () => {
                           </Link>
                         </li>
                         <li>
+                          <Link
+                            href="/switch-plan"
+                          >
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
+                          </Link>
+                        </li>
+                        <li>
                           <Link href={"/transaction"}>
                             <i
                               className="fa fa-file-text-o"
