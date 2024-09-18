@@ -51,6 +51,8 @@ const SingleBlogSection = () => {
     { data: commentsData, isLoading: commentsLoading },
   ] = useGetCommentForQuetionMutation();
 
+  // console.log('commentsData', commentsData.data[0].is_show)
+
   const [createComment] = useCreateCommentMutation();
   const [getCommentForParentComment] = useGetCommentForParentCommentMutation();
   const [deleteCommentById] = useDeleteCommentByIdMutation();
@@ -399,7 +401,7 @@ const SingleBlogSection = () => {
 
                 <div className="clear" id="comment-list">
                   <div className="comments-area" id="comments">
-                    {commentsData?.data?.is_show == 0 && (
+                    {commentsData?.data[0]?.is_show == 1 && (
                       <>
                         {" "}
                         <h2 className="comments-title">Comments</h2>

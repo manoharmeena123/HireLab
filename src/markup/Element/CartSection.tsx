@@ -48,55 +48,56 @@ const CartSection = () => {
           };
   
           try {
-            // Create an order ID
+            // Create an order ID by calling your backend's order API
             const response = await fetch('/api/order', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                amount: Number(selectedPlan?.price) * 100,
+                amount: Number(selectedPlan?.price) * 100, // Amount in paise
                 currency: 'INR',
               }),
             });
+  
             const { orderId } = await response.json();
   
             // Start the Razorpay payment
             const options: RazorpayOptions = {
-              key: `rzp_test_6Yk0yEiSfOEYXv`,
-              amount: Number(selectedPlan?.price) * 100,
-              currency: 'INR',
+              key: `rzp_test_6Yk0yEiSfOEYXv`, // Replace with your test/live Razorpay key
+              amount: Number(selectedPlan?.price) * 100, // Amount in paise
+              currency: 'INR', // Currency
               name: selectedPlan.title,
               description: 'Membership Purchase',
-              order_id: orderId,
+              order_id: orderId, // Order ID from the backend
               handler: async function (response: any) {
-                console.log('response', response)
-                // Handle payment success
-                const data = {
-                  orderCreationId: orderId,
-                  razorpayPaymentId: response.razorpay_payment_id,
-                  razorpayOrderId: response.razorpay_order_id,
-                  razorpaySignature: response.razorpay_signature,
-                };
-                console.log('data', data)
+                // Handle successful payment, capture the payment using the capture API
+                console.log('Payment success:', response);
   
-                const verifyResponse = await fetch('/api/verify', {
+                const paymentData = {
+                  paymentId: response.razorpay_payment_id, // Razorpay payment ID
+                  amount: Number(selectedPlan?.price) * 100, // Amount in paise
+                  currency: 'INR', // Currency
+                };
+  
+                // Capture the payment by calling your capture API
+                const captureResponse = await fetch('/api/capture', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
-                  body: JSON.stringify(data),
+                  body: JSON.stringify(paymentData),
                 });
   
-                const result = await verifyResponse.json();
-                console.log('verifyResponse', result);
-                if (result.isOk) {
+                const captureResult = await captureResponse.json();
+                console.log('Capture result:', captureResult);
+  
+                if (captureResult.message === 'Payment captured successfully' || captureResult.alreadyCaptured) {
                   await saveMemberShip(payload).unwrap();
-                  alert("Payment succeeded");
-
-                  router.push('/dashboard-section');
+                  Swal.fire("Success", "Payment succeeded!", "success");
+                  router.push('/dashboard-section'); // Navigate to the dashboard after success
                 } else {
-                  alert("Payment verification failed");
+                  Swal.fire("Error", "Payment capture failed. Please try again.", "error");
                 }
               },
               prefill: {
@@ -108,12 +109,12 @@ const CartSection = () => {
               },
             };
   
+            // Open Razorpay checkout
             const paymentObject = new window.Razorpay(options);
             paymentObject.on('payment.failed', function (response: any) {
-              alert(response.error.description);
+              Swal.fire("Error", response.error.description, "error");
             });
             paymentObject.open();
-  
           } catch (error) {
             console.error("Failed to save membership", error);
           }
@@ -121,6 +122,8 @@ const CartSection = () => {
       });
     }
   };
+  
+  
   
   return (
     <>
