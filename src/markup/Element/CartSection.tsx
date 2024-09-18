@@ -42,13 +42,8 @@ const CartSection = () => {
         cancelButtonText: "No, cancel!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          // const payload = {
-          //   user_id: user.user.id.toString(),
-          //   membership_id: selectedPlan.id.toString(),
-          // };
-  
           try {
-            // Create an order ID by calling your backend's order API
+            // Create an order by calling the backend order API
             const response = await fetch('/api/order', {
               method: 'POST',
               headers: {
@@ -62,25 +57,22 @@ const CartSection = () => {
   
             const { orderId } = await response.json();
   
-            // Start the Razorpay payment
+            // Setup Razorpay payment options
             const options: RazorpayOptions = {
-              key: `rzp_test_6Yk0yEiSfOEYXv`, // Replace with your test/live Razorpay key
+              key: 'rzp_test_6Yk0yEiSfOEYXv', // Replace with your Razorpay test key
               amount: Number(selectedPlan?.price) * 100, // Amount in paise
               currency: 'INR', // Currency
               name: selectedPlan.title,
               description: 'Membership Purchase',
               order_id: orderId, // Order ID from the backend
-              handler: async function (response: any) {
-                // Handle successful payment, capture the payment using the capture API
-                console.log('Payment success:', response);
-  
+              handler: async (response: any) => {
+                // Capture payment and save membership
                 const paymentData = {
-                  paymentId: response.razorpay_payment_id, // Razorpay payment ID
-                  amount: Number(selectedPlan?.price) * 100, // Amount in paise
-                  currency: 'INR', // Currency
+                  paymentId: response.razorpay_payment_id,
+                  amount: Number(selectedPlan?.price) * 100,
+                  currency: 'INR',
                 };
   
-                // Capture the payment by calling your capture API
                 const captureResponse = await fetch('/api/capture', {
                   method: 'POST',
                   headers: {
@@ -90,26 +82,54 @@ const CartSection = () => {
                 });
   
                 const captureResult = await captureResponse.json();
-                console.log('Capture result:', captureResult);
   
-                if (captureResult.message === 'Payment captured successfully' || captureResult.alreadyCaptured) {
+                if (
+                  captureResult.message === 'Payment captured successfully' ||
+                  captureResult.alreadyCaptured
+                ) {
                   const payload = {
                     user_id: user.user.id.toString(),
                     membership_id: selectedPlan.id.toString(),
-                    amount :captureResult?.data?.amount,
-                    id:captureResult?.data?.id ,
-                    currency : captureResult?.data?.currency,
-                    status:captureResult?.data?.status,
-                    order_id :captureResult?.data?.order_id,
-                    card_id:captureResult?.data?.card?.id,
-                    network :captureResult?.data?.card?.network
+                    amount: captureResult.data.amount,
+                    id: captureResult.data.id,
+                    status: captureResult.data.status,
+                    order_id: captureResult.data.order_id,
+                    payment_type: captureResult.data.method,
+                    is_true: true,
                   };
-          
-                  await saveMemberShip(payload).unwrap();
-                  Swal.fire("Success", "Payment succeeded!", "success");
-                  router.push('/dashboard-section'); // Navigate to the dashboard after success
+  
+                  const res: any = await saveMemberShip(payload).unwrap();
+  
+                  if (res?.code === 200) {
+                    Swal.fire('Success', res.message, 'success');
+                    router.push('/dashboard-section'); // Navigate to dashboard
+                  } else if (res?.code === 401) {
+                    Swal.fire('Error', res.message, 'error');
+                  } else {
+                    Swal.fire('Error', 'Unexpected success response. Please check!', 'error');
+                  }
                 } else {
-                  Swal.fire("Error", "Payment capture failed. Please try again.", "error");
+                  // Handle failed membership saving
+                  const failedPayload = {
+                    user_id: user.user.id.toString(),
+                    membership_id: selectedPlan.id.toString(),
+                    amount: captureResult.data.amount,
+                    id: captureResult.data.id,
+                    status: captureResult.data.status,
+                    order_id: captureResult.data.order_id,
+                    payment_type: captureResult.data.method,
+                    is_true: false,
+                  };
+  
+                  const res: any = await saveMemberShip(failedPayload).unwrap();
+  
+                  if (res?.code === 200) {
+                    Swal.fire('Error', res.message, 'error');
+                  } else if (res?.code === 401) {
+                    Swal.fire('Error', res.message, 'error');
+                  } else {
+                    Swal.fire('Error', 'Payment capture failed. Please try again.', 'error');
+                  }
                 }
               },
               prefill: {
@@ -123,17 +143,19 @@ const CartSection = () => {
   
             // Open Razorpay checkout
             const paymentObject = new window.Razorpay(options);
-            paymentObject.on('payment.failed', function (response: any) {
-              Swal.fire("Error", response.error.description, "error");
+            paymentObject.on('payment.failed', (response: any) => {
+              Swal.fire('Error', response.error.description, 'error');
             });
             paymentObject.open();
           } catch (error) {
-            console.error("Failed to save membership", error);
+            console.error('Error in processing payment:', error);
+            Swal.fire('Error', 'Failed to initiate payment. Please try again.', 'error');
           }
         }
       });
     }
   };
+  
   
   
   
