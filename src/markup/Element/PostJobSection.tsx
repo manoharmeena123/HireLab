@@ -166,57 +166,78 @@ const PostJobSection = () => {
       );
     }
   };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to post this job.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, post it!",
-      cancelButtonText: "No, cancel",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await postJob(profileData).unwrap();
-        if (response.code == 200) {
-          Swal.fire({
-            icon: "success",
-            title: "Job Posted",
-            text: response?.message,
-          });
-          router.push("/manage-job");
-          await addNotificationToFirestore("New Job Posted", `job has been posted`);
-        } else if (response.code == 401) {
+  
+    // Check if user has membership
+    if (!user?.user?.membership) {
+      const membershipResult = await Swal.fire({
+        title: "No Membership Plan",
+        text: "You don't have any membership plan to apply for jobs. Would you like to buy one?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Buy Subscription",
+        cancelButtonText: "Go Back to Job",
+      });
+  
+      if (membershipResult.isConfirmed) {
+        // Redirect to the subscription page (cart)
+        router.push("/cart");
+      } else {
+        // Stay on the job posting page
+        return;
+      }
+    } else {
+      // Proceed with the job posting process
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You are about to post this job.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, post it!",
+        cancelButtonText: "No, cancel",
+      });
+  
+      if (result.isConfirmed) {
+        try {
+          const response = await postJob(profileData).unwrap();
+          if (response.code == 200) {
+            Swal.fire({
+              icon: "success",
+              title: "Job Posted",
+              text: response?.message,
+            });
+            router.push("/manage-job");
+            await addNotificationToFirestore("New Job Posted", "A job has been posted");
+          } else if (response.code == 401) {
+            Swal.fire({
+              icon: "error",
+              title: "Unauthorized",
+              text: response?.message,
+            });
+          } else if (response.code == 404) {
+            console.error("Error posting job:", response);
+            Swal.fire({
+              icon: "error",
+              title: "Not Found",
+              text: response?.message,
+            });
+            dispatch(setPostJobErrors(response.errors));
+          } else {
+            console.error("Unexpected error format:", response);
+          }
+        } catch (err: any) {
+          console.error("Error posting job:", err);
           Swal.fire({
             icon: "error",
-            title: "Unauthorized",
-            text: response?.message,
+            title: "Error",
+            text: err?.message,
           });
-        } else if (response.code == 404) {
-          console.error("Error posting job:", response);
-          Swal.fire({
-            icon: "error",
-            title: "Not Found",
-            text: response?.message,
-          });
-          dispatch(setPostJobErrors(response.errors));
-        } else {
-          console.error("Unexpected error format:", response);
         }
-      } catch (err: any) {
-        console.error("Error posting job:", err);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err?.message,
-        });
       }
     }
   };
+  
 
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);

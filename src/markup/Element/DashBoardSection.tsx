@@ -268,6 +268,27 @@ const DashboardSection = () => {
     push(`/cart?plan=${membershipId}`);
   };
 
+
+  // Membership check before allowing discussion creation
+  const handleAskQuestion = () => {
+    if (!user?.user?.membership) {
+      Swal.fire({
+        title: "No Membership Plan",
+        text: "You need a membership to create a discussion. Would you like to buy one?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Buy Subscription",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          push("/cart");
+        }
+      });
+    } else {
+      setShowCreateModal(true);
+    }
+  };
+
   return (
     <>
       {recentLoading && eventLoading && discussionLoading && <Loading />}
@@ -650,7 +671,7 @@ const DashboardSection = () => {
                         background: "rgb(42, 99, 16)",
                         border: "none",
                       }}
-                      onClick={() => setShowCreateModal(true)} // Show create modal
+                      onClick={handleAskQuestion} // Use the function to check for membership
                     >
                       Ask a Question
                     </button>
