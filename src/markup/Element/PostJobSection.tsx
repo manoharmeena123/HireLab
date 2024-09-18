@@ -31,6 +31,7 @@ import {
   useGetCtcDataQuery,
   useGetDesignationQuery,
   useGetSectorQuery,
+  useGetExperienceQuery
 } from "@/store/global-store/global.query";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -67,7 +68,8 @@ const PostJobSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-
+const {data :getExperience} = useGetExperienceQuery();
+console.log('getExperience', getExperience)
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -832,8 +834,8 @@ const PostJobSection = () => {
                             className="job-time d-flex gap-3 mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {["Fresher Only", "Experience Only", "Any"].map(
-                              (text, index) => (
+                            {getExperience?.data?.map(
+                              (text :any, index :any) => (
                                 <span
                                   key={index}
                                   style={spanStyles(
@@ -861,7 +863,7 @@ const PostJobSection = () => {
                                     )
                                   }
                                 >
-                                  {text}
+                                  {text?.title}
                                 </span>
                               )
                             )}

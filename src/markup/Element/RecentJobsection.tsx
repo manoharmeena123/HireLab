@@ -199,7 +199,7 @@ const RecentJobsection = () => {
               </div>
             </div>
             <div className="col-lg-3">
-              <div className="sticky-top">xt
+              <div className="sticky-top">
                 <div className="candidates-are-sys m-b30">
                   {lastTestimonial && (
                     <div className="candidates-bx">

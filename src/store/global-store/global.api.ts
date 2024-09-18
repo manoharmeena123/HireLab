@@ -7,6 +7,7 @@ import {
   SaveContactData,
   WritableSingleBlogCommentPost,
 } from "@/types/index";
+import { query } from "firebase/firestore";
 import { url } from "inspector";
 
 export const queries = {
@@ -366,6 +367,12 @@ export const queries = {
   myTransactions :{
     query :() => ({
       url :"api/my-transcations",
+      method :"GET"
+    })
+  },
+  getExperience :{
+    query :() =>({
+      url :'api/get-experiences',
       method :"GET"
     })
   },

@@ -42,10 +42,10 @@ const CartSection = () => {
         cancelButtonText: "No, cancel!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const payload = {
-            user_id: user.user.id.toString(),
-            membership_id: selectedPlan.id.toString(),
-          };
+          // const payload = {
+          //   user_id: user.user.id.toString(),
+          //   membership_id: selectedPlan.id.toString(),
+          // };
   
           try {
             // Create an order ID by calling your backend's order API
@@ -93,6 +93,18 @@ const CartSection = () => {
                 console.log('Capture result:', captureResult);
   
                 if (captureResult.message === 'Payment captured successfully' || captureResult.alreadyCaptured) {
+                  const payload = {
+                    user_id: user.user.id.toString(),
+                    membership_id: selectedPlan.id.toString(),
+                    amount :captureResult?.data?.amount,
+                    id:captureResult?.data?.id ,
+                    currency : captureResult?.data?.currency,
+                    status:captureResult?.data?.status,
+                    order_id :captureResult?.data?.order_id,
+                    card_id:captureResult?.data?.card?.id,
+                    network :captureResult?.data?.card?.network
+                  };
+          
                   await saveMemberShip(payload).unwrap();
                   Swal.fire("Success", "Payment succeeded!", "success");
                   router.push('/dashboard-section'); // Navigate to the dashboard after success

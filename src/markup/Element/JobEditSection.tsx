@@ -35,11 +35,10 @@ import {
   useGetDesignationQuery,
   useGetSectorQuery,
   useGetJobByIdMutation,
+  useGetExperienceQuery,
 } from "@/store/global-store/global.query";
-import { useGetManageJobQuery } from '@/app/manage-job/store/manage-job.query'
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
-import Loading from "@/components/Loading";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
@@ -77,12 +76,10 @@ const JobEditSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-    const {
-      data: jobsData,
-      error: jobsError,
-      isLoading: jobsLoading,
-      refetch: manageRefetch,
-    } = useGetManageJobQuery();
+  const {
+    data: getExperience,
+  } = useGetExperienceQuery();
+
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
 
@@ -244,7 +241,6 @@ const JobEditSection = () => {
         if (response.code == 200) {
           toast.success("Job updated successfully!", { theme: "colored" });
           await addNotificationToFirestore("Job updated", `job has been updated`);
-          manageRefetch()
           router.push("/manage-job");
         } else if (response.code == 401) {
           toast.error(response.message, { theme: "colored" });
@@ -834,8 +830,8 @@ const JobEditSection = () => {
                             className="job-time d-flex gap-3 mr-auto"
                             style={{ gap: "1rem" }}
                           >
-                            {["Fresher Only", "Experience Only", "Any"].map(
-                              (text, index) => (
+                            {getExperience?.data?.map(
+                              (text :any, index :any) => (
                                 <span
                                   key={index}
                                   style={spanStyles(
@@ -863,7 +859,7 @@ const JobEditSection = () => {
                                     )
                                   }
                                 >
-                                  {text}
+                                  {text?.title}
                                 </span>
                               )
                             )}
