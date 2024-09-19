@@ -86,11 +86,19 @@ const DashboardSection = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of jobs per page
 
-  // Paginate jobs
-  const totalJobs = recentJob?.data?.length || 0;
+  // Paginate and sort jobs by 'created_at' in descending order
+  const sortedJobs = recentJob?.data
+    ?.slice()
+    ?.sort(
+      (a: RecentJobData, b: RecentJobData) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+
+  const totalJobs = sortedJobs?.length || 0;
   const indexOfLastJob = currentPage * itemsPerPage;
   const indexOfFirstJob = indexOfLastJob - itemsPerPage;
-  const currentJobs = recentJob?.data?.slice(indexOfFirstJob, indexOfLastJob) || [];
+  const currentJobs =
+    sortedJobs?.slice(indexOfFirstJob, indexOfLastJob) || [];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -135,38 +143,36 @@ const DashboardSection = () => {
 
   const handleCreateDiscussion = async () => {
     try {
-     const res :any =  await createDiscussion(createFormData);
-     console.log('first', res)
-     if(res?.data?.code == 200){
-          refetch();
-      Swal.fire({
-        icon: "success",
-        title: "Discussion Created Successfully!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      setCreateFormData({
-        question: "",
-        description: "",
-        status: "1", // Reset form fields to initial values
-      }); // Clear the form fields after successful submission
-      setShowCreateModal(false); // Close modal after submission
-     }else if (res?.data?.code == 404){
-      Swal.fire({
-        icon: "error",
-        title: "Error Creating Discussion",
-        text: res?.data?.data?.error?.question,
-        confirmButtonText: "OK",
-      });
-      setCreateFormData({
-        question: "",
-        description: "",
-        status: "1", // Reset form fields to initial values
-      }); // Clear the form fields after successful submission
-      setShowCreateModal(false);
-     }
-  
-    } catch (error :any) {
+      const res: any = await createDiscussion(createFormData);
+      if (res?.data?.code == 200) {
+        refetch();
+        Swal.fire({
+          icon: "success",
+          title: "Discussion Created Successfully!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        setCreateFormData({
+          question: "",
+          description: "",
+          status: "1", // Reset form fields to initial values
+        });
+        setShowCreateModal(false); // Close modal after submission
+      } else if (res?.data?.code == 404) {
+        Swal.fire({
+          icon: "error",
+          title: "Error Creating Discussion",
+          text: res?.data?.data?.error?.question,
+          confirmButtonText: "OK",
+        });
+        setCreateFormData({
+          question: "",
+          description: "",
+          status: "1", // Reset form fields to initial values
+        });
+        setShowCreateModal(false);
+      }
+    } catch (error: any) {
       Swal.fire({
         icon: "error",
         title: "Error Creating Discussion",
@@ -268,7 +274,6 @@ const DashboardSection = () => {
     push(`/cart?plan=${membershipId}`);
   };
 
-
   // Membership check before allowing discussion creation
   const handleAskQuestion = () => {
     if (!user?.user?.membership) {
@@ -288,7 +293,6 @@ const DashboardSection = () => {
       setShowCreateModal(true);
     }
   };
-
   return (
     <>
       {recentLoading && eventLoading && discussionLoading && <Loading />}
@@ -297,65 +301,93 @@ const DashboardSection = () => {
           <div className="section-full bg-white browse-job p-b50">
             <div className="ds-wrap">
               <div className="row">
-                <div className="col-lg-9">
-                  <h3 className="text-center mt-5" style={{ fontWeight: "600px", fontSize: "bold" }}>
+              <div className="col-lg-9">
+                  <h3
+                    className="text-center mt-5"
+                    style={{ fontWeight: "600px", fontSize: "bold" }}
+                  >
                     Recent Jobs
                   </h3>
                   <div>
                     <ul className="post-job-bx" style={{ padding: "5px" }}>
-                      {currentJobs?.map((item: RecentJobData, index: number) => (
-                        <li key={index}>
-                          <div className="post-bx">
-                            <div className="d-flex m-b30">
-                              <div className="job-post-info">
-                                <h4 style={{ cursor: "pointer" }} className="text-secondry" onClick={() => viewJobHandler(item.id)}>
-                                  <Link href="">{item?.job_title}</Link>
-                                </h4>
-                                <ul>
-                                  <li>
-                                    <i className="fa fa-map-marker"></i>
-                                    {item?.address}
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-bookmark-o"></i>
-                                    {item?.location?.title}
-                                  </li>
-                                  <li>
-                                    <i className="fa fa-clock-o"></i> Published {formaterDate(item?.created_at)}
-                                  </li>
-                                </ul>
+                      {currentJobs?.map(
+                        (item: RecentJobData, index: number) => (
+                          <li key={index}>
+                            <div className="post-bx">
+                              <div className="d-flex m-b30">
+                                <div className="job-post-info">
+                                  <h4
+                                    style={{ cursor: "pointer" }}
+                                    className="text-secondry"
+                                    onClick={() => viewJobHandler(item.id)}
+                                  >
+                                    <Link href="">
+                                      {item?.job_title}
+                                    </Link>
+                                  </h4>
+                                  <ul>
+                                    <li>
+                                      <i className="fa fa-map-marker"></i>
+                                      {item?.address}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-bookmark-o"></i>
+                                      {item?.location?.title}
+                                    </li>
+                                    <li>
+                                      <i className="fa fa-clock-o"></i>{" "}
+                                      Published{" "}
+                                      {formaterDate(item?.created_at)}
+                                    </li>
+                                  </ul>
+                                </div>
                               </div>
-                            </div>
-                            <div className="job-time m-t15 m-b10">
-                              {item.tags &&
-                                item.tags.split(",").map((tag, index) => (
-                                  <Link key={index} href="#" className="mr-1">
-                                    <span>{tag.trim()}</span>
+                              <div className="job-time m-t15 m-b10">
+                                {item.tags &&
+                                  item.tags
+                                    .split(",")
+                                    .map((tag, index) => (
+                                      <Link
+                                        key={index}
+                                        href="#"
+                                        className="mr-1"
+                                      >
+                                        <span>{tag.trim()}</span>
+                                      </Link>
+                                    ))}
+                              </div>
+                              <div className="d-flex">
+                                <div className="job-time mr-auto">
+                                  <Link href="">
+                                    <span>{item?.location?.title}</span>
                                   </Link>
-                                ))}
-                            </div>
-                            <div className="d-flex">
-                              <div className="job-time mr-auto">
-                                <Link href="">
-                                  <span>{item?.location?.title}</span>
-                                </Link>
+                                </div>
+                                <div className="salary-bx">
+                                  <span className="ctc-badge">
+                                    <i className="fa fa-money"></i>{" "}
+                                    {getCtcTitleById(item.ctc)}
+                                  </span>
+                                </div>
                               </div>
-                              <div className="salary-bx">
-                                <span className="ctc-badge">
-                                  <i className="fa fa-money"></i> {getCtcTitleById(item.ctc)}
-                                </span>
-                              </div>
+                              <label
+                                className={`like-btn ${
+                                  likedJobs.includes(
+                                    item.id.toString()
+                                  )
+                                    ? "liked"
+                                    : ""
+                                }`}
+                                onClick={() =>
+                                  handleLikeToggle(item.id.toString())
+                                }
+                              >
+                                <input type="checkbox" />
+                                <span className="checkmark"></span>
+                              </label>
                             </div>
-                            <label
-                              className={`like-btn ${likedJobs.includes(item.id.toString()) ? "liked" : ""}`}
-                              onClick={() => handleLikeToggle(item.id.toString())}
-                            >
-                              <input type="checkbox" />
-                              <span className="checkmark"></span>
-                            </label>
-                          </div>
-                        </li>
-                      ))}
+                          </li>
+                        )
+                      )}
                     </ul>
                     {/* Pagination component */}
                     <Pagination
@@ -522,7 +554,7 @@ const DashboardSection = () => {
                                         width: "20px",
                                         height: "20px",
                                       }}
-                                      onClick={() => {}}
+                                     
                                     >
                                       <path
                                         d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"

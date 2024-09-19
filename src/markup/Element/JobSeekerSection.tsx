@@ -19,6 +19,7 @@ import Loading from "@/components/Loading";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
 import { Modal, Button } from "react-bootstrap"; // Importing modal from react-bootstrap
+import { navigateSource } from "@/lib/action";
 
 interface OptionType {
   value: string;
@@ -46,7 +47,7 @@ const JobSeekerSection = () => {
   const [resumeName, setResumeName] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
-
+   const [saveLoading, setSaveLoading] = useState(false)
   const [profileForm, setProfileForm] = useState<WritableProfileFormData>({
     name: "",
     email: "" || null,
@@ -320,10 +321,13 @@ const validateForm = () => {
     });
 
     try {
+      setSaveLoading(true)
       const res = await postProfile(formData).unwrap();
       toast.success(res?.message);
       refetch();
       setShowModal(false); // Close modal after successful submission
+      setSaveLoading(false)
+      navigateSource("/dashboard-section")
     } catch (error: any) {
       console.log("error", error);
       toast.error(error.message || "Failed to save profile.");
@@ -407,6 +411,7 @@ const validateForm = () => {
                               name="email"
                               value={profileForm.email || ""}
                               onChange={handleInputChange}
+                              readOnly={true}
                             />
                             {validationErrors.email && <div className="invalid-feedback">{validationErrors.email}</div>}
                           </div>
@@ -423,6 +428,7 @@ const validateForm = () => {
                               value={profileForm.mobile_number || ""}
                               onChange={handleInputChange}
                               maxLength={10} // Limit input length to 10 digits
+                              readOnly={true}
                             />
                             {validationErrors.mobile_number && <div className="invalid-feedback">{validationErrors.mobile_number}</div>}
                           </div>
@@ -600,7 +606,7 @@ const validateForm = () => {
                           </div>
                         </div>
                       </div>
-                      <button type="submit" className="site-button">Save Changes</button>
+                      <button type="submit" className="site-button">{saveLoading ? "Loading" :"Save Changes"}</button>
                     </form>
                   </div>
                 </div>
