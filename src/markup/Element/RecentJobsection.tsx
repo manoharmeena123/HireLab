@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";
@@ -20,6 +20,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import parse from "html-react-parser";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Loading from "@/components/Loading";
+import Pagination from "./Pagination"; // Import the Pagination component
 
 const RecentJobsection = () => {
   const { data: recentJob, isLoading: recentJobLoading } =
@@ -34,6 +35,9 @@ const RecentJobsection = () => {
   const { data: testimonialData } = useGetTestimonialsQuery();
   const { data: savedJob, refetch: savedJobRefetch } = useGetSavedJobQuery();
   const { data: createAccount } = useCreateAccountQuery();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of jobs per page
 
   const lastTestimonial = testimonialData?.data?.slice(-1)[0];
   const savedJobsMap = new Map(
@@ -98,6 +102,12 @@ const RecentJobsection = () => {
     push(`/job-detail?jobId=${id}`);
   };
 
+  // Pagination logic
+  const totalJobs = recentJob?.data?.length || 0;
+  const indexOfLastJob = currentPage * itemsPerPage;
+  const indexOfFirstJob = indexOfLastJob - itemsPerPage;
+  const currentJobs = recentJob?.data?.slice(indexOfFirstJob, indexOfLastJob);
+
   return (
     <>
       {recentJobLoading && isSavingLoading && isDeletingLoading && <Loading />}
@@ -121,7 +131,7 @@ const RecentJobsection = () => {
           <div className="row">
             <div className="col-lg-9">
               <ul className="post-job-bx browse-job recent-job-scroll-mob">
-                {recentJob?.data?.map((item: RecentJobData, index: number) => (
+                {currentJobs?.map((item: RecentJobData, index: number) => (
                   <li key={index}>
                     {item && (
                       <div className="post-bx">
@@ -187,16 +197,13 @@ const RecentJobsection = () => {
                   </li>
                 ))}
               </ul>
-              <div className="m-t30">
-                <div className="d-flex">
-                  <Link className="site-button button-sm mr-auto" href="">
-                    <i className="ti-arrow-left"></i> Prev
-                  </Link>
-                  <Link className="site-button button-sm" href="#">
-                    Next <i className="ti-arrow-right"></i>
-                  </Link>
-                </div>
-              </div>
+              {/* Pagination Component */}
+              <Pagination
+                currentPage={currentPage}
+                itemsPerPage={itemsPerPage}
+                totalItems={totalJobs}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
             </div>
             <div className="col-lg-3">
               <div className="sticky-top">
