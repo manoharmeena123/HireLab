@@ -326,8 +326,8 @@ const validateForm = () => {
       toast.success(res?.message);
       refetch();
       setShowModal(false); // Close modal after successful submission
-      setSaveLoading(false)
       navigateSource("/dashboard-section")
+      setSaveLoading(false)
     } catch (error: any) {
       console.log("error", error);
       toast.error(error.message || "Failed to save profile.");
