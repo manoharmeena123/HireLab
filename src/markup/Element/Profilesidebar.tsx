@@ -140,21 +140,30 @@ const Profilesidebar = ({
               </li>
               <li>
                 <Link
+                  href="/job-seeker"
+                  onClick={(e) => handleNavigation(e, "/job-seeker")}
+                  className="active"
+                >
+                  <i className="fa fa-user-o" aria-hidden="true"></i>
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/post-job"
+                  onClick={(e) => handleNavigation(e, "/post-job")}
+                >
+                  <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                  Post a Job
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/job-posted"
                   onClick={(e) => handleNavigation(e, "/job-posted")}
                 >
                   <i  className="fa fa-briefcase" aria-hidden="true"></i>
                   Job Posted
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/profile"
-                  onClick={(e) => handleNavigation(e, "/profile")}
-                  className="active"
-                >
-                  <i className="fa fa-user-o" aria-hidden="true"></i>
-                  Profile
                 </Link>
               </li>
               <li>

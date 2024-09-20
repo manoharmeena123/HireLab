@@ -31,7 +31,7 @@ import {
   useGetCtcDataQuery,
   useGetDesignationQuery,
   useGetSectorQuery,
-  useGetExperienceQuery
+  useGetExperienceQuery,
 } from "@/store/global-store/global.query";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -68,8 +68,8 @@ const PostJobSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-const {data :getExperience} = useGetExperienceQuery();
-console.log('getExperience', getExperience)
+  const { data: getExperience } = useGetExperienceQuery();
+  console.log("getExperience", getExperience);
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
     Array(3).fill(false)
@@ -170,7 +170,7 @@ console.log('getExperience', getExperience)
   };
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
+
     // Check if user has membership
     if (!user?.user?.membership) {
       const membershipResult = await Swal.fire({
@@ -181,7 +181,7 @@ console.log('getExperience', getExperience)
         confirmButtonText: "Buy Subscription",
         cancelButtonText: "Go Back to Job",
       });
-  
+
       if (membershipResult.isConfirmed) {
         // Redirect to the subscription page (cart)
         router.push("/cart");
@@ -199,7 +199,7 @@ console.log('getExperience', getExperience)
         confirmButtonText: "Yes, post it!",
         cancelButtonText: "No, cancel",
       });
-  
+
       if (result.isConfirmed) {
         try {
           const response = await postJob(profileData).unwrap();
@@ -210,7 +210,10 @@ console.log('getExperience', getExperience)
               text: response?.message,
             });
             router.push("/manage-job");
-            await addNotificationToFirestore("New Job Posted", "A job has been posted");
+            await addNotificationToFirestore(
+              "New Job Posted",
+              "A job has been posted"
+            );
           } else if (response.code == 401) {
             Swal.fire({
               icon: "error",
@@ -239,7 +242,6 @@ console.log('getExperience', getExperience)
       }
     }
   };
-  
 
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
@@ -449,21 +451,22 @@ console.log('getExperience', getExperience)
                         </p>
                       </div>
                     </div>
+                    {/* Sidebar Links */}
                     <ul>
                       <li>
-                        <Link href="/manage-job">
+                        <Link href="/dashboard-section">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Dashboard</span>
+                          Dashboard
                         </Link>
                       </li>
                       <li>
-                        <Link href="/job-poster">
+                        <Link href="/job-seeker">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
                           <span>Profile</span>
                         </Link>
                       </li>
                       <li>
-                        <Link className="active" href="/post-job">
+                        <Link href="/post-job" className="active">
                           <i
                             className="fa fa-file-text-o"
                             aria-hidden="true"
@@ -472,18 +475,59 @@ console.log('getExperience', getExperience)
                         </Link>
                       </li>
                       <li>
-                        <Link href="/credit-earned">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Credit Earned</span>
+                        <Link href="/job-posted">
+                          <i className="fa fa-briefcase" aria-hidden="true"></i>
+                          Job Posted
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link href="/manage-job">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Manage Jobs</span>
+                      <li>
+                        <Link href="/my-resume">
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
+                          My Resume
                         </Link>
-                      </li> */}
-
+                      </li>
+                      <li>
+                        <Link href="/saved-jobs">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          Saved Jobs
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/applied-job">
+                          <i className="fa fa-briefcase" aria-hidden="true"></i>
+                          Applied Jobs
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/job-alert">
+                          <i className="fa fa-bell-o" aria-hidden="true"></i>
+                          Job Alerts
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/cv-manager">
+                          <i className="fa fa-id-card-o" aria-hidden="true"></i>
+                          CV Manager
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/switch-plan">
+                          <i className="fa fa-money" aria-hidden="true"></i>
+                          Switch Plan
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/transaction">
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
+                          <span>Transaction</span>
+                        </Link>
+                      </li>
                       <li>
                         <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
@@ -835,7 +879,7 @@ console.log('getExperience', getExperience)
                             style={{ gap: "1rem" }}
                           >
                             {getExperience?.data?.map(
-                              (text :any, index :any) => (
+                              (text: any, index: any) => (
                                 <span
                                   key={index}
                                   style={spanStyles(

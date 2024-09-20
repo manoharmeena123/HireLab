@@ -150,12 +150,33 @@ const AppliedJobSection = () => {
                       </div>
                     </div>
                     <ul>
-                      <li>
-                        <Link href={"/job-seeker"}>
-                          <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span>Profile</span>
-                        </Link>
-                      </li>
+                    <li>
+                          <Link href="/dashboard-section">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Dashboard</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/job-seeker"}>
+                            <i className="fa fa-user-o" aria-hidden="true"></i>
+                            <span>Profile</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/post-job">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Post A job</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/job-posted">
+                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                            Job Posted
+                          </Link>
+                        </li>
                       <li>
                         <Link href={"/jobs-my-resume"}>
                           <i
