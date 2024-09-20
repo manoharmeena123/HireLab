@@ -179,6 +179,7 @@ const SingleEvent = () => {
   const handleBuyPass = async (event: any) => {
     setSelectedEvent(event);
     setProcessingEventId(event.id);
+  
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to buy this pass?",
@@ -190,12 +191,12 @@ const SingleEvent = () => {
     });
   
     if (result.isConfirmed) {
-      const event_id = event?.id.toString();
+      const event_id = event?.id?.toString();
       const amount = event?.amount;
   
       if (event_id && amount) {
         try {
-          // Fetch the Razorpay order details from your backend
+          // Fetch Razorpay order details from the backend
           const response = await fetch('/api/order', {
             method: 'POST',
             headers: {
@@ -207,58 +208,77 @@ const SingleEvent = () => {
             }),
           });
   
-          const { orderId, key, currency } = await response.json();
+          if (!response.ok) {
+            throw new Error('Failed to create order. Please try again.');
+          }
+  
+          const jsonResponse = await response.json();
+          const { orderId } = jsonResponse;
   
           // Create a new Razorpay instance
           const options = {
-            key: key, // Razorpay key
+            key: 'rzp_test_6Yk0yEiSfOEYXv', // Replace with your Razorpay key
             amount: Number(amount) * 100, // Amount in paise
-            currency: 'INR', // Currency
+            currency: 'INR',
             name: event?.title,
             description: "Event Pass Purchase",
-            order_id: orderId,
+            order_id: orderId, // Razorpay Order ID
             handler: async function (response: any) {
-              // Step 1: Verify payment signature
               try {
-                const verifyRes = await fetch('/api/verify-payment', {
+                // Capture payment directly
+                const captureRes = await fetch('/api/capture', {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_signature: response.razorpay_signature,
+                    paymentId: response.razorpay_payment_id,
+                    amount: Number(amount) * 100, // Amount in paise
                   }),
                 });
   
-                const verifyData = await verifyRes.json();
-  
-                if (verifyData.success) {
-                  // Step 2: Capture the payment
-                  const captureRes = await fetch('/api/capture-payment', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      payment_id: response.razorpay_payment_id,
-                      amount: Number(amount) * 100, // Amount in paise
-                    }),
-                  });
-  
-                  const captureData = await captureRes.json();
-  
-                  if (captureData.success) {
-                    Swal.fire("Purchased!", "Your pass has been successfully purchased and captured.", "success");
-                  } else {
-                    throw new Error("Payment capture failed");
-                  }
-                } else {
-                  throw new Error("Payment verification failed");
+                if (!captureRes.ok) {
+                  throw new Error('Payment capture failed. Please try again.');
                 }
-              } catch (error: any) {
-                Swal.fire("Error", `Payment verification failed: ${error.message}`, "error");
+  
+                const captureData = await captureRes.json();
+  
+                if (captureData.message === 'Payment captured successfully' || captureData.alreadyCaptured) {
+                  const payload = {
+                    event_id: event_id,
+                    amount: captureData.data.amount,
+                    id: captureData.data.id,
+                    status: captureData.data.status,
+                    order_id: captureData.data.order_id,
+                    payment_type: captureData.data.method,
+                    is_true: true,
+                  };
+  
+                  await buyPassForEvent(payload).unwrap();
+                  Swal.fire("Purchased!", "Your pass was successfully purchased!", "success");
+                } else {
+                  throw new Error('Payment capture failed.');
+                }
+              } catch (error) {
+                // Call buyPassForEvent in failure case
+                const failedPayload = {
+                  event_id: event_id,
+                  amount: Number(amount) * 100,
+                  id: response.razorpay_payment_id,
+                  status: 'failed',
+                  order_id: response.razorpay_order_id,
+                  payment_type: 'unknown',
+                  is_true: false,
+                };
+  
+                // Always call the API, even if payment fails
+                try {
+                  await buyPassForEvent(failedPayload).unwrap();
+                } catch (apiError) {
+                  Swal.fire('Error', `Failed to update pass in the API: ${apiError.message}`, 'error');
+                }
+  
+                Swal.fire('Error', `Payment failed: ${error.message}`, 'error');
               }
             },
             prefill: {
@@ -266,21 +286,24 @@ const SingleEvent = () => {
               email: user?.user?.email, // User's email
             },
             theme: {
-              color: "#2a6310",
+              color: '#2a6310',
             },
           };
   
           const rzp = new (window as any).Razorpay(options);
           rzp.open();
-        } catch (error: any) {
-          Swal.fire("Error", `Failed to initialize payment: ${error.message}`, "error");
+        } catch (error) {
+          Swal.fire('Error', `Failed to initialize payment: ${error.message}`, 'error');
         }
       } else {
-        Swal.fire("Error", "Event ID or amount is missing.", "error");
+        Swal.fire('Error', 'Event ID or amount is missing.', 'error');
       }
     }
     setProcessingEventId(null);
   };
+  
+  
+  
   
 
   const mapDescriptionWithIndex = (description: string) => {

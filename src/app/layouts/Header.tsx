@@ -237,6 +237,9 @@ const Header = () => {
                     <li className="">
                       <Link href="/single-event">Meetup</Link>
                     </li>
+                    <li className="">
+                      <Link href="/view-all-discussion">Discussion</Link>
+                    </li>
                   </>
                 ) : (
                   <>
