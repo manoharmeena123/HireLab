@@ -1,11 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { Modal, Button, Form } from "react-bootstrap"; // Importing react-bootstrap components
-
 import {
   useRecentJobSeekerJobQuery,
   usePostSaveJobMutation,
@@ -24,9 +23,9 @@ import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import Pagination from "./Pagination"; // Importing your existing Pagination component
+import RangeSlider from "react-range-slider-input"; // CTC Range Slider
+import "react-range-slider-input/dist/style.css"; // Range slider styling
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-
-var bnr = require("./../../images/banner/bnr1.jpg");
 
 // Type for creating discussion form data
 type CreateFormData = {
@@ -41,6 +40,14 @@ type EditFormData = {
   question: string;
   description: string;
 };
+
+interface Filters {
+  experience: string[];
+  location: string[];
+  education: string[];
+  cities: string[];
+  jobTitles: string[];
+}
 
 const DashboardSection = () => {
   const { user } = useLoggedInUser();
@@ -82,32 +89,111 @@ const DashboardSection = () => {
     description: "",
   });
 
+  // State for filters
+  const [filters, setFilters] = useState<Filters>({
+    experience: [],
+    location: [],
+    education: [],
+    cities: [],
+    jobTitles: [],
+  });
+
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of jobs per page
-  type TimeFilter = "LastMonth" | "LastWeek" | "LastDay" | "All";
-  const [timeFilter, setTimeFilter] = useState<TimeFilter>("All");
 
-  // Helper functions to filter jobs based on time period
-  const filterByTimePeriod = (job: RecentJobData) => {
-    const jobDate = dayjs(job.created_at);
-    const now = dayjs();
+  // CTC filter range
+  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]); // Default CTC range
 
-    switch (timeFilter) {
-      case "LastMonth":
-        return jobDate.isAfter(now.subtract(1, "month"));
-      case "LastWeek":
-        return jobDate.isAfter(now.subtract(1, "week"));
-      case "LastDay":
-        return jobDate.isAfter(now.subtract(1, "day"));
+  // Sort option state for date-based filtering
+  const [sortOption, setSortOption] = useState<string>("last3Months");
+
+  const getCtcTitleById = (id: any) => {
+    const ctcItem = ctcData?.data?.find((item) => item.id == id);
+    return ctcItem ? ctcItem.title : "N/A";
+  };
+
+  // Helper function to extract the numeric range from the CTC title
+  const extractCtcRange = (title: string): [number, number] => {
+    const [min, max] = title
+      .replace("lac", "") // Remove the "lac" string
+      .split("-") // Split by the dash (-) to get the range
+      .map((str) => parseInt(str.trim())); // Convert to numbers
+    return [min, max];
+  };
+
+  // Apply CTC range filter
+  const filterByCtcRange = (job: RecentJobData) => {
+    const ctcItem = ctcData?.data?.find((item) => item.id == job.ctc);
+    if (!ctcItem) return false;
+    const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
+    return ctcMin >= ctcRange[0] && ctcMax <= ctcRange[1];
+  };
+
+  // Apply other filters (similar to BrowseJobFilter)
+  const applyFilters = (jobs: RecentJobData[]) => {
+    return jobs
+      .filter((job) =>
+        filters.experience.length
+          ? filters.experience.includes(job.experience?.title || "")
+          : true
+      )
+      .filter((job) =>
+        filters.location.length
+          ? filters.location.includes(job.location?.title || "")
+          : true
+      )
+      .filter((job) =>
+        filters.education.length
+          ? filters.education.includes(job.education?.name || "")
+          : true
+      )
+      .filter((job) =>
+        filters.cities.length
+          ? filters.cities.some((city) => job.address?.includes(city) || false)
+          : true
+      )
+      .filter((job) =>
+        filters.jobTitles.length
+          ? filters.jobTitles.includes(job.job_title)
+          : true
+      );
+  };
+
+  // Date filtering function (similar to BrowseJobFilter)
+  const sortJobs = (jobs: RecentJobData[]): RecentJobData[] => {
+    const now = new Date();
+    const threeMonthsAgo = new Date(now.getTime());
+    threeMonthsAgo.setMonth(now.getMonth() - 3);
+    const oneMonthAgo = new Date(now.getTime());
+    oneMonthAgo.setMonth(now.getMonth() - 1);
+    const oneWeekAgo = new Date(now.getTime());
+    oneWeekAgo.setDate(now.getDate() - 7);
+    const threeDaysAgo = new Date(now.getTime());
+    threeDaysAgo.setDate(now.getDate() - 3);
+    const oneDayAgo = new Date(now.getTime());
+    oneDayAgo.setDate(now.getDate() - 1);
+
+    switch (sortOption) {
+      case "last3Months":
+        return jobs.filter((job) => new Date(job.created_at) >= threeMonthsAgo);
+      case "lastMonth":
+        return jobs.filter((job) => new Date(job.created_at) >= oneMonthAgo);
+      case "lastWeek":
+        return jobs.filter((job) => new Date(job.created_at) >= oneWeekAgo);
+      case "last3Days":
+        return jobs.filter((job) => new Date(job.created_at) >= threeDaysAgo);
+      case "lastDay":
+        return jobs.filter((job) => new Date(job.created_at) >= oneDayAgo);
       default:
-        return true;
+        return jobs;
     }
   };
 
-  // Paginate and sort jobs by 'created_at' in descending order
+  // Paginate and sort jobs by 'created_at' in descending order, applying filters and CTC filter
   const sortedAndFilteredJobs = recentJob?.data
-    ?.filter(filterByTimePeriod)
+    ?.filter(filterByCtcRange)
+    ?.filter((job: any) => applyFilters([job]).length > 0)
     ?.sort(
       (a: RecentJobData, b: RecentJobData) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -116,33 +202,12 @@ const DashboardSection = () => {
   const totalJobs = sortedAndFilteredJobs?.length || 0;
   const indexOfLastJob = currentPage * itemsPerPage;
   const indexOfFirstJob = indexOfLastJob - itemsPerPage;
-  const currentJobs =
-    sortedAndFilteredJobs?.slice(indexOfFirstJob, indexOfLastJob) || [];
+  const currentJobs = sortJobs(
+    sortedAndFilteredJobs?.slice(indexOfFirstJob, indexOfLastJob) || []
+  );
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
-
-  const handleDeleteDiscussion = async (discussionId: string) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to undo this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deleteDiscussion(discussionId).unwrap();
-          refetch();
-          Swal.fire("Deleted!", "Your discussion has been deleted.", "success");
-        } catch (error) {
-          Swal.fire("Error!", "Failed to delete discussion.", "error");
-        }
-      }
-    });
   };
 
   const handleUpdateDiscussion = async () => {
@@ -201,118 +266,6 @@ const DashboardSection = () => {
     }
   };
 
-  const viewJobHandler = (id: number) => {
-    push(`/job-detail?jobId=${id}`);
-  };
-
-  // Function to toggle like state
-  const handleLikeToggle = async (jobId: string) => {
-    if (isSaving || isDeleting) return;
-
-    if (likedJobs.includes(jobId)) {
-      try {
-        await deleteJob(jobId);
-        setLikedJobs(likedJobs.filter((id) => id !== jobId));
-        dispatch(fetchRecentJobsStart());
-        Swal.fire({
-          icon: "success",
-          title: "Job Deleted Successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } catch (error) {
-        console.error("Error deleting job:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error in Deleted Job",
-          text: "Failed to delete job.",
-          confirmButtonText: "OK",
-        });
-      }
-    } else {
-      try {
-        await saveJob({ job_id: jobId });
-        setLikedJobs([...likedJobs, jobId]);
-        dispatch(fetchRecentJobsStart());
-        Swal.fire({
-          icon: "success",
-          title: "Job Saved Successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      } catch (error) {
-        console.error("Error saving job:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error in Saving Job",
-          text: "Failed to save job.",
-          confirmButtonText: "OK",
-        });
-      }
-    }
-  };
-
-  // Set edit form data when user clicks on the edit button
-  const handleShowEditModal = (discussion: any) => {
-    setEditFormData({
-      id: discussion.id,
-      question: discussion.question,
-      description: discussion.description,
-    });
-    setShowEditModal(true); // Open edit modal
-  };
-
-  const handleFormChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    formType: "create" | "edit"
-  ) => {
-    if (formType === "create") {
-      setCreateFormData({
-        ...createFormData,
-        [e.target.name]: e.target.value,
-      });
-    } else {
-      setEditFormData({
-        ...editFormData,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  const viewDiscussionHandler = (title: string) => {
-    const encodedTitle = encodeURIComponent(title.trim()).replace(/%20/g, "-");
-    push(`/single-discussion?query=${encodedTitle}`);
-  };
-
-  const getCtcTitleById = (id: any) => {
-    const ctcItem = ctcData?.data?.find((item) => item.id == id);
-    return ctcItem ? ctcItem.title : "N/A";
-  };
-
-  const handleGetStarted = async (membershipId: any) => {
-    push(`/cart?plan=${membershipId}`);
-  };
-
-  // Membership check before allowing discussion creation
-  const handleAskQuestion = () => {
-    if (!user?.user?.membership) {
-      Swal.fire({
-        title: "No Membership Plan",
-        text: "You need a membership to create a discussion. Would you like to buy one?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Buy Subscription",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          push("/cart");
-        }
-      });
-    } else {
-      setShowCreateModal(true);
-    }
-  };
-
   return (
     <>
       {recentLoading && eventLoading && discussionLoading && <Loading />}
@@ -323,91 +276,95 @@ const DashboardSection = () => {
               <div className="row">
                 <div className="col-lg-9">
                   <div className="d-flex justify-content-between align-items-center">
+                    {/* Centered Heading */}
                     <h3
-                      className="text-center mt-5"
-                      style={{ fontWeight: "600px", fontSize: "bold" }}
+                      className="text-center mt-5 mx-auto"
+                      style={{ fontWeight: "600", fontSize: "bold" }}
                     >
                       Jobs for you
                     </h3>
 
-                    {/* Select Filter */}
+                    {/* Time Filter - Positioned at the end */}
                     <select
-                      className="form-select mt-5"
-                      value={timeFilter}
-                      onChange={(e) => setTimeFilter(e.target.value as TimeFilter)}
+                      className="form-select mt-5 ms-auto"
+                      value={sortOption}
+                      onChange={(e) => setSortOption(e.target.value as string)}
                       style={{
                         maxWidth: "200px",
                         borderRadius: "5px",
                         padding: "5px",
                       }}
                     >
-                      <option value="All">All Jobs</option>
-                      <option value="LastMonth">Last Month</option>
-                      <option value="LastWeek">Last Week</option>
-                      <option value="LastDay">Last Day</option>
+                      <option value="last3Months">Last 3 Months</option>
+                      <option value="lastMonth">Last Month</option>
+                      <option value="lastWeek">Last Week</option>
+                      <option value="last3Days">Last 3 Days</option>
+                      <option value="lastDay">Last Day</option>
                     </select>
                   </div>
 
                   <div>
                     <ul className="post-job-bx" style={{ padding: "5px" }}>
                       {currentJobs.length > 0 ? (
-                        currentJobs.map((item: RecentJobData, index: number) => (
-                          <li key={index}>
-                            <div className="post-bx">
-                              <div className="d-flex m-b30">
-                                <div className="job-post-info">
-                                  <h4
-                                    style={{ cursor: "pointer" }}
-                                    className="text-secondry"
-                                    onClick={() => viewJobHandler(item.id)}
-                                  >
-                                    <Link href="">{item?.job_title}</Link>
-                                  </h4>
-                                  <ul>
-                                    <li>
-                                      <i className="fa fa-map-marker"></i>
-                                      {item?.address}
-                                    </li>
-                                    <li>
-                                      <i className="fa fa-bookmark-o"></i>
-                                      {item?.location?.title}
-                                    </li>
-                                    <li>
-                                      <i className="fa fa-clock-o"></i> Published{" "}
-                                      {formaterDate(item?.created_at)}
-                                    </li>
-                                  </ul>
+                        currentJobs.map(
+                          (item: RecentJobData, index: number) => (
+                            <li key={index}>
+                              <div className="post-bx">
+                                <div className="d-flex m-b30">
+                                  <div className="job-post-info">
+                                    <h4
+                                      style={{ cursor: "pointer" }}
+                                      className="text-secondry"
+                                      onClick={() =>
+                                        push(`/job-detail?jobId=${item.id}`)
+                                      }
+                                    >
+                                      <Link href="">{item?.job_title}</Link>
+                                    </h4>
+                                    <ul>
+                                      <li>
+                                        <i className="fa fa-map-marker"></i>
+                                        {item?.address || "N/A"}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-bookmark-o"></i>
+                                        {item?.location?.title || "N/A"}
+                                      </li>
+                                      <li>
+                                        <i className="fa fa-clock-o"></i>{" "}
+                                        Published{" "}
+                                        {formaterDate(item?.created_at)}
+                                      </li>
+                                    </ul>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="job-time m-t15 m-b10">
-                                {item.tags &&
-                                  item.tags.split(",").map((tag, index) => (
-                                    <Link key={index} href="#" className="mr-1">
-                                      <span>{tag.trim()}</span>
+                                <div className="d-flex">
+                                  <div className="job-time mr-auto">
+                                    <Link href={""}>
+                                      <span>{item?.location?.title}</span>
                                     </Link>
-                                  ))}
-                              </div>
-                              <div className="d-flex">
-                                <div className="job-time mr-auto">
-                                  <Link href="">
-                                    <span>{item?.location?.title}</span>
-                                  </Link>
+                                  </div>
+                                  <div className="salary-bx">
+                                    <span className="ctc-badge">
+                                      <i className="fa fa-money"></i>{" "}
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
+                                  </div>
                                 </div>
+                                <label
+                                  className={`like-btn ${
+                                    likedJobs.includes(item.id.toString())
+                                      ? "liked"
+                                      : ""
+                                  }`}
+                                >
+                                  <input type="checkbox" />
+                                  <span className="checkmark"></span>
+                                </label>
                               </div>
-                              <label
-                                className={`like-btn ${
-                                  likedJobs.includes(item.id.toString())
-                                    ? "liked"
-                                    : ""
-                                }`}
-                                onClick={() => handleLikeToggle(item.id.toString())}
-                              >
-                                <input type="checkbox" />
-                                <span className="checkmark"></span>
-                              </label>
-                            </div>
-                          </li>
-                        ))
+                            </li>
+                          )
+                        )
                       ) : (
                         <p className="text-center">No Job Found</p>
                       )}
@@ -423,12 +380,33 @@ const DashboardSection = () => {
                   </div>
                 </div>
 
-                {/* Membership section */}
+                {/* Membership, CTC filter, Meetups, and Discussion Forum */}
                 <div className="col-lg-3">
+                  {/* CTC Range Filter */}
+                  <div
+                    className="shadow p-3 bg-white"
+                    style={{ marginTop: "20px" }}
+                  >
+                    <h6 className="text-center">
+                      <i className="fa fa-sliders m-r5"></i> CTC Filter
+                    </h6>
+                    <RangeSlider
+                      value={ctcRange}
+                      onInput={setCtcRange}
+                      min={10}
+                      max={50}
+                    />
+                    <div className="d-flex justify-content-between gap-1 mt-2">
+                      <span>{ctcRange[0]} Lac</span>
+                      <span>{ctcRange[1]} Lac</span>
+                    </div>
+                  </div>
+
+                  {/* Membership Card */}
                   <div
                     className="sticky-top browse-candidates shadow"
                     style={{
-                      marginTop: "100px",
+                      marginTop: "40px",
                       display: "grid",
                       justifyContent: "space-evenly",
                     }}
@@ -460,7 +438,7 @@ const DashboardSection = () => {
                             cursor: "pointer",
                           }}
                           key={index}
-                          onClick={() => handleGetStarted(item?.id)}
+                          onClick={() => push(`/cart?plan=${item?.id}`)}
                         >
                           <div className="quote-info">
                             <div className="d-flex align-items-center relative">
@@ -529,9 +507,12 @@ const DashboardSection = () => {
                   </div>
                 </div>
               </div>
-
               {/* Meetups and Discussion Forum */}
-              <div className="row mt-3 justify-content-center" style={{ gap: "2rem" }}>
+              <div
+                className="row mt-3 justify-content-center"
+                style={{ gap: "2rem" }}
+              >
+                {/* Meetups */}
                 <div
                   className="col-lg-6 col-md-12 shadow p-4"
                   style={{
@@ -603,7 +584,10 @@ const DashboardSection = () => {
                   >
                     <button
                       className="btn btn-primary"
-                      style={{ background: "rgb(42, 99, 16)", border: "none" }}
+                      style={{
+                        background: "rgb(42, 99, 16)",
+                        border: "none",
+                      }}
                     >
                       Browse All
                     </button>
@@ -639,7 +623,9 @@ const DashboardSection = () => {
                               <div>
                                 <h5
                                   onClick={() =>
-                                    viewDiscussionHandler(item?.question)
+                                    push(
+                                      `/single-discussion?query=${item?.question}`
+                                    )
                                   }
                                   style={{
                                     fontWeight: "600",
@@ -665,7 +651,14 @@ const DashboardSection = () => {
                               <div className="d-flex align-items-center">
                                 <i
                                   className="fa fa-pencil mr-3"
-                                  onClick={() => handleShowEditModal(item)} // Open modal with data
+                                  onClick={() => {
+                                    setEditFormData({
+                                      id: item.id,
+                                      question: item.question,
+                                      description: item.description,
+                                    });
+                                    setShowEditModal(true);
+                                  }} // Open modal with data
                                   style={{
                                     cursor: "pointer",
                                     color: "green",
@@ -675,7 +668,20 @@ const DashboardSection = () => {
                                 <i
                                   className="fa fa-trash"
                                   onClick={() =>
-                                    handleDeleteDiscussion(item.id)
+                                    Swal.fire({
+                                      title: "Are you sure?",
+                                      text: "You won't be able to undo this!",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#3085d6",
+                                      cancelButtonColor: "#d33",
+                                      confirmButtonText: "Yes, delete it!",
+                                    }).then(async (result) => {
+                                      if (result.isConfirmed) {
+                                        await deleteDiscussion(item.id);
+                                        refetch();
+                                      }
+                                    })
                                   }
                                   style={{
                                     cursor: "pointer",
@@ -705,7 +711,24 @@ const DashboardSection = () => {
                         background: "rgb(42, 99, 16)",
                         border: "none",
                       }}
-                      onClick={handleAskQuestion} // Use the function to check for membership
+                      onClick={() => {
+                        if (!user?.user?.membership) {
+                          Swal.fire({
+                            title: "No Membership Plan",
+                            text: "You need a membership to create a discussion. Would you like to buy one?",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Buy Subscription",
+                            cancelButtonText: "Cancel",
+                          }).then((result) => {
+                            if (result.isConfirmed) {
+                              push("/cart");
+                            }
+                          });
+                        } else {
+                          setShowCreateModal(true);
+                        }
+                      }}
                     >
                       Ask a Question
                     </button>
@@ -715,13 +738,6 @@ const DashboardSection = () => {
             </div>
           </div>
         </div>
-        <style jsx>{`
-          .text-center-li {
-            display: flex;
-            justify-content: center;
-            align-item: center;
-          }
-        `}</style>
       </div>
 
       {/* Modal for creating a discussion */}
@@ -737,7 +753,12 @@ const DashboardSection = () => {
                 type="text"
                 name="question"
                 value={createFormData.question}
-                onChange={(e) => handleFormChange(e, "create")}
+                onChange={(e) =>
+                  setCreateFormData({
+                    ...createFormData,
+                    question: e.target.value,
+                  })
+                }
                 placeholder="Enter your question"
               />
             </Form.Group>
@@ -748,7 +769,12 @@ const DashboardSection = () => {
                 rows={3}
                 name="description"
                 value={createFormData.description}
-                onChange={(e) => handleFormChange(e, "create")}
+                onChange={(e) =>
+                  setCreateFormData({
+                    ...createFormData,
+                    description: e.target.value,
+                  })
+                }
                 placeholder="Enter description"
               />
             </Form.Group>
@@ -777,7 +803,9 @@ const DashboardSection = () => {
                 type="text"
                 name="question"
                 value={editFormData.question}
-                onChange={(e) => handleFormChange(e, "edit")}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, question: e.target.value })
+                }
               />
             </Form.Group>
             <Form.Group className="mb-3">
@@ -787,7 +815,12 @@ const DashboardSection = () => {
                 rows={3}
                 name="description"
                 value={editFormData.description}
-                onChange={(e) => handleFormChange(e, "edit")}
+                onChange={(e) =>
+                  setEditFormData({
+                    ...editFormData,
+                    description: e.target.value,
+                  })
+                }
               />
             </Form.Group>
           </Form>
