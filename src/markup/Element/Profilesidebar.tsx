@@ -140,6 +140,15 @@ const Profilesidebar = ({
               </li>
               <li>
                 <Link
+                  href="/job-posted"
+                  onClick={(e) => handleNavigation(e, "/job-posted")}
+                >
+                  <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                  Job Posted
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/profile"
                   onClick={(e) => handleNavigation(e, "/profile")}
                   className="active"

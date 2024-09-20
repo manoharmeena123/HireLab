@@ -18,7 +18,7 @@ import {
   useDeleteDiscussionMutation,
   useUpdateDiscussionMutation,
 } from "@/store/global-store/global.query";
-
+import dayjs from "dayjs"; // Date manipulation library
 import { RecentJobData } from "@/types/index";
 import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { formaterDate } from "@/utils/formateDate";
@@ -85,20 +85,39 @@ const DashboardSection = () => {
   // State for pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of jobs per page
+  type TimeFilter = "LastMonth" | "LastWeek" | "LastDay" | "All";
+  const [timeFilter, setTimeFilter] = useState<TimeFilter>("All");
+
+  // Helper functions to filter jobs based on time period
+  const filterByTimePeriod = (job: RecentJobData) => {
+    const jobDate = dayjs(job.created_at);
+    const now = dayjs();
+
+    switch (timeFilter) {
+      case "LastMonth":
+        return jobDate.isAfter(now.subtract(1, "month"));
+      case "LastWeek":
+        return jobDate.isAfter(now.subtract(1, "week"));
+      case "LastDay":
+        return jobDate.isAfter(now.subtract(1, "day"));
+      default:
+        return true;
+    }
+  };
 
   // Paginate and sort jobs by 'created_at' in descending order
-  const sortedJobs = recentJob?.data
-    ?.slice()
+  const sortedAndFilteredJobs = recentJob?.data
+    ?.filter(filterByTimePeriod)
     ?.sort(
       (a: RecentJobData, b: RecentJobData) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
-  const totalJobs = sortedJobs?.length || 0;
+  const totalJobs = sortedAndFilteredJobs?.length || 0;
   const indexOfLastJob = currentPage * itemsPerPage;
   const indexOfFirstJob = indexOfLastJob - itemsPerPage;
   const currentJobs =
-    sortedJobs?.slice(indexOfFirstJob, indexOfLastJob) || [];
+    sortedAndFilteredJobs?.slice(indexOfFirstJob, indexOfLastJob) || [];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -293,6 +312,7 @@ const DashboardSection = () => {
       setShowCreateModal(true);
     }
   };
+
   return (
     <>
       {recentLoading && eventLoading && discussionLoading && <Loading />}
@@ -301,17 +321,37 @@ const DashboardSection = () => {
           <div className="section-full bg-white browse-job p-b50">
             <div className="ds-wrap">
               <div className="row">
-              <div className="col-lg-9">
-                  <h3
-                    className="text-center mt-5"
-                    style={{ fontWeight: "600px", fontSize: "bold" }}
-                  >
-                    Recent Jobs
-                  </h3>
+                <div className="col-lg-9">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <h3
+                      className="text-center mt-5"
+                      style={{ fontWeight: "600px", fontSize: "bold" }}
+                    >
+                      Jobs for you
+                    </h3>
+
+                    {/* Select Filter */}
+                    <select
+                      className="form-select mt-5"
+                      value={timeFilter}
+                      onChange={(e) => setTimeFilter(e.target.value as TimeFilter)}
+                      style={{
+                        maxWidth: "200px",
+                        borderRadius: "5px",
+                        padding: "5px",
+                      }}
+                    >
+                      <option value="All">All Jobs</option>
+                      <option value="LastMonth">Last Month</option>
+                      <option value="LastWeek">Last Week</option>
+                      <option value="LastDay">Last Day</option>
+                    </select>
+                  </div>
+
                   <div>
                     <ul className="post-job-bx" style={{ padding: "5px" }}>
-                      {currentJobs?.map(
-                        (item: RecentJobData, index: number) => (
+                      {currentJobs.length > 0 ? (
+                        currentJobs.map((item: RecentJobData, index: number) => (
                           <li key={index}>
                             <div className="post-bx">
                               <div className="d-flex m-b30">
@@ -321,9 +361,7 @@ const DashboardSection = () => {
                                     className="text-secondry"
                                     onClick={() => viewJobHandler(item.id)}
                                   >
-                                    <Link href="">
-                                      {item?.job_title}
-                                    </Link>
+                                    <Link href="">{item?.job_title}</Link>
                                   </h4>
                                   <ul>
                                     <li>
@@ -335,8 +373,7 @@ const DashboardSection = () => {
                                       {item?.location?.title}
                                     </li>
                                     <li>
-                                      <i className="fa fa-clock-o"></i>{" "}
-                                      Published{" "}
+                                      <i className="fa fa-clock-o"></i> Published{" "}
                                       {formaterDate(item?.created_at)}
                                     </li>
                                   </ul>
@@ -344,17 +381,11 @@ const DashboardSection = () => {
                               </div>
                               <div className="job-time m-t15 m-b10">
                                 {item.tags &&
-                                  item.tags
-                                    .split(",")
-                                    .map((tag, index) => (
-                                      <Link
-                                        key={index}
-                                        href="#"
-                                        className="mr-1"
-                                      >
-                                        <span>{tag.trim()}</span>
-                                      </Link>
-                                    ))}
+                                  item.tags.split(",").map((tag, index) => (
+                                    <Link key={index} href="#" className="mr-1">
+                                      <span>{tag.trim()}</span>
+                                    </Link>
+                                  ))}
                               </div>
                               <div className="d-flex">
                                 <div className="job-time mr-auto">
@@ -362,33 +393,26 @@ const DashboardSection = () => {
                                     <span>{item?.location?.title}</span>
                                   </Link>
                                 </div>
-                                <div className="salary-bx">
-                                  <span className="ctc-badge">
-                                    <i className="fa fa-money"></i>{" "}
-                                    {getCtcTitleById(item.ctc)}
-                                  </span>
-                                </div>
                               </div>
                               <label
                                 className={`like-btn ${
-                                  likedJobs.includes(
-                                    item.id.toString()
-                                  )
+                                  likedJobs.includes(item.id.toString())
                                     ? "liked"
                                     : ""
                                 }`}
-                                onClick={() =>
-                                  handleLikeToggle(item.id.toString())
-                                }
+                                onClick={() => handleLikeToggle(item.id.toString())}
                               >
                                 <input type="checkbox" />
                                 <span className="checkmark"></span>
                               </label>
                             </div>
                           </li>
-                        )
+                        ))
+                      ) : (
+                        <p className="text-center">No Job Found</p>
                       )}
                     </ul>
+
                     {/* Pagination component */}
                     <Pagination
                       currentPage={currentPage}
@@ -398,6 +422,8 @@ const DashboardSection = () => {
                     />
                   </div>
                 </div>
+
+                {/* Membership section */}
                 <div className="col-lg-3">
                   <div
                     className="sticky-top browse-candidates shadow"
@@ -504,10 +530,8 @@ const DashboardSection = () => {
                 </div>
               </div>
 
-              <div
-                className="row mt-3 justify-content-center"
-                style={{ gap: "2rem" }}
-              >
+              {/* Meetups and Discussion Forum */}
+              <div className="row mt-3 justify-content-center" style={{ gap: "2rem" }}>
                 <div
                   className="col-lg-6 col-md-12 shadow p-4"
                   style={{
@@ -541,28 +565,6 @@ const DashboardSection = () => {
                                       {event.title}
                                     </Link>
                                   </h5>
-                                  <div className="d-flex justify-content-end">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 10 13"
-                                      fill="none"
-                                      style={{
-                                        fontSize: "16px",
-                                        fontWeight: 400,
-                                        marginLeft: "8px",
-                                        cursor: "pointer",
-                                        width: "20px",
-                                        height: "20px",
-                                      }}
-                                     
-                                    >
-                                      <path
-                                        d="M0.5 0H9.5V12.5L5 10L0.5 12.5V0Z"
-                                        fill="#fff"
-                                        stroke="#2A6310"
-                                      />
-                                    </svg>
-                                  </div>
                                 </div>
                                 <ul
                                   style={{
@@ -722,45 +724,45 @@ const DashboardSection = () => {
         `}</style>
       </div>
 
-     {/* Modal for creating a discussion */}
-     <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Ask a Question</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Question</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="question"
-                  value={createFormData.question}
-                  onChange={(e) => handleFormChange(e, "create")}
-                  placeholder="Enter your question"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  name="description"
-                  value={createFormData.description}
-                  onChange={(e) => handleFormChange(e, "create")}
-                  placeholder="Enter description"
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleCreateDiscussion}>
-              Submit
-            </Button>
-          </Modal.Footer>
-        </Modal>
+      {/* Modal for creating a discussion */}
+      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Ask a Question</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Question</Form.Label>
+              <Form.Control
+                type="text"
+                name="question"
+                value={createFormData.question}
+                onChange={(e) => handleFormChange(e, "create")}
+                placeholder="Enter your question"
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                name="description"
+                value={createFormData.description}
+                onChange={(e) => handleFormChange(e, "create")}
+                placeholder="Enter description"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleCreateDiscussion}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       {/* Modal for editing a discussion */}
       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>

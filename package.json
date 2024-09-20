@@ -24,6 +24,7 @@
     "@types/react-redux": "^7.1.33",
     "axios": "^1.7.2",
     "bootstrap": "^4.6.2",
+    "dayjs": "^1.11.13",
     "dompurify": "^3.1.6",
     "dotenv": "^16.4.5",
     "emoji-picker-react": "^4.11.1",

@@ -20,6 +20,7 @@ import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { toast } from "react-toastify";
+import Script from 'next/script';
 
 const SingleEvent = () => {
   const { user } = useLoggedInUser();
@@ -187,23 +188,92 @@ const SingleEvent = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, buy it!",
     });
-
+  
     if (result.isConfirmed) {
       const event_id = event?.id.toString();
       const amount = event?.amount;
-
+  
       if (event_id && amount) {
         try {
-          const res = await buyPassForEvent({ event_id, amount }).unwrap();
-          if (res) {
-            Swal.fire("Purchased!", res?.message, "success");
-          }
+          // Fetch the Razorpay order details from your backend
+          const response = await fetch('/api/order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              amount: Number(amount) * 100, // Amount in paise
+              currency: 'INR',
+            }),
+          });
+  
+          const { orderId, key, currency } = await response.json();
+  
+          // Create a new Razorpay instance
+          const options = {
+            key: key, // Razorpay key
+            amount: Number(amount) * 100, // Amount in paise
+            currency: 'INR', // Currency
+            name: event?.title,
+            description: "Event Pass Purchase",
+            order_id: orderId,
+            handler: async function (response: any) {
+              // Step 1: Verify payment signature
+              try {
+                const verifyRes = await fetch('/api/verify-payment', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    razorpay_payment_id: response.razorpay_payment_id,
+                    razorpay_order_id: response.razorpay_order_id,
+                    razorpay_signature: response.razorpay_signature,
+                  }),
+                });
+  
+                const verifyData = await verifyRes.json();
+  
+                if (verifyData.success) {
+                  // Step 2: Capture the payment
+                  const captureRes = await fetch('/api/capture-payment', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      payment_id: response.razorpay_payment_id,
+                      amount: Number(amount) * 100, // Amount in paise
+                    }),
+                  });
+  
+                  const captureData = await captureRes.json();
+  
+                  if (captureData.success) {
+                    Swal.fire("Purchased!", "Your pass has been successfully purchased and captured.", "success");
+                  } else {
+                    throw new Error("Payment capture failed");
+                  }
+                } else {
+                  throw new Error("Payment verification failed");
+                }
+              } catch (error: any) {
+                Swal.fire("Error", `Payment verification failed: ${error.message}`, "error");
+              }
+            },
+            prefill: {
+              name: user?.user?.name, // User's name
+              email: user?.user?.email, // User's email
+            },
+            theme: {
+              color: "#2a6310",
+            },
+          };
+  
+          const rzp = new (window as any).Razorpay(options);
+          rzp.open();
         } catch (error: any) {
-          Swal.fire(
-            "Error",
-            `Failed to buy the pass: ${error?.message}`,
-            "error"
-          );
+          Swal.fire("Error", `Failed to initialize payment: ${error.message}`, "error");
         }
       } else {
         Swal.fire("Error", "Event ID or amount is missing.", "error");
@@ -211,6 +281,7 @@ const SingleEvent = () => {
     }
     setProcessingEventId(null);
   };
+  
 
   const mapDescriptionWithIndex = (description: string) => {
     const paragraphs = description.split("</p><p>").map((para, index) => {
@@ -221,6 +292,10 @@ const SingleEvent = () => {
 
   return (
     <>
+      <Script
+        id="razorpay-checkout-js"
+        src="https://checkout.razorpay.com/v1/checkout.js"
+      />
       {(singleEventByTitleLoading || isUpcomingLoading || isPastLoading) && (
         <Loading />
       )}

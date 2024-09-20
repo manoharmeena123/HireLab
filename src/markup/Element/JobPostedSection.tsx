@@ -29,7 +29,7 @@ import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Pagination from "./Pagination";
 
-const ManageJobs = () => {
+const JobPostedSection = () => {
   const { push } = useRouter();
   const router = useRouter();
 
@@ -307,30 +307,76 @@ const ManageJobs = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/manage-job" className="active">
+                          <Link href="/dashboard-section">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/job-poster">
+                          <Link href="/job-posted" className="active">
+                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                            Job Posted
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/job-seeker">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>Profile</span>
                           </Link>
                         </li>
+
                         <li>
-                          <Link href="/post-job">
+                          <Link href="/my-resume">
                             <i
                               className="fa fa-file-text-o"
                               aria-hidden="true"
                             ></i>
-                            <span>Post A job</span>
+                            <span>My Resume</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link href="/saved-jobs" >
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Saved Jobs</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link href="/apply-jobs">
+                            <i className="fa fa-heart-o" aria-hidden="true"></i>
+                            <span>Apply Jobs</span>
+                          </Link>
+                        </li>
+
+                        <li>
+                          <Link href="/job-alert">
+                            <i className="fa fa-bell-o" aria-hidden="true"></i>
+                            <span>Job Alerts</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/credit-earned">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Credit Earned</span>
+                          <Link href={"/cv-manager"}>
+                            <i
+                              className="fa fa-id-card-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>CV Manager</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/switch-plan">
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href={"/transaction"}>
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Transaction</span>
                           </Link>
                         </li>
                         <li>
@@ -606,4 +652,4 @@ const ManageJobs = () => {
   );
 };
 
-export default ManageJobs;
+export default JobPostedSection;

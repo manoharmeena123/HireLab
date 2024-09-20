@@ -123,6 +123,12 @@ const JobSavedSection = () => {
                           </Link>
                         </li>
                         <li>
+                          <Link href="/job-posted">
+                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                            Job Posted
+                          </Link>
+                        </li>
+                        <li>
                           <Link href="/job-seeker">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>Profile</span>
@@ -169,9 +175,7 @@ const JobSavedSection = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link
-                            href="/switch-plan"
-                          >
+                          <Link href="/switch-plan">
                             <i className="fa fa-money" aria-hidden="true"></i>
                             Switch Plan
                           </Link>
