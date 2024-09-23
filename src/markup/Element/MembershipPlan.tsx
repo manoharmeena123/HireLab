@@ -1,17 +1,29 @@
 import React from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useGetMembershipQuery } from "@/store/global-store/global.query";
 import { useSaveMemberShipMutation } from "@/app/my-resume/store/resume.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-// Images
-const bnr7 = require("./../../images/background/plans.png");
 
-const MembershipPlans = ({ plan }: any) => {
+const MembershipPlans = () => {
   const { data: membershipData } = useGetMembershipQuery();
-  const [saveMemberShip] = useSaveMemberShipMutation();
   const { user } = useLoggedInUser();
   const router = useRouter();
+
+  // Reorder plans to ensure the selected plan is always first
+  const reorderedPlans = () => {
+    if (!membershipData?.data) return [];
+    const userMembershipId = user?.user?.membership?.membership_id;
+
+    // Put the selected membership first and others after it
+    const selectedPlan = membershipData.data.find(
+      (plan) => plan.id === userMembershipId
+    );
+    const otherPlans = membershipData.data.filter(
+      (plan) => plan.id !== userMembershipId
+    );
+
+    return selectedPlan ? [selectedPlan, ...otherPlans] : membershipData.data;
+  };
 
   const parseHtml = (htmlString: any) => {
     return { __html: htmlString };
@@ -25,10 +37,14 @@ const MembershipPlans = ({ plan }: any) => {
     <div className="section-content box-sort-in button-example m-t80">
       <div className="pricingtable-row">
         <div className="display-property">
-          {membershipData?.data?.map((text, index) => (
+          {reorderedPlans()?.map((text, index) => (
             <div
               key={index}
-              className="pricingtable-wrapper style2 bg-white member-ship-div"
+              className={`pricingtable-wrapper style2 bg-white member-ship-div ${
+                user?.user?.membership?.membership_id === text.id
+                  ? "selected-plan"
+                  : ""
+              }`}
               onMouseEnter={(e) => {
                 const button = e.currentTarget.querySelector(
                   ".site-button"
@@ -92,16 +108,21 @@ const MembershipPlans = ({ plan }: any) => {
                         onClick={() => handleGetStarted(text?.id)}
                         className="site-button radius-xl white-hover"
                       >
-                        <span className="p-lr30 button-text">Get Started</span>
+                        <span className="p-lr30 button-text">
+                          {user?.user?.membership?.membership_id === text.id
+                            ? "Selected Plan"
+                            : "Get Started"}
+                        </span>
                       </button>
                     ) : (
-                      <button    
-                        className="site-button radius-xl white-hover" 
-                        onClick={() => router.push(`/login?page=/`)}>
-                          <span className="p-lr30 button-text">
-                            Login to Get Started
-                          </span>
-                        </button>
+                      <button
+                        className="site-button radius-xl white-hover"
+                        onClick={() => router.push(`/login?page=/`)}
+                      >
+                        <span className="p-lr30 button-text">
+                          Login to Get Started
+                        </span>
+                      </button>
                     )}
                   </div>
                 </div>
@@ -125,6 +146,9 @@ const MembershipPlans = ({ plan }: any) => {
           margin: 20px;
           display: flex;
           flex-direction: column;
+        }
+        .selected-plan {
+          border: 2px solid #2a6310;
         }
         .member-ship-div:hover {
           background-color: #2a6310 !important;
@@ -207,7 +231,7 @@ const MembershipPlans = ({ plan }: any) => {
           .display-property {
             overflow-x: scroll;
             padding-left: 1rem;
-            display:flex;
+            display: flex;
           }
         }
         @media (max-width: 576px) {

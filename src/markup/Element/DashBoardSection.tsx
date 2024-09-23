@@ -123,7 +123,7 @@ const DashboardSection = () => {
   };
 
   // Apply CTC range filter
-  const filterByCtcRange = (job: RecentJobData) => {
+  const filterByCtcRange = (job: any) => {
     const ctcItem = ctcData?.data?.find((item) => item.id == job.ctc);
     if (!ctcItem) return false;
     const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
