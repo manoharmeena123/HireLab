@@ -16,6 +16,7 @@ import { selectRegisterState } from "@/app/register/store/register.selectors";
 import { toast } from "react-toastify";
 import styles from "@/styles/SendOtp.module.css";
 import { useAuthToken } from "@/hooks/useAuthToken";
+import { useLoggedInUser } from '@/hooks/useLoggedInUser'
 import { VerifyOtp } from "@/app/send-otp/types/index";
 import { useSearchParams, useRouter } from "next/navigation";
 import { navigateSource } from "@/lib/action";
@@ -45,7 +46,7 @@ const OtpVefication = () => {
   const { saveToken } = useAuthToken();
   const loginState = useSelector(selectLoginState);
   const registerState = useSelector(selectRegisterState);
-
+  const { user } = useLoggedInUser();
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
   const [parsedDatas, setParsedDatas] = useState<LoginData | null>(null);
@@ -54,7 +55,10 @@ const OtpVefication = () => {
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
 
-  const endpoint = queryTitle ? `${queryTitle}` : "/job-seeker";
+  const endpoint = queryTitle
+  ? `${queryTitle}`
+  : (user?.is_profile_completed === 1 ? "/dashboard-section" : "/job-seeker");
+
 
   // Parse localStorage data
   useEffect(() => {

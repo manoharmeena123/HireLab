@@ -14,7 +14,7 @@ import {
   useCreateSingleBlogCommentMutation,
   useGetSingleParentBlogCommentbyIdMutation,
   useDeleteBlogCommentByIdMutation,
-  useUpdateBlogCommentMutation
+  useUpdateBlogCommentMutation,
 } from "@/store/global-store/global.query";
 import {
   blogformatDate,
@@ -28,7 +28,7 @@ var bnr = require("./../../images/banner/bnr1.jpg");
 import profileIcon from "../../images/favicon.png";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash,faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
+import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
 
 const SingleBlogSection = () => {
   const { data: getSetting } = useGetSettingsQuery();
@@ -40,7 +40,7 @@ const SingleBlogSection = () => {
     /%20/g,
     "+"
   );
-const [updateBlogComment] =useUpdateBlogCommentMutation()
+  const [updateBlogComment] = useUpdateBlogCommentMutation();
   const [expandedBlogId, setExpandedBlogId] = useState<string | null>(null);
   const [replyToCommentId, setReplyToCommentId] = useState<string | null>(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
@@ -64,7 +64,7 @@ const [updateBlogComment] =useUpdateBlogCommentMutation()
 
   const [getSingleParentBlogCommentbyId] =
     useGetSingleParentBlogCommentbyIdMutation();
-const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
+  const [deleteBlogCommentById] = useDeleteBlogCommentByIdMutation();
   const questionId = getSingleBlogData?.data?.[0]?.id;
 
   useEffect(() => {
@@ -105,20 +105,20 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
       router.push("/login");
     } else {
       try {
-        const form = event.currentTarget; 
+        const form = event.currentTarget;
         const formData = new FormData(event.currentTarget);
         const commentData = {
-        question_id: questionId,
-        body: formData.get("comment") as string,
-        parent_comment_id: null,
-      };
-      const res = await createSingleBlogComment(commentData);
-      toast.success(res?.data?.message, { theme: "colored" });
-      if (res?.data?.code == 200) {
-        getSingleBlogCommentbyQuetionId(questionId as any);
-        form.reset(); 
-      }
-      } catch (error :any) {
+          question_id: questionId,
+          body: formData.get("comment") as string,
+          parent_comment_id: null,
+        };
+        const res = await createSingleBlogComment(commentData);
+        toast.success(res?.data?.message, { theme: "colored" });
+        if (res?.data?.code == 200) {
+          getSingleBlogCommentbyQuetionId(questionId as any);
+          form.reset();
+        }
+      } catch (error: any) {
         toast.success(error?.data?.message, { theme: "colored" });
       }
     }
@@ -132,34 +132,34 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
       router.push("/login");
     } else {
       try {
-      const form = event.currentTarget; 
-      const formData = new FormData(event.currentTarget);
-      const commentData = {
-        question_id: questionId,
-        body: formData.get("comment") as string,
-        parent_comment_id: replyToCommentId,
-      };
-      const res = await createSingleBlogComment(commentData);
-      toast.success(res?.data?.message, { theme: "colored" });
-      setShowReplyModal(false);
-      setReplyToCommentId(null);
-      getSingleParentBlogCommentbyId({
-        questionId: questionId,
-        commentId: replyToCommentId,
-      });
-      if (res?.data?.code == 200) {
-        getSingleBlogCommentbyQuetionId(questionId as any);
-        form.reset(); 
-      }
-      } catch (error :any) {
+        const form = event.currentTarget;
+        const formData = new FormData(event.currentTarget);
+        const commentData = {
+          question_id: questionId,
+          body: formData.get("comment") as string,
+          parent_comment_id: replyToCommentId,
+        };
+        const res = await createSingleBlogComment(commentData);
+        toast.success(res?.data?.message, { theme: "colored" });
+        setShowReplyModal(false);
+        setReplyToCommentId(null);
+        getSingleParentBlogCommentbyId({
+          questionId: questionId,
+          commentId: replyToCommentId,
+        });
+        if (res?.data?.code == 200) {
+          getSingleBlogCommentbyQuetionId(questionId as any);
+          form.reset();
+        }
+      } catch (error: any) {
         toast.error(error?.data?.message, { theme: "colored" });
       }
     }
   };
 
-  const handleEditComment = (commentId: string,commentText:string) => {
+  const handleEditComment = (commentId: string, commentText: string) => {
     // Implement edit functionality or open an edit modal
-    console.log("Edit comment with ID:", commentId,commentText);
+    console.log("Edit comment with ID:", commentId, commentText);
     setCurrentCommentId(commentId);
     setCurrentCommentText(commentText);
     setShowEditModal(true);
@@ -167,13 +167,13 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
 
   const handleDeleteComment = async (id: any) => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -188,7 +188,7 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
       }
     });
   };
-  
+
   const handleReply = (commentId: string) => {
     setReplyToCommentId(commentId);
     setShowReplyModal(true);
@@ -214,12 +214,14 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
     router.push(`/login?page=single-blog?query=${queryTitle}`);
   };
 
-  const handleUpdateComment = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateComment = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     if (currentCommentId && currentCommentText.trim() !== "") {
       try {
         const res = await updateBlogComment({
-          question_id : questionId,
+          question_id: questionId,
           id: currentCommentId,
           body: currentCommentText,
         });
@@ -278,19 +280,24 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
                 {comment?.user?.id == user?.user?.id && (
-                  <>   
-                  <FontAwesomeIcon
-                  icon={faEdit}
-                  onClick={() => handleEditComment(comment?.id, comment?.body)}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
-                />
-                <FontAwesomeIcon
-                  icon={faTrash}
-                  onClick={() => handleDeleteComment(comment.id)}
-                  style={{ cursor: "pointer", marginLeft: "10px", color: "red" }}
-                />
+                  <>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      onClick={() =>
+                        handleEditComment(comment?.id, comment?.body)
+                      }
+                      style={{ cursor: "pointer", marginLeft: "10px" }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrash}
+                      onClick={() => handleDeleteComment(comment.id)}
+                      style={{
+                        cursor: "pointer",
+                        marginLeft: "10px",
+                        color: "red",
+                      }}
+                    />
                   </>
-               
                 )}
               </div>
             )}
@@ -428,112 +435,121 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
 
                 <div className="clear" id="comment-list">
                   <div className="comments-area" id="comments">
-                    <h2 className="comments-title">Comments</h2>
-                    <div className="clearfix m-b20">
-                      <ol className="comment-list">
-                        {singleBlogCommentData?.data[0]?.comments &&
-                          renderComments(
-                            singleBlogCommentData?.data[0]?.comments
-                          )}
-                      </ol>
-                      <div className="comment-respond" id="respond">
-                        <h4 className="comment-reply-title" id="reply-title">
-                          Leave a Reply{" "}
-                          <small>
-                            {" "}
-                            <Link
-                              href={"#"}
-                              style={{ display: "none" }}
-                              id="cancel-comment-reply-link"
-                              rel="nofollow"
-                            >
-                              Cancel reply
-                            </Link>{" "}
-                          </small>{" "}
-                        </h4>
-                        {!user?.user ? (
-                          <button
-                            className="site-button"
-                            onClick={handleLoginToPost}
-                          >
-                            Login to post comment
-                          </button>
-                        ) : (
-                          <form
-                            className="comment-form"
-                            id="commentform"
-                            method="post"
-                            onSubmit={(e) => handlePostComment(e)}
-                          >
-                            {user?.user &&
-                              !(
-                                <>
-                                  <p className="comment-form-author">
-                                    <label htmlFor="author">
-                                      Name <span className="required">*</span>
-                                    </label>
-                                    <input
-                                      type="text"
-                                      name="author"
-                                      placeholder="Author"
-                                      id="author"
-                                      required
-                                      value={user?.user.name}
-                                      readOnly
-                                    />
-                                  </p>
-                                  <p className="comment-form-email">
-                                    <label htmlFor="email">
-                                      Email <span className="required">*</span>
-                                    </label>
-                                    <input
-                                      type="email"
-                                      name="email"
-                                      placeholder="Email"
-                                      id="email"
-                                      required
-                                      value={user?.user.email}
-                                      readOnly
-                                      style={{ padding: "7px 53px" }}
-                                    />
-                                  </p>
-                                  <p className="comment-form-url">
-                                    <label htmlFor="url">Website</label>
-                                    <input
-                                      type="url"
-                                      name="url"
-                                      placeholder="Website"
-                                      id="url"
-                                      value={user?.user?.website || ""}
-                                      readOnly
-                                      style={{ padding: "7px 53px" }}
-                                    />
-                                  </p>
-                                </>
+                    {singleBlogCommentData?.data[0].is_show == 1 && (
+                      <>
+                        <h2 className="comments-title">Comments</h2>
+                        <div className="clearfix m-b20">
+                          <ol className="comment-list">
+                            {singleBlogCommentData?.data[0]?.comments &&
+                              renderComments(
+                                singleBlogCommentData?.data[0]?.comments
                               )}
-                            <p className="comment-form-comment">
-                              <label htmlFor="comment">Comment</label>
-                              <textarea
-                                rows={8}
-                                name="comment"
-                                placeholder="Comment"
-                                id="comment"
-                                required
-                              ></textarea>
-                            </p>
-                            <p className="form-submit">
-                              <input
-                                type="submit"
-                                value="Post Comment"
-                                className="submit site-button"
-                                id="submit"
-                                name="submit"
-                              />
-                            </p>
-                          </form>
-                        )}
-                      </div>
-                    </div>
+                          </ol>
+                          <div className="comment-respond" id="respond">
+                            <h4
+                              className="comment-reply-title"
+                              id="reply-title"
+                            >
+                              Leave a Reply{" "}
+                              <small>
+                                {" "}
+                                <Link
+                                  href={"#"}
+                                  style={{ display: "none" }}
+                                  id="cancel-comment-reply-link"
+                                  rel="nofollow"
+                                >
+                                  Cancel reply
+                                </Link>{" "}
+                              </small>{" "}
+                            </h4>
+                            {!user?.user ? (
+                              <button
+                                className="site-button"
+                                onClick={handleLoginToPost}
+                              >
+                                Login to post comment
+                              </button>
+                            ) : (
+                              <form
+                                className="comment-form"
+                                id="commentform"
+                                method="post"
+                                onSubmit={(e) => handlePostComment(e)}
+                              >
+                                {user?.user &&
+                                  !(
+                                    <>
+                                      <p className="comment-form-author">
+                                        <label htmlFor="author">
+                                          Name{" "}
+                                          <span className="required">*</span>
+                                        </label>
+                                        <input
+                                          type="text"
+                                          name="author"
+                                          placeholder="Author"
+                                          id="author"
+                                          required
+                                          value={user?.user.name}
+                                          readOnly
+                                        />
+                                      </p>
+                                      <p className="comment-form-email">
+                                        <label htmlFor="email">
+                                          Email{" "}
+                                          <span className="required">*</span>
+                                        </label>
+                                        <input
+                                          type="email"
+                                          name="email"
+                                          placeholder="Email"
+                                          id="email"
+                                          required
+                                          value={user?.user.email}
+                                          readOnly
+                                          style={{ padding: "7px 53px" }}
+                                        />
+                                      </p>
+                                      <p className="comment-form-url">
+                                        <label htmlFor="url">Website</label>
+                                        <input
+                                          type="url"
+                                          name="url"
+                                          placeholder="Website"
+                                          id="url"
+                                          value={user?.user?.website || ""}
+                                          readOnly
+                                          style={{ padding: "7px 53px" }}
+                                        />
+                                      </p>
+                                    </>
+                                  )}
+                                <p className="comment-form-comment">
+                                  <label htmlFor="comment">Comment</label>
+                                  <textarea
+                                    rows={8}
+                                    name="comment"
+                                    placeholder="Comment"
+                                    id="comment"
+                                    required
+                                  ></textarea>
+                                </p>
+                                <p className="form-submit">
+                                  <input
+                                    type="submit"
+                                    value="Post Comment"
+                                    className="submit site-button"
+                                    id="submit"
+                                    name="submit"
+                                  />
+                                </p>
+                              </form>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -594,8 +610,8 @@ const [deleteBlogCommentById] =useDeleteBlogCommentByIdMutation()
         </Modal.Footer>
       </Modal>
 
-       {/* Edit Modal */}
-       <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+      {/* Edit Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Comment</Modal.Title>
         </Modal.Header>
