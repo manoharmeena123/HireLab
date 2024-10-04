@@ -55,9 +55,9 @@ const OtpVefication = () => {
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
   console.log('firstuser', user)
-  const endpoint = queryTitle
-  ? `${queryTitle}`
-  : (user?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
+  // const endpoint = queryTitle
+  // ? `${queryTitle}`
+  // : (user?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
 
 
   // Parse localStorage data
@@ -127,8 +127,12 @@ const OtpVefication = () => {
          // Remove registerData from localStorage
         localStorage.removeItem("registerData");
         localStorage.removeItem("logindata");
-        const loggedInUser = await fetchUser();
+        const loggedInUser :any = await fetchUser();
         console.log('loggedInUser', loggedInUser)
+        const endpoint = queryTitle
+        ? `${queryTitle}`
+        : (loggedInUser?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
+      
         if (loggedInUser) {
           navigateSource(endpoint);
         }
