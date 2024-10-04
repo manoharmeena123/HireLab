@@ -509,6 +509,6 @@ export const {
   useMyTransactionsQuery,
   useUpdateDiscussionCommentMutation,
   useGetExperienceQuery,
-  useGetCvDownloadQuery
+  useGetCvDownloadQuery: useGetCvDownloadQuery
 } = globalApi;
 export default globalApi;
