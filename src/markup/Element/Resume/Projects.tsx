@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { Modal, Form } from "react-bootstrap";
 import Link from "next/link";
@@ -16,14 +18,12 @@ interface ProjectsProps {
 
 interface ProjectData {
   title: string;
-  // project_employment: string;
   client: string;
   project_status: string;
   start_from_year: string;
   start_from_month: string;
   worked_till_year: string;
   worked_till_month: string;
-  // detail_of_project: string;
 }
 
 const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
@@ -33,14 +33,12 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
 
   const [project, setProject] = useState<ProjectData>({
     title: "",
-    // project_employment: "",
     client: "",
     project_status: "",
     start_from_year: "",
     start_from_month: "",
     worked_till_year: "",
     worked_till_month: "",
-    // detail_of_project: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -53,14 +51,12 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
       if (existingProject) {
         setProject({
           title: existingProject.title,
-          // project_employment: existingProject.project_employment,
           client: existingProject.client,
           project_status: existingProject.project_status,
           start_from_year: existingProject.start_from_year,
           start_from_month: existingProject.start_from_month,
           worked_till_year: existingProject.worked_till_year,
           worked_till_month: existingProject.worked_till_month,
-          // detail_of_project: existingProject.detail_of_project,
         });
         setProjectId(existingProject.id);
         setEditMode(true);
@@ -80,36 +76,31 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
     }));
   };
 
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 51 }, (_, index) => currentYear - index);
+  };
+
   const validateForm = () => {
     const {
       title,
-      // project_employment,
       client,
       project_status,
       start_from_year,
       start_from_month,
       worked_till_year,
       worked_till_month,
-      // detail_of_project,
     } = project;
 
     const newErrors: string[] = [];
 
-    if (
-      !title ||
-      // !project_employment ||
-      !client ||
-      !project_status ||
-      !start_from_year ||
-      !start_from_month
-      // !detail_of_project
-    ) {
-      newErrors.push("All fields must be filled.");
+    if (!title || !client || !project_status || !start_from_year || !start_from_month) {
+      newErrors.push("All required fields must be filled.");
     }
 
     if (project_status === "finished") {
       if (!worked_till_year || !worked_till_month) {
-        newErrors.push("All fields must be filled.");
+        newErrors.push("All fields must be filled for finished projects.");
       }
 
       const startDate = new Date(
@@ -122,7 +113,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
       );
 
       if (startDate > endDate) {
-        newErrors.push("Start date must be before or equal to end date.");
+        newErrors.push("Start date must be before or equal to the end date.");
       }
     }
 
@@ -144,7 +135,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
         toast.success(response?.data?.message, { theme: "colored" });
       }
       onHide();
-    } catch (error :any) {
+    } catch (error: any) {
       toast.error(error?.message, { theme: "colored" });
     }
   };
@@ -153,11 +144,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
     <div id="projects_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
         <h5 className="m-b15">Projects</h5>
-        <Link
-          href=""
-          onClick={onShow}
-          className="site-button add-btn button-sm"
-        >
+        <Link href="" onClick={onShow} className="site-button add-btn button-sm">
           <i className="fa fa-pencil m-r5"></i> Edit
         </Link>
       </div>
@@ -173,7 +160,6 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
               ? `${project.worked_till_month} ${project.worked_till_year}`
               : "Present"}
           </p>
-          {/* <p className="m-b0">{project.detail_of_project}</p> */}
         </>
       )}
 
@@ -217,23 +203,6 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                       />
                     </div>
                   </div>
-                  {/* <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>
-                        Tag this project with your Employment/Education
-                      </label>
-                      <Form.Control
-                        as="select"
-                        name="project_employment"
-                        value={project.project_employment}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="Class 12th">Class 12th</option>
-                        <option value="Class 10th">Class 10th</option>
-                      </Form.Control>
-                    </div>
-                  </div> */}
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Client</label>
@@ -292,7 +261,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-6">
+                  <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Started Working From</label>
                       <div className="row">
@@ -304,30 +273,11 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                             onChange={handleChange}
                           >
                             <option value="">Year</option>
-                            <option>2024</option>
-                            <option>2023</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                            <option>2009</option>
-                            <option>2008</option>
-                            <option>2007</option>
-                            <option>2006</option>
-                            <option>2005</option>
-                            <option>2004</option>
-                            <option>2003</option>
-                            <option>2002</option>
-                            <option>2001</option>
+                            {generateYears().map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
                           </Form.Control>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-6">
@@ -338,18 +288,24 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                             onChange={handleChange}
                           >
                             <option value="">Month</option>
-                            <option>January</option>
-                            <option>February</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                            <option>September</option>
-                            <option>October</option>
-                            <option>November</option>
-                            <option>December</option>
+                            {[
+                              "January",
+                              "February",
+                              "March",
+                              "April",
+                              "May",
+                              "June",
+                              "July",
+                              "August",
+                              "September",
+                              "October",
+                              "November",
+                              "December",
+                            ].map((month) => (
+                              <option key={month} value={month}>
+                                {month}
+                              </option>
+                            ))}
                           </Form.Control>
                         </div>
                       </div>
@@ -358,7 +314,7 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
 
                   {project.project_status === "finished" && (
                     <>
-                      <div className="col-lg-12 col-md-6">
+                      <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Worked Till</label>
                           <div className="row">
@@ -370,30 +326,11 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                                 onChange={handleChange}
                               >
                                 <option value="">Year</option>
-                                <option>2024</option>
-                                <option>2023</option>
-                                <option>2022</option>
-                                <option>2021</option>
-                                <option>2020</option>
-                                <option>2019</option>
-                                <option>2018</option>
-                                <option>2017</option>
-                                <option>2016</option>
-                                <option>2015</option>
-                                <option>2014</option>
-                                <option>2013</option>
-                                <option>2012</option>
-                                <option>2011</option>
-                                <option>2010</option>
-                                <option>2009</option>
-                                <option>2008</option>
-                                <option>2007</option>
-                                <option>2006</option>
-                                <option>2005</option>
-                                <option>2004</option>
-                                <option>2003</option>
-                                <option>2002</option>
-                                <option>2001</option>
+                                {generateYears().map((year) => (
+                                  <option key={year} value={year}>
+                                    {year}
+                                  </option>
+                                ))}
                               </Form.Control>
                             </div>
                             <div className="col-lg-6 col-md-6 col-sm-6 col-6">
@@ -404,18 +341,24 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                                 onChange={handleChange}
                               >
                                 <option value="">Month</option>
-                                <option>January</option>
-                                <option>February</option>
-                                <option>March</option>
-                                <option>April</option>
-                                <option>May</option>
-                                <option>June</option>
-                                <option>July</option>
-                                <option>August</option>
-                                <option>September</option>
-                                <option>October</option>
-                                <option>November</option>
-                                <option>December</option>
+                                {[
+                                  "January",
+                                  "February",
+                                  "March",
+                                  "April",
+                                  "May",
+                                  "June",
+                                  "July",
+                                  "August",
+                                  "September",
+                                  "October",
+                                  "November",
+                                  "December",
+                                ].map((month) => (
+                                  <option key={month} value={month}>
+                                    {month}
+                                  </option>
+                                ))}
                               </Form.Control>
                             </div>
                           </div>
@@ -423,19 +366,6 @@ const Projects: React.FC<ProjectsProps> = ({ show, onShow, onHide }) => {
                       </div>
                     </>
                   )}
-
-                  {/* <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Details of Project</label>
-                      <textarea
-                        className="form-control"
-                        name="detail_of_project"
-                        value={project.detail_of_project}
-                        onChange={handleChange}
-                        placeholder="Type Description"
-                      ></textarea>
-                    </div>
-                  </div> */}
                 </div>
               </form>
             </div>

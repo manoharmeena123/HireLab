@@ -8,11 +8,13 @@ import {
 } from "@/app/my-resume/store/resume.query";
 import { WritablePersonalDetails } from "@/app/my-resume/types/resume";
 import { toast } from "react-toastify";
+
 interface PersonalDetailsProps {
   show: boolean;
   onShow: () => void;
   onHide: () => void;
 }
+
 const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   show,
   onShow,
@@ -40,7 +42,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   const [personalDetailsId, setPersonalDetailsId] = useState<number | null>(
     null
   );
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (resumeData && resumeData.data.length > 0) {
@@ -78,37 +80,28 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
   };
 
   const validateForm = () => {
-    const {
-      dob,
-      permanent_address,
-      gender,
-      pin_code,
-      marital_status,
-      hometown,
-      passport_number,
-      work_permit_of_other_country,
-      differently_abled,
-      languages,
-    } = personalDetails;
+    const newErrors: Record<string, string> = {};
+    const requiredFields = [
+      "dob",
+      "permanent_address",
+      "gender",
+      "pin_code",
+      "marital_status",
+      "hometown",
+      "passport_number",
+      "work_permit_of_other_country",
+      "differently_abled",
+      "languages",
+    ];
 
-    if (
-      !dob ||
-      !permanent_address ||
-      !gender ||
-      !pin_code ||
-      !marital_status ||
-      !hometown ||
-      !passport_number ||
-      !work_permit_of_other_country ||
-      !differently_abled ||
-      !languages
-    ) {
-      setError("All fields must be filled");
-      return false;
-    }
+    requiredFields.forEach((field) => {
+      if (!personalDetails[field as keyof WritablePersonalDetails]) {
+        newErrors[field] = `${field.replace(/_/g, " ")} is required`;
+      }
+    });
 
-    setError("");
-    return true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSave = async () => {
@@ -161,6 +154,11 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
             <div className="modal-body">
               <form>
                 <div className="row">
+                  {Object.keys(errors).map((key) => (
+                    <div key={key} className="col-lg-12 col-md-12">
+                      <div className="alert alert-danger">{errors[key]}</div>
+                    </div>
+                  ))}
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Date of Birth</label>
@@ -170,7 +168,6 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                         name="dob"
                         value={personalDetails.dob}
                         onChange={handleChange}
-                        placeholder="Enter Date of Birth"
                       />
                     </div>
                   </div>
@@ -249,7 +246,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                     <div className="form-group">
                       <label>Pincode</label>
                       <input
-                        type="text"
+                        type="number"
                         className="form-control"
                         name="pin_code"
                         value={personalDetails.pin_code}
@@ -288,7 +285,7 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                   </div>
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
-                      <label>What assistance do you need</label>
+                      <label>What assistance do you need?</label>
                       <textarea
                         className="form-control"
                         name="differently_abled"
@@ -337,7 +334,6 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
                     </div>
                   </div>
                 </div>
-                {error && <div className="alert alert-danger">{error}</div>}
               </form>
             </div>
             <div className="modal-footer">
@@ -356,64 +352,74 @@ const PersonalDetails: React.FC<PersonalDetailsProps> = ({
         </div>
       </Modal>
 
-      <div className="row">
-        <div className="col-lg-6 col-md-6 col-sm-6">
-          <div className="clearfix m-b20">
-            <label className="m-b0">Date of Birth</label>
-            <span className="clearfix font-13">{personalDetails.dob}</span>
+      {personalDetails && (
+        <div className="row">
+          <div className="col-lg-6 col-md-6 col-sm-6">
+            <div className="clearfix m-b20">
+              <label className="m-b0">Date of Birth</label>
+              <span className="clearfix font-13">
+                {personalDetails.dob || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Gender</label>
+              <span className="clearfix font-13">
+                {personalDetails.gender || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Marital Status</label>
+              <span className="clearfix font-13">
+                {personalDetails.marital_status || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Passport Number</label>
+              <span className="clearfix font-13">
+                {personalDetails.passport_number || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Differently Abled</label>
+              <span className="clearfix font-13">
+                {personalDetails.differently_abled || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Languages</label>
+              <span className="clearfix font-13">
+                {personalDetails.languages || "N/A"}
+              </span>
+            </div>
           </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Gender</label>
-            <span className="clearfix font-13">{personalDetails.gender}</span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Marital Status</label>
-            <span className="clearfix font-13">
-              {personalDetails.marital_status}
-            </span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Passport Number</label>
-            <span className="clearfix font-13">
-              {personalDetails.passport_number}
-            </span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Differently Abled</label>
-            <span className="clearfix font-13">
-              {personalDetails.differently_abled}
-            </span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Languages</label>
-            <span className="clearfix font-13">
-              {personalDetails.languages}
-            </span>
+          <div className="col-lg-6 col-md-6 col-sm-6">
+            <div className="clearfix m-b20">
+              <label className="m-b0">Permanent Address</label>
+              <span className="clearfix font-13">
+                {personalDetails.permanent_address || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Area Pin Code</label>
+              <span className="clearfix font-13">
+                {personalDetails.pin_code || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Hometown</label>
+              <span className="clearfix font-13">
+                {personalDetails.hometown || "N/A"}
+              </span>
+            </div>
+            <div className="clearfix m-b20">
+              <label className="m-b0">Work Permit of Other Country</label>
+              <span className="clearfix font-13">
+                {personalDetails.work_permit_of_other_country || "N/A"}
+              </span>
+            </div>
           </div>
         </div>
-        <div className="col-lg-6 col-md-6 col-sm-6">
-          <div className="clearfix m-b20">
-            <label className="m-b0">Permanent Address</label>
-            <span className="clearfix font-13">
-              {personalDetails.permanent_address}
-            </span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Area Pin Code</label>
-            <span className="clearfix font-13">{personalDetails.pin_code}</span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Hometown</label>
-            <span className="clearfix font-13">{personalDetails.hometown}</span>
-          </div>
-          <div className="clearfix m-b20">
-            <label className="m-b0">Work Permit of Other Country</label>
-            <span className="clearfix font-13">
-              {personalDetails.work_permit_of_other_country || "N/A"}
-            </span>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

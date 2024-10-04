@@ -98,6 +98,8 @@ interface EducationData {
   education: string;
   course: string;
   university: string;
+  end_year :string;
+  start_year :string;
 }
 interface EducationDataResponse {
   code: number;

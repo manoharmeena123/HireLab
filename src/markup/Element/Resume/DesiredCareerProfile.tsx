@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 import { Modal, Form } from "react-bootstrap";
 import Link from "next/link";
@@ -61,6 +62,15 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
       ...prevData,
       [name]: value,
     }));
+  };
+
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    return Array.from({ length: 20 }, (_, index) => currentYear + index);
+  };
+
+  const generateSalaries = () => {
+    return Array.from({ length: 50 }, (_, index) => index + 1);
   };
 
   const validate = () => {
@@ -131,7 +141,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="DesiredprofileModalLongTitle">
-                Desired Career Profile{" "}
+                Desired Career Profile
               </h5>
               <button type="button" className="close" onClick={onHide}>
                 <span aria-hidden="true">&times;</span>
@@ -140,6 +150,11 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
             <div className="modal-body">
               <form>
                 <div className="row">
+                  {Object.keys(errors).map((key) => (
+                    <div key={key} className="col-lg-12 col-md-12">
+                      <div className="alert alert-danger">{errors[key]}</div>
+                    </div>
+                  ))}
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Industry</label>
@@ -211,241 +226,103 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Job Type</label>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="permanent"
-                              name="job_type"
-                              value="permanent"
-                              checked={profileData.job_type === "permanent"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="permanent"
-                            >
-                              Permanent
-                            </label>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6 col-6">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="contractual"
-                              name="job_type"
-                              value="contractual"
-                              checked={profileData.job_type === "contractual"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="contractual"
-                            >
-                              Contractual
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <Form.Control
+                        as="select"
+                        name="job_type"
+                        value={profileData.job_type}
+                        onChange={handleChange}
+                        isInvalid={!!errors.job_type}
+                      >
+                        <option value="">Select Job Type</option>
+                        <option value="permanent">Permanent</option>
+                        <option value="contractual">Contractual</option>
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.job_type}
+                      </Form.Control.Feedback>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Employment Type</label>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="fulltime"
-                              name="employment_type"
-                              value="Full Time"
-                              checked={profileData.employment_type.includes(
-                                "Full Time"
-                              )}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="fulltime"
-                            >
-                              Full Time
-                            </label>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                          <div className="custom-control custom-checkbox">
-                            <input
-                              type="checkbox"
-                              className="custom-control-input"
-                              id="parttime"
-                              name="employment_type"
-                              value="Part Time"
-                              checked={profileData.employment_type.includes(
-                                "Part Time"
-                              )}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="parttime"
-                            >
-                              Part Time
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <Form.Control
+                        as="select"
+                        name="employment_type"
+                        value={profileData.employment_type}
+                        onChange={handleChange}
+                        isInvalid={!!errors.employment_type}
+                      >
+                        <option value="">Select Employment Type</option>
+                        <option>Full Time</option>
+                        <option>Part Time</option>
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.employment_type}
+                      </Form.Control.Feedback>
                     </div>
                   </div>
-
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Preferred Shift</label>
-                      <div className="row">
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                          <div className="custom-control custom-radio">
-                            <input
-                              type="radio"
-                              className="custom-control-input"
-                              id="day"
-                              name="desired_shift"
-                              value="Day"
-                              checked={profileData.desired_shift === "Day"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="day"
-                            >
-                              Day
-                            </label>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                          <div className="custom-control custom-radio">
-                            <input
-                              type="radio"
-                              className="custom-control-input"
-                              id="night"
-                              name="desired_shift"
-                              value="Night"
-                              checked={profileData.desired_shift === "Night"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="night"
-                            >
-                              Night
-                            </label>
-                          </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-sm-6">
-                          <div className="custom-control custom-radio">
-                            <input
-                              type="radio"
-                              className="custom-control-input"
-                              id="flexible"
-                              name="desired_shift"
-                              value="Flexible"
-                              checked={profileData.desired_shift === "Flexible"}
-                              onChange={handleChange}
-                            />
-                            <label
-                              className="custom-control-label"
-                              htmlFor="flexible"
-                            >
-                              Flexible
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <Form.Control
+                        as="select"
+                        name="desired_shift"
+                        value={profileData.desired_shift}
+                        onChange={handleChange}
+                        isInvalid={!!errors.desired_shift}
+                      >
+                        <option value="">Select Preferred Shift</option>
+                        <option value="Day">Day</option>
+                        <option value="Night">Night</option>
+                        <option value="Flexible">Flexible</option>
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.desired_shift}
+                      </Form.Control.Feedback>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-6">
                     <div className="form-group">
                       <label>Availability to Join</label>
-                      <div className="row">
-                        <div className="col-lg-6 col-md-6 col-sm-6">
-                          <Form.Control
-                            as="select"
-                            name="availability_to_join"
-                            value={profileData.availability_to_join}
-                            onChange={handleChange}
-                            isInvalid={!!errors.availability_to_join}
-                          >
-                            <option value="">Select Year</option>
-                            <option>2022</option>
-                            <option>2023</option>
-                            <option>2024</option>
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {errors.availability_to_join}
-                          </Form.Control.Feedback>
-                        </div>
-                        <div className="col-lg-6 col-md-6 col-sm-6">
-                          <Form.Control
-                            as="select"
-                            name="availability_to_join"
-                            value={profileData.availability_to_join}
-                            onChange={handleChange}
-                            isInvalid={!!errors.availability_to_join}
-                          >
-                            <option value="">Select Month</option>
-                            <option>January</option>
-                            <option>February</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                            <option>September</option>
-                            <option>October</option>
-                            <option>November</option>
-                            <option>December</option>
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {errors.availability_to_join}
-                          </Form.Control.Feedback>
-                        </div>
-                      </div>
+                      <Form.Control
+                        as="select"
+                        name="availability_to_join"
+                        value={profileData.availability_to_join}
+                        onChange={handleChange}
+                        isInvalid={!!errors.availability_to_join}
+                      >
+                        <option value="">Select Year</option>
+                        {generateYears().map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.availability_to_join}
+                      </Form.Control.Feedback>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
-                      <label>Expected Salary</label>
-                      <div className="row mt-3">
-                        <div className="col-lg-12 col-md-12 col-sm-12 col-12">
-                          <Form.Control
-                            as="select"
-                            name="expected_salary"
-                            value={profileData.expected_salary}
-                            onChange={handleChange}
-                            isInvalid={!!errors.expected_salary}
-                          >
-                            <option value="">Select Salary</option>
-                            <option value="1">1 lakh</option>
-                            <option value="2">2 lakh</option>
-                            <option value="3">3 lakh</option>
-                            <option value="4">4 lakh</option>
-                            <option value="5">5 lakh</option>
-                            <option value="6">6 lakh</option>
-                            <option value="7">7 lakh</option>
-                            <option value="8">8 lakh</option>
-                            <option value="9">9 lakh</option>
-                            <option value="10">10 lakh</option>
-                          </Form.Control>
-                          <Form.Control.Feedback type="invalid">
-                            {errors.expected_salary}
-                          </Form.Control.Feedback>
-                        </div>
-                      </div>
+                      <label>Expected Salary (in lakh)</label>
+                      <Form.Control
+                        as="select"
+                        name="expected_salary"
+                        value={profileData.expected_salary}
+                        onChange={handleChange}
+                        isInvalid={!!errors.expected_salary}
+                      >
+                        <option value="">Select Salary</option>
+                        {generateSalaries().map((salary) => (
+                          <option key={salary} value={salary}>
+                            {salary} lakh
+                          </option>
+                        ))}
+                      </Form.Control>
+                      <Form.Control.Feedback type="invalid">
+                        {errors.expected_salary}
+                      </Form.Control.Feedback>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12">
@@ -487,7 +364,7 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
                         <option value="">Select Industry</option>
                         <option>Software</option>
                         <option>Factory</option>
-                        <option>Ngo</option>
+                        <option>NGO</option>
                         <option>Other</option>
                       </Form.Control>
                       <Form.Control.Feedback type="invalid">
@@ -525,12 +402,6 @@ const DesiredCareerProfile: React.FC<DesiredCareerProfileProps> = ({
             </div>
             <div className="clearfix m-b20">
               <label className="m-b0">Role</label>
-              <span className="clearfix font-13">
-                {profileData.role || "N/A"}
-              </span>
-            </div>
-            <div className="clearfix m-b20">
-              <label className="m-b0">Employment Type</label>
               <span className="clearfix font-13">
                 {profileData.role || "N/A"}
               </span>
