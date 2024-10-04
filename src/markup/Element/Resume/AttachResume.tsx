@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import Link from "next/link";
@@ -17,18 +19,22 @@ const AttachResume = () => {
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
   const [currentFileUrl, setCurrentFileUrl] = useState<string | null>(null);
-  const {data : resume} = useGetCvDownloadQuery()
-  console.log('resume', resume)
+  const { data: resume } = useGetCvDownloadQuery();
+
   useEffect(() => {
     if (resumeData && resumeData.data.length > 0) {
       const resumeFile = resumeData.data[0]?.files?.[0];
       if (resumeFile) {
         setCurrentFile(resumeFile.file);
         setResumeId(resumeFile.id);
-        setCurrentFileUrl(resumeFile.file); // Assuming the API provides a URL field
       }
     }
-  }, [resumeData]);
+
+    // Update currentFileUrl with the download URL from the resume query
+    if (resume && resume.success) {
+      setCurrentFileUrl(resume.data);
+    }
+  }, [resumeData, resume]);
 
   const onDrop = useCallback(
     async (acceptedFiles: any) => {
@@ -50,7 +56,7 @@ const AttachResume = () => {
           if (res && res.data) {
             toast.success(res.data.message, { theme: "colored" });
           } else {
-            toast.error("Failed to upload file",{ theme: "colored" });
+            toast.error("Failed to upload file", { theme: "colored" });
           }
           setCurrentFile(file.name);
           setCurrentFileUrl(URL.createObjectURL(file)); // Update the URL for download
