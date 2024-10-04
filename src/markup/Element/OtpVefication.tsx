@@ -46,7 +46,7 @@ const OtpVefication = () => {
   const { saveToken } = useAuthToken();
   const loginState = useSelector(selectLoginState);
   const registerState = useSelector(selectRegisterState);
-  const { user } = useLoggedInUser();
+  const { user,fetchUser } = useLoggedInUser();
   // Local state to store the parsed data
   const [parsedData, setParsedData] = useState<RegisterData | null>(null);
   const [parsedDatas, setParsedDatas] = useState<LoginData | null>(null);
@@ -54,10 +54,10 @@ const OtpVefication = () => {
   // State to store OTP input and manage length
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
-
+  console.log('firstuser', user)
   const endpoint = queryTitle
   ? `${queryTitle}`
-  : (user?.is_profile_completed === 1 ? "/dashboard-section" : "/job-seeker");
+  : (user?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
 
 
   // Parse localStorage data
@@ -127,7 +127,11 @@ const OtpVefication = () => {
          // Remove registerData from localStorage
         localStorage.removeItem("registerData");
         localStorage.removeItem("logindata");
-        navigateSource(endpoint);
+        const loggedInUser = await fetchUser();
+        console.log('loggedInUser', loggedInUser)
+        if (loggedInUser) {
+          navigateSource(endpoint);
+        }
       } else if (res.code === 401) {
         toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {

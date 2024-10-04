@@ -6,6 +6,7 @@ import {
   useCreateAttachmResumeFileMutation,
   useUpdateAttachResumeFileMutation,
 } from "@/app/my-resume/store/resume.query";
+import { useGetCvDownloadQuery } from '@/store/global-store/global.query'
 import Loading from "@/components/Loading";
 import { toast } from "react-toastify";
 
@@ -16,7 +17,8 @@ const AttachResume = () => {
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
   const [currentFileUrl, setCurrentFileUrl] = useState<string | null>(null);
-
+  const {data : resume} = useGetCvDownloadQuery()
+  console.log('resume', resume)
   useEffect(() => {
     if (resumeData && resumeData.data.length > 0) {
       const resumeFile = resumeData.data[0]?.files?.[0];

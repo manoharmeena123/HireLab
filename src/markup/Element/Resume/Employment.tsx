@@ -28,7 +28,6 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
     start_from_month: "",
     worked_till_year: "",
     worked_till_month: "",
-    // describe_job_profile: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -47,7 +46,6 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
           start_from_month: existingEmployment.start_from_month,
           worked_till_year: existingEmployment.worked_till_year,
           worked_till_month: existingEmployment.worked_till_month,
-          // describe_job_profile: existingEmployment.describe_job_profile,
         });
         setEmploymentId(existingEmployment.id);
         setEditMode(true);
@@ -83,7 +81,10 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
       return;
     }
 
-    if (!employment.worked_till_year || !employment.worked_till_month) {
+    if (
+      employment.current_company === "no" &&
+      (!employment.worked_till_year || !employment.worked_till_month)
+    ) {
       setError("End date is required.");
       return;
     }
@@ -91,11 +92,12 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
     const startDate = new Date(
       `${employment.start_from_year}-${employment.start_from_month}-01`
     );
-    const endDate = new Date(
-      `${employment.worked_till_year}-${employment.worked_till_month}-01`
-    );
+    const endDate =
+      employment.current_company === "no"
+        ? new Date(`${employment.worked_till_year}-${employment.worked_till_month}-01`)
+        : null;
 
-    if (startDate > endDate) {
+    if (endDate && startDate > endDate) {
       setError("Start date must be earlier than end date.");
       return;
     }
@@ -121,6 +123,15 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
     }
   };
 
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let year = currentYear; year >= 2000; year--) {
+      years.push(year);
+    }
+    return years;
+  };
+
   return (
     <div id="employment_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
@@ -141,9 +152,10 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
           <p className="m-b0">{employment.organization}</p>
           <p className="m-b0">
             {employment.start_from_month} {employment.start_from_year} to{" "}
-            {employment.worked_till_month} {employment.worked_till_year}
+            {employment.current_company === "yes"
+              ? "Present"
+              : `${employment.worked_till_month} ${employment.worked_till_year}`}
           </p>
-          {/* <p className="m-b0">{employment.describe_job_profile}</p> */}
         </>
       )}
 
@@ -249,30 +261,11 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                             onChange={handleChange}
                           >
                             <option value="">Select Year</option>
-                            <option>2024</option>
-                            <option>2023</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                            <option>2009</option>
-                            <option>2008</option>
-                            <option>2007</option>
-                            <option>2006</option>
-                            <option>2005</option>
-                            <option>2004</option>
-                            <option>2003</option>
-                            <option>2002</option>
-                            <option>2001</option>
+                            {generateYears().map((year) => (
+                              <option key={year} value={year}>
+                                {year}
+                              </option>
+                            ))}
                           </Form.Control>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 col-6">
@@ -283,98 +276,81 @@ const Employment: React.FC<EmploymentProps> = ({ show, onShow, onHide }) => {
                             onChange={handleChange}
                           >
                             <option value="">Select Month</option>
-                            <option>January</option>
-                            <option>February</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                            <option>September</option>
-                            <option>October</option>
-                            <option>November</option>
-                            <option>December</option>
+                            {[
+                              "January",
+                              "February",
+                              "March",
+                              "April",
+                              "May",
+                              "June",
+                              "July",
+                              "August",
+                              "September",
+                              "October",
+                              "November",
+                              "December",
+                            ].map((month) => (
+                              <option key={month} value={month}>
+                                {month}
+                              </option>
+                            ))}
                           </Form.Control>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Worked Till</label>
-                      <div className="row">
-                        <div className="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <Form.Control
-                            as="select"
-                            name="worked_till_year"
-                            value={employment.worked_till_year}
-                            onChange={handleChange}
-                          >
-                            <option value="">Select Year</option>
-                            <option>2024</option>
-                            <option>2023</option>
-                            <option>2022</option>
-                            <option>2021</option>
-                            <option>2020</option>
-                            <option>2019</option>
-                            <option>2018</option>
-                            <option>2017</option>
-                            <option>2016</option>
-                            <option>2015</option>
-                            <option>2014</option>
-                            <option>2013</option>
-                            <option>2012</option>
-                            <option>2011</option>
-                            <option>2010</option>
-                            <option>2009</option>
-                            <option>2008</option>
-                            <option>2007</option>
-                            <option>2006</option>
-                            <option>2005</option>
-                            <option>2004</option>
-                            <option>2003</option>
-                            <option>2002</option>
-                            <option>2001</option>
-                          </Form.Control>
-                        </div>
-                        <div className="col-lg-6 col-md-6 col-sm-6 col-6">
-                          <Form.Control
-                            as="select"
-                            name="worked_till_month"
-                            value={employment.worked_till_month}
-                            onChange={handleChange}
-                          >
-                            <option value="">Select Month</option>
-                            <option>January</option>
-                            <option>February</option>
-                            <option>March</option>
-                            <option>April</option>
-                            <option>May</option>
-                            <option>June</option>
-                            <option>July</option>
-                            <option>August</option>
-                            <option>September</option>
-                            <option>October</option>
-                            <option>November</option>
-                            <option>December</option>
-                          </Form.Control>
+                  {employment.current_company === "no" && (
+                    <div className="col-lg-12 col-md-12">
+                      <div className="form-group">
+                        <label>Worked Till</label>
+                        <div className="row">
+                          <div className="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <Form.Control
+                              as="select"
+                              name="worked_till_year"
+                              value={employment.worked_till_year}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select Year</option>
+                              {generateYears().map((year) => (
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
+                          <div className="col-lg-6 col-md-6 col-sm-6 col-6">
+                            <Form.Control
+                              as="select"
+                              name="worked_till_month"
+                              value={employment.worked_till_month}
+                              onChange={handleChange}
+                            >
+                              <option value="">Select Month</option>
+                              {[
+                                "January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                              ].map((month) => (
+                                <option key={month} value={month}>
+                                  {month}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  {/* <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Describe your Job Profile</label>
-                      <textarea
-                        className="form-control"
-                        name="describe_job_profile"
-                        value={employment.describe_job_profile}
-                        onChange={handleChange}
-                        placeholder="Type Description"
-                      ></textarea>
-                    </div>
-                  </div> */}
+                  )}
                 </div>
               </form>
             </div>

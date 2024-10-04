@@ -376,6 +376,12 @@ export const queries = {
       method :"GET"
     })
   },
+  getCvDownload :{
+    query :()=>({
+      url :'api/get-my-cv',
+      method :"GET"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

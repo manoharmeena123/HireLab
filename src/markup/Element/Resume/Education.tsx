@@ -21,12 +21,11 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
   const [updateEducation] = useUpdateEducationMutation();
 
   const [education, setEducation] = useState<WritableEducationData>({
-    // title: "",
-    year: "",
-    // description: "",
     education: "",
     course: "",
     university: "",
+    start_year: "",
+    end_year: "",
   });
 
   const [editMode, setEditMode] = useState(false);
@@ -37,12 +36,11 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
       const existingEducation = resumeData.data[0].educations[0]; // Assuming single education entry for simplicity
       if (existingEducation) {
         setEducation({
-          // title: existingEducation.title,
-          year: existingEducation.year,
-          // description: existingEducation.description,
           education: existingEducation.education,
           course: existingEducation.course,
           university: existingEducation.university,
+          start_year: existingEducation.start_year,
+          end_year: existingEducation.end_year,
         });
         setEducationId(existingEducation.id);
         setEditMode(true);
@@ -63,6 +61,24 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
   };
 
   const handleSave = async () => {
+    if (!education.education || !education.course || !education.university) {
+      toast.error("Please fill in all fields", { theme: "colored" });
+      return;
+    }
+
+    if (!education.start_year || !education.end_year) {
+      toast.error("Please select both start and end years", { theme: "colored" });
+      return;
+    }
+
+    const startYear = parseInt(education.start_year);
+    const endYear = parseInt(education.end_year);
+
+    if (startYear > endYear) {
+      toast.error("Start year must be earlier than end year", { theme: "colored" });
+      return;
+    }
+
     try {
       if (editMode && educationId !== null) {
         const response = await updateEducation({
@@ -80,6 +96,15 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
     }
   };
 
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let year = currentYear; year >= 2000; year--) {
+      years.push(year);
+    }
+    return years;
+  };
+
   return (
     <div id="education_bx" className="job-bx bg-white m-b30">
       <div className="d-flex">
@@ -93,8 +118,8 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
         </Link>
       </div>
       <p>
-        Mention your employment details including your current and previous
-        company work experience
+        Mention your education details including your degrees, courses, and
+        universities attended
       </p>
 
       <Modal
@@ -106,7 +131,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="EducationModalLongTitle">
-                Education
+                {editMode ? "Edit Education" : "Add Education"}
               </h5>
               <button type="button" className="close" onClick={onHide}>
                 <span aria-hidden="true">&times;</span>
@@ -117,7 +142,7 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                 <div className="row">
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
-                      <label>Education</label>
+                      <label>Education Level</label>
                       <Form.Control
                         as="select"
                         name="education"
@@ -138,67 +163,81 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>Course</label>
-                      <input
-                        type="text"
-                        className="form-control"
+                      <Form.Control
+                        as="select"
                         name="course"
                         value={education.course}
                         onChange={handleChange}
-                        placeholder="Select Course"
-                      />
+                      >
+                        <option value="">Select Course</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Business Administration">
+                          Business Administration
+                        </option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Law">Law</option>
+                        <option value="Medicine">Medicine</option>
+                      </Form.Control>
                     </div>
                   </div>
                   <div className="col-lg-12 col-md-12">
                     <div className="form-group">
                       <label>University/Institute</label>
-                      <input
-                        type="text"
-                        className="form-control"
+                      <Form.Control
+                        as="select"
                         name="university"
                         value={education.university}
                         onChange={handleChange}
-                        placeholder="Select University/Institute"
-                      />
+                      >
+                        <option value="">Select University/Institute</option>
+                        <option value="Harvard University">Harvard University</option>
+                        <option value="Stanford University">Stanford University</option>
+                        <option value="MIT">MIT</option>
+                        <option value="University of Oxford">
+                          University of Oxford
+                        </option>
+                        <option value="University of Cambridge">
+                          University of Cambridge
+                        </option>
+                      </Form.Control>
                     </div>
                   </div>
-                  {/* <div className="col-lg-12 col-md-12">
+                  <div className="col-lg-6 col-md-6">
                     <div className="form-group">
-                      <label>Title</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="title"
-                        value={education.title}
+                      <label>Start Year</label>
+                      <Form.Control
+                        as="select"
+                        name="start_year"
+                        value={education.start_year}
                         onChange={handleChange}
-                        placeholder="Enter Title"
-                      />
-                    </div>
-                  </div> */}
-                  <div className="col-lg-12 col-md-12">
-                    <div className="form-group">
-                      <label>Year</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="year"
-                        value={education.year}
-                        onChange={handleChange}
-                        placeholder="Enter Year"
-                      />
+                      >
+                        <option value="">Select Start Year</option>
+                        {generateYears().map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </Form.Control>
                     </div>
                   </div>
-                  {/* <div className="col-lg-12 col-md-12">
+                  <div className="col-lg-6 col-md-6">
                     <div className="form-group">
-                      <label>Description</label>
-                      <textarea
-                        className="form-control"
-                        name="description"
-                        value={education.description}
+                      <label>End Year</label>
+                      <Form.Control
+                        as="select"
+                        name="end_year"
+                        value={education.end_year}
                         onChange={handleChange}
-                        placeholder="Type Description"
-                      ></textarea>
+                      >
+                        <option value="">Select End Year</option>
+                        {generateYears().map((year) => (
+                          <option key={year} value={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </Form.Control>
                     </div>
-                  </div> */}
+                  </div>
                 </div>
               </form>
             </div>
@@ -222,21 +261,18 @@ const Education: React.FC<EducationProps> = ({ show, onShow, onHide }) => {
         <div className="col-lg-12 col-md-12 col-sm-12">
           {resumeData?.data[0]?.educations.map((edu: any, index: number) => (
             <div key={index} className="clearfix m-b20">
-              {/* <label className="m-b0">{edu.title}</label> */}
               <span className="clearfix font-17 d-flex">
-                {" "}
-                <b>Years :</b>
-                {edu.year}
+                <b>Education Level: </b> {edu.education}
+              </span>
+              <span className="clearfix font-17 d-flex">
+                <b>Course: </b> {edu.course}
               </span>
               <p className="m-b0 d-flex font-17">
-                <b>Course : </b>
-                {edu.course}
+                <b>University: </b> {edu.university}
               </p>
               <p className="m-b0 d-flex font-17">
-                <b>University : </b>
-                {edu.university}
+                <b>Years: </b> {edu.start_year} - {edu.end_year}
               </p>
-              {/* <p className="m-b0">Description : {edu.description}</p> */}
             </div>
           ))}
         </div>

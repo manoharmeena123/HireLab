@@ -33,10 +33,27 @@ export const useLoggedInUser = () => {
   //   }
   // };
 
+   // Function to refetch user data and return it as a promise
+   const fetchUser = async () => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      const result = await refetch();
+      setUser(result?.data);
+      return result?.data;
+    } catch (error) {
+      setFetchError(error as Error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     user,
     error: fetchError,
     isLoading: loading,
-    refetch
+    refetch,
+    fetchUser
   };
 };
