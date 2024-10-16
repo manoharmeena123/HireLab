@@ -16,6 +16,8 @@
 
 .form-title {
   font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  color: #333 !important;
 }
 
 .lato-font {
@@ -68,7 +70,7 @@
 }
 
 .create-div {
-  text-align: center !important !important;
+  text-align: center !important;
 }
 
 .no-wrap {
@@ -77,7 +79,40 @@
 
 .forgot-password-link {
   color: #007bff !important;
-  text-decoration: none !important !important;
+  text-decoration: none !important;
   white-space: nowrap !important;
-  text-align: center !important !important;
+  text-align: center !important;
 }
+
+.login-form {
+  background-color: #fff !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  padding: 30px !important;
+}
+
+.bottom-footer {
+  margin-top: 20px !important;
+}
+
+.bottom-footer p {
+  color: #fff !important;
+  font-size: 14px !important;
+}
+
+.site-button {
+  padding: 12px 30px !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+  border: none !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+  transition: background-color 0.3s ease !important;
+  background-color: #007bff !important;
+}
+
+.site-button:hover {
+  background-color: #0056b3 !important;
+}
+

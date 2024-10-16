@@ -29,6 +29,7 @@
     "dotenv": "^16.4.5",
     "emoji-picker-react": "^4.11.1",
     "firebase": "^10.12.5",
+    "formik": "^2.4.6",
     "html-react-parser": "^5.1.12",
     "next": "14.2.3",
     "next-auth": "^4.24.7",
@@ -56,6 +57,7 @@
     "sweetalert2-react-content": "^5.0.7",
     "timeago.js": "^4.0.2",
     "typescript-cookie": "^1.0.6",
+    "yup": "^1.4.0",
     "zustand": "^4.5.4"
   },
   "devDependencies": {
