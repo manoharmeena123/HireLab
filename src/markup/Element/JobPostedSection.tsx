@@ -307,13 +307,13 @@ const JobPostedSection = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/dashboard-section">
+                          <Link href="/manage-job">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/job-seeker">
+                          <Link href="/job-poster">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
                             <span>Profile</span>
                           </Link>
@@ -334,7 +334,7 @@ const JobPostedSection = () => {
                           </Link>
                         </li>
 
-                        <li>
+                        {/* <li>
                           <Link href="/my-resume">
                             <i
                               className="fa fa-file-text-o"
@@ -363,7 +363,7 @@ const JobPostedSection = () => {
                             <i className="fa fa-bell-o" aria-hidden="true"></i>
                             <span>Job Alerts</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href={"/cv-manager"}>
                             <i

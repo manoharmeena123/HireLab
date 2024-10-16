@@ -148,7 +148,7 @@ const Login = () => {
                             value={mobileNumber}
                             onChange={handleInputChange}
                             className={`form-control w-full ${styles["lato-font"]}`}
-                            placeholder="Mobile Number"
+                            placeholder="+91- Enter your 10 digit mobile number"
                             maxLength={10} // Limit input length to 10 characters
                           />
                           {/* Display error if the mobile number is invalid */}
@@ -161,20 +161,23 @@ const Login = () => {
                             {errors?.mobile_number?.[0]}
                           </span>
                           <div className={`row ${styles["div-style"]}`}>
-                            <div className="form-check mt-3">
-                              <input
+                            <div className="form-check mt-1">
+                              {/* <input
                                 type="checkbox"
                                 className="form-check-input"
                                 id="rememberMe"
                                 checked={rememberMe}
                                 onChange={handleRememberMeChange}
-                              />
-                              <label
+                              /> */}
+                              <span>
+                                You will receive an OTP on this number
+                              </span>
+                              {/* <label
                                 className="form-check-label"
                                 htmlFor="rememberMe"
                               >
                                 Remember Me
-                              </label>
+                              </label> */}
                             </div>
                           </div>
                         </div>
@@ -188,7 +191,7 @@ const Login = () => {
                           disabled={isLoading}
                           style={{ width: "100%" }}
                         >
-                          {isLoading ? "Loading..." : "Send OTP"}
+                          {isLoading ? "Loading..." : "Get OTP"}
                         </button>
                       </div>
                       <div className={`${styles["create-div"]}`}>

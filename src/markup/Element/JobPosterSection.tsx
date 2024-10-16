@@ -280,11 +280,32 @@ const JobPosterSection = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/credit-earned">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Credit Earned</span>
-                          </Link>
-                        </li>
+                        <Link href="/job-posted">
+                          <i className="fa fa-briefcase" aria-hidden="true"></i>
+                          Job Posted
+                        </Link>
+                      </li>
+                        <li>
+                        <Link href="/cv-manager">
+                          <i className="fa fa-id-card-o" aria-hidden="true"></i>
+                          CV Manager
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/switch-plan">
+                          <i className="fa fa-money" aria-hidden="true"></i>
+                          Switch Plan
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/transaction">
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
+                          <span>Transaction</span>
+                        </Link>
+                      </li>
                         {/* <li>
                           <Link href="/manage-job">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>

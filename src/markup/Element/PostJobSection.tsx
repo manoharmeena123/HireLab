@@ -454,13 +454,13 @@ const PostJobSection = () => {
                     {/* Sidebar Links */}
                     <ul>
                       <li>
-                        <Link href="/dashboard-section">
+                        <Link href="/manage-job">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
                           Dashboard
                         </Link>
                       </li>
                       <li>
-                        <Link href="/job-seeker">
+                        <Link href="/job-poster">
                           <i className="fa fa-user-o" aria-hidden="true"></i>
                           <span>Profile</span>
                         </Link>
@@ -480,7 +480,7 @@ const PostJobSection = () => {
                           Job Posted
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href="/my-resume">
                           <i
                             className="fa fa-file-text-o"
@@ -506,7 +506,7 @@ const PostJobSection = () => {
                           <i className="fa fa-bell-o" aria-hidden="true"></i>
                           Job Alerts
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link href="/cv-manager">
                           <i className="fa fa-id-card-o" aria-hidden="true"></i>

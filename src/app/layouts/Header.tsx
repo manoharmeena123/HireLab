@@ -6,7 +6,7 @@ import ProfileDropdown from "@/app/user-profile/page";
 import logo2 from "../../images/hiralablogo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname, useRouter } from "next/navigation";
-import { useAuthToken } from "@/hooks/useAuthToken";
+import { useAuthToken, useLoggedInUser } from "@/hooks/";
 
 // Import Font Awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ import { faMessage } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const router = useRouter();
+  const { user } = useLoggedInUser();
   const { token } = useAuthToken();
   const pathname = usePathname();
   const isLoginPage = pathname === "/login";
@@ -228,12 +229,16 @@ const Header = () => {
                     <li className="">
                       <Link href="/dashboard-section">Dashboard</Link>
                     </li>
-                    <li className="">
-                      <Link href="/job-seeker">Profile</Link>
-                    </li>
-                    <li className="">
-                      <Link href="/post-job">Post Job</Link>
-                    </li>
+                    {user?.user?.role === "job_seeker" && (
+                      <li className="">
+                        <Link href="/job-seeker">Profile</Link>
+                      </li>
+                    )}
+                    {user?.user?.role === "job_poster" && (
+                      <li className="">
+                        <Link href="/post-job">Post Job</Link>
+                      </li>
+                    )}
                     <li className="">
                       <Link href="/single-event">Meetup</Link>
                     </li>

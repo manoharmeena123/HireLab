@@ -164,76 +164,124 @@ const Transaction = () => {
                       </div>
                       {/* Sidebar Links */}
                       <ul>
+                        {user?.user?.role === "job_poster" ? (
+                          <li>
+                            <Link href="/manage-job">
+                              <i
+                                className="fa fa-heart-o"
+                                aria-hidden="true"
+                              ></i>
+                              Dashboard
+                            </Link>
+                          </li>
+                        ) : (
+                          <li>
+                            <Link href="/dashboard-section">
+                              <i
+                                className="fa fa-heart-o"
+                                aria-hidden="true"
+                              ></i>
+                              Dashboard
+                            </Link>
+                          </li>
+                        )}
+
+                        {user?.user?.role === "job_poster" ? (
+                          <li>
+                            <Link href="/job-poster">
+                              <i
+                                className="fa fa-user-o"
+                                aria-hidden="true"
+                              ></i>
+                              Profile
+                            </Link>
+                          </li>
+                        ) : (
+                          <li>
+                            <Link href="/job-seeker">
+                              <i
+                                className="fa fa-user-o"
+                                aria-hidden="true"
+                              ></i>
+                              Profile
+                            </Link>
+                          </li>
+                        )}
+                        {user?.user?.role === "job_poster" && (
+                          <>
+                            <li>
+                              <Link href="/post-job">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Post A job</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-posted">
+                                <i
+                                  className="fa fa-briefcase"
+                                  aria-hidden="true"
+                                ></i>
+                                Job Posted
+                              </Link>
+                            </li>
+
+                            <li>
+                              <Link href="/cv-manager">
+                                <i
+                                  className="fa fa-id-card-o"
+                                  aria-hidden="true"
+                                ></i>
+                                CV Manager
+                              </Link>
+                            </li>
+                          </>
+                        )}
+                        {user?.user?.role === "job_seeker" && (
+                          <>
+                            <li>
+                              <Link href="/my-resume">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                My Resume
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/saved-jobs">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                Saved Jobs
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/applied-job">
+                                <i
+                                  className="fa fa-briefcase"
+                                  aria-hidden="true"
+                                ></i>
+                                Applied Jobs
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-alert">
+                                <i
+                                  className="fa fa-bell-o"
+                                  aria-hidden="true"
+                                ></i>
+                                Job Alerts
+                              </Link>
+                            </li>
+                          </>
+                        )}
+
                         <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            Dashboard
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-seeker">
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            Profile
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/post-job">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Post A job</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-posted">
-                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
-                            Job Posted
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/my-resume">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            My Resume
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/saved-jobs">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            Saved Jobs
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/applied-job">
-                            <i
-                              className="fa fa-briefcase"
-                              aria-hidden="true"
-                            ></i>
-                            Applied Jobs
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-alert">
-                            <i className="fa fa-bell-o" aria-hidden="true"></i>
-                            Job Alerts
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/cv-manager">
-                            <i
-                              className="fa fa-id-card-o"
-                              aria-hidden="true"
-                            ></i>
-                            CV Manager
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            href="/switch-plan"
-                          >
+                          <Link href="/switch-plan">
                             <i className="fa fa-money" aria-hidden="true"></i>
                             Switch Plan
                           </Link>
@@ -272,12 +320,11 @@ const Transaction = () => {
                       Transactions
                     </h3>
                     <h6>
-                        Your Remainning credit {" "}
-                        <span style={{ color: "blue" }}>
-                          {user?.user?.membership?.credit || 0}{" "}
-                          Credits
-                        </span>
-                      </h6>
+                      Your Remainning credit{" "}
+                      <span style={{ color: "blue" }}>
+                        {user?.user?.membership?.credit || 0} Credits
+                      </span>
+                    </h6>
                     <table className="table-job-bx cv-manager company-manage-job">
                       <thead>
                         <tr>
@@ -301,7 +348,7 @@ const Transaction = () => {
                               }`}
                             >
                               {item.point}{" "}
-                              { item?.type == "debit"? "Debited" : "Credited"}
+                              {item?.type == "debit" ? "Debited" : "Credited"}
                             </td>
                             <td
                               className={`application ${
