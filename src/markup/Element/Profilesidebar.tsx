@@ -73,12 +73,12 @@ const Profilesidebar = ({
     }
   };
 
-  const handleNavigation = (e: any, url: string) => {
-    if (!isProfileComplete) {
-      e.preventDefault(); // Prevent navigation
-      setShowModal(true); // Show modal if profile is incomplete
-    }
-  };
+  // const handleNavigation = (e: any, url: string) => {
+  //   if (!isProfileComplete) {
+  //     e.preventDefault(); // Prevent navigation
+  //     setShowModal(true); // Show modal if profile is incomplete
+  //   }
+  // };
 
   if (userLoading || designationLoading || isLoggingOut) {
     return <Loading />;
@@ -132,7 +132,7 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/dashboard-section"
-                  onClick={(e) => handleNavigation(e, "/dashboard-section")}
+                  // onClick={(e) => handleNavigation(e, "/dashboard-section")}
                 >
                   <i className="fa fa-heart-o" aria-hidden="true"></i>
                   Dashboard
@@ -141,14 +141,14 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/job-seeker"
-                  onClick={(e) => handleNavigation(e, "/job-seeker")}
+                  // onClick={(e) => handleNavigation(e, "/job-seeker")}
                   className="active"
                 >
                   <i className="fa fa-user-o" aria-hidden="true"></i>
                   Profile
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/post-job"
                   onClick={(e) => handleNavigation(e, "/post-job")}
@@ -156,8 +156,8 @@ const Profilesidebar = ({
                   <i  className="fa fa-briefcase" aria-hidden="true"></i>
                   Post a Job
                 </Link>
-              </li>
-              <li>
+              </li> */}
+              {/* <li>
                 <Link
                   href="/job-posted"
                   onClick={(e) => handleNavigation(e, "/job-posted")}
@@ -165,11 +165,11 @@ const Profilesidebar = ({
                   <i  className="fa fa-briefcase" aria-hidden="true"></i>
                   Job Posted
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/my-resume"
-                  onClick={(e) => handleNavigation(e, "/my-resume")}
+                  // onClick={(e) => handleNavigation(e, "/my-resume")}
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true"></i>
                   My Resume
@@ -178,7 +178,7 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/saved-jobs"
-                  onClick={(e) => handleNavigation(e, "/saved-jobs")}
+                  // onClick={(e) => handleNavigation(e, "/saved-jobs")}
                 >
                   <i className="fa fa-heart-o" aria-hidden="true"></i>
                   Saved Jobs
@@ -187,7 +187,7 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/applied-job"
-                  onClick={(e) => handleNavigation(e, "/applied-job")}
+                  // onClick={(e) => handleNavigation(e, "/applied-job")}
                 >
                   <i className="fa fa-briefcase" aria-hidden="true"></i>
                   Applied Jobs
@@ -196,13 +196,13 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/job-alert"
-                  onClick={(e) => handleNavigation(e, "/job-alert")}
+                  // onClick={(e) => handleNavigation(e, "/job-alert")}
                 >
                   <i className="fa fa-bell-o" aria-hidden="true"></i>
                   Job Alerts
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   href="/cv-manager"
                   onClick={(e) => handleNavigation(e, "/cv-manager")}
@@ -210,11 +210,11 @@ const Profilesidebar = ({
                   <i className="fa fa-id-card-o" aria-hidden="true"></i>
                   CV Manager
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   href="/switch-plan"
-                  onClick={(e) => handleNavigation(e, "/cv-manager")}
+                  // onClick={(e) => handleNavigation(e, "/cv-manager")}
                 >
                <i className="fa fa-money" aria-hidden="true"></i>
                  Switch Plan
@@ -223,7 +223,7 @@ const Profilesidebar = ({
               <li>
                 <Link
                   href="/transaction"
-                  onClick={(e) => handleNavigation(e, "/transaction")}
+                  // onClick={(e) => handleNavigation(e, "/transaction")}
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true"></i>
                   Transaction
@@ -244,9 +244,8 @@ const Profilesidebar = ({
           </div>
         </div>
       </div>
-
       {/* Modal Popup for Incomplete Profile */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Complete Your Profile</Modal.Title>
         </Modal.Header>
@@ -258,7 +257,7 @@ const Profilesidebar = ({
             Okay
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal>  */}
     </>
   );
 };

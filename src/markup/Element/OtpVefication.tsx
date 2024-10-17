@@ -98,8 +98,8 @@ const OtpVefication = () => {
     event.preventDefault();
 
   // Validate OTP length for both user input (otp) and parsedData
-  const parsedOtp = parsedData?.data?.otp.toString().length;
-  const parsedOtps = parsedDatas?.data?.otp.toString().length;
+  const parsedOtp = parsedData?.data?.otp?.toString().length;
+  const parsedOtps = parsedDatas?.data?.otp?.toString().length;
   console.log('parsedOtps', parsedOtps)
   if ((otp.length !== 6 && !parsedOtp && !parsedDatas) || (parsedOtp && parsedOtp !== 6 && !parsedDatas && !otp) || (parsedOtps && parsedOtps !== 6 && !parsedData && !otp)) {
     setOtpError("OTP must be exactly 6 digits.");

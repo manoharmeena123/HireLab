@@ -128,7 +128,7 @@ const JobSavedSection = () => {
                             <span>Profile</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="/post-job">
                             <i
                               className="fa fa-file-text-o"
@@ -142,7 +142,7 @@ const JobSavedSection = () => {
                             <i  className="fa fa-briefcase" aria-hidden="true"></i>
                             Job Posted
                           </Link>
-                        </li>
+                        </li> */}
 
                         <li>
                           <Link href="/my-resume">
@@ -162,9 +162,9 @@ const JobSavedSection = () => {
                         </li>
 
                         <li>
-                          <Link href="/apply-jobs">
+                          <Link href="/applied-job">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Apply Jobs</span>
+                            <span>Applied Jobs</span>
                           </Link>
                         </li>
 
@@ -174,7 +174,7 @@ const JobSavedSection = () => {
                             <span>Job Alerts</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href={"/cv-manager"}>
                             <i
                               className="fa fa-id-card-o"
@@ -182,7 +182,7 @@ const JobSavedSection = () => {
                             ></i>
                             <span>CV Manager</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="/switch-plan">
                             <i className="fa fa-money" aria-hidden="true"></i>

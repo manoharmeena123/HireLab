@@ -162,7 +162,7 @@ const AppliedJobSection = () => {
                             <span>Profile</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="/post-job">
                             <i
                               className="fa fa-file-text-o"
@@ -176,7 +176,7 @@ const AppliedJobSection = () => {
                             <i  className="fa fa-briefcase" aria-hidden="true"></i>
                             Job Posted
                           </Link>
-                        </li>
+                        </li> */}
                       <li>
                         <Link href={"/jobs-my-resume"}>
                           <i
@@ -204,12 +204,12 @@ const AppliedJobSection = () => {
                           <span>Job Alerts</span>
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href={"/cv-manager"}>
                           <i className="fa fa-id-card-o" aria-hidden="true"></i>
                           <span>CV Manager</span>
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                           <Link
                             href={"/switch-plan"}

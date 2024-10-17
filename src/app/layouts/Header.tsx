@@ -22,7 +22,10 @@ const Header = () => {
   const isRegisterPage = pathname === "/register";
 
   const [menuOpen, setMenuOpen] = useState(false);
-
+  // Function to check if the link is active
+  const isActive = (href: any) => {
+    return pathname === href;
+  };
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -220,47 +223,81 @@ const Header = () => {
               )}
 
               <ul className="nav navbar-nav">
+                <li
+                  className={isActive("/") ? "active" : ""}
+                >
+                  <Link href="/">Home</Link>
+                </li>
+
                 {token ? (
                   <>
-                    {" "}
-                    <li className="">
-                      <Link href="/">Home</Link>
-                    </li>
-                    <li className="">
+                    <li
+                      className={isActive("/dashboard-section") ? "active" : ""}
+                    >
                       <Link href="/dashboard-section">Dashboard</Link>
                     </li>
+
                     {user?.user?.role === "job_seeker" && (
-                      <li className="">
+                      <li
+                        className={isActive("/job-seeker") ? "active" : ""}
+                   
+                      >
                         <Link href="/job-seeker">Profile</Link>
                       </li>
                     )}
+
                     {user?.user?.role === "job_poster" && (
-                      <li className="">
+                      <li
+                        className={isActive("/post-job") ? "active" : ""}
+                     
+                      >
                         <Link href="/post-job">Post Job</Link>
                       </li>
                     )}
-                    <li className="">
+
+                    <li
+                      className={isActive("/single-event") ? "active" : ""}
+                    >
                       <Link href="/single-event">Meetup</Link>
                     </li>
-                    <li className="">
+
+                    <li
+                      className={
+                        isActive("/view-all-discussion") ? "active" : ""
+                      }
+                    >
                       <Link href="/view-all-discussion">Discussion</Link>
                     </li>
                   </>
                 ) : (
                   <>
-                    <li className="">
+                    <li
+                      className={isActive("/") ? "active" : ""}
+                    >
                       <Link href="/">Home</Link>
                     </li>
-                    <li className="">
+
+                    <li
+                      className={isActive("/job-seeker") ? "active" : ""}
+                    >
                       <Link href="/job-seeker">I'M A Job SEEKER</Link>
                     </li>
-                    <li className="">
+
+                    <li
+                      className={isActive("/job-poster") ? "active" : ""}
+                    >
                       <Link href="/job-poster">I'M A Job Poster</Link>
                     </li>
-                    <li className="">
+
+                    <li
+                      className={isActive("/services") ? "active" : ""}
+                    >
                       <Link href="/services">Services</Link>
                     </li>
-                    <li className="">
+
+                    <li
+                      className={isActive("/blogs") ? "active" : ""}
+                    >
                       <Link href="/blogs">BLOG</Link>
                     </li>
                   </>

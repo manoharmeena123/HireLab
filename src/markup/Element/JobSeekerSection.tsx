@@ -617,7 +617,7 @@ const validateForm = () => {
       </div>
 
       {/* Modal Popup */}
-      <Modal show={showModal} onHide={() => {}}>
+      {/* <Modal show={showModal} onHide={() => {}}>
         <Modal.Header>
           <Modal.Title>Complete Your Profile</Modal.Title>
         </Modal.Header>
@@ -627,7 +627,7 @@ const validateForm = () => {
         <Modal.Footer>
           <Button variant="primary" onClick={() => setShowModal(false)}>Okay</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </>
   );
 };
