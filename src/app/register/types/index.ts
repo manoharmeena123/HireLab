@@ -33,7 +33,6 @@ export interface RegisterData {
     name: string;
     email: string;
     mobile_number: string;
-    password :string;
     company_name: string;
     company_website? :string
     role:string

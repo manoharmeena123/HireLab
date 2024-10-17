@@ -13,8 +13,6 @@ import { navigateSource } from "@/lib/action";
 import styles from "@/styles/Register.module.css";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"; // Import icons
 
 const bnr = require("./../../images/background/bg6.jpg");
 
@@ -22,10 +20,6 @@ const RegisterSection = () => {
   const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
   const errors = useSelector(selectRegisterErrors);
-
-  // State for password visibility
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   // Formik form validation schema
   const validationSchema = Yup.object().shape({
@@ -38,36 +32,19 @@ const RegisterSection = () => {
     mobile_number: Yup.string()
       .matches(/^\d{10}$/, "Mobile number must be exactly 10 digits.")
       .required("Mobile number is required"),
-    password: Yup.string()
-      .min(11, "Password must be at least 11 characters.")
-      .max(11, "Password must not exceed 11 characters.") // Maximum 8 characters
-      .required("Password is required"),
-    confirm_password: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords do not match")
-      .required("Confirm Password is required"),
-    company_name: Yup.string().required("Company name is required"),
+    company_name: Yup.string().required("Company name is required."),
     company_website: Yup.string().optional(),
     role: Yup.string().required("Please select a role"),
   });
 
   const handleSubmit = async (values: any) => {
-    const {
-      name,
-      email,
-      mobile_number,
-      password,
-      confirm_password,
-      company_name,
-      company_website,
-      role,
-    } = values;
+    const { name, email, mobile_number, company_name, company_website, role } = values;
 
     try {
       const res = await register({
         name,
         email,
         mobile_number,
-        password,
         company_name,
         company_website,
         role,
@@ -125,8 +102,6 @@ const RegisterSection = () => {
                         name: "",
                         email: "",
                         mobile_number: "",
-                        password: "",
-                        confirm_password: "",
                         company_name: "",
                         company_website: "",
                         role: "",
@@ -138,7 +113,7 @@ const RegisterSection = () => {
                         <Form
                           className="dez-form"
                           method="post"
-                          style={{ width: "100%", paddingBottom:"30px" }}
+                          style={{ width: "100%", paddingBottom: "30px" }}
                         >
                           <h3
                             className={`${styles["form-title"]} ${styles["rubik-font"]}`}
@@ -192,70 +167,6 @@ const RegisterSection = () => {
                             </span>
                           </div>
 
-                          {/* Password Field */}
-                          <div className="form-group position-relative">
-                            <Field
-                              className={`form-control ${styles["lato-font"]}`}
-                              name="password"
-                              placeholder="Password"
-                              type={passwordVisible ? "text" : "password"} // Toggle password visibility
-                            />
-                            <span className={`${styles["text-danger"]}`}>
-                              <ErrorMessage name="password" />
-                              {errors?.password?.[0]}
-                            </span>
-                            <span
-                              className="position-absolute"
-                              style={{
-                                right: "10px",
-                                top: "10px",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                setPasswordVisible(!passwordVisible)
-                              }
-                            >
-                              <FontAwesomeIcon
-                                icon={passwordVisible ? faEyeSlash : faEye}
-                              />
-                            </span>
-                          </div>
-
-                          {/* Confirm Password Field */}
-                          <div className="form-group position-relative">
-                            <Field
-                              className={`form-control ${styles["lato-font"]}`}
-                              name="confirm_password"
-                              placeholder="Confirm Password"
-                              type={
-                                confirmPasswordVisible ? "text" : "password"
-                              } // Toggle password visibility
-                            />
-                            <span className={`${styles["text-danger"]}`}>
-                              <ErrorMessage name="confirm_password" />
-                              {errors?.confirm_password?.[0]}
-                            </span>
-                            <span
-                              className="position-absolute"
-                              style={{
-                                right: "10px",
-                                top: "10px",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                setConfirmPasswordVisible(
-                                  !confirmPasswordVisible
-                                )
-                              }
-                            >
-                              <FontAwesomeIcon
-                                icon={
-                                  confirmPasswordVisible ? faEyeSlash : faEye
-                                }
-                              />
-                            </span>
-                          </div>
-
                           {/* Company Name Field */}
                           <div className="form-group">
                             <Field
@@ -264,7 +175,7 @@ const RegisterSection = () => {
                               placeholder="Company Name"
                             />
                             <span className={`${styles["text-danger"]}`}>
-                              <ErrorMessage name="name" />
+                              <ErrorMessage name="company_name" />
                               {errors?.company_name?.[0]}
                             </span>
                           </div>
@@ -306,6 +217,7 @@ const RegisterSection = () => {
                               {errors?.role?.[0]}
                             </span>
                           </div>
+
                           {/* Register Button */}
                           <div className="form-group w-full d-flex justify-content-center">
                             <button
@@ -322,7 +234,10 @@ const RegisterSection = () => {
                               style={{ textAlign: "center" }}
                             >
                               Already registered?{" "}
-                              <Link href="/login">  <span style={{color:'blue'}}>Login</span></Link>
+                              <Link href="/login">
+                                {" "}
+                                <span style={{ color: "blue" }}>Login</span>
+                              </Link>
                             </p>
                           </div>
                         </Form>
