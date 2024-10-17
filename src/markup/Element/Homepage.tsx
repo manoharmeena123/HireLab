@@ -38,7 +38,7 @@ const Homepage = () => {
               <h2 style={{ fontWeight: "600" }} className="m-b0">
                 Membership Plans
               </h2>
-              <p>"Empowering Careers: CTC-BasedTiers,Your Path to Success."</p>
+              <p>Empowering Careers: CTC-BasedTiers,Your Path to Success</p>
             </div>
             <MembershipPlans/>
           </div>

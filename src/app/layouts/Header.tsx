@@ -37,11 +37,16 @@ const Header = () => {
   const handleNotificationClick = () => {
     router.push("/notifications");
   };
-  const renderProfileDropdown = !isLoginPage && !isRegisterPage && token && (
-    <Link href="/job-seeker">
+  const renderProfileDropdown = 
+  !isLoginPage && 
+  !isRegisterPage && 
+  token && 
+  user?.user?.role && (
+    <Link href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}>
       <ProfileDropdown />
     </Link>
   );
+
 
   const renderLoginRegisterButtons = !isLoginPage &&
     !isRegisterPage &&
@@ -258,7 +263,7 @@ const Header = () => {
                     <li
                       className={isActive("/single-event") ? "active" : ""}
                     >
-                      <Link href="/single-event">Meetup</Link>
+                      <Link href="/single-event">Meetups and Events</Link>
                     </li>
 
                     <li
@@ -271,12 +276,6 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <li
-                      className={isActive("/") ? "active" : ""}
-                    >
-                      <Link href="/">Home</Link>
-                    </li>
-
                     <li
                       className={isActive("/job-seeker") ? "active" : ""}
                     >

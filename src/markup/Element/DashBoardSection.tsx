@@ -523,7 +523,7 @@ const DashboardSection = () => {
                   }}
                 >
                   <h2 style={{ fontWeight: 600, textAlign: "center" }}>
-                    Meet Ups
+                  Meetups and Events
                   </h2>
                   <ul
                     className="post-job-bx col"
