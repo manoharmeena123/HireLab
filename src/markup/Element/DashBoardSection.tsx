@@ -1,840 +1,429 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Swal from "sweetalert2";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import { Modal, Button, Form } from "react-bootstrap"; // Importing react-bootstrap components
+import Slider from "react-slick"; // Importing react-slick for carousel
 import {
+  useGetAppliedJobsQuery,
   useRecentJobSeekerJobQuery,
-  usePostSaveJobMutation,
-  useDeleteSavedJobMutation,
   useGetEventsQuery,
-  useGetMembershipQuery,
-  useGetCtcDataQuery,
-  useUserListDiscussionQuery,
-  useCreateDiscussionMutation,
-  useDeleteDiscussionMutation,
-  useUpdateDiscussionMutation,
+  useGetCommunityMutation,
 } from "@/store/global-store/global.query";
-import dayjs from "dayjs"; // Date manipulation library
-import { RecentJobData } from "@/types/index";
-import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
-import { formaterDate } from "@/utils/formateDate";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime"; // Import relativeTime plugin
 import Loading from "@/components/Loading";
-import Pagination from "./Pagination"; // Importing your existing Pagination component
-import RangeSlider from "react-range-slider-input"; // CTC Range Slider
-import "react-range-slider-input/dist/style.css"; // Range slider styling
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import { Modal, Button } from "react-bootstrap"; // Importing Bootstrap Modal
+import { IMAGE_URL } from "@/lib/apiEndPoints";
+import { useRouter } from "next/navigation";
 
-// Type for creating discussion form data
-type CreateFormData = {
-  question: string;
-  description: string;
-  status: string;
-};
-
-// Type for editing discussion form data
-type EditFormData = {
-  id: string;
-  question: string;
-  description: string;
-};
-
-interface Filters {
-  experience: string[];
-  location: string[];
-  education: string[];
-  cities: string[];
-  jobTitles: string[];
-}
+dayjs.extend(relativeTime); // Extend dayjs with relativeTime plugin
 
 const DashboardSection = () => {
   const { user } = useLoggedInUser();
   const { push } = useRouter();
-  const dispatch = useDispatch();
-  const { data: membershipData } = useGetMembershipQuery();
-  const {
-    data: recentJob,
-    isLoading: recentLoading,
-    isError,
-  } = useRecentJobSeekerJobQuery();
-  const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
-  const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
-  const { data: eventsData, isLoading: eventLoading } = useGetEventsQuery();
-  const { data: ctcData } = useGetCtcDataQuery();
-  const [likedJobs, setLikedJobs] = useState<string[]>([]);
-  const {
-    data: discussionData,
-    isLoading: discussionLoading,
-    refetch,
-  } = useUserListDiscussionQuery();
-  const [createDiscussion] = useCreateDiscussionMutation();
-  const [deleteDiscussion] = useDeleteDiscussionMutation();
-  const [updateDiscussion] = useUpdateDiscussionMutation();
+  const { data: appliedJobsData, isLoading: appliedJobsLoading } =
+    useGetAppliedJobsQuery();
+  const { data: recentJobData, isLoading: recentJobLoading } =
+    useRecentJobSeekerJobQuery();
+  const { data: eventsData, isLoading: eventsLoading } = useGetEventsQuery(); // For fetching events data
+  const [getCommunity, { data: getCommunityData }] = useGetCommunityMutation();
 
-  // State for modal control and form data for creating and editing discussions
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [showModal, setShowModal] = useState(false); // Modal control state
+  
+// Calling the API to get community data, replacing spaces with hyphens
+useEffect(() => {
+  if (user?.user?.communities?.length > 0) {
+    const communityName = user.user.communities[0].name.replace(/\s+/g, "-");
+    getCommunity(communityName); // Call the community API
+  }
+}, [user, getCommunity]);
 
-  const [createFormData, setCreateFormData] = useState<CreateFormData>({
-    question: "",
-    description: "",
-    status: "1", // Default value for status
-  });
+  // Simulated profile completion value for demonstration purposes
+  const profileCompletion = 35; // This can come dynamically from user data
 
-  const [editFormData, setEditFormData] = useState<EditFormData>({
-    id: "",
-    question: "",
-    description: "",
-  });
+  // Modal close handler
+  const handleClose = () => setShowModal(false);
 
-  // State for filters
-  const [filters, setFilters] = useState<Filters>({
-    experience: [],
-    location: [],
-    education: [],
-    cities: [],
-    jobTitles: [],
-  });
+  if (appliedJobsLoading || recentJobLoading || eventsLoading) {
+    return <Loading />;
+  }
 
-  // State for pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Number of jobs per page
+  const totalCredits = user?.total_credits || 10; // Default to 10 if total_credits not available
+  const remainingCredits = user?.remaining_credits || 0; // Default to 0 if remaining_credits not available
 
-  // CTC filter range
-  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]); // Default CTC range
+  const recentJobs = recentJobData?.data || [];
+  const appliedJobs = appliedJobsData?.data || [];
+  const events = eventsData?.data || [];
+  const communityUsers = getCommunityData?.data[0]?.users || [];
 
-  // Sort option state for date-based filtering
-  const [sortOption, setSortOption] = useState<string>("last3Months");
+  const formatDate = (date: string) => dayjs(date).fromNow(); // Format the date relative to now
 
-  const getCtcTitleById = (id: any) => {
-    const ctcItem = ctcData?.data?.find((item) => item.id == id);
-    return ctcItem ? ctcItem.title : "N/A";
-  };
-
-  // Helper function to extract the numeric range from the CTC title
-  const extractCtcRange = (title: string): [number, number] => {
-    const [min, max] = title
-      .replace("lac", "") // Remove the "lac" string
-      .split("-") // Split by the dash (-) to get the range
-      .map((str) => parseInt(str.trim())); // Convert to numbers
-    return [min, max];
-  };
-
-  // Apply CTC range filter
-  const filterByCtcRange = (job: any) => {
-    const ctcItem = ctcData?.data?.find((item) => item.id == job.ctc);
-    if (!ctcItem) return false;
-    const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
-    return ctcMin >= ctcRange[0] && ctcMax <= ctcRange[1];
-  };
-
-  // Apply other filters (similar to BrowseJobFilter)
-  const applyFilters = (jobs: RecentJobData[]) => {
-    return jobs
-      .filter((job) =>
-        filters.experience.length
-          ? filters.experience.includes(job.experience?.title || "")
-          : true
-      )
-      .filter((job) =>
-        filters.location.length
-          ? filters.location.includes(job.location?.title || "")
-          : true
-      )
-      .filter((job) =>
-        filters.education.length
-          ? filters.education.includes(job.education?.name || "")
-          : true
-      )
-      .filter((job) =>
-        filters.cities.length
-          ? filters.cities.some((city) => job.address?.includes(city) || false)
-          : true
-      )
-      .filter((job) =>
-        filters.jobTitles.length
-          ? filters.jobTitles.includes(job.job_title)
-          : true
-      );
-  };
-
-  // Date filtering function (similar to BrowseJobFilter)
-  const sortJobs = (jobs: RecentJobData[]): RecentJobData[] => {
-    const now = new Date();
-    const threeMonthsAgo = new Date(now.getTime());
-    threeMonthsAgo.setMonth(now.getMonth() - 3);
-    const oneMonthAgo = new Date(now.getTime());
-    oneMonthAgo.setMonth(now.getMonth() - 1);
-    const oneWeekAgo = new Date(now.getTime());
-    oneWeekAgo.setDate(now.getDate() - 7);
-    const threeDaysAgo = new Date(now.getTime());
-    threeDaysAgo.setDate(now.getDate() - 3);
-    const oneDayAgo = new Date(now.getTime());
-    oneDayAgo.setDate(now.getDate() - 1);
-
-    switch (sortOption) {
-      case "last3Months":
-        return jobs.filter((job) => new Date(job.created_at) >= threeMonthsAgo);
-      case "lastMonth":
-        return jobs.filter((job) => new Date(job.created_at) >= oneMonthAgo);
-      case "lastWeek":
-        return jobs.filter((job) => new Date(job.created_at) >= oneWeekAgo);
-      case "last3Days":
-        return jobs.filter((job) => new Date(job.created_at) >= threeDaysAgo);
-      case "lastDay":
-        return jobs.filter((job) => new Date(job.created_at) >= oneDayAgo);
-      default:
-        return jobs;
-    }
-  };
-
-  // Paginate and sort jobs by 'created_at' in descending order, applying filters and CTC filter
-  const sortedAndFilteredJobs = recentJob?.data
-    ?.filter(filterByCtcRange)
-    ?.filter((job: any) => applyFilters([job]).length > 0)
-    ?.sort(
-      (a: RecentJobData, b: RecentJobData) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    );
-
-  const totalJobs = sortedAndFilteredJobs?.length || 0;
-  const indexOfLastJob = currentPage * itemsPerPage;
-  const indexOfFirstJob = indexOfLastJob - itemsPerPage;
-  const currentJobs = sortJobs(
-    sortedAndFilteredJobs?.slice(indexOfFirstJob, indexOfLastJob) || []
-  );
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleUpdateDiscussion = async () => {
-    try {
-      await updateDiscussion({
-        id: editFormData.id,
-        question: editFormData.question,
-        description: editFormData.description,
-      }).unwrap();
-      refetch();
-      setShowEditModal(false);
-      Swal.fire("Success!", "Your discussion has been updated.", "success");
-    } catch (error) {
-      Swal.fire("Error!", "Failed to update discussion.", "error");
-    }
-  };
-
-  const handleCreateDiscussion = async () => {
-    try {
-      const res: any = await createDiscussion(createFormData);
-      if (res?.data?.code == 200) {
-        refetch();
-        Swal.fire({
-          icon: "success",
-          title: "Discussion Created Successfully!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        setCreateFormData({
-          question: "",
-          description: "",
-          status: "1", // Reset form fields to initial values
-        });
-        setShowCreateModal(false); // Close modal after submission
-      } else if (res?.data?.code == 404) {
-        Swal.fire({
-          icon: "error",
-          title: "Error Creating Discussion",
-          text: res?.data?.data?.error?.question,
-          confirmButtonText: "OK",
-        });
-        setCreateFormData({
-          question: "",
-          description: "",
-          status: "1", // Reset form fields to initial values
-        });
-        setShowCreateModal(false);
-      }
-    } catch (error: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Error Creating Discussion",
-        text: error?.message,
-        confirmButtonText: "OK",
-      });
-    }
+  // Carousel settings for slick
+  const carouselSettings = {
+    dots: true, // Show dots below for navigation
+    infinite: true, // Infinite scroll for items
+    speed: 500, // Transition speed
+    slidesToShow: 2, // Number of job cards to show at once
+    slidesToScroll: 1, // Number of job cards to scroll at a time
+    responsive: [
+      {
+        breakpoint: 1024, // For medium-sized screens
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600, // For small screens
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   return (
-    <>
-      {recentLoading && eventLoading && discussionLoading && <Loading />}
-      <div className="page-content bg-white">
-        <div className="content-block">
-          <div className="section-full bg-white browse-job p-b50">
-            <div className="ds-wrap">
-              <div className="row">
-                <div className="col-lg-9">
-                  <div className="d-flex justify-content-between align-items-center">
-                    {/* Centered Heading */}
-                    <h3
-                      className="text-center mt-5 mx-auto"
-                      style={{ fontWeight: "600", fontSize: "bold" }}
-                    >
-                      Jobs for you
-                    </h3>
+    <div className="container page-content bg-white mt-5">
+      <div className="row">
+        {/* Recommended Jobs Section */}
+        <div className="col-lg-8">
+          <div className=" p-4 bg-white mb-4 " 
+            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+          >
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h4 className="fw-bold">Recommended Jobs for You</h4>
+              <Link href="/apply-jobs" className="btn btn-link text-primary">
+                View All
+              </Link>
+            </div>
 
-                    {/* Time Filter - Positioned at the end */}
-                    <select
-                      className="form-select mt-5 ms-auto"
-                      value={sortOption}
-                      onChange={(e) => setSortOption(e.target.value as string)}
-                      style={{
-                        maxWidth: "200px",
-                        borderRadius: "5px",
-                        padding: "5px",
-                      }}
-                    >
-                      <option value="last3Months">Last 3 Months</option>
-                      <option value="lastMonth">Last Month</option>
-                      <option value="lastWeek">Last Week</option>
-                      <option value="last3Days">Last 3 Days</option>
-                      <option value="lastDay">Last Day</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <ul className="post-job-bx" style={{ padding: "5px" }}>
-                      {currentJobs.length > 0 ? (
-                        currentJobs.map(
-                          (item: RecentJobData, index: number) => (
-                            <li key={index}>
-                              <div className="post-bx">
-                                <div className="d-flex m-b30">
-                                  <div className="job-post-info">
-                                    <h4
-                                      style={{ cursor: "pointer" }}
-                                      className="text-secondry"
-                                      onClick={() =>
-                                        push(`/job-detail?jobId=${item.id}`)
-                                      }
-                                    >
-                                      <Link href="">{item?.job_title}</Link>
-                                    </h4>
-                                    <ul>
-                                      <li>
-                                        <i className="fa fa-map-marker"></i>
-                                        {item?.address || "N/A"}
-                                      </li>
-                                      <li>
-                                        <i className="fa fa-bookmark-o"></i>
-                                        {item?.location?.title || "N/A"}
-                                      </li>
-                                      <li>
-                                        <i className="fa fa-clock-o"></i>{" "}
-                                        Published{" "}
-                                        {formaterDate(item?.created_at)}
-                                      </li>
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div className="d-flex">
-                                  <div className="job-time mr-auto">
-                                    <Link href={""}>
-                                      <span>{item?.location?.title}</span>
-                                    </Link>
-                                  </div>
-                                  <div className="salary-bx">
-                                    <span className="ctc-badge">
-                                      <i className="fa fa-money"></i>{" "}
-                                      {getCtcTitleById(item.ctc)}
-                                    </span>
-                                  </div>
-                                </div>
-                                <label
-                                  className={`like-btn ${
-                                    likedJobs.includes(item.id.toString())
-                                      ? "liked"
-                                      : ""
-                                  }`}
-                                >
-                                  <input type="checkbox" />
-                                  <span className="checkmark"></span>
-                                </label>
-                              </div>
-                            </li>
-                          )
-                        )
-                      ) : (
-                        <p className="text-center">No Job Found</p>
-                      )}
-                    </ul>
-
-                    {/* Pagination component */}
-                    <Pagination
-                      currentPage={currentPage}
-                      itemsPerPage={itemsPerPage}
-                      totalItems={totalJobs}
-                      onPageChange={handlePageChange}
-                    />
-                  </div>
-                </div>
-
-                {/* Membership, CTC filter, Meetups, and Discussion Forum */}
-                <div className="col-lg-3">
-                  {/* CTC Range Filter */}
+            {/* Recommended Jobs Carousel */}
+            <Slider {...carouselSettings}>
+              {recentJobs.map((job: any) => (
+                <div key={job.id} className="p-3">
                   <div
-                    className="shadow p-3 bg-white"
-                    style={{ marginTop: "20px" }}
+                    className="job-card p-4  shadow-sm"
+                    style={{
+                      background: "#fff",
+                      transition: "0.3s",
+                      cursor: "pointer",
+                      border: "1px solid #e0e0e0",
+                      borderRadius: "20px",
+                      boxShadow:
+                        "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                    }}
                   >
-                    <h6 className="text-center">
-                      <i className="fa fa-sliders m-r5"></i> CTC Filter
+                    <h6 className="text-dark mb-2 fw-semibold">
+                      {job.job_title}
                     </h6>
-                    <RangeSlider
-                      value={ctcRange}
-                      onInput={setCtcRange}
-                      min={10}
-                      max={50}
-                    />
-                    <div className="d-flex justify-content-between gap-1 mt-2">
-                      <span>{ctcRange[0]} Lac</span>
-                      <span>{ctcRange[1]} Lac</span>
-                    </div>
-                  </div>
-
-                  {/* Membership Card */}
-                  <div
-                    className="sticky-top browse-candidates shadow"
-                    style={{
-                      marginTop: "40px",
-                      display: "grid",
-                      justifyContent: "space-evenly",
-                    }}
-                  >
-                    <h3
+                    <p className="text-muted mb-2">{job.company_name}</p>
+                    <p className="text-muted small mb-2">
+                      <i className="fa fa-calendar me-1 mr-1"></i>
+                      {formatDate(job.created_at)}
+                    </p>
+                    <p className="text-muted small">
+                      <i className="fa fa-map-marker me-1"></i>
+                      {job.location?.title || "Location not available"}
+                    </p>
+                    <Link
+                      href={`/job-detail?jobId=${job.id}`}
+                      className="btn btn-block mt-3"
                       style={{
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        paddingTop: "20px",
+                        backgroundColor: "#2A6310",
+                        color: "white",
+                        borderRadius: "30px",
+                        transition: "background-color 0.3s",
                       }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#225307")}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2A6310")}
                     >
-                      Membership Plan
-                    </h3>
-                    <p className="text-center">Your path to Success</p>
-
-                    <div className="ds-mp-wrap">
-                      {membershipData?.data?.map((item, index) => (
-                        <div
-                          className="membership_class"
-                          style={{
-                            backgroundColor:
-                              user?.user?.membership?.membership_id === item.id
-                                ? "#2A6310"
-                                : "rgb(42 99 16 / 67%)",
-                            padding: "10px",
-                            minWidth: "230px",
-                            position: "relative",
-                            height: "auto",
-                            cursor: "pointer",
-                          }}
-                          key={index}
-                          onClick={() => push(`/cart?plan=${item?.id}`)}
-                        >
-                          <div className="quote-info">
-                            <div className="d-flex align-items-center relative">
-                              <h5 className="text-white text-center  flex-grow-1 mb-0">
-                                {item?.title}
-                              </h5>
-                              {user?.user?.membership?.membership_id ===
-                                item.id && (
-                                <div
-                                  className="px-2 absolute"
-                                  style={{ right: "0", top: "5px" }}
-                                >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="26"
-                                    height="26"
-                                    viewBox="0 0 36 36"
-                                    fill="none"
-                                  >
-                                    <circle
-                                      cx="18"
-                                      cy="18"
-                                      r="18"
-                                      fill="#42A5F5"
-                                    />
-                                    <path
-                                      d="M25.5 11.41L15.5 21.41L10 15.91L11.41 14.5L15.5 18.58L24.09 10L25.5 11.41Z"
-                                      fill="#fff"
-                                    />
-                                  </svg>
-                                </div>
-                              )}
-                            </div>
-
-                            <h6
-                              className="text-white text-center mb-1"
-                              style={{
-                                fontFamily: "Lato, sans-serif !important",
-                              }}
-                            >
-                              Price
-                            </h6>
-                            <li
-                              className="text-center mp-lists"
-                              style={{
-                                fontFamily: "Lato, sans-serif !important",
-                                letterSpacing: "0.05em",
-                              }}
-                            >
-                              {item?.monthly_price}
-                            </li>
-
-                            <li
-                              className="text-center mp-lists"
-                              style={{
-                                fontFamily: "Lato, sans-serif !important",
-                                letterSpacing: "0.05em",
-                              }}
-                            >
-                              {item?.quarterly_price}
-                            </li>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                      View Job
+                    </Link>
                   </div>
                 </div>
+              ))}
+            </Slider>
+          </div>
+
+          {/* Applied Jobs Section */}
+          <div className="p-4 bg-white "
+            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+          
+          >
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h4 className="fw-bold">Applied Jobs</h4>
+            </div>
+
+            {/* Applied Jobs Carousel */}
+            <Slider {...carouselSettings}>
+              {appliedJobs.length > 0 ? (
+                appliedJobs.map((job: any, index: number) => (
+                  <div key={index} className="p-3">
+                    <div
+                      className="job-card p-4  shadow-sm"
+                      style={{
+                        background: "#fff",
+                        transition: "0.3s",
+                        cursor: "pointer",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "12px",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                      }}
+                    >
+                      <h6 className="text-dark mb-2 fw-semibold">
+                        {job.job_title}
+                      </h6>
+                      <p className="text-muted mb-2">{job.company_name}</p>
+                      <p className="text-muted small mb-2">
+                        <i className="fa fa-calendar me-1 mr-1"></i>
+                        {formatDate(job.created_at)}
+                      </p>
+                      <p className="text-muted small">
+                        <i className="fa fa-map-marker me-1"></i>
+                        {job.location?.title || "Location not available"}
+                      </p>
+                      <Link
+                        href={`/job-detail?jobId=${job.id}`}
+                        className="btn btn-block mt-3"
+                        style={{
+                          backgroundColor: "#2A6310",
+                          color: "white",
+                          borderRadius: "30px",
+                          transition: "background-color 0.3s",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#225307")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2A6310")}
+                      >
+                        View Job
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No applied jobs available</p>
+              )}
+            </Slider>
+          </div>
+
+          {/* Meetups and Events Section */}
+          <div className="p-4 bg-white  mt-4"
+            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+          
+          >
+            <div className="d-flex justify-content-between align-items-center mb-4">
+              <h4 className="fw-bold">Meetups and Events</h4>
+              <Link href="/single-event" className="btn btn-link text-primary">
+                View All
+              </Link>
+            </div>
+
+            {/* Meetups and Events Carousel */}
+            <Slider {...carouselSettings}>
+              {events.length > 0 ? (
+                events.map((event: any, index) => (
+                  <div key={index} className="p-3">
+                    <div
+                      className="event-card p-4  shadow-sm"
+                      style={{
+                        background: "#fff",
+                        transition: "0.3s",
+                        cursor: "pointer",
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "12px",
+                        boxShadow:
+                          "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                      }}
+                    >
+                      <h6 className="text-dark mb-2 fw-semibold">
+                        {event.title}
+                      </h6>
+                      <p className="text-muted mb-2">{event.location}</p>
+                      <p className="text-muted small mb-2">
+                        <i className="fa fa-calendar me-1"></i> {event.date}
+                      </p>
+                      <p className="text-muted small">
+                        <i className="fa fa-clock me-1"></i> {event.time}
+                      </p>
+                      <Link
+                        href={`/event-detail?eventId=${event.id}`}
+                        className="btn btn-block mt-3"
+                        style={{
+                          backgroundColor: "#2A6310",
+                          color: "white",
+                          borderRadius: "30px",
+                          transition: "background-color 0.3s",
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#225307")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2A6310")}
+                      >
+                        View Event
+                      </Link>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>No events available</p>
+              )}
+            </Slider>
+          </div>
+        </div>
+
+        {/* Scrollable Right Sidebar */}
+        <div className="col-lg-3">
+          <div className="sticky-top" style={{ maxHeight: "calc(100vh - 20px)", overflowY: "auto" }}>
+            {/* Profile Completion Section */}
+             <div className=" p-3 bg-white mb-4 m-1" 
+            style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+             
+             >
+              <h5 className="fw-bold">Profile Completion</h5>
+              {/* Profile completion logic */}
+              <div className="progress mb-3" style={{ height: "25px" }}>
+                <div
+                  className="progress-bar bg-success"
+                  role="progressbar"
+                  style={{ width: "70%" }} // This value can be dynamic
+                  aria-valuenow={70}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                >
+                  70% Complete
+                </div>
               </div>
-              {/* Meetups and Discussion Forum */}
-              <div
-                className="row mt-3 justify-content-center"
-                style={{ gap: "2rem" }}
+              <ul className="list-unstyled">
+                <li>
+                  <Link href="#" className="text-decoration-none text-dark">
+                    Upload LinkedIn Profile
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-decoration-none text-dark">
+                    Add Profile Picture
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-decoration-none text-dark">
+                    Add Permanent Address
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {/* My Community Section */}
+            <div
+              className="p-3 bg-white mb-4 m-1 text-center"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+            >
+              <h5 className="fw-bold">My Community</h5>
+              <h6 className="text-muted">
+                {getCommunityData?.data[0]?.name || "No Community"}
+              </h6>
+              <p className="text-muted">
+                {communityUsers.length} {communityUsers.length === 1 ? "Member" : "Members"}
+              </p>
+              <button
+                className="btn btn-outline-success w-100"
+                style={{
+                  backgroundColor: "#2A6310",
+                  color: "white",
+                  borderRadius: "30px",
+                  // transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#225307")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2A6310")}
+                onClick={() => setShowModal(true)}
               >
-                {/* Meetups */}
-                <div
-                  className="col-lg-6 col-md-12 shadow p-4"
-                  style={{
-                    marginTop: "30px",
-                    paddingRight: "-15px",
-                    borderRadius: "1rem",
-                    maxWidth: "550px",
-                  }}
-                >
-                  <h2 style={{ fontWeight: 600, textAlign: "center" }}>
-                  Meetups and Events
-                  </h2>
-                  <ul
-                    className="post-job-bx col"
-                    style={{
-                      paddingTop: "10px",
-                    }}
-                  >
-                    {eventsData &&
-                      eventsData.data.slice(0, 2).map((event, index) => (
-                        <li key={index}>
-                          <div className="post-bx">
-                            <div className="d-flex m-b10">
-                              <div className="job-post-info w-100">
-                                <div className="d-flex justify-content-between w-100">
-                                  <h5>
-                                    <Link
-                                      href={`/single-event?query=${event.title}`}
-                                      style={{ fontWeight: "600" }}
-                                    >
-                                      {event.title}
-                                    </Link>
-                                  </h5>
-                                </div>
-                                <ul
-                                  style={{
-                                    display: "flex",
-                                    marginTop: "20px",
-                                    color: "#2A6310 !important",
-                                    flexWrap: "wrap",
-                                  }}
-                                >
-                                  <li className="mr-4">
-                                    <i
-                                      className="fa fa-map-marker"
-                                      style={{
-                                        fontSize: "large",
-                                        color: "#2A6310",
-                                      }}
-                                    ></i>
-                                    {event.location}
-                                  </li>
-                                  <li className="mr-4">{event.date}</li>
-                                  <li className="mr-4">{event.time}</li>
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                  </ul>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                    className="mt-4 mb-3"
-                  >
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        background: "rgb(42, 99, 16)",
-                        border: "none",
-                      }}
-                    >
-                      Browse All
-                    </button>
-                  </div>
-                </div>
+                View Members
+              </button>
+            </div>
 
-                {/* Discussion Forum Section */}
-                <div
-                  className="col-lg-6 col-md-12 shadow p-4"
-                  style={{
-                    marginTop: "30px",
-                    paddingLeft: "-15px",
-                    borderRadius: "1rem",
-                    maxWidth: "550px",
-                  }}
-                >
-                  <h2 style={{ fontWeight: 600, textAlign: "center" }}>
-                    Discussion Forum
-                  </h2>
-                  <ul
-                    className="post-job-bx col"
-                    style={{
-                      paddingTop: "10px",
-                      maxHeight: "320px", // Limit height to display only 2 items initially
-                      overflowY: "auto", // Enable scrolling after 2 items
-                    }}
-                  >
-                    {discussionData?.data?.map((item: any) => (
-                      <li key={item?.id}>
-                        <div className="post-bx">
-                          <div className="d-flex m-b10">
-                            <div className="job-post-info w-100 d-flex justify-content-between">
-                              <div>
-                                <h5
-                                  onClick={() =>
-                                    push(
-                                      `/single-discussion?query=${item?.question}`
-                                    )
-                                  }
-                                  style={{
-                                    fontWeight: "600",
-                                    cursor: "pointer",
-                                  }}
-                                >
-                                  <Link href="#">
-                                    Q: {item?.question?.replace(/-/g, " ")}
-                                  </Link>
-                                </h5>
-                                <ul
-                                  style={{
-                                    display: "flex",
-                                    marginTop: "10px",
-                                    color: "#2A6310",
-                                  }}
-                                >
-                                  <p>Author: {item?.user?.name}</p>
-                                </ul>
-                              </div>
-
-                              {/* Edit and Delete icons aligned to the end */}
-                              <div className="d-flex align-items-center">
-                                <i
-                                  className="fa fa-pencil mr-3"
-                                  onClick={() => {
-                                    setEditFormData({
-                                      id: item.id,
-                                      question: item.question,
-                                      description: item.description,
-                                    });
-                                    setShowEditModal(true);
-                                  }} // Open modal with data
-                                  style={{
-                                    cursor: "pointer",
-                                    color: "green",
-                                    fontSize: "18px",
-                                  }}
-                                ></i>
-                                <i
-                                  className="fa fa-trash"
-                                  onClick={() =>
-                                    Swal.fire({
-                                      title: "Are you sure?",
-                                      text: "You won't be able to undo this!",
-                                      icon: "warning",
-                                      showCancelButton: true,
-                                      confirmButtonColor: "#3085d6",
-                                      cancelButtonColor: "#d33",
-                                      confirmButtonText: "Yes, delete it!",
-                                    }).then(async (result) => {
-                                      if (result.isConfirmed) {
-                                        await deleteDiscussion(item.id);
-                                        refetch();
-                                      }
-                                    })
-                                  }
-                                  style={{
-                                    cursor: "pointer",
-                                    color: "red",
-                                    fontSize: "18px",
-                                  }}
-                                ></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                  {/* Static Ask a Question button outside the scrollable list */}
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      marginTop: "20px",
-                    }}
-                  >
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        background: "rgb(42, 99, 16)",
-                        border: "none",
-                      }}
-                      onClick={() => {
-                        if (!user?.user?.membership) {
-                          Swal.fire({
-                            title: "No Membership Plan",
-                            text: "You need a membership to create a discussion. Would you like to buy one?",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonText: "Buy Subscription",
-                            cancelButtonText: "Cancel",
-                          }).then((result) => {
-                            if (result.isConfirmed) {
-                              push("/cart");
-                            }
-                          });
-                        } else {
-                          setShowCreateModal(true);
-                        }
-                      }}
-                    >
-                      Ask a Question
-                    </button>
-                  </div>
-                </div>
-              </div>
+            {/* Credits Section */}
+            <div
+              className="p-3 m-1 bg-white mb-4  text-center"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
+            >
+              <h5 className="fw-bold">
+                Credits Left ({Math.max(remainingCredits, 0)}/
+                {totalCredits > 0 ? totalCredits : 0})
+              </h5>
+              {remainingCredits < 0 ? (
+                <p className="text-danger">You have exceeded your credits!</p>
+              ) : null}
+              <button
+                className="btn w-100 mt-2"
+                style={{
+                  backgroundColor: "#2A6310",
+                  color: "white",
+                  borderRadius: "30px",
+                  // transition: "background-color 0.3s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#225307")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#2A6310")}
+                onClick={() => push("/cart")}
+              >
+                Buy Credits
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal for creating a discussion */}
-      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Ask a Question</Modal.Title>
+      {/* Modal to show community members */}
+      <Modal show={showModal} onHide={handleClose}>
+        <Modal.Header style={{ backgroundColor: "#f0a500", color: "white" }} closeButton>
+          <Modal.Title>
+            {getCommunityData?.data[0]?.name} - Members List
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Question</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={createFormData.question}
-                onChange={(e) =>
-                  setCreateFormData({
-                    ...createFormData,
-                    question: e.target.value,
-                  })
-                }
-                placeholder="Enter your question"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={createFormData.description}
-                onChange={(e) =>
-                  setCreateFormData({
-                    ...createFormData,
-                    description: e.target.value,
-                  })
-                }
-                placeholder="Enter description"
-              />
-            </Form.Group>
-          </Form>
+          {communityUsers.length > 0 ? (
+            <ul className="list-group">
+              {communityUsers.map((user: any) => (
+                <li
+                  key={user.id}
+                  className="list-group-item d-flex align-items-center py-3"
+                  style={{ borderBottom: "1px solid #ddd" }}
+                >
+                  <div className="d-flex align-items-center">
+                    {user.image ? (
+                      <Image
+                        src={`${IMAGE_URL}${user?.image}`}
+                        alt={user.name}
+                        className="rounded-circle me-3"
+                        width={50}
+                        height={50}
+                        objectFit="cover"
+                      />
+                    ) : (
+                      <div
+                        className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                        style={{
+                          width: "50px",
+                          height: "50px",
+                          fontSize: "20px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                    <p className="mb-0 fw-bold text-capitalize px-2">{user.name}</p>
+                    <p className="text-muted small mb-0 px-2">{user.email}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No members found</p>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleCreateDiscussion}>
-            Submit
-          </Button>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
         </Modal.Footer>
       </Modal>
-
-      {/* Modal for editing a discussion */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Discussion</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>Question</Form.Label>
-              <Form.Control
-                type="text"
-                name="question"
-                value={editFormData.question}
-                onChange={(e) =>
-                  setEditFormData({ ...editFormData, question: e.target.value })
-                }
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                name="description"
-                value={editFormData.description}
-                onChange={(e) =>
-                  setEditFormData({
-                    ...editFormData,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleUpdateDiscussion}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    </div>
   );
 };
 

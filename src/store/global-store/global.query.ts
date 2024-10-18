@@ -116,7 +116,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "MyTransactions",
     "UpdateDiscussionComment",
     "GetExperience",
-    "CvDownload"
+    "CvDownload",
+    "GetCommunity"
   ],
 });
 
@@ -432,6 +433,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
    query : queries.getCvDownload.query,
     providesTags :["CvDownload"]
     }),
+    getCommunity : builder.mutation<any,any>({
+      query : (data) => queries.getCommunity.query(data),
+      invalidatesTags:["GetCommunity"]
+    })
   }),
 
   overrideExisting: true,
@@ -509,6 +514,7 @@ export const {
   useMyTransactionsQuery,
   useUpdateDiscussionCommentMutation,
   useGetExperienceQuery,
-  useGetCvDownloadQuery: useGetCvDownloadQuery
+  useGetCvDownloadQuery,
+  useGetCommunityMutation
 } = globalApi;
 export default globalApi;

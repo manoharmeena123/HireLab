@@ -382,6 +382,11 @@ export const queries = {
       method :"GET"
     })
   },
+  getCommunity :{
+    query :(query :any)=>({
+      url : `api/community/${query}`
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {
