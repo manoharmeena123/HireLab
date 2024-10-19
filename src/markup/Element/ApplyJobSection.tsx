@@ -23,31 +23,31 @@ const ApplyJobSection = () => {
   // Local state to manage loading state for each job
   const [loadingJobs, setLoadingJobs] = useState<string[]>([]);
 
-  const handleApplyJob = async (jobId: string) => {
-    try {
-      setLoadingJobs([...loadingJobs, jobId]);
-      const { data } = await applyJob({ job_id: jobId });
-      if (data?.success) {
-        // Show success SweetAlert
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Job applied successfully!",
-        });
-        console.log("Job applied successfully!");
-      }
-    } catch (error) {
-      console.error("Error applying job:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to apply for the job.",
-      });
-    } finally {
-      // Remove jobId from loadingJobs to reset loading state
-      setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
-    }
-  };
+  // const handleApplyJob = async (jobId: string) => {
+  //   try {
+  //     setLoadingJobs([...loadingJobs, jobId]);
+  //     const { data } = await applyJob({ job_id: jobId });
+  //     if (data?.success) {
+  //       // Show success SweetAlert
+  //       Swal.fire({
+  //         icon: "success",
+  //         title: "Success!",
+  //         text: "Job applied successfully!",
+  //       });
+  //       console.log("Job applied successfully!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error applying job:", error);
+  //     Swal.fire({
+  //       icon: "error",
+  //       title: "Error",
+  //       text: "Failed to apply for the job.",
+  //     });
+  //   } finally {
+  //     // Remove jobId from loadingJobs to reset loading state
+  //     setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
+  //   }
+  // };
   const viewJobHandler = (id: number) => {
     push(`/job-detail?jobId=${id}`);
   };
@@ -126,16 +126,14 @@ const ApplyJobSection = () => {
                               </p>
                               <button
                                 onClick={() =>
-                                  handleApplyJob(item?.id.toString())
+                                  viewJobHandler(item?.id)
                                 }
                                 className="site-button button-sm float-right"
                                 disabled={loadingJobs.includes(
                                   item?.id.toString()
                                 )}
-                              >
-                                {loadingJobs.includes(item?.id.toString())
-                                  ? "Applying..."
-                                  : "Apply Job"}
+                              >View Job
+                       
                               </button>
                             </div>
                           </div>

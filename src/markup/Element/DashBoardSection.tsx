@@ -90,9 +90,9 @@ useEffect(() => {
           <div className=" p-4 bg-white mb-4 " 
             style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
           >
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-2">
               <h4 className="fw-bold">Recommended Jobs for You</h4>
-              <Link href="/apply-jobs" className="btn btn-link text-primary">
+              <Link href="/apply-jobs" className="btn btn-link text-success">
                 View All
               </Link>
             </div>
@@ -150,7 +150,7 @@ useEffect(() => {
             style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
           
           >
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-2">
               <h4 className="fw-bold">Applied Jobs</h4>
             </div>
 
@@ -211,9 +211,9 @@ useEffect(() => {
             style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px", borderRadius: "20px" }}
           
           >
-            <div className="d-flex justify-content-between align-items-center mb-4">
+            <div className="d-flex justify-content-between align-items-center mb-2">
               <h4 className="fw-bold">Meetups and Events</h4>
-              <Link href="/single-event" className="btn btn-link text-primary">
+              <Link href="/single-event" className="btn btn-link text-success">
                 View All
               </Link>
             </div>
