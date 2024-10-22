@@ -1,5 +1,4 @@
 "use client";
-// src/components/JobSeekerSection.tsx
 import React, { useState, useEffect } from "react";
 import Profilesidebar from "@/markup/Element/Profilesidebar";
 import { useRouter } from "next/navigation";
@@ -18,8 +17,10 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
-import { Modal, Button } from "react-bootstrap"; // Importing modal from react-bootstrap
-import { navigateSource } from "@/lib/action";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import ReactTagInput from "@pathofdev/react-tag-input";
+import "@pathofdev/react-tag-input/build/index.css";
 
 interface OptionType {
   value: string;
@@ -31,26 +32,36 @@ const JobSeekerSection = () => {
   const { token } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
   const router = useRouter();
-  const { data: collageData, isLoading: collageDataLoading } = useGetCollageQuery();
-  const { data: getSectorData, isLoading: getSectorDataLoading } = useGetSectorQuery();
-  const { data: designationData, isLoading: designationDataLoading } = useGetDesignationQuery();
-  const { data: getCtcData, isLoading: getCtcDataLoading } = useGetCtcDataQuery();
+  const { data: collageData, isLoading: collageDataLoading } =
+    useGetCollageQuery();
+  const { data: getSectorData, isLoading: getSectorDataLoading } =
+    useGetSectorQuery();
+  const { data: designationData, isLoading: designationDataLoading } =
+    useGetDesignationQuery();
+  const { data: getCtcData, isLoading: getCtcDataLoading } =
+    useGetCtcDataQuery();
 
-   const [isProfileComplete, setIsProfileComplete] = useState(false); 
-
-  const [selectedCollege, setSelectedCollege] = useState<SingleValue<OptionType> | null>(null);
-  const [selectedIndustry, setSelectedIndustry] = useState<SingleValue<OptionType> | null>(null);
-  const [selectedDesignation, setSelectedDesignation] = useState<SingleValue<OptionType> | null>(null);
-  const [selectedCtc, setSelectedCtc] = useState<SingleValue<OptionType> | null>(null);
+  const [isProfileComplete, setIsProfileComplete] = useState(false);
+  const [selectedCollege, setSelectedCollege] =
+    useState<SingleValue<OptionType> | null>(null);
+  const [selectedIndustry, setSelectedIndustry] =
+    useState<SingleValue<OptionType> | null>(null);
+  const [selectedDesignation, setSelectedDesignation] =
+    useState<SingleValue<OptionType> | null>(null);
+  const [selectedCtc, setSelectedCtc] =
+    useState<SingleValue<OptionType> | null>(null);
+  const [selectedSector, setSelectedSector] =
+    useState<SingleValue<OptionType>>(null);
 
   const [postProfile] = usePostProfileMutation();
   const [resumeName, setResumeName] = useState<string>("");
   const [imageName, setImageName] = useState<string>("");
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
-   const [saveLoading, setSaveLoading] = useState(false)
-  const [profileForm, setProfileForm] = useState<WritableProfileFormData>({
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [tags, setTags] = useState<string[]>([]);
+  const [profileForm, setProfileForm] = useState<any>({
     name: "",
-    email: "" || null,
+    email: "",
     mobile_number: "",
     college: "",
     designation: "",
@@ -58,47 +69,80 @@ const JobSeekerSection = () => {
     experience: "",
     country: "",
     expected_ctc: "",
-    resume: null,
+    resume: null, // For Resume Upload
+    sector: "",
     location: "",
     industry: "",
     image: null,
+    current_city: "",
+    permanent_address: "",
+    linkedin_profile: "",
+    gender: "",
+    availability_to_join: "",
+    dob: "",
+    highest_qualification: "",
+    degree: "",
+    institute: "",
+    year_of_graduation: "",
+    additional_certifications: "",
+    job_1_title: "",
+    job_1_company: "",
+    job_1_start_end: "",
+    job_1_responsibilities: "",
+    job_2_title: "",
+    job_2_company: "",
+    job_2_start_end: "",
+    key_skills: "",
+    languages_known: "",
+    preferred_job_locations: "",
+    willing_to_relocate: "",
+    willing_to_work_remotely: "",
+    portfolio: "",
   });
 
-  const [showModal, setShowModal] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({});
 
-  // Options State
-  const [collegeOptions, setCollegeOptions] = useState<OptionType[]>([]);
-  const [getSectorDataOptions, setGetSectorDataOptions] = useState<OptionType[]>([]);
-  const [designationOptions, setDesignationOptions] = useState<OptionType[]>([]);
+  // Predefined options for Availability to Join
+  const availabilityOptions = [
+    { value: "Immediate", label: "Immediate" },
+    { value: "1 week", label: "1 Week" },
+    { value: "1 month", label: "1 Month" },
+    { value: "2 months", label: "2 Months" },
+    { value: "3 months", label: "3 Months" },
+  ];
+
+  // Designation options
+  const [designationOptions, setDesignationOptions] = useState<OptionType[]>(
+    []
+  );
   const [ctcOptions, setCtcOptions] = useState<OptionType[]>([]);
 
-  // Fetch and set options
+  // Generate years for Year of Graduation
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 50 }, (_, index) => currentYear - index);
+
+  const sectorOptions: OptionType[] =
+    getSectorData?.data?.map((sector) => ({
+      value: sector.name,
+      label: sector.name,
+      id: sector.id.toString(),
+    })) || [];
+
+  const handleSectorSelectChange = (option: any) => {
+    setSelectedSector(option);
+  };
+
   useEffect(() => {
-    if (collageData?.data) {
-      const options: OptionType[] = collageData.data.map((college: any) => ({
-        value: college.title,
-        label: college.title,
-        id: college.id.toString(),
-      }));
-      setCollegeOptions(options);
-    }
-
-    if (getSectorData?.data) {
-      const options: OptionType[] = getSectorData.data.map((industry: any) => ({
-        value: industry.name,
-        label: industry.name,
-        id: industry.id.toString(),
-      }));
-      setGetSectorDataOptions(options);
-    }
-
     if (designationData?.data) {
-      const options: OptionType[] = designationData.data.map((designation: any) => ({
-        value: designation.title,
-        label: designation.title,
-        id: designation.id.toString(),
-      }));
+      const options: OptionType[] = designationData.data.map(
+        (designation: any) => ({
+          value: designation.title,
+          label: designation.title,
+          id: designation.id.toString(),
+        })
+      );
       setDesignationOptions(options);
     }
 
@@ -110,445 +154,871 @@ const JobSeekerSection = () => {
       }));
       setCtcOptions(options);
     }
-  }, [collageData, getSectorData, designationData, getCtcData]);
+  }, [designationData, getCtcData]);
 
-  // Set user data to form and check profile completeness
-  useEffect(() => {
-    if (user && collageData && getSectorData && designationData && getCtcData) {
-      setProfileForm({
-        name: user.user.name || "",
-        email: user.user.email || "",
-        mobile_number: user.user.mobile_number || "",
-        college: user.user.college_id?.toString() || "",
-        designation: user.user.designation_id?.toString() || "",
-        company_name: user.user.company_name || "",
-        experience: user.user.experience || "",
-        country: user.user.country || "",
-        expected_ctc: user.user.expected_ctc || "",
-        resume: user.user.resume || null,
-        location: user.user.location || "",
-        industry: user.user.industry_id?.toString() || "",
-        image: user.user.image || null,
-      });
-
-      setSelectedCollege(collegeOptions.find((option) => option.id === user.user.college_id?.toString()) || null);
-      setSelectedIndustry(getSectorDataOptions.find((option) => option.id === user.user.industry_id?.toString()) || null);
-      setSelectedDesignation(designationOptions.find((option) => option.id === user.user.designation_id?.toString()) || null);
-      setSelectedCtc(ctcOptions.find((option) => option.id === user.user.expected_ctc?.toString()) || null);
-
-      if (user.user.resume) setResumeName(user.user.resume);
-      if (user.user.image) {
-        setImageName(user.user.image);
-        setImagePreviewUrl(`${IMAGE_URL}/${user.user.image}`);
-      }
-
-      // Check if profile is complete
-      const isProfileComplete = checkProfileCompletion(user.user, {
-        college: user.user.college_id?.toString(),
-        designation: user.user.designation_id?.toString(),
-        industry: user.user.industry_id?.toString(),
-        expected_ctc: user.user.expected_ctc?.toString(),
-      });
-      setIsProfileComplete(isProfileComplete); 
-      if (!isProfileComplete) {
-        setShowModal(true);
-      }
-    }
-  }, [user, collageData, getSectorDataOptions, designationOptions, ctcOptions]);
-
-  // Function to check profile completeness
-  const checkProfileCompletion = (userData: any, additionalFields: any) => {
-    const requiredFields = [
-      "name",
-      "email",
-      "mobile_number",
-      "college",
-      "designation",
-      "company_name",
-      "experience",
-      "country",
-      "expected_ctc",
-      "location",
-      "industry",
-      "image",
-    ];
-
-    for (const field of requiredFields) {
-      const value = field in additionalFields ? additionalFields[field] : userData[field];
-      if (!value || value === "" || value === null || value === undefined) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  // Handle input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    e: any
+  ) => {
     const { name, value, files } = e.target;
-
     if (files && files[0]) {
       const file = files[0];
       if (name === "resume") {
-        setProfileForm((prevForm) => ({ ...prevForm, resume: file }));
+        setProfileForm((prevForm: any) => ({ ...prevForm, resume: file }));
         setResumeName(file.name);
       } else if (name === "image") {
-        setProfileForm((prevForm) => ({ ...prevForm, image: file }));
+        setProfileForm((prevForm: any) => ({ ...prevForm, image: file }));
         setImageName(file.name);
         setImagePreviewUrl(URL.createObjectURL(file));
       }
     } else {
-      setProfileForm((prevForm) => ({ ...prevForm, [name]: value }));
-      // Clear validation error for the field
-      setValidationErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
+      setProfileForm((prevForm: any) => ({ ...prevForm, [name]: value }));
     }
   };
 
-  // Handle select changes
-  const handleSelectChange = (name: string, selectedOption: SingleValue<OptionType> | null) => {
-    setProfileForm((prevForm) => ({
+  const handleSelectChange = (
+    name: string,
+    selectedOption:any
+  ) => {
+    setProfileForm((prevForm: any) => ({
       ...prevForm,
-      [name]: selectedOption ? selectedOption.id : "",
+      [name]: selectedOption ? selectedOption.value : "",
     }));
-    if (name === "college") setSelectedCollege(selectedOption);
-    if (name === "industry") setSelectedIndustry(selectedOption);
-    if (name === "designation") setSelectedDesignation(selectedOption);
-    if (name === "expected_ctc") setSelectedCtc(selectedOption);
-    // Clear validation error for the field
-    setValidationErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
-  // Validate form before submission
-const validateForm = () => {
-  const errors: { [key: string]: string } = {};
+  const validateForm = () => {
+    const errors: { [key: string]: string } = {};
+    const requiredFields = [
+      "name",
+      "email",
+      "mobile_number",
+      "current_city",
+      "gender",
+      "dob",
+      "highest_qualification",
+      "degree",
+      "institute",
+      "year_of_graduation",
+      "job_1_title",
+      "job_1_company",
+      "job_1_start_end",
+      "job_1_responsibilities",
+      "resume", // Resume is mandatory
+      "key_skills",
+      "preferred_job_locations",
+      "willing_to_relocate",
+      "sector",
+    ];
 
-  // Validate Name
-  if (!profileForm.name?.trim()) {
-    errors.name = "Name is required.";
-  }
+    requiredFields.forEach((field) => {
+      if (!profileForm[field]) {
+        errors[field] = `${field.replace("_", " ")} is required.`;
+      }
+    });
 
-  // Validate Email
-  if (!profileForm.email?.trim()) {
-    errors.email = "Email is required.";
-  } else if (!/\S+@\S+\.\S+/.test(profileForm.email)) {
-    errors.email = "Email is invalid.";
-  }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
-  // Validate Mobile Number
-  const mobileNumber = profileForm.mobile_number?.toString().trim() || "";
-  if (!mobileNumber) {
-    errors.mobile_number = "Mobile number is required.";
-  } else if (!/^\d{10}$/.test(mobileNumber)) {
-    errors.mobile_number = "Mobile number must be exactly 10 digits.";
-  }
+  // Dynamic Work Experience Management
+  const [workExperiences, setWorkExperiences] = useState([
+    {
+      job_title: "",
+      company_name: "",
+      start_date: "",
+      end_date: "",
+      responsibilities: "",
+    },
+  ]);
 
-  // Validate College
-  if (!profileForm.college?.trim()) {
-    errors.college = "College is required.";
-  }
+  // Handle dynamic work experience field changes
+  const handleWorkExperienceChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    const updatedExperiences = [...workExperiences];
+    updatedExperiences[index][name] = value;
+    setWorkExperiences(updatedExperiences);
+  };
 
-  // Validate Designation
-  if (!profileForm.designation?.trim()) {
-    errors.designation = "Designation is required.";
-  }
+  // Add new experience
+  const addExperience = () => {
+    setWorkExperiences([
+      ...workExperiences,
+      {
+        job_title: "",
+        company_name: "",
+        start_date: "",
+        end_date: "",
+        responsibilities: "",
+      },
+    ]);
+  };
 
-  // Validate Company Name
-  if (!profileForm.company_name?.trim()) {
-    errors.company_name = "Company name is required.";
-  }
+  // Remove experience
+  const removeExperience = (index: number) => {
+    const updatedExperiences = workExperiences.filter((_, i) => i !== index);
+    setWorkExperiences(updatedExperiences);
+  };
 
-  // Validate Experience
-  const experience = profileForm.experience?.toString().trim() || "";
-  if (!experience) {
-    errors.experience = "Experience is required.";
-  } else if (isNaN(Number(experience)) || Number(experience) < 0) {
-    errors.experience = "Experience must be a positive number.";
-  }
-
-  // Validate Country
-  if (!profileForm.country?.trim()) {
-    errors.country = "Country is required.";
-  }
-
-  // Validate Expected CTC
-  if (!profileForm.expected_ctc?.trim()) {
-    errors.expected_ctc = "Expected CTC is required.";
-  }
-
-  // Validate Location
-  if (!profileForm.location?.trim()) {
-    errors.location = "Location is required.";
-  }
-
-  // Validate Industry
-  if (!profileForm.industry?.trim()) {
-    errors.industry = "Industry is required.";
-  }
-
-  // Validate Image
-  if (!profileForm.image) {
-    errors.image = "Profile image is required.";
-  }
-
-  setValidationErrors(errors);
-
-  return Object.keys(errors).length === 0;
-};
-
-
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fill the all input fields.");
+      toast.error("Please fill all mandatory fields.");
       return;
     }
 
     const formData = new FormData();
-
     Object.entries(profileForm).forEach(([key, value]) => {
       if (value !== null) {
-        if (value instanceof File) {
-          formData.append(key, value);
-        } else if (key === "resume" && typeof value === "string" && resumeName === value) {
-          // Do not append existing resume URL if it is not a new file
-        } else if (key === "image" && typeof value === "string" && imageName === value) {
-          // Do not append existing image URL if it is not a new file
-        } else {
-          formData.append(key, value as string);
-        }
+        formData.append(key, value instanceof File ? value : String(value));
       }
     });
 
+    // Append dynamic work experiences
+    workExperiences.forEach((exp, index) => {
+      formData.append(`workExperiences[${index}][job_title]`, exp.job_title);
+      formData.append(
+        `workExperiences[${index}][company_name]`,
+        exp.company_name
+      );
+      formData.append(`workExperiences[${index}][start_date]`, exp.start_date);
+      formData.append(`workExperiences[${index}][end_date]`, exp.end_date);
+      formData.append(
+        `workExperiences[${index}][responsibilities]`,
+        exp.responsibilities
+      );
+    });
+
     try {
-      setSaveLoading(true)
+      setSaveLoading(true);
       const res = await postProfile(formData).unwrap();
       toast.success(res?.message);
       refetch();
-      setShowModal(false); // Close modal after successful submission
-      navigateSource("/dashboard-section")
-      setSaveLoading(false)
+      setSaveLoading(false);
     } catch (error: any) {
-      console.log("error", error);
       toast.error(error.message || "Failed to save profile.");
     }
   };
+  // Qualification options array
+  const qualificationOptions = [
+    { value: "High School", label: "High School" },
+    { value: "Diploma", label: "Diploma" },
+    { value: "Bachelor's Degree", label: "Bachelor's Degree" },
+    { value: "Master's Degree", label: "Master's Degree" },
+    { value: "PhD", label: "PhD" },
+    { value: "Other", label: "Other" },
+  ];
 
-  // Custom styles for react-select
-  const customStyles = {
-    control: (base: any) => ({
-      ...base,
-      height: 38,
-      minHeight: 38,
-    }),
-  };
-
-  // Generate URLs for resume and image previews
-  const resumeUrl: any =
-    profileForm.resume && profileForm.resume instanceof File
-      ? URL.createObjectURL(profileForm.resume)
-      : profileForm.resume || "";
-  const imageUrl =
-    profileForm.image && profileForm.image instanceof File
-      ? URL.createObjectURL(profileForm.image)
-      : `${IMAGE_URL}/${profileForm.image}` || "";
-
-  // Clean up object URLs on unmount
-  useEffect(() => {
-    return () => {
-      if (resumeUrl && profileForm.resume instanceof File) URL.revokeObjectURL(resumeUrl);
-      if (imagePreviewUrl && profileForm.image instanceof File) URL.revokeObjectURL(imagePreviewUrl);
-    };
-  }, [resumeUrl, imagePreviewUrl]);
-
+  // Degree/Program options array
+  const degreeOptions = [
+    { value: "B.Sc", label: "B.Sc" },
+    { value: "B.Tech", label: "B.Tech" },
+    { value: "B.A", label: "B.A" },
+    { value: "B.Com", label: "B.Com" },
+    { value: "M.Sc", label: "M.Sc" },
+    { value: "M.Tech", label: "M.Tech" },
+    { value: "M.A", label: "M.A" },
+    { value: "MBA", label: "MBA" },
+    { value: "PhD", label: "PhD" },
+    { value: "Other", label: "Other" },
+  ];
   return (
     <>
-      {(collageDataLoading || getSectorDataLoading || designationDataLoading || getCtcDataLoading) && <Loading />}
+      {(collageDataLoading ||
+        getSectorDataLoading ||
+        designationDataLoading ||
+        getCtcDataLoading) && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white browse-job p-t50 p-b20">
             <div className="container">
               <div className="row">
-              {/* Pass isProfileComplete as prop to Profilesidebar */}
-              <Profilesidebar refetch={refetch} isProfileComplete={isProfileComplete} />
+                <Profilesidebar
+                  refetch={refetch}
+                  isProfileComplete={isProfileComplete}
+                />
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx job-profile">
+                    {/* Personal Information Section */}
                     <div className="job-bx-title clearfix">
-                      <h5 className="font-weight-700 pull-left text-uppercase">Basic Information</h5>
-                      <button
-                        onClick={() => router.back()}
-                        className="site-button right-arrow button-sm float-right"
-                        style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                      >
-                        Back
-                      </button>
+                      <h5 className="font-weight-700 pull-left text-uppercase">
+                        Personal Information
+                      </h5>
                     </div>
                     <form onSubmit={handleSubmit}>
                       <div className="row m-b30">
-                        {/* Name */}
+                        {/* Full Name */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Your Name:</label>
+                            <label>Full Name:</label>
                             <input
                               type="text"
-                              className={`form-control ${validationErrors.name ? "is-invalid" : ""}`}
-                              placeholder="Enter Your Name"
+                              className={`form-control ${
+                                validationErrors.name ? "is-invalid" : ""
+                              }`}
+                              placeholder="First Name, Middle Name, Last Name"
                               name="name"
                               value={profileForm.name || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.name && <div className="invalid-feedback">{validationErrors.name}</div>}
+                            {validationErrors.name && (
+                              <div className="invalid-feedback">
+                                {validationErrors.name}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        {/* Email */}
+
+                        {/* Date of Birth */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Email:</label>
+                            <label>Date of Birth:</label>
                             <input
-                              type="email"
-                              className={`form-control ${validationErrors.email ? "is-invalid" : ""}`}
-                              placeholder="Enter Your Email"
-                              name="email"
-                              value={profileForm.email || ""}
+                              type="date"
+                              className={`form-control ${
+                                validationErrors.dob ? "is-invalid" : ""
+                              }`}
+                              name="dob"
+                              value={profileForm.dob || ""}
                               onChange={handleInputChange}
-                              readOnly={true}
                             />
-                            {validationErrors.email && <div className="invalid-feedback">{validationErrors.email}</div>}
+                            {validationErrors.dob && (
+                              <div className="invalid-feedback">
+                                {validationErrors.dob}
+                              </div>
+                            )}
                           </div>
                         </div>
+
+                        {/* Gender */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Gender:</label>
+                            <select
+                              className={`form-control ${
+                                validationErrors.gender ? "is-invalid" : ""
+                              }`}
+                              name="gender"
+                              value={profileForm.gender || ""}
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select Gender</option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Other">Other</option>
+                            </select>
+                            {validationErrors.gender && (
+                              <div className="invalid-feedback">
+                                {validationErrors.gender}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
                         {/* Mobile Number */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Mobile Number:</label>
                             <input
                               type="number"
-                              className={`form-control ${validationErrors.mobile_number ? "is-invalid" : ""}`}
+                              className={`form-control ${
+                                validationErrors.mobile_number
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               placeholder="Enter Your Mobile Number"
                               name="mobile_number"
                               value={profileForm.mobile_number || ""}
                               onChange={handleInputChange}
-                              maxLength={10} // Limit input length to 10 digits
-                              readOnly={true}
                             />
-                            {validationErrors.mobile_number && <div className="invalid-feedback">{validationErrors.mobile_number}</div>}
+                            {validationErrors.mobile_number && (
+                              <div className="invalid-feedback">
+                                {validationErrors.mobile_number}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        {/* College */}
+
+                        {/* Email Address */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>College:</label>
-                            <Select
-                              styles={customStyles}
-                              value={selectedCollege}
-                              onChange={(option) => handleSelectChange("college", option)}
-                              options={collegeOptions}
-                              placeholder="Select College"
+                            <label>Email Address:</label>
+                            <input
+                              type="email"
+                              className={`form-control ${
+                                validationErrors.email ? "is-invalid" : ""
+                              }`}
+                              placeholder="Enter Your Email Address"
+                              name="email"
+                              value={profileForm.email || ""}
+                              onChange={handleInputChange}
                             />
-                            {validationErrors.college && <div className="text-danger">{validationErrors.college}</div>}
+                            {validationErrors.email && (
+                              <div className="invalid-feedback">
+                                {validationErrors.email}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        {/* Designation */}
+
+                        {/* Current City */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Current Designation:</label>
+                            <label>Current City:</label>
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                validationErrors.current_city
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              placeholder="Enter Your Current City"
+                              name="current_city"
+                              value={profileForm.current_city || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.current_city && (
+                              <div className="invalid-feedback">
+                                {validationErrors.current_city}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Permanent Address */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Permanent Address:</label>
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                validationErrors.permanent_address
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              placeholder="Enter Your Permanent Address"
+                              name="permanent_address"
+                              value={profileForm.permanent_address || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.permanent_address && (
+                              <div className="invalid-feedback">
+                                {validationErrors.permanent_address}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* LinkedIn Profile */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>LinkedIn Profile:</label>
+                            <input
+                              type="url"
+                              className={`form-control ${
+                                validationErrors.linkedin_profile
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              placeholder="Enter LinkedIn Profile URL"
+                              name="linkedin_profile"
+                              value={profileForm.linkedin_profile || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.linkedin_profile && (
+                              <div className="invalid-feedback">
+                                {validationErrors.linkedin_profile}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Profile Picture */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Upload Profile Picture:</label>
+                            <input
+                              type="file"
+                              className="form-control"
+                              name="image"
+                              onChange={handleInputChange}
+                            />
+                            {imagePreviewUrl ? (
+                              <Image
+                                src={imagePreviewUrl}
+                                alt="Profile"
+                                className="img-thumbnail"
+                                width={100}
+                                height={100}
+                                style={{ width: "35%" }}
+                              />
+                            ) : imageName ? (
+                              <Image
+                                src={`${IMAGE_URL}/${imageName}`}
+                                alt="Profile"
+                                className="img-thumbnail"
+                                width={100}
+                                height={100}
+                                style={{ width: "35%" }}
+                              />
+                            ) : (
+                              <div className="mt-2">
+                                <span>No image uploaded</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Professional Information Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Professional Information
+                        </h5>
+                      </div>
+                      <div className="row m-b30">
+                        {/* Current Job Title */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Current Job Title:</label>
                             <Select
-                              styles={customStyles}
-                              value={selectedDesignation}
-                              onChange={(option) => handleSelectChange("designation", option)}
+                              value={designationOptions.find(
+                                (option) =>
+                                  option.value === profileForm.designation
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("designation", option)
+                              }
                               options={designationOptions}
-                              placeholder="Select Designation"
+                              placeholder="Select Job Title"
                             />
-                            {validationErrors.designation && <div className="text-danger">{validationErrors.designation}</div>}
+                            {validationErrors.designation && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.designation}
+                              </span>
+                            )}
                           </div>
                         </div>
+
                         {/* Company Name */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Company Name:</label>
                             <input
                               type="text"
-                              className={`form-control ${validationErrors.company_name ? "is-invalid" : ""}`}
+                              className={`form-control ${
+                                validationErrors.job_1_company
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
                               placeholder="Enter Company Name"
-                              name="company_name"
-                              value={profileForm.company_name || ""}
+                              name="job_1_company"
+                              value={profileForm.job_1_company || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.company_name && <div className="invalid-feedback">{validationErrors.company_name}</div>}
+                            {validationErrors.job_1_company && (
+                              <div className="invalid-feedback">
+                                {validationErrors.job_1_company}
+                              </div>
+                            )}
                           </div>
                         </div>
-                        {/* Experience */}
+                        {/* Current CTC */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
-                            <label>Experience:</label>
-                            <input
-                              type="number"
-                              className={`form-control ${validationErrors.experience ? "is-invalid" : ""}`}
-                              placeholder="Enter Experience"
-                              name="experience"
-                              value={profileForm.experience || ""}
-                              onChange={handleInputChange}
+                            <label>Current CTC (Fixed + Variable):</label>
+                            <Select
+                              value={ctcOptions.find(
+                                (option) =>
+                                  option.value === profileForm.current_ctc
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("current_ctc", option)
+                              }
+                              options={ctcOptions}
+                              placeholder="Select Current CTC"
                             />
-                            {validationErrors.experience && <div className="invalid-feedback">{validationErrors.experience}</div>}
+                            {validationErrors.current_ctc && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.current_ctc}
+                              </span>
+                            )}
                           </div>
                         </div>
-                        {/* Country */}
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Country:</label>
-                            <input
-                              type="text"
-                              className={`form-control ${validationErrors.country ? "is-invalid" : ""}`}
-                              placeholder="Enter Country"
-                              name="country"
-                              value={profileForm.country || ""}
-                              onChange={handleInputChange}
-                            />
-                            {validationErrors.country && <div className="invalid-feedback">{validationErrors.country}</div>}
-                          </div>
-                        </div>
+
                         {/* Expected CTC */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Expected CTC:</label>
                             <Select
-                              styles={customStyles}
-                              value={selectedCtc}
-                              onChange={(option) => handleSelectChange("expected_ctc", option)}
+                              value={ctcOptions.find(
+                                (option) =>
+                                  option.value === profileForm.expected_ctc
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("expected_ctc", option)
+                              }
                               options={ctcOptions}
                               placeholder="Select Expected CTC"
                             />
-                            {validationErrors.expected_ctc && <div className="text-danger">{validationErrors.expected_ctc}</div>}
+                            {validationErrors.expected_ctc && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.expected_ctc}
+                              </span>
+                            )}
                           </div>
                         </div>
-                        {/* Location */}
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Location:</label>
-                            <input
-                              type="text"
-                              className={`form-control ${validationErrors.location ? "is-invalid" : ""}`}
-                              placeholder="Enter Location"
-                              name="location"
-                              value={profileForm.location || ""}
-                              onChange={handleInputChange}
-                            />
-                            {validationErrors.location && <div className="invalid-feedback">{validationErrors.location}</div>}
-                          </div>
-                        </div>
+
                         {/* Industry */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Industry:</label>
                             <Select
-                              styles={customStyles}
-                              value={selectedIndustry}
-                              onChange={(option) => handleSelectChange("industry", option)}
-                              options={getSectorDataOptions}
+                              value={selectedSector}
+                              onChange={handleSectorSelectChange}
+                              options={sectorOptions}
                               placeholder="Select Industry"
                             />
-                            {validationErrors.industry && <div className="text-danger">{validationErrors.industry}</div>}
+                            {validationErrors.sector && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.sector}
+                              </span>
+                            )}
                           </div>
                         </div>
+
+                        {/* Availability to Join */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Availability to Join:</label>
+                            <select
+                              className="form-control"
+                              name="availability_to_join"
+                              value={profileForm.availability_to_join}
+                              onChange={handleInputChange}
+                            >
+                              <option value="">Select Availability</option>
+                              {availabilityOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                  {option.label}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Education Details Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Education Details
+                        </h5>
+                      </div>
+                      <div className="row m-b30">
+                        {/* Highest Qualification */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Highest Qualification:</label>
+                            <Select
+                              value={qualificationOptions.find(
+                                (option) =>
+                                  option.value ===
+                                  profileForm.highest_qualification
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange(
+                                  "highest_qualification",
+                                  option
+                                )
+                              }
+                              options={qualificationOptions}
+                              placeholder="Select Highest Qualification"
+                            />
+                            {validationErrors.highest_qualification && (
+                              <div className="invalid-feedback">
+                                {validationErrors.highest_qualification}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Degree/Program */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Degree/Program:</label>
+                            <Select
+                              value={degreeOptions.find(
+                                (option) => option.value === profileForm.degree
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("degree", option)
+                              }
+                              options={degreeOptions}
+                              placeholder="Select Degree/Program"
+                            />
+                            {validationErrors.degree && (
+                              <div className="invalid-feedback">
+                                {validationErrors.degree}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Institute Name */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Institute/University Name:</label>
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                validationErrors.institute ? "is-invalid" : ""
+                              }`}
+                              placeholder="Enter Institute Name"
+                              name="institute"
+                              value={profileForm.institute || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.institute && (
+                              <div className="invalid-feedback">
+                                {validationErrors.institute}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Year of Graduation */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Year of Graduation:</label>
+                            <select
+                              className="form-control"
+                              name="year_of_graduation"
+                              value={profileForm.year_of_graduation}
+                              onChange={handleInputChange}
+                            >
+                              <option value="">
+                                Select Year of Graduation
+                              </option>
+                              {years.map((year) => (
+                                <option key={year} value={year}>
+                                  {year}
+                                </option>
+                              ))}
+                            </select>
+                            {validationErrors.year_of_graduation && (
+                              <div className="invalid-feedback">
+                                {validationErrors.year_of_graduation}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Additional Certifications/Courses (Non-Mandatory) */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>
+                              Additional Certifications/Courses (Optional):
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              placeholder="Enter Additional Certifications or Courses"
+                              name="additional_certifications"
+                              value={
+                                profileForm.additional_certifications || ""
+                              }
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Work Experience Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Work Experience
+                        </h5>
+                      </div>
+
+                      {workExperiences.map((experience, index) => (
+                        <div className="row m-b30" key={index}>
+                          {/* Job Title */}
+                          <div className="col-lg-6 col-md-6">
+                            <div className="form-group">
+                              <label>Job Title (Job {index + 1}):</label>
+                              <input
+                                type="text"
+                                className={`form-control ${
+                                  validationErrors[`job_1_title_${index}`]
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                name="job_title"
+                                placeholder="Enter Job Title"
+                                value={experience.job_title}
+                                onChange={(e) =>
+                                  handleWorkExperienceChange(index, e)
+                                }
+                              />
+                              {validationErrors[`job_1_title_${index}`] && (
+                                <div className="invalid-feedback">
+                                  {validationErrors[`job_1_title_${index}`]}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Company Name */}
+                          <div className="col-lg-6 col-md-6">
+                            <div className="form-group">
+                              <label>Company Name (Job {index + 1}):</label>
+                              <input
+                                type="text"
+                                className={`form-control ${
+                                  validationErrors[`job_1_company_${index}`]
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                name="company_name"
+                                placeholder="Enter Company Name"
+                                value={experience.company_name}
+                                onChange={(e) =>
+                                  handleWorkExperienceChange(index, e)
+                                }
+                              />
+                              {validationErrors[`job_1_company_${index}`] && (
+                                <div className="invalid-feedback">
+                                  {validationErrors[`job_1_company_${index}`]}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Start Date */}
+                          <div className="col-lg-6 col-md-6">
+                            <div className="form-group">
+                              <label>Start Date (Job {index + 1}):</label>
+                              <input
+                                type="date"
+                                className={`form-control ${
+                                  validationErrors[`job_1_start_date_${index}`]
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                name="start_date"
+                                value={experience.start_date}
+                                onChange={(e) =>
+                                  handleWorkExperienceChange(index, e)
+                                }
+                              />
+                              {validationErrors[
+                                `job_1_start_date_${index}`
+                              ] && (
+                                <div className="invalid-feedback">
+                                  {
+                                    validationErrors[
+                                      `job_1_start_date_${index}`
+                                    ]
+                                  }
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* End Date */}
+                          <div className="col-lg-6 col-md-6">
+                            <div className="form-group">
+                              <label>End Date (Job {index + 1}):</label>
+                              <input
+                                type="date"
+                                className={`form-control ${
+                                  validationErrors[`job_1_end_date_${index}`]
+                                    ? "is-invalid"
+                                    : ""
+                                }`}
+                                name="end_date"
+                                value={experience.end_date}
+                                onChange={(e) =>
+                                  handleWorkExperienceChange(index, e)
+                                }
+                              />
+                              {validationErrors[`job_1_end_date_${index}`] && (
+                                <div className="invalid-feedback">
+                                  {validationErrors[`job_1_end_date_${index}`]}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* CKEditor for Key Responsibilities */}
+                          <div className="col-lg-12 col-md-12">
+                            <div className="form-group">
+                              <label>
+                                Key Responsibilities (Job {index + 1}):
+                              </label>
+                              <CKEditor
+                                editor={ClassicEditor}
+                                data={experience.responsibilities || ""}
+                                onChange={(event, editor) => {
+                                  const data = editor.getData();
+                                  handleWorkExperienceChange(index, {
+                                    target: {
+                                      name: "responsibilities",
+                                      value: data,
+                                    },
+                                  });
+                                }}
+                              />
+                              {validationErrors[
+                                `job_1_responsibilities_${index}`
+                              ] && (
+                                <div className="invalid-feedback">
+                                  {
+                                    validationErrors[
+                                      `job_1_responsibilities_${index}`
+                                    ]
+                                  }
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Remove Experience Button */}
+                          {index > 0 && (
+                            <div className="col-lg-12 col-md-12">
+                              <button
+                                type="button"
+                                className="btn btn-danger"
+                                onClick={() => removeExperience(index)}
+                              >
+                                Remove Job {index + 1}
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {/* Add New Experience Button */}
+                      <div className="col-lg-12 col-md-12">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          style={{
+                            backgroundColor: "#2A6310",
+                            color: "#fff",
+                          }}
+                          onClick={addExperience}
+                        >
+                          Add Another Job
+                        </button>
+                      </div>
+
+                      {/* Resume Upload Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Resume Upload
+                        </h5>
+                      </div>
+                      <div className="row m-b30">
                         {/* Upload Resume */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
@@ -558,55 +1028,185 @@ const validateForm = () => {
                               className="form-control"
                               name="resume"
                               onChange={handleInputChange}
+                              accept=".pdf,.docx"
                             />
                             {resumeName && (
                               <div className="mt-2">
                                 <span>{resumeName}</span>
                               </div>
                             )}
-                          </div>
-                        </div>
-                        {/* Upload Image */}
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Upload Image:</label>
-                            <input
-                              type="file"
-                              className="form-control"
-                              name="image"
-                              onChange={handleInputChange}
-                            />
-                            {imagePreviewUrl ? (
-                              <div className="mt-2">
-                                <Image
-                                  src={imagePreviewUrl}
-                                  alt="Profile"
-                                  className="img-thumbnail"
-                                  width={100}
-                                  height={100}
-                                  style={{ width: "35%" }}
-                                />
-                              </div>
-                            ) : imageName ? (
-                              <div className="mt-2">
-                                <Image
-                                  src={`${IMAGE_URL}/${imageName}`}
-                                  alt="Profile"
-                                  className="img-thumbnail"
-                                  width={100}
-                                  height={100}
-                                  style={{ width: "35%" }}
-                                />
-                              </div>
-                            ) : (
-                              <div className="mt-2">
-                                <span>No image uploaded</span>
+                            {validationErrors.resume && (
+                              <div className="invalid-feedback">
+                                {validationErrors.resume}
                               </div>
                             )}
                           </div>
                         </div>
                       </div>
-                      <button type="submit" className="site-button">{saveLoading ? "Loading" :"Save Changes"}</button>
+                      {/* Skills Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Skills
+                        </h5>
+                      </div>
+                      <div className="row m-b30">
+                        {/* Key Skills */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Key Skills</label>
+                            <div
+                              className="job-time d-flex flex-wrap mr-auto"
+                              style={{ gap: "1rem" }}
+                            >
+                              <div className="tags-container">
+                                <ReactTagInput
+                                  tags={tags}
+                                  onChange={(newTags: any) => setTags(newTags)}
+                                  placeholder="Type tags and press Enter"
+                                />
+                              </div>
+                            </div>
+                            <span className="text-red-500 text-danger">
+                              {/* {errors?.tags?.[0]} */}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Languages Known */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Languages Known:</label>
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                validationErrors.languages_known
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              placeholder="Enter Languages"
+                              name="languages_known"
+                              value={profileForm.languages_known || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.languages_known && (
+                              <div className="invalid-feedback">
+                                {validationErrors.languages_known}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Other Details Section */}
+                      <div className="job-bx-title clearfix">
+                        <h5 className="font-weight-700 pull-left text-uppercase">
+                          Other Details
+                        </h5>
+                      </div>
+                      <div className="row m-b30">
+                        {/* Preferred Job Locations */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Preferred Job Locations:</label>
+                            <input
+                              type="text"
+                              className={`form-control ${
+                                validationErrors.preferred_job_locations
+                                  ? "is-invalid"
+                                  : ""
+                              }`}
+                              placeholder="Enter Preferred Job Locations"
+                              name="preferred_job_locations"
+                              value={profileForm.preferred_job_locations || ""}
+                              onChange={handleInputChange}
+                            />
+                            {validationErrors.preferred_job_locations && (
+                              <div className="invalid-feedback">
+                                {validationErrors.preferred_job_locations}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        {/* Willing to Relocate */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Willing to Relocate:</label>
+                            <Select
+                              value={[
+                                { value: "Yes", label: "Yes" },
+                                { value: "No", label: "No" },
+                              ].find(
+                                (option) =>
+                                  option.value ===
+                                  profileForm.willing_to_relocate
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange(
+                                  "willing_to_relocate",
+                                  option
+                                )
+                              }
+                              options={[
+                                { value: "Yes", label: "Yes" },
+                                { value: "No", label: "No" },
+                              ]}
+                              placeholder="Select Yes/No"
+                            />
+                            {validationErrors.willing_to_relocate && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.willing_to_relocate}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Willing to Work Remotely */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Willing to Work Remotely:</label>
+                            <Select
+                              value={[
+                                { value: "Yes", label: "Yes" },
+                                { value: "No", label: "No" },
+                              ].find(
+                                (option) =>
+                                  option.value ===
+                                  profileForm.willing_to_work_remotely
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange(
+                                  "willing_to_work_remotely",
+                                  option
+                                )
+                              }
+                              options={[
+                                { value: "Yes", label: "Yes" },
+                                { value: "No", label: "No" },
+                              ]}
+                              placeholder="Select Yes/No"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Portfolio or Website */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Portfolio or Website (Optional):</label>
+                            <input
+                              type="url"
+                              className="form-control"
+                              placeholder="Enter Portfolio URL"
+                              name="portfolio"
+                              value={profileForm.portfolio || ""}
+                              onChange={handleInputChange}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <button type="submit" className="site-button">
+                        {saveLoading ? "Saving..." : "Save Changes"}
+                      </button>
                     </form>
                   </div>
                 </div>
@@ -615,19 +1215,6 @@ const validateForm = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal Popup */}
-      {/* <Modal show={showModal} onHide={() => {}}>
-        <Modal.Header>
-          <Modal.Title>Complete Your Profile</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Please complete your profile details before proceeding further.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={() => setShowModal(false)}>Okay</Button>
-        </Modal.Footer>
-      </Modal> */}
     </>
   );
 };

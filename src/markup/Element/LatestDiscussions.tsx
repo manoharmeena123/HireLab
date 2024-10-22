@@ -137,7 +137,7 @@ const LatestDiscussions = () => {
                 style={{ fontWeight: "600", cursor: "pointer" }}
                 className="mb-2"
               >
-                Latest discussion
+                Latest updates
               </h2>
             </Link>
           </div>
@@ -153,7 +153,7 @@ const LatestDiscussions = () => {
                   />
                 )}
               </h2>
-              <h6 className="fw3">Job Posted</h6>
+              <h6 className="fw3">Job Listings</h6>
             </div>
             <div className="head-counter-bx mr-4">
               <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
@@ -166,7 +166,7 @@ const LatestDiscussions = () => {
                   />
                 )}
               </h2>
-              <h6 className="fw3">Questions Posted</h6>
+              <h6 className="fw3">Community queries</h6>
             </div>
             <div className="head-counter-bx mr-4">
               <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
@@ -179,7 +179,7 @@ const LatestDiscussions = () => {
                   />
                 )}
               </h2>
-              <h6 className="fw3">Answers Given</h6>
+              <h6 className="fw3">Active Jobs</h6>
             </div>
             <div className="head-counter-bx">
               <h2 style={{ fontWeight: "600" }} className="mb-1 counter">
@@ -192,11 +192,11 @@ const LatestDiscussions = () => {
                   />
                 )}
               </h2>
-              <h6 className="fw3">Total Forum</h6>
+              <h6 className="fw3">Active threads</h6>
             </div>
           </div>
         </div>
-        <div className="row align-items-center mb-4">
+        {/* <div className="row align-items-center mb-4">
           <div className="col"></div>
           <div className="col text-right">
             <Link href={"/view-all-discussion"}>
@@ -212,7 +212,7 @@ const LatestDiscussions = () => {
               </Button>
             </Link>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           {discussionData?.data
             ?.slice(0, 3)

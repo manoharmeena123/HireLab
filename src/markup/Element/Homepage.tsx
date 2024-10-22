@@ -34,23 +34,23 @@ const Homepage = () => {
       >
         <div className="section-full content-inner-2 overlay-white-middle">
           <div className="container">
-            <div className="section-head text-black text-center">
+            {/* <div className="section-head text-black text-center">
               <h2 style={{ fontWeight: "600" }} className="m-b0">
                 Membership Plans
               </h2>
               <p>Empowering Careers: CTC-BasedTiers,Your Path to Success</p>
-            </div>
+            </div> */}
             <MembershipPlans/>
           </div>
-        </div>
-        <div className="section-full content-inner bg-white">
-          <UpComingMeetings />
         </div>
         <div className="section-full job-categories content-inner-2 bg-white">
           <LatestDiscussions />
         </div>
+        <div className="section-full content-inner bg-white">
+          <UpComingMeetings />
+        </div>
 
-        <CtcSection />
+        {/* <CtcSection /> */}
         <RecentJobsection />
         <div
           className="section-full p-tb70 overlay-black-dark text-white text-center bg-img-fix"

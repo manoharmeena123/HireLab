@@ -1,32 +1,25 @@
+"use client";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useGetMembershipQuery } from "@/store/global-store/global.query";
-import { useSaveMemberShipMutation } from "@/app/my-resume/store/resume.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
+import Loading from "@/components/Loading";
 
-const MembershipPlans = () => {
-  const { data: membershipData } = useGetMembershipQuery();
+const SwitchPlan = () => {
+  const { data: membershipData, isLoading } = useGetMembershipQuery();
   const { user } = useLoggedInUser();
   const router = useRouter();
 
-  // Reorder plans to ensure the selected plan is always first
   const reorderedPlans = () => {
     if (!membershipData?.data) return [];
     const userMembershipId = user?.user?.membership?.membership_id;
-
-    // Put the selected membership first and others after it
     const selectedPlan = membershipData.data.find(
       (plan) => plan.id === userMembershipId
     );
     const otherPlans = membershipData.data.filter(
       (plan) => plan.id !== userMembershipId
     );
-
     return selectedPlan ? [selectedPlan, ...otherPlans] : membershipData.data;
-  };
-
-  const parseHtml = (htmlString: any) => {
-    return { __html: htmlString };
   };
 
   const handleGetStarted = async (membershipId: any) => {
@@ -34,215 +27,292 @@ const MembershipPlans = () => {
   };
 
   return (
-    <div className="section-content box-sort-in button-example m-t80">
-      <div className="pricingtable-row">
-        <div className="display-property">
-          {reorderedPlans()?.map((text, index) => (
-            <div
-              key={index}
-              className={`pricingtable-wrapper style2 bg-white member-ship-div ${
-                user?.user?.membership?.membership_id === text.id
-                  ? "selected-plan"
-                  : ""
-              }`}
-              onMouseEnter={(e) => {
-                const button = e.currentTarget.querySelector(
-                  ".site-button"
-                ) as HTMLElement;
-                button.style.backgroundColor = "#fff";
-                button.style.color = "#000";
+    <>
+      {isLoading && <Loading />}
+      <div className="section-full content-inner-2 overlay-white-middle">
+        <div className="container">
+          <div className="section-head text-black text-center">
+            <h2 style={{ fontWeight: "600" }} className="m-b0">
+              Membership Plans
+            </h2>
+            <p>"Empowering Careers: CTC-Based Tiers, Your Path to Success."</p>
+          </div>
 
-                const title = e.currentTarget.querySelector(
-                  ".pricingtable-title"
-                ) as HTMLElement;
-                title.style.color = "#000";
-
-                const description = e.currentTarget.querySelector(
-                  ".pricingtable-description"
-                ) as HTMLElement;
-                description.style.color = "#fff";
-              }}
-              onMouseLeave={(e) => {
-                const button = e.currentTarget.querySelector(
-                  ".site-button"
-                ) as HTMLElement;
-                button.style.backgroundColor = "#2A6310";
-                button.style.color = "#fff";
-
-                const title = e.currentTarget.querySelector(
-                  ".pricingtable-title"
-                ) as HTMLElement;
-                title.style.color = "";
-
-                const description = e.currentTarget.querySelector(
-                  ".pricingtable-description"
-                ) as HTMLElement;
-                description.style.color = "";
-              }}
-            >
-              <div className="pricingtable-inner">
-                <div className="pricingtable-price">
-                  <h4 className="font-weight-900 m-t10 m-b0 text-center pricingtable-title">
-                    {text?.title}
-                  </h4>
-                  <p
-                    className="text-left my-2 pricingtable-description"
-                    dangerouslySetInnerHTML={parseHtml(text?.description)}
-                  ></p>
-                </div>
-                <div className="price-info-wrapper">
-                  <h3 className="font-weight-300 m-t10 m-b0 price-title">
-                    Price
-                  </h3>
-                  <ul className="price-list">
-                    <li className="price-item">
-                      <b>{text?.monthly_price}</b>
-                    </li>
-                    <li className="price-item">
-                      <del className="text-red">{text?.quarterly_price}</del>
-                    </li>
-                  </ul>
-                  <div className="text-center button-wrap">
-                    {user?.user ? (
+          <div className="pricing-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Features</th>
+                  {reorderedPlans().map((plan, index) => (
+                    <th
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Job listing CTC based</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.ctcBased}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Priority Application</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.priorityApplication ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Advanced Job Search Filters</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.advancedSearch ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Resume & Cover Letter Reviews</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.resumeReview ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Mock Interviews</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.mockInterviews ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Connect with Job Poster</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.connectJobPoster ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>City Meetups & Events</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.cityMeetups ? "✓" : "×"}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Credits for Successful Job Application</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.credits}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td>Price (Monthly)</td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
+                      {plan.monthly_price}
+                    </td>
+                  ))}
+                </tr>
+                {/* New Row for the Buttons */}
+                <tr>
+                  <td></td>
+                  {reorderedPlans().map((plan, index) => (
+                    <td
+                      key={index}
+                      className={
+                        user?.user?.membership?.membership_id === plan.id
+                          ? "highlight-column"
+                          : ""
+                      }
+                    >
                       <button
-                        onClick={() => handleGetStarted(text?.id)}
-                        className="site-button radius-xl white-hover"
+                        onClick={() => handleGetStarted(plan.id)}
+                        className={`${
+                          user?.user?.membership?.membership_id === plan.id
+                            ? "selected-plan-btn"
+                            : "get-started-btn"
+                        }`}
+                        disabled={user?.user?.membership?.membership_id === plan.id}
                       >
-                        <span className="p-lr30 button-text">
-                          {user?.user?.membership?.membership_id === text.id
-                            ? "Selected Plan"
-                            : "Get Started"}
-                        </span>
+                        {user?.user?.membership?.membership_id === plan.id
+                          ? "Selected Plan"
+                          : "Get Started"}
                       </button>
-                    ) : (
-                      <button
-                        className="site-button radius-xl white-hover"
-                        onClick={() => router.push(`/login?page=/`)}
-                      >
-                        <span className="p-lr30 button-text">
-                          Login to Get Started
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-                {text.info?.map((e, i) => (
-                  <ul key={i} className="mp-cards">
-                    <li className="mp-card-item">{e?.content}</li>
-                  </ul>
-                ))}
-              </div>
-            </div>
-          ))}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
       <style jsx>{`
-        .member-ship-div {
-          min-height: 500px;
-          border-radius: 20px;
-          padding: 20px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          transition: background-color 0.3s, color 0.3s;
-          margin: 20px;
-          display: flex;
-          flex-direction: column;
+        .pricing-table {
+          margin-top: 20px;
+          width: 100%;
+          text-align: center;
+          border-collapse: separate;
+          border-spacing: 0 10px;
         }
-        .selected-plan {
-          border: 2px solid #2a6310;
+
+        table {
+          width: 100%;
+          border-collapse: collapse;
         }
-        .member-ship-div:hover {
-          background-color: #2a6310 !important;
-          color: white !important;
+
+        th,
+        td {
+          border: 1px solid #ddd;
+          padding: 12px;
+          font-size: 16px;
         }
-        .member-ship-div:hover .site-button {
-          background-color: #fff !important;
-          color: #000 !important;
-        }
-        .member-ship-div:hover .pricingtable-title {
-          color: #000 !important;
-        }
-        .member-ship-div:hover .pricingtable-description {
-          color: #fff !important;
-        }
-        .member-ship-div:hover .price-title,
-        .member-ship-div:hover .price-item,
-        .member-ship-div:hover .mp-card-item {
-          color: white !important;
-        }
-        .pricingtable-wrapper.style2 .pricingtable-price {
-          padding: 10px;
-        }
-        .pricingtable-inner {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 100%;
-        }
-        .pricingtable-title {
+
+        th {
+          background-color: #f2f2f2;
           font-weight: bold;
-          font-size: 28px;
-          border: 1.5px solid black;
-          border-radius: 20px;
-          padding: 5px;
+        }
+
+        td {
           text-align: center;
-          margin-bottom: 15px;
+          padding: 15px;
         }
-        .pricingtable-description {
-          text-align: center;
-          margin-bottom: 20px;
+
+        .highlight-column {
+          background-color: #e7f9e7; /* Light green to highlight selected column */
+          font-weight: bold;
         }
-        .price-info-wrapper {
-          margin-top: auto;
-          text-align: center;
+
+        .get-started-btn,
+        .selected-plan-btn {
+          padding: 12px 28px;
+          border-radius: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          display: inline-block;
+          border: none;
         }
-        .price-title {
-          font-size: 20px;
-          font-weight: 700;
-        }
-        .price-list {
-          list-style: none;
-          padding: 0;
-        }
-        .price-item {
-          color: black;
-          margin: 5px 0;
-          font-size: 18px;
-        }
-        .button-wrap {
-          text-align: center;
-        }
-        .display-property {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-        }
-        .site-button {
-          border: 1px solid white;
-          background-color: #2a6310;
-          padding: 10px 30px;
-          border-radius: 30px;
+
+        .get-started-btn {
+          background: linear-gradient(135deg, #007bff, #00c6ff);
           color: white;
-          transition: background-color 0.3s, color 0.3s;
         }
-        .button-text {
-          font-family: "__Inter_Fallback_aaf875";
+
+        .get-started-btn:hover {
+          background: linear-gradient(135deg, #00c6ff, #007bff);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
-        @media (max-width: 1200px) {
-          .display-property {
-            overflow-x: scroll;
-            padding-left: 1rem;
-            display: flex;
+
+        .selected-plan-btn {
+          background: linear-gradient(135deg, #ffdd33, #ff9900);
+          color: white;
+          cursor: not-allowed;
+          opacity: 0.8;
+        }
+
+        .selected-plan-btn:disabled {
+          cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+          table,
+          th,
+          td {
+            font-size: 14px;
           }
-        }
-        @media (max-width: 576px) {
-          .member-ship-div {
-            min-width: 350px;
-            min-height: auto;
+
+          .get-started-btn,
+          .selected-plan-btn {
+            width: 80%;
+            margin: 10px auto;
           }
         }
       `}</style>
-    </div>
+    </>
   );
 };
 
-export default MembershipPlans;
+export default SwitchPlan;

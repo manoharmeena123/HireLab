@@ -307,9 +307,15 @@ const JobPostedSection = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/manage-job">
+                          <Link href="/job-poster-dashboard">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/manage-job">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage jobs</span>
                           </Link>
                         </li>
                         <li>
@@ -329,7 +335,10 @@ const JobPostedSection = () => {
                         </li>
                         <li>
                           <Link href="/job-posted" className="active">
-                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-briefcase"
+                              aria-hidden="true"
+                            ></i>
                             Job Posted
                           </Link>
                         </li>
@@ -453,7 +462,7 @@ const JobPostedSection = () => {
                               </td>
                             </tr>
                           ) : (
-                            paginatedJobsData?.map((job :any, index) => (
+                            paginatedJobsData?.map((job: any, index) => (
                               <tr key={index}>
                                 <td className="feature">
                                   <div className="custom-control custom-checkbox">
@@ -535,8 +544,10 @@ const JobPostedSection = () => {
                       <table className="table-job-bx cv-manager company-manage-job">
                         <tbody>
                           {paginatedJobsData
-                            ?.filter((appl :any) => appl.id === applicationviewid)
-                            .map((job :any, index) => (
+                            ?.filter(
+                              (appl: any) => appl.id === applicationviewid
+                            )
+                            .map((job: any, index) => (
                               <tr key={job.id}>
                                 <td className="feature">
                                   <div

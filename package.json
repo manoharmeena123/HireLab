@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^42.0.1",
-    "@ckeditor/ckeditor5-react": "^8.0.0",
+    "@ckeditor/ckeditor5-build-classic": "^43.2.0",
+    "@ckeditor/ckeditor5-react": "^9.3.1",
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-brands-svg-icons": "^6.6.0",
     "@fortawesome/free-regular-svg-icons": "^6.6.0",
@@ -24,6 +24,7 @@
     "@types/react-redux": "^7.1.33",
     "axios": "^1.7.2",
     "bootstrap": "^4.6.2",
+    "ckeditor4-react": "^5.2.0",
     "dayjs": "^1.11.13",
     "dompurify": "^3.1.6",
     "dotenv": "^16.4.5",

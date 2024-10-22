@@ -165,15 +165,20 @@ const Transaction = () => {
                       {/* Sidebar Links */}
                       <ul>
                         {user?.user?.role === "job_poster" ? (
-                          <li>
-                            <Link href="/manage-job">
-                              <i
-                                className="fa fa-heart-o"
-                                aria-hidden="true"
-                              ></i>
-                              Dashboard
-                            </Link>
-                          </li>
+                          <>
+                               <li>
+                               <Link href="/job-poster-dashboard" >
+                                 <i className="fa fa-heart-o" aria-hidden="true"></i>
+                                 <span>Dashboard</span>
+                               </Link>
+                             </li>
+                             <li>
+                               <Link href="/manage-job" >
+                                 <i className="fa fa-cog" aria-hidden="true"></i>
+                                 <span>Manage jobs</span>
+                               </Link>
+                             </li>
+                          </>
                         ) : (
                           <li>
                             <Link href="/dashboard-section">

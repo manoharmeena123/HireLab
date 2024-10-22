@@ -307,9 +307,15 @@ const ManageJobs = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/manage-job" className="active">
+                          <Link href="/job-poster-dashboard" >
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/manage-job" className="active">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage jobs</span>
                           </Link>
                         </li>
                         <li>

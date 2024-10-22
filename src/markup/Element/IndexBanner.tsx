@@ -52,7 +52,7 @@ const IndexBanner: React.FC = () => {
     return cityData
       .filter((city) =>
         city.city.toLowerCase().includes(inputValue.toLowerCase())
-      )
+      ).slice(0, 5) // Limit to 5 suggestions
       .map((city) => city.city);
   };
 
@@ -179,8 +179,9 @@ const IndexBanner: React.FC = () => {
                   .filter((job) =>
                     job.value
                       .toLowerCase()
+                     
                       .includes(filters.job_title.toLowerCase())
-                  )
+                  ).slice(0, 3) // Limit the job title suggestions to 5 options
                   .map((job) => (
                     <option key={job.value} value={job.label} />
                   ))}

@@ -454,9 +454,15 @@ const PostJobSection = () => {
                     {/* Sidebar Links */}
                     <ul>
                       <li>
-                        <Link href="/manage-job">
+                        <Link href="/job-poster-dashboard">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          Dashboard
+                          <span>Dashboard</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/manage-job">
+                        <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Manage jobs</span>
                         </Link>
                       </li>
                       <li>

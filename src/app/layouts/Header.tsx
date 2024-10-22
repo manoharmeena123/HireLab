@@ -37,16 +37,16 @@ const Header = () => {
   const handleNotificationClick = () => {
     router.push("/notifications");
   };
-  const renderProfileDropdown = 
-  !isLoginPage && 
-  !isRegisterPage && 
-  token && 
-  user?.user?.role && (
-    <Link href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}>
-      <ProfileDropdown />
-    </Link>
-  );
-
+  const renderProfileDropdown = !isLoginPage &&
+    !isRegisterPage &&
+    token &&
+    user?.user?.role && (
+      <Link
+        href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}
+      >
+        <ProfileDropdown />
+      </Link>
+    );
 
   const renderLoginRegisterButtons = !isLoginPage &&
     !isRegisterPage &&
@@ -228,41 +228,34 @@ const Header = () => {
               )}
 
               <ul className="nav navbar-nav">
-                <li
-                  className={isActive("/") ? "active" : ""}
-                >
+                <li className={isActive("/") ? "active" : ""}>
                   <Link href="/">Home</Link>
                 </li>
 
                 {token ? (
                   <>
-                    <li
-                      className={isActive("/dashboard-section") ? "active" : ""}
-                    >
-                      <Link href="/dashboard-section">Dashboard</Link>
-                    </li>
-
                     {user?.user?.role === "job_seeker" && (
-                      <li
-                        className={isActive("/job-seeker") ? "active" : ""}
-                   
-                      >
-                        <Link href="/job-seeker">Profile</Link>
-                      </li>
+                      <>
+                        <li
+                          className={
+                            isActive("/dashboard-section") ? "active" : ""
+                          }
+                        >
+                          <Link href="/dashboard-section">Dashboard</Link>
+                        </li>
+                        <li className={isActive("/job-seeker") ? "active" : ""}>
+                          <Link href="/job-seeker">Profile</Link>
+                        </li>{" "}
+                      </>
                     )}
 
                     {user?.user?.role === "job_poster" && (
-                      <li
-                        className={isActive("/post-job") ? "active" : ""}
-                     
-                      >
+                      <li className={isActive("/post-job") ? "active" : ""}>
                         <Link href="/post-job">Post Job</Link>
                       </li>
                     )}
 
-                    <li
-                      className={isActive("/single-event") ? "active" : ""}
-                    >
+                    <li className={isActive("/single-event") ? "active" : ""}>
                       <Link href="/single-event">Meetups and Events</Link>
                     </li>
 
@@ -273,30 +266,25 @@ const Header = () => {
                     >
                       <Link href="/view-all-discussion">Discussion</Link>
                     </li>
+                    <li className={isActive("/services") ? "active" : ""}>
+                      <Link href="/services">Services</Link>
+                    </li>
                   </>
                 ) : (
                   <>
-                    <li
-                      className={isActive("/job-seeker") ? "active" : ""}
-                    >
+                    <li className={isActive("/job-seeker") ? "active" : ""}>
                       <Link href="/job-seeker">I'M A Job SEEKER</Link>
                     </li>
 
-                    <li
-                      className={isActive("/job-poster") ? "active" : ""}
-                    >
+                    <li className={isActive("/job-poster") ? "active" : ""}>
                       <Link href="/job-poster">I'M A Job Poster</Link>
                     </li>
 
-                    <li
-                      className={isActive("/services") ? "active" : ""}
-                    >
+                    <li className={isActive("/services") ? "active" : ""}>
                       <Link href="/services">Services</Link>
                     </li>
 
-                    <li
-                      className={isActive("/blogs") ? "active" : ""}
-                    >
+                    <li className={isActive("/blogs") ? "active" : ""}>
                       <Link href="/blogs">BLOG</Link>
                     </li>
                   </>

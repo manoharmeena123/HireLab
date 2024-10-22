@@ -128,8 +128,8 @@ const RecentJobsection = () => {
               </Link>
             </div>
           </div>
-          <div className="row">
-            <div className="col-lg-9">
+          <div className="row ">
+            <div className="col-lg-12">
               <ul className="post-job-bx browse-job recent-job-scroll-mob">
                 {currentJobs?.map((item: RecentJobData, index: number) => (
                   <li key={index}>
@@ -205,7 +205,7 @@ const RecentJobsection = () => {
                 onPageChange={(page) => setCurrentPage(page)}
               />
             </div>
-            <div className="col-lg-3">
+            {/* <div className="col-lg-3">
               <div className="sticky-top">
                 <div className="candidates-are-sys m-b30">
                   {lastTestimonial && (
@@ -251,7 +251,7 @@ const RecentJobsection = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
