@@ -192,7 +192,7 @@ const JobPosterDashboard = () => {
                         <div className="col-lg-12 mb-2">
                         <h5 className="font-weight-700 pull-left text-uppercase">Welcome,{user?.user?.name || "User Name"}</h5>
                           <button
-                            onClick={() => router.back()}
+                           onClick={handleLogout}
                             className="site-button right-arrow button-sm float-right mb-1"
                             style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
