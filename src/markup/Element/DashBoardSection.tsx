@@ -495,7 +495,7 @@ const DashboardSection = () => {
                     (e.currentTarget.style.color = "white"),
                     (e.currentTarget.style.border = "none")
                   )}
-                  onClick={() => setShowModal(true)}
+                  onClick={() => push("/my-community")}
                 >
                   View Members
                 </button>
