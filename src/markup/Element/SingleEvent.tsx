@@ -34,6 +34,18 @@ const SingleEvent = () => {
   );
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
+  const events = searchParams.get("event")
+  console.log('events', events)
+
+// Detect the `events` parameter and set the active tab accordingly
+useEffect(() => {
+  if (events) {
+    setActiveButton(events === "upcoming" ? "upcoming" : "past");
+  }
+}, [events]);
+
+
+
   const [removeEvent] = useRemoveEventMutation();
   const [
     getSingleEventByTitle,
@@ -62,12 +74,18 @@ const SingleEvent = () => {
   const [saveEvent] = useSaveEventMutation();
   const { data: myEventsData, refetch } = useMyEventsQuery();
 
-  // Fetch the event data when the component mounts
   useEffect(() => {
+    // Fetch the event data when the component mounts
     if (query) {
       getSingleEventByTitle(query);
     }
-  }, [getSingleEventByTitle, query]);
+  
+    // Set the active button based on the `events` parameter
+    if (events) {
+      setActiveButton(events === "upcoming" ? "upcoming" : "past");
+    }
+  }, [getSingleEventByTitle, query, events]);
+  
 
   // Update the selected event when the single event data changes
   useEffect(() => {

@@ -22,6 +22,7 @@ const Header = () => {
   const isRegisterPage = pathname === "/register";
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
   // Function to check if the link is active
   const isActive = (href: any) => {
     return pathname === href;
@@ -36,6 +37,10 @@ const Header = () => {
 
   const handleNotificationClick = () => {
     router.push("/notifications");
+  };
+
+  const handleMeetupAndEventClick = (query: any) => {
+    router.push(`/single-event?event=${query}`);
   };
   const renderProfileDropdown = !isLoginPage &&
     !isRegisterPage &&
@@ -69,6 +74,13 @@ const Header = () => {
       </>
     );
 
+  const handleServiceMouseEnter = () => {
+    setShowServiceDropdown(true);
+  };
+
+  const handleServiceMouseLeave = () => {
+    setShowServiceDropdown(false);
+  };
   return (
     <header className="site-header mo-left header fullwidth">
       <div className="sticky-header main-bar-wraper navbar-expand-lg">
@@ -228,7 +240,9 @@ const Header = () => {
               )}
 
               <ul className="nav navbar-nav">
-                <li className={isActive("/") ? "active" : ""}>
+                <li
+                // className={isActive("/") ? "active" : ""}
+                >
                   <Link href="/">Home</Link>
                 </li>
 
@@ -266,8 +280,97 @@ const Header = () => {
                     >
                       <Link href="/view-all-discussion">Discussion</Link>
                     </li>
-                    <li className={isActive("/services") ? "active" : ""}>
-                      <Link href="/services">Services</Link>
+                    <li
+                      className={`${styles.dropdown}`}
+                      onMouseEnter={handleServiceMouseEnter}
+                      onMouseLeave={handleServiceMouseLeave}
+                    >
+                      <Link href="/services" className={styles.menuLink}>
+                        Services
+                      </Link>
+                      {showServiceDropdown && (
+                        <div className={`dropdown-menu ${styles.dropdownMenu}`}>
+                          <div
+                            className={`${styles.dropdownColumn} ${styles.columnWithBorder}`}
+                          >
+                            <h6 className={styles.dropdownTitle}>
+                              Meet-ups and Events
+                            </h6>
+                            <Link
+                              href="#"
+                              className={styles.dropdownItem}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleMeetupAndEventClick("past");
+                              }}
+                            >
+                              Past Meet-ups
+                            </Link>
+                            <Link
+                              href="#"
+                              className={styles.dropdownItem}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleMeetupAndEventClick("upcoming");
+                              }}
+                            >
+                              Available Pass for Upcoming Meet-ups
+                            </Link>
+                          </div>
+
+                          <div
+                            className={`${styles.dropdownColumn} ${styles.columnWithBorder}`}
+                          >
+                            <h6 className={styles.dropdownTitle}>
+                              Book a Session
+                            </h6>
+                            <Link href="#" className={styles.dropdownItem}>
+                              Mock Interviews
+                            </Link>
+                            <Link href="#" className={styles.dropdownItem}>
+                              Book a Session Form
+                            </Link>
+                          </div>
+
+                          <div
+                            className={`${styles.dropdownColumn} ${styles.columnWithBorder}`}
+                          >
+                            <h6 className={styles.dropdownTitle}>
+                              Resume Reviews
+                            </h6>
+                            <Link href="#" className={styles.dropdownItem}>
+                              Resume Reviews
+                            </Link>
+                          </div>
+
+                          <div className={styles.dropdownColumn}>
+                            <h6 className={styles.dropdownTitle}>
+                              More Services
+                            </h6>
+                            <Link href="/blogs" className={styles.dropdownItem}>
+                              Blogs
+                            </Link>
+                            <Link
+                              href="/contact-us"
+                              className={styles.dropdownItem}
+                            >
+                              Contact Us
+                            </Link>
+                          </div>
+
+                          <div
+                            className={`${styles.dropdownColumn}`}
+                          >
+                            <h6 className={styles.dropdownTitle}>
+                              Why Choose Us
+                            </h6>
+                            <span className={styles.dropdownItem}>
+                              At HireLab, we revolutionize the hiring process
+                              for employers and candidates...
+                            </span>
+                          </div>
+                        </div>
+                      )}
                     </li>
                   </>
                 ) : (

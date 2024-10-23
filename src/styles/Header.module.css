@@ -1,5 +1,4 @@
-/* Header.module.css */
-
+/* Container adjustments for larger screens */
 .containerFluid {
   padding-left: 12rem !important;
 }
@@ -9,7 +8,7 @@
 }
 
 .logo {
-  left:-100px
+  left: -100px;
 }
 
 @media (max-width: 1200px) {
@@ -24,7 +23,8 @@
   }
 }
 
-.close-btn {
+/* Close button styling */
+.closeBtn {
   background: none !important;
   border: none !important;
   cursor: pointer !important;
@@ -35,9 +35,128 @@
   top: 50% !important;
   right: 10px !important;
   transform: translateY(-50%) !important;
-  z-index: 2 !important; 
+  z-index: 2 !important;
 }
 
-.close-btn:hover {
-  color: #f00 !important; 
+.closeBtn:hover {
+  color: #f00 !important;
+}
+
+/* Dropdown menu styling */
+.dropdownMenu {
+  position: absolute !important;
+  top: 100% !important;
+  left: -475px !important;
+  display: grid !important;
+  width: 800px;
+  background-color: #ffffff !important;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  padding: 20px !important;
+  border-radius: 8px !important;
+  z-index: 1000 !important;
+  grid-template-columns: repeat(4, 1fr); /* Split into 4 equal columns */
+  gap: 15px; /* Gap between columns */
+}
+
+/* Show dropdown on hover */
+.navbar-nav .dropdown:hover .dropdownMenu {
+  display: grid !important; /* Show dropdown when hovering over parent */
+}
+
+/* Styling for dropdown links */
+.dropdownMenu a {
+  display: block !important;
+  padding: 12px 18px !important; /* Increased padding for a modern look */
+  color: #333 !important;
+  text-decoration: none !important;
+  font-size: 15px; /* Slightly larger font for better readability */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.dropdownMenu a:hover {
+  background-color: #f0f0f0 !important; /* Softer hover background */
+  color: #2a6310 !important; /* Green hover text for contrast */
+  border-radius: 6px; /* Rounded corners for hover effect */
+}
+
+/* Styling for the columns in the dropdown */
+.dropdownColumn {
+  margin-right: 20px; /* Spacing between columns */
+}
+
+/* Promotional Offer styling */
+.promotionalOffer {
+  background-color: #fffae6 !important; /* Lighter background for promotion */
+  padding: 15px !important;
+  border-radius: 8px !important;
+  font-size: 15px !important;
+  color: #d9534f !important; /* Bright red for emphasis */
+  font-weight: bold !important;
+}
+
+/* Section Titles inside the dropdown */
+.dropdownColumn h6 {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 700; /* Bolder titles */
+  color: #333;
+}
+.dropdownTitle{
+  white-space: nowrap !important;
+  font-size: 16px;
+}
+
+.dropdownItem {
+  font-size: 14px !important;
+  font-weight: 500;
+  text-transform: none !important;
+}
+/* Text for each section */
+.dropdownColumn p {
+  margin: 0;
+  font-size: 14px;
+  color: #777;
+}
+
+.dropdownMenu h6,
+.dropdownMenu p {
+  color: #555;
+}
+.horizontalDivider {
+  border: none;
+  border-top: 1px solid #e0e0e0; /* Light gray line for divider */
+  margin: 10px 0; /* Add some spacing above and below the divider */
+}
+/* Styling for dropdown columns with vertical borders */
+.columnWithBorder {
+  border-right: 1px solid #e0e0e0; /* Light gray vertical line */
+  padding-right: 15px;
+}
+
+.columnWithBorder:last-child {
+  border-right: none; /* Remove border for the last column */
+}
+
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .dropdownMenu {
+    width: 100%; /* Full width for mobile */
+    left: 0 !important; /* Center dropdown */
+    grid-template-columns: 1fr; /* Single column for mobile */
+    padding: 20px; /* Adjust padding for mobile */
+  }
+
+  .dropdownMenu a {
+    padding: 10px 15px; /* Adjust padding for mobile links */
+    font-size: 14px; /* Smaller font for mobile */
+  }
+
+  .dropdownColumn {
+    margin-right: 0; /* Remove column spacing for mobile */
+  }
+
+  .promotionalOffer {
+    margin-top: 15px; /* Add spacing for promo section on mobile */
+  }
 }
