@@ -285,7 +285,7 @@ const Header = () => {
                       onMouseEnter={handleServiceMouseEnter}
                       onMouseLeave={handleServiceMouseLeave}
                     >
-                      <Link href="/services" className={styles.menuLink}>
+                      <Link href="#" className={styles.menuLink}>
                         Services
                       </Link>
                       {showServiceDropdown && (
