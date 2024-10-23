@@ -359,7 +359,7 @@ const Header = () => {
                           </div>
 
                           <div
-                            className={`${styles.dropdownColumn}`}
+                            className={`${styles.dropdownColumn} ${styles.promotionalOffer}`}
                           >
                             <h6 className={styles.dropdownTitle}>
                               Why Choose Us
