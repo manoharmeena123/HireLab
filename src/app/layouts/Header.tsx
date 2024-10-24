@@ -7,7 +7,7 @@ import logo2 from "../../images/hiralablogo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthToken, useLoggedInUser } from "@/hooks/";
-
+import ProfileDrawer from "@/markup/Element/ProfileDrawer"
 // Import Font Awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -42,14 +42,23 @@ const Header = () => {
   const handleMeetupAndEventClick = (query: any) => {
     router.push(`/single-event?event=${query}`);
   };
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Function to toggle drawer
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
   const renderProfileDropdown = !isLoginPage &&
     !isRegisterPage &&
     token &&
     user?.user?.role && (
       <Link
-        href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}
+        // href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}
+        href={"#"}
       >
-        <ProfileDropdown />
+            <ProfileDropdown toggleDrawer={toggleDrawer} />
+      {/* <ProfileDropdown  /> */}
       </Link>
     );
 
@@ -443,6 +452,8 @@ const Header = () => {
           </div>
         </div>
       </div>
+      {/* ProfileDrawer component with drawerOpen state */}
+      <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />
     </header>
   );
 };
