@@ -9,10 +9,11 @@ import profileIcon from "../../images/favicon.png";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { navigateSource } from "@/lib/action";
 import Swal from "sweetalert2";
+import Loading from "@/components/Loading";
 
 const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer: () => void }) => {
   const {push} = useRouter();
-  const { user } = useLoggedInUser();
+  const { user ,isLoading} = useLoggedInUser();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
   const { removeToken } = useAuthToken();
 
@@ -57,6 +58,8 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer
   }
 
   return (
+    <> 
+    {isLoading && <Loading/>}
     <div className={`profile-drawer ${isOpen ? "open" : ""}`}>
       <button
         type="button"
@@ -180,6 +183,7 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer
         }
       `}</style>
     </div>
+    </>
   );
 };
 

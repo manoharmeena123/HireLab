@@ -264,10 +264,10 @@ const JobSeekerSection = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      toast.error("Please fill all mandatory fields.");
-      return;
-    }
+    // if (!validateForm()) {
+    //   toast.error("Please fill all mandatory fields.");
+    //   return;
+    // }
 
     const formData = new FormData();
     Object.entries(profileForm).forEach(([key, value]) => {
@@ -1169,6 +1169,7 @@ const JobSeekerSection = () => {
                                 { value: "Yes", label: "Yes" },
                                 { value: "No", label: "No" },
                               ].find(
+
                                 (option) =>
                                   option.value ===
                                   profileForm.willing_to_work_remotely

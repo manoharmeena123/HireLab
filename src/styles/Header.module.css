@@ -63,6 +63,15 @@
   display: grid !important; /* Show dropdown when hovering over parent */
 }
 
+/* Remove underline from navbar links */
+.navbar-nav a {
+  text-decoration: none !important; /* Ensure no underline by default */
+}
+
+.navbar-nav a:hover {
+  text-decoration: none !important; /* Ensure no underline on hover */
+}
+      
 /* Styling for dropdown links */
 .dropdownMenu a {
   display: block !important;

@@ -223,7 +223,7 @@ const Transaction = () => {
                                 <span>Post A job</span>
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link href="/job-posted">
                                 <i
                                   className="fa fa-briefcase"
@@ -231,7 +231,7 @@ const Transaction = () => {
                                 ></i>
                                 Job Posted
                               </Link>
-                            </li>
+                            </li> */}
 
                             <li>
                               <Link href="/cv-manager">
@@ -300,6 +300,35 @@ const Transaction = () => {
                             <span>Transaction</span>
                           </Link>
                         </li>
+                        {user?.user?.role === "job_poster" && ( 
+                          <>
+                          
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
+                          </Link>
+                        </li>
+                          </>
+                        )}
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i

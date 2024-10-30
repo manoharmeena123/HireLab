@@ -453,7 +453,7 @@ const Header = () => {
         </div>
       </div>
       {/* ProfileDrawer component with drawerOpen state */}
-      <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+      {drawerOpen && <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />}
     </header>
   );
 };

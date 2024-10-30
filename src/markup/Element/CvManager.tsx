@@ -171,12 +171,12 @@ const CvManager = () => {
                             <span>Post A job</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="/job-posted">
                             <i  className="fa fa-briefcase" aria-hidden="true"></i>
                             Job Posted
                           </Link>
-                        </li>
+                        </li> */}
                         {/* <li>
                           <Link href={"/my-resume"}>
                             <i
@@ -231,6 +231,30 @@ const CvManager = () => {
                               aria-hidden="true"
                             ></i>
                             <span>Transaction</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
                           </Link>
                         </li>
                         <li>

@@ -258,15 +258,15 @@ const JobPosterSection = () => {
                         </div>
                       </div>
                       <ul>
-                      <li>
-                          <Link href="/job-poster-dashboard" >
+                        <li>
+                          <Link href="/job-poster-dashboard">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="/manage-job" >
-                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <Link href="/manage-job">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Manage jobs</span>
                           </Link>
                         </li>
@@ -285,39 +285,63 @@ const JobPosterSection = () => {
                             <span>Post A job</span>
                           </Link>
                         </li>
-                        <li>
-                        <Link href="/job-posted">
-                          <i className="fa fa-briefcase" aria-hidden="true"></i>
-                          Job Posted
-                        </Link>
-                      </li>
-                        <li>
-                        <Link href="/cv-manager">
-                          <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                          CV Manager
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/switch-plan">
-                          <i className="fa fa-money" aria-hidden="true"></i>
-                          Switch Plan
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/transaction">
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
                         {/* <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Manage Jobs</span>
+                          <Link href="/job-posted">
+                            <i
+                              className="fa fa-briefcase"
+                              aria-hidden="true"
+                            ></i>
+                            Job Posted
                           </Link>
                         </li> */}
+                        <li>
+                          <Link href="/cv-manager">
+                            <i
+                              className="fa fa-id-card-o"
+                              aria-hidden="true"
+                            ></i>
+                            CV Manager
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/switch-plan">
+                            <i className="fa fa-money" aria-hidden="true"></i>
+                            Switch Plan
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/transaction">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Transaction</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
+                          </Link>
+                        </li>
 
                         <li>
                           <Link href="#" onClick={handleLogout}>
@@ -336,7 +360,7 @@ const JobPosterSection = () => {
                   <div className="job-bx submit-resume">
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left">
-                        {user?.user?.name.split('',7) || "User"}'s Profile
+                        {user?.user?.name.split("", 7) || "User"}'s Profile
                       </h5>
                       <button
                         onClick={() => router.back()}
