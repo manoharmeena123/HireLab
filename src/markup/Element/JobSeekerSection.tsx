@@ -21,6 +21,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
+import { experienceOptions, jobTitleOptions } from "@/data/indexSearch";
 
 interface OptionType {
   value: string;
@@ -67,6 +68,7 @@ const JobSeekerSection = () => {
     designation: "",
     company_name: "",
     experience: "",
+    yearOfExperience: "",
     country: "",
     expected_ctc: "",
     resume: null, // For Resume Upload
@@ -156,9 +158,7 @@ const JobSeekerSection = () => {
     }
   }, [designationData, getCtcData]);
 
-  const handleInputChange = (
-    e: any
-  ) => {
+  const handleInputChange = (e: any) => {
     const { name, value, files } = e.target;
     if (files && files[0]) {
       const file = files[0];
@@ -175,10 +175,7 @@ const JobSeekerSection = () => {
     }
   };
 
-  const handleSelectChange = (
-    name: string,
-    selectedOption:any
-  ) => {
+  const handleSelectChange = (name: string, selectedOption: any) => {
     setProfileForm((prevForm: any) => ({
       ...prevForm,
       [name]: selectedOption ? selectedOption.value : "",
@@ -207,6 +204,7 @@ const JobSeekerSection = () => {
       "preferred_job_locations",
       "willing_to_relocate",
       "sector",
+      "yearOfExperience"
     ];
 
     requiredFields.forEach((field) => {
@@ -708,6 +706,28 @@ const JobSeekerSection = () => {
                             </select>
                           </div>
                         </div>
+                        {/* Year of Experience */}
+                        <div className="col-lg-6 col-md-6">
+                          <div className="form-group">
+                            <label>Year of Experience:</label>
+                            <Select
+                              value={experienceOptions.find(
+                                (option) =>
+                                  option.value === profileForm.yearOfExperience
+                              )}
+                              onChange={(option) =>
+                                handleSelectChange("yearOfExperience", option)
+                              }
+                              options={experienceOptions}
+                              placeholder="Select Year of Experience"
+                            />
+                            {validationErrors.yearOfExperience && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.yearOfExperience}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
 
                       {/* Education Details Section */}
@@ -1169,7 +1189,6 @@ const JobSeekerSection = () => {
                                 { value: "Yes", label: "Yes" },
                                 { value: "No", label: "No" },
                               ].find(
-
                                 (option) =>
                                   option.value ===
                                   profileForm.willing_to_work_remotely
