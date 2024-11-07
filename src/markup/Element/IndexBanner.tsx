@@ -162,7 +162,7 @@ const IndexBanner: React.FC = () => {
                 {parse(heading)}
               </div>
             </Link> */}
-            <h2 style={{ marginTop: "20px" }}>
+            <h2 style={{ marginTop: "20px", textAlign:"center" }}>
               {parse(description)} <br />
             </h2>
             <form onSubmit={handleSubmit} style={styles.formContainer}>

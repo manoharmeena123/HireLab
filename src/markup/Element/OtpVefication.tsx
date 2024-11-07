@@ -55,11 +55,6 @@ const OtpVefication = () => {
   const [otp, setOtp] = useState<string>("");
   const [otpError, setOtpError] = useState<string | null>(null);
   console.log('firstuser', user)
-  // const endpoint = queryTitle
-  // ? `${queryTitle}`
-  // : (user?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
-
-
   // Parse localStorage data
   useEffect(() => {
     const data = localStorage.getItem("registerData");
@@ -131,7 +126,7 @@ const OtpVefication = () => {
         console.log('loggedInUser', loggedInUser)
         const endpoint = queryTitle
         ? `${queryTitle}`
-        : (loggedInUser?.is_profile_completed == 1 ? "/dashboard-section" : "/job-seeker");
+        : (loggedInUser?.user?.role === "job_poster" ? "/job-poster-dashboard" : "/dashboard-section");
       
         if (loggedInUser) {
           navigateSource(endpoint);

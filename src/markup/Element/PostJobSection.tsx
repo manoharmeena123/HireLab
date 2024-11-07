@@ -42,6 +42,7 @@ import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
 import { addNotificationToFirestore } from "@/app/notifications/firebaseConfig"; // Import the function
+import { experienceOptions } from "@/data/indexSearch";
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -124,6 +125,15 @@ const PostJobSection = () => {
       prev.map((hovered, i) => (i === index ? true : hovered))
     );
   };
+
+
+  const [selectedExperience, setSelectedExperience] = useState(null);
+
+  const handleExperienceChange = (selectedOption :any) => {
+    setSelectedExperience(selectedOption);
+    dispatch(setPostJobData({ experience: selectedOption?.value || "" }));
+  };
+  
 
   const handleMouseLeave = (
     index: number,
@@ -461,7 +471,7 @@ const PostJobSection = () => {
                       </li>
                       <li>
                         <Link href="/manage-job">
-                        <i className="fa fa-cog" aria-hidden="true"></i>
+                          <i className="fa fa-cog" aria-hidden="true"></i>
                           <span>Manage jobs</span>
                         </Link>
                       </li>
@@ -535,29 +545,23 @@ const PostJobSection = () => {
                         </Link>
                       </li>
                       <li>
-                          <Link href="#">
-                            <i
-                              className="fa fa-bar-chart"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Analytics & Report</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="#">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Account Setting</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="#">
-                            <i
-                              className="fa fa-life-ring"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Support</span>
-                          </Link>
-                        </li>
+                        <Link href="#">
+                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
+                          <span>Analytics & Report</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Account Setting</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-life-ring" aria-hidden="true"></i>
+                          <span>Support</span>
+                        </Link>
+                      </li>
                       <li>
                         <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
@@ -619,27 +623,40 @@ const PostJobSection = () => {
                         </div>
                       </div>
                       <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Experience</label>
-                          <Form.Control
-                            as="select"
-                            name="experience"
-                            onChange={(e) => handleInputChange(e as any)}
-                            className="custom-select"
-                          >
-                            <option selected>select experience</option>
-                            <option value="0">0 Years</option>
-                            <option value="1">1 Years</option>
-                            <option value="2">2 Years</option>
-                            <option value="3">3 Years</option>
-                            <option value="4">4 Years</option>
-                            <option value="5">5 Years</option>
-                          </Form.Control>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.experience?.[0]}
-                        </span>
-                      </div>
+      <div className="form-group">
+        <label>Experience</label>
+        <Select
+          options={experienceOptions}
+          value={selectedExperience}
+          onChange={handleExperienceChange}
+          placeholder="Select experience"
+          isClearable
+          styles={{
+            menu: (provided) => ({
+              ...provided,
+              maxHeight: "500px", // Limits the height of the dropdown menu
+            }),
+            control: (base) => ({
+              ...base,
+              padding: "10px",
+              borderRadius: "20px",
+              border: "none",
+              boxShadow: "none",
+              backgroundColor: "#F8F8F8",
+              width: "100%",
+            }),
+            placeholder: (base) => ({
+              ...base,
+              color: "#6F6F6F",
+              fontSize: "15px",
+            }),
+          }}
+        />
+      </div>
+      <span className="text-red-500 text-danger">
+        {errors?.experience?.[0]}
+      </span>
+    </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Job Type</label>

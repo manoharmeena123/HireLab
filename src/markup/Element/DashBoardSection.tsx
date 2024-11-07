@@ -147,59 +147,83 @@ const DashboardSection = () => {
                 View All
               </Link>
             </div>
-            <Slider {...carouselSettings}>
-              {recentJobs.map((job: any) => (
-                <div key={job.id} className="p-3">
-                  <div
-                    className="job-card p-4 shadow-sm"
-                    style={{
-                      background: "#fff",
-                      transition: "0.3s",
-                      cursor: "pointer",
-                      border: "1px solid #e0e0e0",
-                      borderRadius: "20px",
-                      boxShadow:
-                        "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                    }}
-                  >
-                    <h6 className="text-dark mb-2 fw-semibold">
-                      {job.job_title}
-                    </h6>
-                    <p className="text-muted mb-2">{job.company_name}</p>
-                    <p className="text-muted small mb-2">
-                      <i className="fa fa-calendar me-1 mr-1"></i>
-                      {formatDate(job.created_at)}
-                    </p>
-                    <p className="text-muted small">
-                      <i className="fa fa-map-marker me-1"></i>
-                      {job.location?.title || "Location not available"}
-                    </p>
-                    <Link
-                      href={`/job-detail?jobId=${job.id}`}
-                      className="btn btn-block mt-3"
-                      style={{
-                        backgroundColor: "#2A6310",
-                        color: "white",
-                        borderRadius: "30px",
-                        transition: "background-color 0.3s",
-                      }}
-                      onMouseEnter={(e) => (
-                        (e.currentTarget.style.backgroundColor = "white"),
-                        (e.currentTarget.style.color = "black"),
-                        (e.currentTarget.style.border = "1px solid black")
-                      )}
-                      onMouseLeave={(e) => (
-                        (e.currentTarget.style.backgroundColor = "#2A6310"),
-                        (e.currentTarget.style.color = "white"),
-                        (e.currentTarget.style.border = "none")
-                      )}
-                    >
-                      View Job
-                    </Link>
-                  </div>
+            <div>
+              {recentJobs.length > 0 ? (
+                <Slider {...carouselSettings}>
+                  {recentJobs.map((job: any) => (
+                    <div key={job.id} className="p-3">
+                      <div
+                        className="job-card p-4 shadow-sm"
+                        style={{
+                          background: "#fff",
+                          transition: "0.3s",
+                          cursor: "pointer",
+                          border: "1px solid #e0e0e0",
+                          borderRadius: "20px",
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                          minHeight: "200px", // Adjust height as needed
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h6 className="text-dark mb-2 fw-semibold">
+                          {job.job_title}
+                        </h6>
+                        <p className="text-muted mb-2">{job.company_name}</p>
+                        <p className="text-muted small mb-2">
+                          <i className="fa fa-calendar me-1 mr-1"></i>
+                          {formatDate(job.created_at)}
+                        </p>
+                        <p className="text-muted small">
+                          <i className="fa fa-map-marker me-1"></i>
+                          {job.location?.title || "Location not available"}
+                        </p>
+                        <Link
+                          href={`/job-detail?jobId=${job.id}`}
+                          className="btn btn-block mt-3"
+                          style={{
+                            backgroundColor: "#2A6310",
+                            color: "white",
+                            borderRadius: "30px",
+                            transition: "background-color 0.3s",
+                          }}
+                          onMouseEnter={(e) => (
+                            (e.currentTarget.style.backgroundColor = "white"),
+                            (e.currentTarget.style.color = "black"),
+                            (e.currentTarget.style.border = "1px solid black")
+                          )}
+                          onMouseLeave={(e) => (
+                            (e.currentTarget.style.backgroundColor = "#2A6310"),
+                            (e.currentTarget.style.color = "white"),
+                            (e.currentTarget.style.border = "none")
+                          )}
+                        >
+                          View Job
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              ) : (
+                <div
+                  style={{
+                    minHeight: "265px",// Adjust height as needed
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#fff",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "20px",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                  }}
+                >
+                  <p className="text-muted">No recent jobs available</p>
                 </div>
-              ))}
-            </Slider>
+              )}
+            </div>
           </div>
         </div>
         <div className="col-lg-4">
@@ -298,9 +322,7 @@ const DashboardSection = () => {
               onMouseLeave={(e) =>
                 (e.currentTarget.style.backgroundColor = "#FF4500")
               }
-              onClick={() => 
-                handleLogout()
-}
+              onClick={() => handleLogout()}
             >
               Logout
             </button>
@@ -325,59 +347,83 @@ const DashboardSection = () => {
                 View All
               </Link>
             </div>
-            <Slider {...carouselSettings}>
-              {appliedJobs.map((job: any, index: number) => (
-                <div key={index} className="p-3">
-                  <div
-                    className="job-card p-4 shadow-sm"
-                    style={{
-                      background: "#fff",
-                      transition: "0.3s",
-                      cursor: "pointer",
-                      border: "1px solid #e0e0e0",
-                      borderRadius: "12px",
-                      boxShadow:
-                        "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                    }}
-                  >
-                    <h6 className="text-dark mb-2 fw-semibold">
-                      {job.job_title}
-                    </h6>
-                    <p className="text-muted mb-2">{job.company_name}</p>
-                    <p className="text-muted small mb-2">
-                      <i className="fa fa-calendar me-1 mr-1"></i>
-                      {formatDate(job.created_at)}
-                    </p>
-                    <p className="text-muted small">
-                      <i className="fa fa-map-marker me-1"></i>
-                      {job.location?.title || "Location not available"}
-                    </p>
-                    <Link
-                      href={`/job-detail?jobId=${job.id}`}
-                      className="btn btn-block mt-3"
-                      style={{
-                        backgroundColor: "#2A6310",
-                        color: "white",
-                        borderRadius: "30px",
-                        transition: "background-color 0.3s",
-                      }}
-                      onMouseEnter={(e) => (
-                        (e.currentTarget.style.backgroundColor = "white"),
-                        (e.currentTarget.style.color = "black"),
-                        (e.currentTarget.style.border = "1px solid black")
-                      )}
-                      onMouseLeave={(e) => (
-                        (e.currentTarget.style.backgroundColor = "#2A6310"),
-                        (e.currentTarget.style.color = "white"),
-                        (e.currentTarget.style.border = "none")
-                      )}
-                    >
-                      View Job
-                    </Link>
-                  </div>
+            <div>
+              {appliedJobs.length > 0 ? (
+                <Slider {...carouselSettings}>
+                  {appliedJobs.map((job: any, index: number) => (
+                    <div key={index} className="p-3">
+                      <div
+                        className="job-card p-4 shadow-sm"
+                        style={{
+                          background: "#fff",
+                          transition: "0.3s",
+                          cursor: "pointer",
+                          border: "1px solid #e0e0e0",
+                          borderRadius: "20px",
+                          boxShadow:
+                            "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                          minHeight: "200px", // Adjust height as needed
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <h6 className="text-dark mb-2 fw-semibold">
+                          {job.job_title}
+                        </h6>
+                        <p className="text-muted mb-2">{job.company_name}</p>
+                        <p className="text-muted small mb-2">
+                          <i className="fa fa-calendar me-1 mr-1"></i>
+                          {formatDate(job.created_at)}
+                        </p>
+                        <p className="text-muted small">
+                          <i className="fa fa-map-marker me-1"></i>
+                          {job.location?.title || "Location not available"}
+                        </p>
+                        <Link
+                          href={`/job-detail?jobId=${job.id}`}
+                          className="btn btn-block mt-3"
+                          style={{
+                            backgroundColor: "#2A6310",
+                            color: "white",
+                            borderRadius: "30px",
+                            transition: "background-color 0.3s",
+                          }}
+                          onMouseEnter={(e) => (
+                            (e.currentTarget.style.backgroundColor = "white"),
+                            (e.currentTarget.style.color = "black"),
+                            (e.currentTarget.style.border = "1px solid black")
+                          )}
+                          onMouseLeave={(e) => (
+                            (e.currentTarget.style.backgroundColor = "#2A6310"),
+                            (e.currentTarget.style.color = "white"),
+                            (e.currentTarget.style.border = "none")
+                          )}
+                        >
+                          View Job
+                        </Link>
+                      </div>
+                    </div>
+                  ))}
+                </Slider>
+              ) : (
+                <div
+                  style={{
+                    minHeight: "285px", // Adjust height as needed
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#fff",
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "20px",
+                    boxShadow:
+                      "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                  }}
+                >
+                  <p className="text-muted">No applied jobs available</p>
                 </div>
-              ))}
-            </Slider>
+              )}
+            </div>
           </div>
         </div>
         <div className="col-lg-6">
