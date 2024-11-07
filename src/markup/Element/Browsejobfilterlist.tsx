@@ -13,7 +13,7 @@ import {
   useGetCtcDataQuery,
 } from "@/store/global-store/global.query";
 import { useSearchParams } from "next/navigation";
-import Loading from "@/components/Loading"; // Ensure you import your Loading component
+import Loading from "@/components/Loading";
 import { formaterDate, formatDateAgo } from "@/utils/formateDate";
 import Pagination from "./Pagination";
 import styles from "@/styles/BrowseJobGrid.module.css";
@@ -24,25 +24,21 @@ const bnr = require("./../../images/banner/bnr1.jpg");
 interface Filters {
   experience: string[];
   location: string[];
-  education: string[];
-  cities: string[];
   jobTitles: string[];
 }
 
 function Browsejobfilterlist() {
   const searchParams = useSearchParams();
   const jobTitleQuery = searchParams.get("job_title") || "";
-  const cityQuery = searchParams.get("city") || "";
-  const sectorQuery = searchParams.get("sector") || "";
+  const cityQuery = searchParams.get("location") || "";
+  const experienceQuery = searchParams.get("experience") || "";
   const jobId = searchParams.get("jobId") || "";
 
   const { push } = useRouter();
-  console.log("query", jobTitleQuery, cityQuery, sectorQuery);
   const [getJobs, { data: ctcData, isLoading: isCtcLoading }] =
     useGetCtcDataByIdMutation();
   const { data: ctcDatas } = useGetCtcDataQuery();
   const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
-
   const { data: sectorData, isLoading: isSectorLoading } = useGetSectorQuery();
   const [getFilterJob, { isLoading: isFilterLoading, data: jobsData }] =
     useGetFilterJobMutation();
@@ -54,20 +50,18 @@ function Browsejobfilterlist() {
   }, [jobId]);
 
   useEffect(() => {
-    if (jobTitleQuery || cityQuery || sectorQuery) {
+    if (jobTitleQuery || cityQuery || experienceQuery) {
       getFilterJob({
         job_title: jobTitleQuery,
-        city: cityQuery,
-        sector: sectorQuery,
+        location: cityQuery,
+        experience: experienceQuery,
       });
     }
-  }, [getFilterJob, jobTitleQuery, cityQuery, sectorQuery]);
+  }, [getFilterJob, jobTitleQuery, cityQuery, experienceQuery]);
 
   const [filters, setFilters] = useState<Filters>({
     experience: [],
     location: [],
-    education: [],
-    cities: [],
     jobTitles: [],
   });
 
@@ -76,7 +70,7 @@ function Browsejobfilterlist() {
   const itemsPerPage = 10;
 
   const [sortOption, setSortOption] = useState<string>("last3Months");
-  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]); // Dynamic CTC range slider value
+  const [ctcRange, setCtcRange] = useState<[number, number]>([10, 50]);
 
   const sortJobs = (jobs: any[]): any[] => {
     const now = new Date();
@@ -107,22 +101,19 @@ function Browsejobfilterlist() {
     }
   };
 
-  // Helper function to extract the numeric range from the CTC title
   const extractCtcRange = (title: string): [number, number] => {
     const [min, max] = title
-      .replace("lac", "") // Remove the "lac" string
-      .split("-")         // Split by the dash (-) to get the range
-      .map((str) => parseInt(str.trim())); // Convert to numbers
+      .replace("lac", "")
+      .split("-")
+      .map((str) => parseInt(str.trim()));
     return [min, max];
   };
 
-  // Function to get CTC title by its ID
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcDatas?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
 
-  // Apply filters and include CTC range logic
   const applyFilters = (jobs: any[]): any[] => {
     const [minCtc, maxCtc] = ctcRange;
 
@@ -137,42 +128,23 @@ function Browsejobfilterlist() {
           ? filters.location.includes(job.location.title)
           : true
       )
-      .filter((job) =>
-        filters.education.length
-          ? filters.education.includes(job.education.name ?? "")
-          : true
-      )
-      .filter((job) =>
-        filters.cities.length
-          ? filters.cities.some((city) => job.address.includes(city))
-          : true
-      )
-      .filter((job) =>
-        filters.jobTitles.length
-          ? filters.jobTitles.includes(job.job_title)
-          : true
-      )
       .filter((job) => {
-        // Get the CTC title from the job (assuming job.ctc contains the ID)
         const ctcItem = ctcDatas?.data?.find((item) => item.id == job.ctc);
         if (!ctcItem) return false;
 
-        // Extract CTC range from the title
         const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
-
-        // Filter jobs where the job's CTC range falls within the selected slider range
         return ctcMin >= minCtc && ctcMax <= maxCtc;
       });
   };
 
-  const paginatedJobs = jobsData?.data || ctcData?.data || getAlljobs?.data
-    ? sortJobs(
-        applyFilters(jobsData?.data || ctcData?.data || getAlljobs?.data).slice(
-          (currentPage - 1) * itemsPerPage,
-          currentPage * itemsPerPage
+  const paginatedJobs =
+    jobsData?.data || ctcData?.data || getAlljobs?.data
+      ? sortJobs(
+          applyFilters(
+            jobsData?.data || ctcData?.data || getAlljobs?.data
+          ).slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
         )
-      )
-    : [];
+      : [];
 
   if (isSectorLoading || isFilterLoading) {
     return <Loading />;
@@ -184,7 +156,6 @@ function Browsejobfilterlist() {
 
   return (
     <>
-      {isSectorLoading && isFilterLoading && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -310,7 +281,10 @@ function Browsejobfilterlist() {
                           ))}
                         </ul>
                       ) : (
-                        <ul className="post-job-bx browse-job-grid row"  style={{display:"flex", flexWrap :"wrap"}}>
+                        <ul
+                          className="post-job-bx browse-job-grid row"
+                          style={{ display: "flex", flexWrap: "wrap" }}
+                        >
                           {paginatedJobs.map((item, index) => (
                             <li className="col-lg-6" key={index}>
                               <div className="post-bx">
@@ -377,7 +351,10 @@ function Browsejobfilterlist() {
                           currentPage={currentPage}
                           itemsPerPage={itemsPerPage}
                           totalItems={
-                            jobsData?.data.length || ctcData?.data?.length || getAlljobs?.data || 0
+                            jobsData?.data.length ||
+                            ctcData?.data?.length ||
+                            getAlljobs?.data ||
+                            0
                           }
                           onPageChange={setCurrentPage}
                         />

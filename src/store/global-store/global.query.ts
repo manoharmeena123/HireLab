@@ -117,7 +117,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "UpdateDiscussionComment",
     "GetExperience",
     "CvDownload",
-    "GetCommunity"
+    "GetCommunity",
+    "GetProfileData"
   ],
 });
 
@@ -436,6 +437,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     getCommunity : builder.mutation<any,any>({
       query : (data) => queries.getCommunity.query(data),
       invalidatesTags:["GetCommunity"]
+    }),
+    getProfileData : builder.query<any,any>({
+      query : queries.getProfileData.query,
+      providesTags : ["GetProfileData"]
     })
   }),
 
@@ -515,6 +520,7 @@ export const {
   useUpdateDiscussionCommentMutation,
   useGetExperienceQuery,
   useGetCvDownloadQuery,
-  useGetCommunityMutation
+  useGetCommunityMutation,
+  useGetProfileDataQuery
 } = globalApi;
 export default globalApi;

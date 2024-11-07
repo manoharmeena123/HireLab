@@ -146,12 +146,14 @@ const IndexBanner: React.FC = () => {
   return (
     <div
       className="dez-bnr-inr dez-bnr-inr-md"
-      style={{ backgroundImage: `url(${bnr1.default.src})` }}
+      // style={{ backgroundImage: `url(${bnr1.default.src})` }}
+      style={{ backgroundColor: '#f5f5f5' }}
+
     >
       <div className="container">
         <div className="dez-bnr-inr-entry align-m">
           <div className="find-job-bx">
-            <Link
+            {/* <Link
               href="/browse-job-filter"
               className="site-button button-sm"
               style={{ backgroundColor: "#2A6310" }}
@@ -159,7 +161,7 @@ const IndexBanner: React.FC = () => {
               <div style={{ margin: "0px", padding: "0px" }}>
                 {parse(heading)}
               </div>
-            </Link>
+            </Link> */}
             <h2 style={{ marginTop: "20px" }}>
               {parse(description)} <br />
             </h2>

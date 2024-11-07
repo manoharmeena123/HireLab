@@ -333,25 +333,16 @@ const Header = () => {
                             <h6 className={styles.dropdownTitle}>
                               Book a Session
                             </h6>
-                            <Link href="#" className={styles.dropdownItem}>
-                              Mock Interviews
+                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
+                              Mock Interviews 
                             </Link>
-                            <Link href="#" className={styles.dropdownItem}>
+                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
                               Book a Session Form
                             </Link>
-                          </div>
-
-                          <div
-                            className={`${styles.dropdownColumn} ${styles.columnWithBorder}`}
-                          >
-                            <h6 className={styles.dropdownTitle}>
-                              Resume Reviews
-                            </h6>
-                            <Link href="#" className={styles.dropdownItem}>
+                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
                               Resume Reviews
                             </Link>
                           </div>
-
                           <div className={styles.dropdownColumn}>
                             <h6 className={styles.dropdownTitle}>
                               More Services

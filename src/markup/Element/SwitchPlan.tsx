@@ -43,7 +43,7 @@ const SwitchPlan = () => {
               <thead>
                 <tr>
                   <th>Features</th>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index :number) => (
                     <th
                       key={index}
                       className={
@@ -60,7 +60,7 @@ const SwitchPlan = () => {
               <tbody>
                 <tr>
                   <td>Job listing CTC based</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -69,13 +69,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.ctcBased}
+                      {plan.job_listing_CTC_based === "optional" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Priority Application</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -84,13 +84,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.priorityApplication ? "✓" : "×"}
+                      {plan.priority_application === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Advanced Job Search Filters</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -99,13 +99,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.advancedSearch ? "✓" : "×"}
+                      {plan.advanced_job_search_filters === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Resume & Cover Letter Reviews</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -114,13 +114,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.resumeReview ? "✓" : "×"}
+                      {plan.resume_and_cover_letter_reviews === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Mock Interviews</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -129,13 +129,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.mockInterviews ? "✓" : "×"}
+                      {plan.mock_interviews === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Connect with Job Poster</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -144,13 +144,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.connectJobPoster ? "✓" : "×"}
+                      {plan.connect_with_job_poster === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>City Meetups & Events</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -159,13 +159,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.cityMeetups ? "✓" : "×"}
+                      {plan.city_meetups_and_events === "yes" ? "✓" : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Credits for Successful Job Application</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -174,13 +174,13 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.credits}
+                      {plan.credit}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Price (Monthly)</td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -196,7 +196,7 @@ const SwitchPlan = () => {
                 {/* New Row for the Buttons */}
                 <tr>
                   <td></td>
-                  {reorderedPlans().map((plan, index) => (
+                  {reorderedPlans().map((plan :any, index) => (
                     <td
                       key={index}
                       className={
@@ -259,7 +259,7 @@ const SwitchPlan = () => {
         }
 
         .highlight-column {
-          background-color: #e7f9e7; /* Light green to highlight selected column */
+          background-color: #e7f9e7;
           font-weight: bold;
         }
 

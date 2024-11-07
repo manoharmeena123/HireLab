@@ -151,12 +151,7 @@ const JobPosterDashboard = () => {
                             <span>Post A job</span>
                           </Link>
                         </li>
-                        <li>
-                          <Link href="/job-posted">
-                            <i className="fa fa-briefcase" aria-hidden="true"></i>
-                            Job Posted
-                          </Link>
-                        </li>
+                      
                         <li>
                           <Link href="/cv-manager">
                             <i className="fa fa-id-card-o" aria-hidden="true"></i>
@@ -173,6 +168,30 @@ const JobPosterDashboard = () => {
                           <Link href="/transaction">
                             <i className="fa fa-file-text-o" aria-hidden="true"></i>
                             <span>Transaction</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="#">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
                           </Link>
                         </li>
                         <li>

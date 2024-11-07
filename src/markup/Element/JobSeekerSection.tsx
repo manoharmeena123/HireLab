@@ -10,6 +10,7 @@ import {
   useGetSectorQuery,
   useGetDesignationQuery,
   useGetCtcDataQuery,
+  useGetProfileDataQuery
 } from "@/store/global-store/global.query";
 import { WritableProfileFormData } from "@/app/job-seeker/types/index";
 import { toast } from "react-toastify";
@@ -41,10 +42,8 @@ const JobSeekerSection = () => {
     useGetDesignationQuery();
   const { data: getCtcData, isLoading: getCtcDataLoading } =
     useGetCtcDataQuery();
-
-  const [isProfileComplete, setIsProfileComplete] = useState(false);
-  const [selectedCollege, setSelectedCollege] =
-    useState<SingleValue<OptionType> | null>(null);
+ const {data : getProfileData , isLoading :getProfileDataLoading } = useGetProfileDataQuery()
+ console.log('getProfileData', getProfileData)
   const [selectedIndustry, setSelectedIndustry] =
     useState<SingleValue<OptionType> | null>(null);
   const [selectedDesignation, setSelectedDesignation] =
@@ -60,47 +59,50 @@ const JobSeekerSection = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>("");
   const [saveLoading, setSaveLoading] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
+
   const [profileForm, setProfileForm] = useState<any>({
     name: "",
     email: "",
     mobile_number: "",
-    college: "",
     designation: "",
     company_name: "",
     experience: "",
     yearOfExperience: "",
     country: "",
     expected_ctc: "",
+    current_ctc: "", // added as per payload
     resume: null, // For Resume Upload
     sector: "",
     location: "",
-    industry: "",
+    industry_id: "", // added as per payload
     image: null,
     current_city: "",
     permanent_address: "",
     linkedin_profile: "",
     gender: "",
     availability_to_join: "",
-    dob: "",
+    date_of_birth: "", // renamed from dob to match your payload
     highest_qualification: "",
     degree: "",
     institute: "",
     year_of_graduation: "",
     additional_certifications: "",
-    job_1_title: "",
-    job_1_company: "",
-    job_1_start_end: "",
-    job_1_responsibilities: "",
-    job_2_title: "",
-    job_2_company: "",
-    job_2_start_end: "",
     key_skills: "",
     languages_known: "",
     preferred_job_locations: "",
     willing_to_relocate: "",
     willing_to_work_remotely: "",
-    portfolio: "",
-  });
+    website: "", // added as per payload
+    work_experiences: [ // updated structure to hold array of work experiences
+        {
+            job_title: "",
+            company_name: "",
+            start_date: "",
+            end_date: "",
+            key_responsibilities: "",
+        },
+    ],
+});
 
   const [validationErrors, setValidationErrors] = useState<{
     [key: string]: string;
@@ -190,21 +192,17 @@ const JobSeekerSection = () => {
       "mobile_number",
       "current_city",
       "gender",
-      "dob",
+      "date_of_birth",
       "highest_qualification",
       "degree",
       "institute",
       "year_of_graduation",
-      "job_1_title",
-      "job_1_company",
-      "job_1_start_end",
-      "job_1_responsibilities",
-      "resume", // Resume is mandatory
+      "resume",
       "key_skills",
       "preferred_job_locations",
       "willing_to_relocate",
       "sector",
-      "yearOfExperience"
+      "yearOfExperience",
     ];
 
     requiredFields.forEach((field) => {
@@ -213,6 +211,17 @@ const JobSeekerSection = () => {
       }
     });
 
+    // Validate start and end dates for work experiences
+    workExperiences.forEach((experience, index) => {
+      const startDate = new Date(experience.start_date);
+      const endDate = new Date(experience.end_date);
+
+      if (experience.start_date && experience.end_date && startDate > endDate) {
+        errors[
+          `workExperiences_${index}_date`
+        ] = `Start date should be earlier than end date for Job ${index + 1}.`;
+      }
+    });
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -224,18 +233,29 @@ const JobSeekerSection = () => {
       company_name: "",
       start_date: "",
       end_date: "",
-      responsibilities: "",
+      key_responsibilities: "",
     },
   ]);
 
-  // Handle dynamic work experience field changes
+  // Define allowed keys for work experience fields
+  type WorkExperienceField =
+    | "job_title"
+    | "company_name"
+    | "start_date"
+    | "end_date"
+    | "key_responsibilities";
+
   const handleWorkExperienceChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    // Ensure `name` is typed as a specific work experience field
+    const fieldName = name as WorkExperienceField;
+
     const updatedExperiences = [...workExperiences];
-    updatedExperiences[index][name] = value;
+    updatedExperiences[index][fieldName] = value;
     setWorkExperiences(updatedExperiences);
   };
 
@@ -248,7 +268,7 @@ const JobSeekerSection = () => {
         company_name: "",
         start_date: "",
         end_date: "",
-        responsibilities: "",
+        key_responsibilities: "",
       },
     ]);
   };
@@ -266,7 +286,7 @@ const JobSeekerSection = () => {
     //   toast.error("Please fill all mandatory fields.");
     //   return;
     // }
-
+console.log('profileForm', profileForm)
     const formData = new FormData();
     Object.entries(profileForm).forEach(([key, value]) => {
       if (value !== null) {
@@ -275,20 +295,15 @@ const JobSeekerSection = () => {
     });
 
     // Append dynamic work experiences
+    // Append each work experience individually as an array item
     workExperiences.forEach((exp, index) => {
-      formData.append(`workExperiences[${index}][job_title]`, exp.job_title);
-      formData.append(
-        `workExperiences[${index}][company_name]`,
-        exp.company_name
-      );
-      formData.append(`workExperiences[${index}][start_date]`, exp.start_date);
-      formData.append(`workExperiences[${index}][end_date]`, exp.end_date);
-      formData.append(
-        `workExperiences[${index}][responsibilities]`,
-        exp.responsibilities
-      );
-    });
-
+      formData.append(`work_experiences[${index}][job_title]`, exp.job_title);
+      formData.append(`work_experiences[${index}][company_name]`, exp.company_name);
+      formData.append(`work_experiences[${index}][start_date]`, exp.start_date);
+      formData.append(`work_experiences[${index}][end_date]`, exp.end_date);
+      formData.append(`work_experiences[${index}][key_responsibilities]`, exp.key_responsibilities);
+  });
+    console.log("formData", formData);
     try {
       setSaveLoading(true);
       const res = await postProfile(formData).unwrap();
@@ -335,7 +350,6 @@ const JobSeekerSection = () => {
               <div className="row">
                 <Profilesidebar
                   refetch={refetch}
-                  isProfileComplete={isProfileComplete}
                 />
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx job-profile">
@@ -376,15 +390,17 @@ const JobSeekerSection = () => {
                             <input
                               type="date"
                               className={`form-control ${
-                                validationErrors.dob ? "is-invalid" : ""
+                                validationErrors.date_of_birth
+                                  ? "is-invalid"
+                                  : ""
                               }`}
-                              name="dob"
-                              value={profileForm.dob || ""}
+                              name="date_of_birth"
+                              value={profileForm.date_of_birth || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.dob && (
+                            {validationErrors.date_of_birth && (
                               <div className="invalid-feedback">
-                                {validationErrors.dob}
+                                {validationErrors.date_of_birth}
                               </div>
                             )}
                           </div>
@@ -420,7 +436,9 @@ const JobSeekerSection = () => {
                           <div className="form-group">
                             <label>Mobile Number:</label>
                             <input
-                              type="number"
+                              type="tel"
+                              pattern="^\d{10}$"
+                              maxLength={10}
                               className={`form-control ${
                                 validationErrors.mobile_number
                                   ? "is-invalid"
@@ -429,7 +447,12 @@ const JobSeekerSection = () => {
                               placeholder="Enter Your Mobile Number"
                               name="mobile_number"
                               value={profileForm.mobile_number || ""}
-                              onChange={handleInputChange}
+                              onChange={(e) => {
+                                const value = e.target.value;
+                                if (/^\d{0,10}$/.test(value)) {
+                                  handleInputChange(e);
+                                }
+                              }}
                             />
                             {validationErrors.mobile_number && (
                               <div className="invalid-feedback">
@@ -569,7 +592,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-
                       {/* Professional Information Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
@@ -729,7 +751,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-
                       {/* Education Details Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
@@ -851,27 +872,22 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-
                       {/* Work Experience Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Work Experience
                         </h5>
                       </div>
-
+                      {/* // Updated work experience fields in the return section */}
                       {workExperiences.map((experience, index) => (
                         <div className="row m-b30" key={index}>
                           {/* Job Title */}
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Job Title (Job {index + 1}):</label>
+                              <label>Job Title:</label>
                               <input
                                 type="text"
-                                className={`form-control ${
-                                  validationErrors[`job_1_title_${index}`]
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
+                                className="form-control"
                                 name="job_title"
                                 placeholder="Enter Job Title"
                                 value={experience.job_title}
@@ -879,25 +895,16 @@ const JobSeekerSection = () => {
                                   handleWorkExperienceChange(index, e)
                                 }
                               />
-                              {validationErrors[`job_1_title_${index}`] && (
-                                <div className="invalid-feedback">
-                                  {validationErrors[`job_1_title_${index}`]}
-                                </div>
-                              )}
                             </div>
                           </div>
 
                           {/* Company Name */}
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Company Name (Job {index + 1}):</label>
+                              <label>Company Name:</label>
                               <input
                                 type="text"
-                                className={`form-control ${
-                                  validationErrors[`job_1_company_${index}`]
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
+                                className="form-control"
                                 name="company_name"
                                 placeholder="Enter Company Name"
                                 value={experience.company_name}
@@ -905,22 +912,19 @@ const JobSeekerSection = () => {
                                   handleWorkExperienceChange(index, e)
                                 }
                               />
-                              {validationErrors[`job_1_company_${index}`] && (
-                                <div className="invalid-feedback">
-                                  {validationErrors[`job_1_company_${index}`]}
-                                </div>
-                              )}
                             </div>
                           </div>
 
                           {/* Start Date */}
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>Start Date (Job {index + 1}):</label>
+                              <label>Start Date:</label>
                               <input
                                 type="date"
                                 className={`form-control ${
-                                  validationErrors[`job_1_start_date_${index}`]
+                                  validationErrors[
+                                    `workExperiences_${index}_date`
+                                  ]
                                     ? "is-invalid"
                                     : ""
                                 }`}
@@ -930,28 +934,19 @@ const JobSeekerSection = () => {
                                   handleWorkExperienceChange(index, e)
                                 }
                               />
-                              {validationErrors[
-                                `job_1_start_date_${index}`
-                              ] && (
-                                <div className="invalid-feedback">
-                                  {
-                                    validationErrors[
-                                      `job_1_start_date_${index}`
-                                    ]
-                                  }
-                                </div>
-                              )}
                             </div>
                           </div>
 
                           {/* End Date */}
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
-                              <label>End Date (Job {index + 1}):</label>
+                              <label>End Date:</label>
                               <input
                                 type="date"
                                 className={`form-control ${
-                                  validationErrors[`job_1_end_date_${index}`]
+                                  validationErrors[
+                                    `workExperiences_${index}_date`
+                                  ]
                                     ? "is-invalid"
                                     : ""
                                 }`}
@@ -961,44 +956,37 @@ const JobSeekerSection = () => {
                                   handleWorkExperienceChange(index, e)
                                 }
                               />
-                              {validationErrors[`job_1_end_date_${index}`] && (
+                              {validationErrors[
+                                `workExperiences_${index}_date`
+                              ] && (
                                 <div className="invalid-feedback">
-                                  {validationErrors[`job_1_end_date_${index}`]}
+                                  {
+                                    validationErrors[
+                                      `workExperiences_${index}_date`
+                                    ]
+                                  }
                                 </div>
                               )}
                             </div>
                           </div>
 
-                          {/* CKEditor for Key Responsibilities */}
+                          {/* Key Responsibilities */}
                           <div className="col-lg-12 col-md-12">
                             <div className="form-group">
-                              <label>
-                                Key Responsibilities (Job {index + 1}):
-                              </label>
+                              <label>Key Responsibilities:</label>
                               <CKEditor
                                 editor={ClassicEditor}
-                                data={experience.responsibilities || ""}
+                                data={experience.key_responsibilities || ""}
                                 onChange={(event, editor) => {
                                   const data = editor.getData();
                                   handleWorkExperienceChange(index, {
                                     target: {
-                                      name: "responsibilities",
+                                      name: "key_responsibilities",
                                       value: data,
                                     },
                                   });
                                 }}
                               />
-                              {validationErrors[
-                                `job_1_responsibilities_${index}`
-                              ] && (
-                                <div className="invalid-feedback">
-                                  {
-                                    validationErrors[
-                                      `job_1_responsibilities_${index}`
-                                    ]
-                                  }
-                                </div>
-                              )}
                             </div>
                           </div>
 
@@ -1016,12 +1004,11 @@ const JobSeekerSection = () => {
                           )}
                         </div>
                       ))}
-
                       {/* Add New Experience Button */}
                       <div className="col-lg-12 col-md-12">
                         <button
                           type="button"
-                          className="btn btn-secondary"
+                          className="btn btn-secondary d-flex justify-content-end"
                           style={{
                             backgroundColor: "#2A6310",
                             color: "#fff",
@@ -1031,7 +1018,6 @@ const JobSeekerSection = () => {
                           Add Another Job
                         </button>
                       </div>
-
                       {/* Resume Upload Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
@@ -1116,7 +1102,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-
                       {/* Other Details Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
@@ -1223,7 +1208,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-
                       <button type="submit" className="site-button">
                         {saveLoading ? "Saving..." : "Save Changes"}
                       </button>

@@ -51,3 +51,27 @@ export const experienceOptions = [
     { value: "20+", label: "20+ Years" },
   ];
   
+
+  // Qualification options array
+ export  const qualificationOptions = [
+    { value: "High School", label: "High School" },
+    { value: "Diploma", label: "Diploma" },
+    { value: "Bachelor's Degree", label: "Bachelor's Degree" },
+    { value: "Master's Degree", label: "Master's Degree" },
+    { value: "PhD", label: "PhD" },
+    { value: "Other", label: "Other" },
+  ];
+
+  // Degree/Program options array
+  export const degreeOptions = [
+    { value: "B.Sc", label: "B.Sc" },
+    { value: "B.Tech", label: "B.Tech" },
+    { value: "B.A", label: "B.A" },
+    { value: "B.Com", label: "B.Com" },
+    { value: "M.Sc", label: "M.Sc" },
+    { value: "M.Tech", label: "M.Tech" },
+    { value: "M.A", label: "M.A" },
+    { value: "MBA", label: "MBA" },
+    { value: "PhD", label: "PhD" },
+    { value: "Other", label: "Other" },
+  ];

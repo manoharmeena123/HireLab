@@ -116,8 +116,8 @@ interface RecentJobResponse {
 // getFilter job
 export interface Filters {
     job_title: string;
-    city: string;
-    sector: string;
+    location: string;
+    experience: string;
     [key: string]: string; // Index signature for string properties
   }
   

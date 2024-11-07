@@ -4,7 +4,7 @@ import { RegisterArgs } from '../types';
 export const queries = {
   register: {
     query: (credentials: RegisterArgs) => ({
-      url: 'api/register',
+      url: 'api/signup',
       method: 'POST',
       body: credentials,
     }),

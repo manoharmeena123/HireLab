@@ -387,6 +387,11 @@ export const queries = {
       url : `api/community/${query}`
     })
   },
+  getProfileData :{
+    query :() =>({
+      url : `api/logged-user1`
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

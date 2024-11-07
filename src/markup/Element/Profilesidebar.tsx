@@ -18,10 +18,8 @@ import { Modal, Button } from "react-bootstrap"; // Importing modal from react-b
 
 const Profilesidebar = ({
   refetch,
-  isProfileComplete,
 }: {
   refetch: any;
-  isProfileComplete: boolean;
 }) => {
   const router = useRouter();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
@@ -229,11 +227,6 @@ const Profilesidebar = ({
                   Transaction
                 </Link>
               </li>
-              {/* <li>
-                <Link href='/switch-plan'>
-                <i className="fa fa-exchange-alt" aria-hidden='true'>Switch plan</i>
-                </Link>
-              </li> */}
               <li>
                 <Link href="#" onClick={handleLogout}>
                   <i className="fa fa-sign-out" aria-hidden="true"></i>
