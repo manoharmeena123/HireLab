@@ -261,7 +261,9 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
             )}
 
             {/* Conditional Save Job button */}
-            {savedJob?.data?.some((saved: any) => saved.id === job?.data?.id) ? (
+            {savedJob?.data?.some(
+              (saved: any) => saved.id === job?.data?.id
+            ) ? (
               <Button
                 className="btn mr-2 apply-saved-btn"
                 onClick={() => handleLikeToggle(job?.data?.id.toString())}
@@ -307,33 +309,35 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
           <div className="d-flex align-items-center">
             <Link href={"/job-poster-profile"}>
               <i className="fa fa-user mr-2" style={{ color: "#2A6310" }}></i>
-              <span>{job?.data?.user?.name}</span>
+              <span>{job?.data?.user?.name ||"Not specified"}</span>
             </Link>
           </div>
         </div>
+        {/* Education, Experience, CTC, and Job Type Sections */}
         <div className="d-flex jd-split-wrap">
-          <div className="mb-4">
-            <h5>Location</h5>
-            <div className="d-flex align-items-center">
-              <i
-                className="fa fa-map-marker mr-2"
-                style={{ color: "#2A6310" }}
-              ></i>
+          {job?.data?.education && (
+            <div className="mb-4">
+              <h5>
+                <i
+                  className="fa fa-graduation-cap"
+                  style={{ color: "#2A6310" }}
+                ></i>{" "}
+                Education
+              </h5>
               <span
                 className="badge badge-light p-2"
                 style={{ color: "#2A6310" }}
               >
-                {job?.data?.address}
+                {job?.data?.education?.name || "Not specified"}
               </span>
             </div>
-          </div>
-          <div className="mb-4">
-            <h5>Experience</h5>
-            <div className="d-flex align-items-center">
-              <i
-                className="fa fa-briefcase mr-2"
-                style={{ color: "#2A6310" }}
-              ></i>
+          )}
+          {job?.data?.total_experience && (
+            <div className="mb-4">
+              <h5>
+                <i className="fa fa-briefcase" style={{ color: "#2A6310" }}></i>{" "}
+                Experience
+              </h5>
               <span
                 className="badge badge-light p-2"
                 style={{ color: "#2A6310" }}
@@ -341,14 +345,26 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
                 {job?.data?.total_experience} Years
               </span>
             </div>
-          </div>
-          <div className="mb-4">
-            <h5>Job Type</h5>
-            <div className="d-flex align-items-center">
-              <i
-                className="fa fa-briefcase mr-2"
+          )}
+          {job?.data?.ctc && (
+            <div className="mb-4">
+              <h5>
+                <i className="fa fa-money" style={{ color: "#2A6310" }}></i> CTC
+              </h5>
+              <span
+                className="badge badge-light p-2"
                 style={{ color: "#2A6310" }}
-              ></i>
+              >
+                {getCtcTitle(job?.data?.ctc)}
+              </span>
+            </div>
+          )}
+          {job?.data?.job_type && (
+            <div className="mb-4">
+              <h5>
+                <i className="fa fa-clock-o" style={{ color: "#2A6310" }}></i>{" "}
+                Job Type
+              </h5>
               <span
                 className="badge badge-light p-2"
                 style={{ color: "#2A6310" }}
@@ -356,44 +372,51 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
                 {job?.data?.job_type?.title || "Full-time"}
               </span>
             </div>
-          </div>
+          )}
+          {/* Job Location */}
+          {job?.data?.city && (
+            <div className="mb-4">
+              <h5>
+                <i
+                  className="fa fa-map-marker"
+                  style={{ color: "#2A6310" }}
+                ></i>{" "}
+                Job Location
+              </h5>
+              <span
+                className="badge badge-light p-2"
+                style={{ color: "#2A6310" }}
+              >
+                {job?.data?.city}
+              </span>
+            </div>
+          )}
         </div>
-        <div className="mb-4">
-          <h5>Full Job Description</h5>
-          <div
-            className="job-description"
-            dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
-          ></div>
-        </div>
-        <div className="mb-4">
-          <h5>Requirements</h5>
-          <ul className={styles.requirements} style={{ paddingLeft: "1rem" }}>
-            {requirements?.map((requirement: any, index: number) => (
-              <li key={index}>{parse(requirement)}</li>
-            ))}
-          </ul>
-        </div>
-        {job?.data?.education?.name && (
+        {/* Job Description */}
+        {job?.data?.job_description && (
           <div className="mb-4">
-            <h5>Education</h5>
-            <ul className={styles.education} style={{ paddingLeft: "1rem" }}>
-              <li>{job?.data?.education?.name}</li>
-            </ul>
+            <h5>
+              <i className="fa fa-file-text-o" style={{ color: "#2A6310" }}></i>{" "}
+              Full Job Description
+            </h5>
+            <div
+              className="job-description"
+              dangerouslySetInnerHTML={{ __html: sanitizedDescription }}
+            ></div>
           </div>
         )}
-        {job?.data?.city && (
+
+        {/* Requirements */}
+        {requirements && requirements.length > 0 && (
           <div className="mb-4">
-            <h5>Job Location</h5>
-            <ul className={styles.jobLocation} style={{ paddingLeft: "1rem" }}>
-              <li>{job?.data?.city}</li>
-            </ul>
-          </div>
-        )}
-        {job?.data?.ctc && (
-          <div className="mb-4">
-            <h5>CTC</h5>
-            <ul className={styles.jobLocation} style={{ paddingLeft: "1rem" }}>
-              <li>{getCtcTitle(job?.data?.ctc)}</li>
+            <h5>
+              <i className="fa fa-list" style={{ color: "#2A6310" }}></i>{" "}
+              Requirements
+            </h5>
+            <ul className={styles.requirements} style={{ paddingLeft: "1rem" }}>
+              {requirements.map((requirement: any, index: number) => (
+                <li key={index}>{parse(requirement)}</li>
+              ))}
             </ul>
           </div>
         )}

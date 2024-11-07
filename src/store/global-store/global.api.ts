@@ -86,7 +86,7 @@ export const queries = {
   },
   getDiscussion: {
     query: () => ({
-      url: "api/get-discussions",
+      url: "api/get-global-discussions",
       method: "GET",
     }),
   },

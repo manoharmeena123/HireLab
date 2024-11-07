@@ -1,30 +1,43 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useGetBlogsDataQuery, useGetCategoryJobByIdMutation ,useGetDiscussionQuery} from "@/store/global-store/global.query";
+import { useGetDiscussionQuery } from "@/store/global-store/global.query";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import { blogformatDate, truncateText } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
+import Pagination from "./Pagination";
+
 // Images
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 const ViewAllDiscusssion = () => {
-const {push} = useRouter()
+  const { push } = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Adjust this number as needed
+
   const viewBlogHandler = (title: string) => {
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-discussion?query=${encodedTitle}`);
   };
 
-  
-  const { data: discussionData, isLoading : discussionLoading} = useGetDiscussionQuery();
+  const { data: discussionData, isLoading: discussionLoading } = useGetDiscussionQuery();
   const blogsToDisplay = discussionData?.data;
-  
+
+  // Calculate the displayed items based on pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBlogs = blogsToDisplay?.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <>
-      {(discussionLoading) && <Loading />}
+      {discussionLoading && <Loading />}
       <div className="page-content bg-white">
         <div
           className="dez-bnr-inr overlay-black-middle"
@@ -47,25 +60,12 @@ const {push} = useRouter()
         <div className="content-area">
           <div className="container">
             <div className="dez-blog-grid-3 row" id="masonry">
-              {blogsToDisplay?.map((item :any, index :number) => (
+              {currentBlogs?.map((item: any, index: number) => (
                 <div
                   className="post card-container col-lg-4 col-md-6 col-sm-6"
                   key={index}
                 >
                   <div className="blog-post blog-grid blog-style-1">
-                    {/* <div className="dez-post-media dez-img-effect radius-sm">
-                      <Link href={"/blog-details"}>
-                        <div className="image-wrapper" style={{marginBottom:"-80px"}}>
-                          <Image
-                            src={`${IMAGE_URL + item?.image}`}
-                            alt={item?.title}
-                             width={300}
-                             height={200}
-                           style={{height:'70%'}}
-                          />
-                        </div>
-                      </Link>
-                    </div> */}
                     <div className="dez-info">
                       <div className="dez-post-meta">
                         <ul className="d-flex align-items-center">
@@ -104,29 +104,12 @@ const {push} = useRouter()
                 </div>
               ))}
             </div>
-            <div className="pagination-bx clearfix text-center">
-              <ul className="pagination">
-                <li className="previous">
-                  <Link href={"#"}>
-                    <i className="ti-arrow-left"></i> Prev
-                  </Link>
-                </li>
-                <li className="active">
-                  <Link href={"#"}>1</Link>
-                </li>
-                <li>
-                  <Link href={"#"}>2</Link>
-                </li>
-                <li>
-                  <Link href={"#"}>3</Link>
-                </li>
-                <li className="next">
-                  <Link href={"#"}>
-                    Next <i className="ti-arrow-right"></i>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={blogsToDisplay?.length || 0}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>

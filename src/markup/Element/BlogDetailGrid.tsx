@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useGetBlogsDataQuery, useGetCategoryJobByIdMutation } from "@/store/global-store/global.query";
@@ -8,7 +8,7 @@ import { blogformatDate, truncateText } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
 import { useSearchParams, useRouter } from "next/navigation";
-// Images
+import Pagination from "@/markup/Element/Pagination"; // Import the Pagination component
 var bnr = require("./../../images/banner/bnr1.jpg");
 
 const BlogDetailGrid = () => {
@@ -16,11 +16,11 @@ const BlogDetailGrid = () => {
   const searchParams = useSearchParams();
   const queryId = searchParams.get("query");
   const [getCategoryJobById, { data: getCategoryJobsData, isLoading }] = useGetCategoryJobByIdMutation();
-  const {
-    data: blogsData,
-    error,
-    isLoading: blogsDataLoading,
-  } = useGetBlogsDataQuery("");
+  const { data: blogsData, error, isLoading: blogsDataLoading } = useGetBlogsDataQuery("");
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6; // Adjust items per page as desired
 
   useEffect(() => {
     if (queryId) {
@@ -28,14 +28,23 @@ const BlogDetailGrid = () => {
     }
   }, [getCategoryJobById, queryId]);
   
-  console.log('getCategoryJobsData', getCategoryJobsData)
-
   const viewBlogHandler = (title: string) => {
     const encodedTitle = encodeURIComponent(title).replace(/%20/g, "-");
     push(`/single-blog?query=${encodedTitle}`);
   };
 
   const blogsToDisplay = queryId ? getCategoryJobsData?.data : blogsData?.data;
+
+  // Calculate pagination details
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentBlogs = blogsToDisplay?.slice(indexOfFirstItem, indexOfLastItem);
+  const totalItems = blogsToDisplay?.length || 0;
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <>
@@ -62,7 +71,7 @@ const BlogDetailGrid = () => {
         <div className="content-area">
           <div className="container">
             <div className="dez-blog-grid-3 row" id="masonry">
-              {blogsToDisplay?.map((item: any, index: number) => (
+              {currentBlogs?.map((item: any, index: number) => (
                 <div
                   className="post card-container col-lg-4 col-md-6 col-sm-6"
                   key={index}
@@ -72,7 +81,7 @@ const BlogDetailGrid = () => {
                       <div
                         className="image-wrapper"
                         style={{ marginBottom: "-80px" }}
-                        onClick={() => viewBlogHandler(item?.title)} // Added onClick handler
+                        onClick={() => viewBlogHandler(item?.title)}
                       >
                         <Image
                           src={`${IMAGE_URL + item?.image}`}
@@ -88,7 +97,7 @@ const BlogDetailGrid = () => {
                         <ul className="d-flex align-items-center">
                           <li className="post-date">
                             <i className="fa fa-calendar"></i>
-                            {blogformatDate(item?.created_at)}{" "}
+                            {blogformatDate(item?.created_at)}
                           </li>
                         </ul>
                       </div>
@@ -121,29 +130,13 @@ const BlogDetailGrid = () => {
                 </div>
               ))}
             </div>
-            <div className="pagination-bx clearfix text-center">
-              <ul className="pagination">
-                <li className="previous">
-                  <Link href={"#"}>
-                    <i className="ti-arrow-left"></i> Prev
-                  </Link>
-                </li>
-                <li className="active">
-                  <Link href={"#"}>1</Link>
-                </li>
-                <li>
-                  <Link href={"#"}>2</Link>
-                </li>
-                <li>
-                  <Link href={"#"}>3</Link>
-                </li>
-                <li className="next">
-                  <Link href={"#"}>
-                    Next <i className="ti-arrow-right"></i>
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {/* Dynamic Pagination */}
+            <Pagination
+              currentPage={currentPage}
+              itemsPerPage={itemsPerPage}
+              totalItems={totalItems}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>
@@ -151,9 +144,9 @@ const BlogDetailGrid = () => {
         .image-wrapper {
           position: relative;
           width: 100%;
-          height: 300px; /* Adjust the height as needed */
+          height: 300px;
           overflow: hidden;
-          cursor: pointer; /* Change cursor to pointer */
+          cursor: pointer;
         }
       `}</style>
     </>

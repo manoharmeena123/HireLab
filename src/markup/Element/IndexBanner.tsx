@@ -151,7 +151,8 @@ const IndexBanner: React.FC = () => {
 
     >
       <div className="container">
-        <div className="dez-bnr-inr-entry align-m">
+      {/* <div className="dez-bnr-inr-entry align-m"> */}
+        <div className="mt-5">
           <div className="find-job-bx">
             {/* <Link
               href="/browse-job-filter"
@@ -162,7 +163,7 @@ const IndexBanner: React.FC = () => {
                 {parse(heading)}
               </div>
             </Link> */}
-            <h2 style={{ marginTop: "20px", textAlign:"center" }}>
+            <h2 style={{ marginTop:"70px", textAlign:"center",fontSize:"40px" }}>
               {parse(description)} <br />
             </h2>
             <form onSubmit={handleSubmit} style={styles.formContainer}>

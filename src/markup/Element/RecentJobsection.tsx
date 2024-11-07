@@ -16,11 +16,12 @@ import { fetchRecentJobsStart } from "@/store/global-store/global.slice";
 import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const RecentJobSection = () => {
-  const { data: recentJob, isLoading: recentJobLoading } = useGetRecentJobsQuery();
+  const { data: recentJob, isLoading: recentJobLoading } =
+    useGetRecentJobsQuery();
   const [saveJob] = usePostSaveJobMutation();
   const [deleteJob] = useDeleteSavedJobMutation();
   const dispatch = useDispatch();
@@ -29,13 +30,15 @@ const RecentJobSection = () => {
   const { data: ctcData } = useGetCtcDataQuery();
   const { data: savedJob, refetch: savedJobRefetch } = useGetSavedJobQuery();
 
-  const savedJobsMap = new Map(savedJob?.data?.map((job :any) => [job.id.toString(), true]));
+  const savedJobsMap = new Map(
+    savedJob?.data?.map((job: any) => [job.id.toString(), true])
+  );
 
   const getCtcTitleById = (id: any) => {
     const ctcItem = ctcData?.data?.find((item) => item.id == id);
     return ctcItem ? ctcItem.title : "N/A";
   };
-  const handleLikeToggle = async (jobId :any) => {
+  const handleLikeToggle = async (jobId: any) => {
     if (!user) {
       push("/login");
       return;
@@ -91,7 +94,7 @@ const RecentJobSection = () => {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 1,
+    slidesToScroll: 3,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
       { breakpoint: 600, settings: { slidesToShow: 1 } },
@@ -105,11 +108,15 @@ const RecentJobSection = () => {
         <div className="container">
           <div className="d-flex job-title-bx section-head">
             <div className="mr-auto">
-              <h2 className="m-b5" style={{ fontWeight: "501" }}>Recent Jobs</h2>
-              <h6 className="fw4 m-b0">{recentJob?.data?.length}+ Recently Added Jobs</h6>
+              <h2 className="m-b5" style={{ fontWeight: "501" }}>
+                Recent Jobs
+              </h2>
+              <h6 className="fw4 m-b0">
+                {recentJob?.data?.length}+ Recently Added Jobs
+              </h6>
             </div>
             <div className="align-self-end">
-              <Link href="/browse-jobs-grid" className="site-button button-sm">
+              <Link href="/browse-jobs-grid" className="site-button button-sm" style={{fontWeight:"600"}} >
                 Browse All Jobs <i className="fa fa-long-arrow-right"></i>
               </Link>
             </div>
@@ -117,31 +124,55 @@ const RecentJobSection = () => {
           <Slider {...sliderSettings}>
             {recentJob?.data?.map((item: RecentJobData, index) => (
               <div key={index} className="p-3">
-                <div style={{
-                  padding: "20px",
-                  backgroundColor: "#fff",
-                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.08)",
-                  borderRadius: "12px",
-                  minHeight: "300px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  cursor: "pointer",
-                  transition: "0.3s",
-                  position: "relative", // Position relative for like button
-                }}>
+                <div
+                  style={{
+                    padding: "20px",
+                    backgroundColor: "#fff",
+                    boxShadow:
+                    "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                    minHeight: "300px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    cursor: "pointer",
+                    transition: "0.3s",
+                    position: "relative", // Position relative for like button
+                    border: "1px solid #e0e0e0",
+                    borderRadius: "20px",
+                  }}
+                >
                   <div>
                     <h4
-                      className="text-secondary"
                       onClick={() => viewJobHandler(item.id)}
-                      style={{ marginBottom: "10px" }}
+                      style={{
+                        color: "#2A6310",
+                        fontWeight: "bold",
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                      }}
                     >
                       {item.job_title}
                     </h4>
-                    <ul style={{ listStyle: "none", padding: 0, fontSize: "14px", color: "#7f8c8d" }}>
-                      <li><i className="fa fa-building mr-1" /> {item.company_name}</li>
-                      <li><i className="fa fa-map-marker mr-1" /> {item.address}</li>
-                      <li><i className="fa fa-clock-o mr-1" /> Published {formaterDate(item.created_at)}</li>
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        padding: 0,
+                        fontSize: "14px",
+                        color: "#2A6310",
+                      }}
+                    >
+                      <li>
+                      <i className="fa fa-bookmark-o"></i>{" "}
+                        {item.company_name}
+                      </li>
+                      <li>
+                        <i className="fa fa-map-marker mr-1" /> {item.address}
+                      </li>
+                      <li>
+                        <i className="fa fa-clock-o mr-1" /> Published{" "}
+                        {formaterDate(item.created_at)}
+                      </li>
                     </ul>
                   </div>
                   <div className="job-time m-t15 m-b10">
@@ -152,23 +183,42 @@ const RecentJobSection = () => {
                     ))}
                   </div>
                   <div className="d-flex justify-content-between align-items-center mt-3">
-                    <span className="badge bg-primary text-white p-2">{item.location?.title || "Location"}</span>
-                    <span className="badge bg-success text-white p-2"><i className="fa fa-money mr-1" />  {getCtcTitleById(item.ctc)}</span>
+                    <span className="badge bg-success text-white p-2">
+                      <i className="fa fa-money mr-1" />{" "}
+                      {getCtcTitleById(item.ctc)}
+                    </span>
+                    <span
+                      className="badge text-white p-2"
+                      style={{ backgroundColor: "#2A6310" }}
+                      onClick={() => viewJobHandler(item.id)}
+                    >
+                      View Job
+                    </span>
                   </div>
                   <div
-                    className={`like-btn ${savedJobsMap.has(item.id.toString()) ? "liked" : ""}`}
+                    className={`like-btn ${
+                      savedJobsMap.has(item.id.toString()) ? "liked" : ""
+                    }`}
                     onClick={() => handleLikeToggle(item.id.toString())}
                     style={{
                       position: "absolute",
                       top: "10px",
                       right: "10px",
-                      color: savedJobsMap.has(item.id.toString()) ? "#e74c3c" : "#bbb",
+                      color: savedJobsMap.has(item.id.toString())
+                        ? "#e74c3c"
+                        : "#bbb",
                       fontSize: "20px",
                       cursor: "pointer",
                       zIndex: 10, // Ensures it's on top of other elements
                     }}
                   >
-                    <i className={`fa ${savedJobsMap.has(item.id.toString()) ? "fa-heart" : "fa-heart-o"}`} />
+                    <i
+                      className={`fa ${
+                        savedJobsMap.has(item.id.toString())
+                          ? "fa-heart"
+                          : "fa-heart-o"
+                      }`}
+                    />
                   </div>
                 </div>
               </div>

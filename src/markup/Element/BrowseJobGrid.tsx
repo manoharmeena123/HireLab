@@ -10,7 +10,7 @@ import {
   useGetCtcDataQuery,
   usePostSaveJobMutation,
   useDeleteSavedJobMutation,
-  useGetSavedJobQuery
+  useGetSavedJobQuery,
 } from "@/store/global-store/global.query";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
@@ -47,7 +47,11 @@ const BrowseJobGrid: React.FC = () => {
   const { data: getAlljobs, isLoading: getAlljobsLoading } = useGetJobsQuery();
   const { data: sectorData, isLoading: sectorLoading } = useGetSectorQuery();
   const { data: ctcDatas } = useGetCtcDataQuery();
-  const { data: savedJobsData, isLoading: savedJobsLoading, refetch } = useGetSavedJobQuery();
+  const {
+    data: savedJobsData,
+    isLoading: savedJobsLoading,
+    refetch,
+  } = useGetSavedJobQuery();
   const { user } = useLoggedInUser();
   const [saveJob, { isLoading: isSaving }] = usePostSaveJobMutation();
   const [deleteJob, { isLoading: isDeleting }] = useDeleteSavedJobMutation();
@@ -70,8 +74,10 @@ const BrowseJobGrid: React.FC = () => {
 
   useEffect(() => {
     if (savedJobsData) {
-      console.log('Saved Jobs Data:', savedJobsData);
-      setLikedJobs(savedJobsData?.data?.map((job: { id: number }) => job.id.toString()));
+      console.log("Saved Jobs Data:", savedJobsData);
+      setLikedJobs(
+        savedJobsData?.data?.map((job: { id: number }) => job.id.toString())
+      );
     }
   }, [savedJobsData]);
 
@@ -201,7 +207,7 @@ const BrowseJobGrid: React.FC = () => {
           : true
       )
       .filter((job) => {
-        const ctcItem = ctcDatas?.data?.find((item :any) => item.id == job.ctc);
+        const ctcItem = ctcDatas?.data?.find((item: any) => item.id == job.ctc);
         if (!ctcItem) return false;
         const [ctcMin, ctcMax] = extractCtcRange(ctcItem.title);
         return ctcMin >= ctcRange[0] && ctcMax <= ctcRange[1];
@@ -329,7 +335,16 @@ const BrowseJobGrid: React.FC = () => {
                                 <div className="d-flex">
                                   <div className="job-time mr-auto">
                                     <Link href="#">
-                                      <span>{item.location.title}</span>
+                                      <span
+                                        className="badge text-white p-2"
+                                        style={{
+                                          backgroundColor: "#2A6310",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => viewJobHandler(item.id)}
+                                      >
+                                        View Job
+                                      </span>
                                     </Link>
                                   </div>
                                   <div className="salary-bx">
@@ -358,7 +373,10 @@ const BrowseJobGrid: React.FC = () => {
                           ))}
                         </ul>
                       ) : (
-                        <ul className="post-job-bx browse-job-grid row" style={{display:"flex", flexWrap :"wrap"}}>
+                        <ul
+                          className="post-job-bx browse-job-grid row"
+                          style={{ display: "flex", flexWrap: "wrap" }}
+                        >
                           {paginatedJobs.map((item) => (
                             <li
                               className="col-lg-6 col-md-6 col-sm-12"
@@ -407,7 +425,16 @@ const BrowseJobGrid: React.FC = () => {
                                 <div className="d-flex">
                                   <div className="job-time mr-auto">
                                     <Link href="#">
-                                      <span>{item.location.title}</span>
+                                      <span
+                                        className="badge text-white p-2"
+                                        style={{
+                                          backgroundColor: "#2A6310",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => viewJobHandler(item.id)}
+                                      >
+                                        View Job
+                                      </span>
                                     </Link>
                                   </div>
                                   <div className="salary-bx">
