@@ -134,6 +134,8 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer
           transform: translateX(100%) !important;
           transition: transform 0.3s ease-in-out !important;
           z-index: 1050 !important;
+          border-top-left-radius: 20px !important;
+          border-bottom-left-radius: 20px !important;
         }
 
         .profile-drawer.open {

@@ -1,0 +1,49 @@
+.page-wraper {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+  }
+  
+  .sidebarContent {
+    max-width: 380px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+  }
+  
+  .width-form {
+    width: 100% !important;
+    margin-top: 15px !important;
+  }
+  
+  .form-title {
+    color: #2A6310 !important;
+    text-align: center !important;
+  }
+  
+  .lato-font {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.03em !important;
+  }
+  
+  .forgot-password-link {
+    color: #007bff !important;
+    text-decoration: none !important;
+  }
+  
+  .forgot-password-link:hover {
+    text-decoration: underline !important;
+  }
+  
+  .no-wrap {
+    white-space: nowrap !important;
+  }
+  
+  .form-check small {
+    color: #6c757d !important;
+  }
+  
+  .text-danger {
+    color: #d9534f !important;
+  }
+  

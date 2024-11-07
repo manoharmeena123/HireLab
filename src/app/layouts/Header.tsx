@@ -12,6 +12,7 @@ import ProfileDrawer from "@/markup/Element/ProfileDrawer"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
+import LoginDrawer from '@/markup/Element/LoginDrawer';
 
 const Header = () => {
   const router = useRouter();
@@ -61,27 +62,44 @@ const Header = () => {
       {/* <ProfileDropdown  /> */}
       </Link>
     );
-
-  const renderLoginRegisterButtons = !isLoginPage &&
-    !isRegisterPage &&
-    !token && (
+    const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
+    const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
+    const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
+  
+    const renderLoginRegisterButtons = !isLoginPage && !isRegisterPage && !token && (
       <>
-        <Link
-          href="/login"
-          className="site-button"
-          style={{ backgroundColor: "#2A6310", borderRadius:"20px",fontWeight:"600" }}
+        <button
+          onClick={handleLoginClick}
+          className="btn btn-primary"
+          style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}
         >
           Login
-        </Link>
-        <Link
-          href="/register"
-          className="site-button"
-          style={{ backgroundColor: "#2A6310", borderRadius:"20px", fontWeight:"600"}}
-        >
-          SingUp
+        </button>
+        <Link href="/register" className="btn btn-primary ml-2" style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}>
+          Sign Up
         </Link>
       </>
     );
+  // const renderLoginRegisterButtons = !isLoginPage &&
+  //   !isRegisterPage &&
+  //   !token && (
+  //     <>
+  //       <Link
+  //         href="/login"
+  //         className="site-button"
+  //         style={{ backgroundColor: "#2A6310", borderRadius:"20px",fontWeight:"600" }}
+  //       >
+  //         Login
+  //       </Link>
+  //       <Link
+  //         href="/register"
+  //         className="site-button"
+  //         style={{ backgroundColor: "#2A6310", borderRadius:"20px", fontWeight:"600"}}
+  //       >
+  //         SingUp
+  //       </Link>
+  //     </>
+  //   );
 
   const handleServiceMouseEnter = () => {
     setShowServiceDropdown(true);
@@ -480,6 +498,35 @@ const Header = () => {
       </div>
       {/* ProfileDrawer component with drawerOpen state */}
       {drawerOpen && <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />}
+       {/* Sidebar for Login */}
+       {showLoginSidebar && (
+        <div className={`sidebar ${styles.sidebar}`}>
+          <div className="sidebar-content">
+            <button onClick={handleCloseSidebar} className="close-btn" style={{ float: "right", fontSize: "1.5rem", border: "none", background:"none", top:"20px" }}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <LoginDrawer /> {/* Render only the Login form */}
+          </div>
+        </div>
+      )}
+
+   <style jsx>{`
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 350px;
+    background: #fff;
+    z-index: 1000;
+    overflow-y: auto;
+    transition: transform 0.3s ease-in-out;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
+  }
+`}</style>
+
     </header>
   );
 };
