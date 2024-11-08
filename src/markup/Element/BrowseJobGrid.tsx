@@ -347,10 +347,10 @@ const BrowseJobGrid: React.FC = () => {
                                       </span>
                                     </Link>
                                   </div>
-                                  <div className="salary-bx">
-                                    <span className="ctc-badge">
+                                  <div className="job-time">
+                                  <span className="tag">
                                       {/* <i className="fa fa-money"></i>{" "} */}
-                                      <span className="mr-1">₹</span> {getCtcTitleById(item.ctc)}
+                                      <span className="mr-1">₹</span>
                                       {getCtcTitleById(item.ctc)}
                                     </span>
                                   </div>
