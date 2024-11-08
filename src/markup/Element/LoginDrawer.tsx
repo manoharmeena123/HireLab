@@ -101,7 +101,7 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
               value={mobileNumber}
               onChange={handleInputChange}
               className={`form-control ${styles["lato-font"]} p-3`}
-              placeholder="📞 +91- Enter your 10-digit mobile number"
+              placeholder="Enter your 10-digit mobile number"
               maxLength={10}
               style={{ borderColor: "#2A6310", borderRadius: "5px" }}
             />

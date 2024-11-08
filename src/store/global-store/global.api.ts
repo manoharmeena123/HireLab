@@ -392,6 +392,11 @@ export const queries = {
       url : `api/logged-user1`
     })
   },
+  getHomeBanner :{
+    query :() =>({
+      url :"api/page/home-banner"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

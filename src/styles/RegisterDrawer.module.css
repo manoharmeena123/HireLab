@@ -37,6 +37,7 @@
     letter-spacing: 0.03em !important;
     width: 100% !important;
     font-size: 16px !important;
+    /* background-color: linear-gradient(180deg,#f5f4fa,rgba(251,251,253,0)) !important; */
   }
   
   .lato-fonts {
@@ -151,4 +152,5 @@
   
   .termandcondititon {
     font-weight: 200 !important;
+    font-size: 14px !important;
   }

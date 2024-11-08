@@ -151,15 +151,15 @@ const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
 
                   {/* Role Field - Radio Buttons */}
                   <div className="form-group">
-                    <label className={styles["lato-font"]}>
+                    <label className={styles["lato-font"]} style ={{fontWeight: 250}}>
                       Select a Role:
                     </label>
                     <div className="d-flex justify-content-around">
-                      <label>
-                        <Field type="radio" name="role" value="job_seeker" />
+                      <label style ={{fontWeight: 250,fontSize :"14px"}}>
+                        <Field type="radio" name="role" value="job_seeker"  />
                         <span> Job Seeker</span>
                       </label>
-                      <label>
+                      <label style ={{fontWeight: 250,fontSize :"14px"}}>
                         <Field type="radio" name="role" value="job_poster" />
                         <span> Job Poster</span>
                       </label>

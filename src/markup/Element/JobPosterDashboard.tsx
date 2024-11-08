@@ -46,10 +46,10 @@ const JobPosterDashboard = () => {
 
   useEffect(() => {
     if (jobsData) {
-      setTotalJobsPosted(jobsData?.totalPosted || 0);
-      setActiveListings(jobsData?.activeListings || 0);
-      setApplicationsReceived(jobsData?.applicationsReceived || 0);
-      setPendingApplications(jobsData?.pendingApplications || 0);
+      setTotalJobsPosted(user?.total_job_posted || 0);
+      setActiveListings(user?.active_listing || 0);
+      setApplicationsReceived(user?.application_recived || 0);
+      setPendingApplications(user?.pendingApplication || 0);
     }
   }, [jobsData]);
 

@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useGetBannerQuery } from "@/store/global-store/global.query";
+import {
+  useGetBannerQuery,
+  useGetHomeBannerQuery,
+} from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
 import Select from "react-select"; // For dynamic search
 import cityData from "@/data/in.json"; // Import your JSON data
 import { experienceOptions, jobTitleOptions } from "@/data/indexSearch";
-const bnr1 = require("./../../images/main-slider/slide2.jpg");
+import { IMAGE_URL } from "@/lib/apiEndPoints";
+import Image from "next/image";
 
 interface City {
   city: string;
@@ -24,6 +28,8 @@ interface Filters {
 const IndexBanner: React.FC = () => {
   const { push } = useRouter();
   const { data: bannerData, isLoading: isBannerLoading } = useGetBannerQuery();
+  const { data: getHomeBanner, isLoading: getHomeBannerLoading } =
+    useGetHomeBannerQuery({});
 
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
@@ -52,7 +58,8 @@ const IndexBanner: React.FC = () => {
     return cityData
       .filter((city) =>
         city.city.toLowerCase().includes(inputValue.toLowerCase())
-      ).slice(0, 5) // Limit to 5 suggestions
+      )
+      .slice(0, 5) // Limit to 5 suggestions
       .map((city) => city.city);
   };
 
@@ -75,7 +82,7 @@ const IndexBanner: React.FC = () => {
     }
   };
 
-  if (isBannerLoading) {
+  if (isBannerLoading || getHomeBannerLoading) {
     return <Loading />;
   }
 
@@ -92,7 +99,11 @@ const IndexBanner: React.FC = () => {
         )
       : "";
 
-  // Custom styles for uniform input fields and select
+  const bannerImageUrl = getHomeBanner?.data?.image
+    ? `${IMAGE_URL}/${getHomeBanner.data.image}`
+    : null;
+
+  // Custom styles
   const styles = {
     formContainer: {
       display: "flex",
@@ -108,7 +119,7 @@ const IndexBanner: React.FC = () => {
       border: "1px solid #E0E0E0",
     },
     inputField: {
-      flex: 1, // Make all fields equal size
+      flex: 1,
       border: "none",
       outline: "none",
       padding: "18px 15px",
@@ -117,12 +128,6 @@ const IndexBanner: React.FC = () => {
       backgroundColor: "#F8F8F8",
       color: "#6F6F6F",
       width: "100%",
-    },
-    select: {
-      flex: 1,
-      borderRadius: "50px",
-      border: "none",
-      backgroundColor: "#F8F8F8",
     },
     searchBtn: {
       backgroundColor: "#2A6310",
@@ -137,37 +142,26 @@ const IndexBanner: React.FC = () => {
       justifyContent: "center",
       minWidth: "120px",
     },
-    searchIcon: {
-      fontSize: "16px",
-      marginRight: "5px",
+    bannerImageContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "60px", // Adds 20px space above the image
+      maxWidth: "900px", // Matches the maxWidth of formContainer
+      width: "100%",
+      margin: "0 auto",
     },
   };
 
   return (
-    <div
-      className="dez-bnr-inr dez-bnr-inr-md"
-      // style={{ backgroundImage: `url(${bnr1.default.src})` }}
-      style={{ backgroundColor: '#f5f5f5' }}
-
-    >
+    <div className="dez-bnr-inr dez-bnr-inr-md" style={{ backgroundColor: "#f5f5f5" }}>
       <div className="container">
-      {/* <div className="dez-bnr-inr-entry align-m"> */}
         <div className="mt-5">
           <div className="find-job-bx">
-            {/* <Link
-              href="/browse-job-filter"
-              className="site-button button-sm"
-              style={{ backgroundColor: "#2A6310" }}
-            >
-              <div style={{ margin: "0px", padding: "0px" }}>
-                {parse(heading)}
-              </div>
-            </Link> */}
-            <h2 style={{ marginTop:"70px", textAlign:"center",fontSize:"40px" }}>
+            <h2 style={{ marginTop: "70px", textAlign: "center", fontSize: "40px" }}>
               {parse(description)} <br />
             </h2>
             <form onSubmit={handleSubmit} style={styles.formContainer}>
-              {/* Job Title Input */}
               <input
                 type="search"
                 name="job_title"
@@ -180,17 +174,13 @@ const IndexBanner: React.FC = () => {
               <datalist id="job-titles">
                 {jobTitleOptions
                   .filter((job) =>
-                    job.value
-                      .toLowerCase()
-                     
-                      .includes(filters.job_title.toLowerCase())
-                  ).slice(0, 3) // Limit the job title suggestions to 5 options
+                    job.value.toLowerCase().includes(filters.job_title.toLowerCase())
+                  )
+                  .slice(0, 3)
                   .map((job) => (
                     <option key={job.value} value={job.label} />
                   ))}
               </datalist>
-
-              {/* Experience Dropdown */}
               <Select
                 name="experience"
                 options={experienceOptions}
@@ -202,20 +192,18 @@ const IndexBanner: React.FC = () => {
                     ...base,
                     padding: "10px",
                     borderRadius: "50px",
-                    border: "none", // Remove border
-                    boxShadow: "none", // Remove the shadow typically shown when focused
-                    backgroundColor: "#F8F8F8", // Match the background color of other inputs
-                    width: "100%", // Set consistent width
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "#F8F8F8",
+                    width: "100%",
                   }),
                   placeholder: (base) => ({
                     ...base,
-                    color: "#6F6F6F", // Match the text color
-                    fontSize:"15px"
+                    color: "#6F6F6F",
+                    fontSize: "15px",
                   }),
                 }}
               />
-
-              {/* City Input */}
               <input
                 type="search"
                 name="location"
@@ -230,15 +218,23 @@ const IndexBanner: React.FC = () => {
                   <option key={city} value={city} />
                 ))}
               </datalist>
-
-              {/* Search Button */}
               <button type="submit" style={styles.searchBtn}>
-                <i className="fa fa-search" style={styles.searchIcon}></i>{" "}
-                Search
+                <i className="fa fa-search" style={{ fontSize: "16px", marginRight: "5px" }}></i> Search
               </button>
             </form>
           </div>
         </div>
+        {bannerImageUrl && (
+          <div style={styles.bannerImageContainer}>
+            <Image
+              src={bannerImageUrl}
+              alt="Home Banner"
+              width={900} // Matches the maxWidth of formContainer
+              height={300} // Adjust height to maintain aspect ratio
+              style={{ objectFit: "cover", borderRadius: "20px" }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
