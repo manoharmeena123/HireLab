@@ -159,7 +159,7 @@ const IndexBanner: React.FC = () => {
       <div className="container">
         <div className="mt-5">
           <div className="find-job-bx">
-            <h2 style={{ marginTop: "70px", textAlign: "center", fontSize: "40px" }}>
+            <h2 style={{ marginTop: "70px", textAlign: "center", fontSize: "30px" }}>
               {parse(description)} <br />
             </h2>
             <form onSubmit={handleSubmit} style={styles.formContainer}>

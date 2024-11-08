@@ -372,7 +372,7 @@ const Header = () => {
                             </Link>
                           </div>
 
-                          <div
+                          {/* <div
                             className={`${styles.dropdownColumn} ${styles.promotionalOffer}`}
                           >
                             <h6 className={styles.dropdownTitle}>
@@ -382,7 +382,7 @@ const Header = () => {
                               At HireLab, we revolutionize the hiring process
                               for employers and candidates...
                             </span>
-                          </div>
+                          </div> */}
                         </div>
                       )}
                     </li>
@@ -475,7 +475,7 @@ const Header = () => {
                             </Link>
                           </div>
 
-                          <div
+                          {/* <div
                             className={`${styles.dropdownColumn} ${styles.promotionalOffer}`}
                           >
                             <h6 className={styles.dropdownTitle}>
@@ -485,14 +485,14 @@ const Header = () => {
                               At HireLab, we revolutionize the hiring process
                               for employers and candidates...
                             </span>
-                          </div>
+                          </div> */}
                         </div>
                       )}
                     </li>
 
-                    <li className={isActive("/blogs") ? "active" : ""}>
+                    {/* <li className={isActive("/blogs") ? "active" : ""}>
                       <Link href="/blogs">BLOG</Link>
-                    </li>
+                    </li> */}
                     <li className={isActive("#") ? "active" : ""}>
                       <Link href="/blogs">Why choose use</Link>
                     </li>
