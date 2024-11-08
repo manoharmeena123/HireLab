@@ -276,18 +276,18 @@ const SwitchPlan = () => {
         }
 
         .get-started-btn {
-          background: linear-gradient(135deg, #007bff, #00c6ff);
+           background: linear-gradient(135deg, #2a6310, #6cc047) !important;
           color: white;
         }
 
         .get-started-btn:hover {
-          background: linear-gradient(135deg, #00c6ff, #007bff);
+         background: linear-gradient(135deg, #57cc21, #223918)!important;
           transform: translateY(-2px);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .selected-plan-btn {
-          background: linear-gradient(135deg, #ffdd33, #ff9900);
+      background: linear-gradient(135deg, #57cc21, #223918)!important;
           color: white;
           cursor: not-allowed;
           opacity: 0.8;

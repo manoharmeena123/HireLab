@@ -7,12 +7,12 @@ import logo2 from "../../images/hiralablogo.png";
 import styles from "@/styles/Header.module.css";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuthToken, useLoggedInUser } from "@/hooks/";
-import ProfileDrawer from "@/markup/Element/ProfileDrawer"
+import ProfileDrawer from "@/markup/Element/ProfileDrawer";
 // Import Font Awesome icons
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
-import LoginDrawer from '@/markup/Element/LoginDrawer';
+import LoginDrawer from "@/markup/Element/LoginDrawer";
 import RegisterDrawer from "@/markup/Element/RegisterDrawer";
 
 const Header = () => {
@@ -59,48 +59,58 @@ const Header = () => {
         // href={user.user.role === "job_seeker" ? "/job-seeker" : "/job-poster"}
         href={"#"}
       >
-            <ProfileDropdown toggleDrawer={toggleDrawer} />
-      {/* <ProfileDropdown  /> */}
+        <ProfileDropdown toggleDrawer={toggleDrawer} />
+        {/* <ProfileDropdown  /> */}
       </Link>
     );
-    //LoginDrawer
-    const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
-    // const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
-    // const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
+  //LoginDrawer
+  const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
+  // const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
+  // const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
 
-   // SignUpDrawer
-    const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
-    // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
-    // const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
-  
+  // SignUpDrawer
+  const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
+  // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
+  // const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
 
-    const handleLoginClick = () => {
-      setShowLoginSidebar(true);
-      setShowSignUpSidebar(false);
-    };
-  
-    const handleSignUpClick = () => {
-      setShowSignUpSidebar(true);
-      setShowLoginSidebar(false);
-    };
-    const handleCloseSidebar = () => {
-      setShowLoginSidebar(false);
-      setShowSignUpSidebar(false);
-    };
-    const renderLoginRegisterButtons = !isLoginPage && !isRegisterPage && !token && (
+  const handleLoginClick = () => {
+    setShowLoginSidebar(true);
+    setShowSignUpSidebar(false);
+  };
+
+  const handleSignUpClick = () => {
+    setShowSignUpSidebar(true);
+    setShowLoginSidebar(false);
+  };
+  const handleCloseSidebar = () => {
+    setShowLoginSidebar(false);
+    setShowSignUpSidebar(false);
+  };
+  const renderLoginRegisterButtons = !isLoginPage &&
+    !isRegisterPage &&
+    !token && (
       <>
         <button
           onClick={handleLoginClick}
           className="btn btn-success"
-          style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}
+          style={{
+            backgroundColor: "#2A6310",
+            borderRadius: "20px",
+            fontWeight: "600",
+          }}
         >
           Login
         </button>
-        <button 
-        onClick={handleSignUpClick}
-        // href="/register" 
-        className="btn btn-success ml-2"
-         style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}>
+        <button
+          onClick={handleSignUpClick}
+          // href="/register"
+          className="btn btn-success ml-2"
+          style={{
+            backgroundColor: "#2A6310",
+            borderRadius: "20px",
+            fontWeight: "600",
+          }}
+        >
           Sign Up
         </button>
       </>
@@ -328,13 +338,22 @@ const Header = () => {
                             <h6 className={styles.dropdownTitle}>
                               Book a Session
                             </h6>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
-                              Mock Interviews 
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
+                              Mock Interviews
                             </Link>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
                               Book a Session Form
                             </Link>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
                               Resume Reviews
                             </Link>
                           </div>
@@ -422,13 +441,22 @@ const Header = () => {
                             <h6 className={styles.dropdownTitle}>
                               Book a Session
                             </h6>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
-                              Mock Interviews 
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
+                              Mock Interviews
                             </Link>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
                               Book a Session Form
                             </Link>
-                            <Link href="#" className={`${styles.dropdownItem} text-nowrap`}>
+                            <Link
+                              href="#"
+                              className={`${styles.dropdownItem} text-nowrap`}
+                            >
                               Resume Reviews
                             </Link>
                           </div>
@@ -522,51 +550,79 @@ const Header = () => {
         </div>
       </div>
       {/* ProfileDrawer component with drawerOpen state */}
-      {drawerOpen && <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />}
-       {/* Sidebar for Login */}
-       {showLoginSidebar && (
+      {drawerOpen && (
+        <ProfileDrawer isOpen={drawerOpen} toggleDrawer={toggleDrawer} />
+      )}
+      {/* Sidebar for Login */}
+      {showLoginSidebar && (
         <div className={`sidebar ${styles.sidebar}`}>
           <div className="sidebar-content">
-            <button onClick={handleCloseSidebar} className="close-btn" style={{ float: "right", fontSize: "1.5rem", border: "none", background:"none", top:"20px" }}>
+            <button
+              onClick={handleCloseSidebar}
+              className="close-btn"
+              style={{
+                float: "right",
+                fontSize: "1.5rem",
+                border: "none",
+                background: "none",
+                top: "20px",
+              }}
+            >
               <FontAwesomeIcon icon={faTimes} />
             </button>
             {/* <LoginDrawer /> Render only the Login form */}
-            <LoginDrawer onClose={handleCloseSidebar} onSwitchToRegister={handleSignUpClick} />
+            <LoginDrawer
+              onClose={handleCloseSidebar}
+              onSwitchToRegister={handleSignUpClick}
+            />
           </div>
         </div>
       )}
-       {showSignUpSidebar && (
+      {showSignUpSidebar && (
         <div className={`sidebar ${styles.sidebar}`}>
           <div className="sidebar-content">
-            <button onClick={handleCloseSidebar} className="close-btn" style={{ float: "right", fontSize: "1.5rem", border: "none", background:"none", top:"20px" }}>
+            <button
+              onClick={handleCloseSidebar}
+              className="close-btn"
+              style={{
+                float: "right",
+                fontSize: "1.5rem",
+                border: "none",
+                background: "none",
+                top: "20px",
+              }}
+            >
               <FontAwesomeIcon icon={faTimes} />
             </button>
-           {/* // <RegisterDrawer  /> Render only the RegisterDrawer form */}
-            <RegisterDrawer onClose={handleCloseSidebar} onSwitchToLogin={handleLoginClick} />
+            {/* // <RegisterDrawer  /> Render only the RegisterDrawer form */}
+            <RegisterDrawer
+              onClose={handleCloseSidebar}
+              onSwitchToLogin={handleLoginClick}
+            />
           </div>
         </div>
       )}
- {/* Overlay for blurring the background */}
- {(showLoginSidebar || showSignUpSidebar) && (
+      {/* Overlay for blurring the background */}
+      {(showLoginSidebar || showSignUpSidebar) && (
         <div className="overlay" onClick={handleCloseSidebar}></div>
       )}
 
-   <style jsx>{`
-  .sidebar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: 100vh;
-    width: 400px;
-    background: #fff;
-    z-index: 1000;
-    overflow-y: auto;
-    transition: transform 0.3s ease-in-out;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
-  }
-       .overlay {
+      <style jsx>{`
+        .sidebar {
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: 100vh;
+          width: 400px;
+          background: #fff;
+          z-index: 1000;
+          overflow-y: auto;
+          transition: transform 0.3s ease-in-out;
+          border-top-left-radius: 20px;
+          border-bottom-left-radius: 20px;
+          box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
+        }
+        .overlay {
           position: fixed;
           top: 0;
           left: 0;
@@ -576,8 +632,7 @@ const Header = () => {
           backdrop-filter: blur(2px); /* Adds blur effect */
           z-index: 999; /* Places overlay below sidebar */
         }
-`}</style>
-
+      `}</style>
     </header>
   );
 };

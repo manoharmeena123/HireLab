@@ -29,13 +29,27 @@ const Pagination: React.FC<PaginationProps> = ({
 
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
+    const maxVisiblePages = 5;
+    const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
         <li key={i} className={i === currentPage ? "active" : ""}>
-          <button onClick={() => handlePageClick(i)} style={{backgroundColor:i === currentPage ? 'green' : '',width:'30px',color:i === currentPage ? '#fff' : ''}}>{i}</button>
+          <button
+            onClick={() => handlePageClick(i)}
+            style={{
+              backgroundColor: i === currentPage ? "green" : "",
+              width: "30px",
+              color: i === currentPage ? "#fff" : "",
+            }}
+          >
+            {i}
+          </button>
         </li>
       );
     }
+
     return pageNumbers;
   };
 
