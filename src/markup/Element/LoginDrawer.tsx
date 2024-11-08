@@ -91,7 +91,7 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
         <div className="dez-separator-outer mb-3">
           <div className="dez-separator bg-success"></div>
         </div>
-        <p className={`${styles["lato-font"]} mb-3`} style={{ color: "#6c757d", textAlign: "center" }}>Please enter your login details</p>
+        <p className={`${styles["lato-font"]} mb-3`} style={{ color: "#6c757d" }}>Please enter your login details</p>
 
         <form onSubmit={handleSubmit} className="dez-form">
           <div className={`form-group ${styles["width-form"]} mb-4`}>
