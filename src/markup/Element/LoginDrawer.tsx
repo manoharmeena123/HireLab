@@ -10,7 +10,7 @@ import styles from "@/styles/LoginDrawer.module.css";
 import { navigateSource } from "@/lib/action";
 import { useSearchParams, useRouter } from "next/navigation";
 
-const Login = () => {
+const Login = ({onClose, onSwitchToRegister}:any) => {
   const searchParams = useSearchParams();
   const queryTitle = searchParams.get("page");
   const dispatch = useDispatch();
@@ -130,7 +130,7 @@ const Login = () => {
           <div className="text-center mt-4">
             <p className={`${styles["lato-font"]} ${styles["no-wrap"]}`}>
               New here?{" "}
-              <Link href="/register" className={`${styles["forgot-password-link"]} text-success`} style={{ fontWeight: "600" }}>
+              <Link href="#" onClick={onSwitchToRegister} className="text-success" style={{ fontWeight: "600" }}>
                 Create Account
               </Link>
             </p>

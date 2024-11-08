@@ -1,0 +1,150 @@
+/* Register.module.css */
+.page-wraper {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+    width: 100% !important;
+  }
+  
+  .browse-job {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  .bg-img-fix {
+    background-size: cover !important;
+    background-position: center !important;
+  }
+  
+  .card {
+    max-width: 380px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+  }
+  
+  .form-title {
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+    color: #333 !important;
+    /* text-align: center !important; */
+   color: #2A6310 !important;    
+  }
+  
+  .lato-font {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.03em !important;
+    width: 100% !important;
+  }
+  
+  .lato-fonts {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.03em !important;
+    width: 100% !important;
+  }
+  
+  .rubik-font {
+    font-family: "Rubik", sans-serif !important;
+  }
+  
+  .custom-checkbox {
+    appearance: none !important;
+    background-color: rgba(46, 85, 250, 0.1) !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin: 0 8px 0 0 !important;
+    border-radius: 4px !important;
+    position: relative !important;
+    cursor: pointer !important;
+  }
+  
+  .custom-checkbox:checked {
+    background-color: #000 !important;
+  }
+  
+  .custom-checkbox:checked::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 6px !important;
+    height: 12px !important;
+    border: solid #fff !important;
+    border-width: 0 2px 2px 0 !important;
+    transform: translate(-50%, -50%) rotate(45deg) !important;
+  }
+  
+  .text-danger {
+    color: #d9534f !important;
+  }
+  
+  .create-div {
+    text-align: center !important;
+  }
+  
+  .no-wrap {
+    white-space: nowrap !important;
+  }
+  
+  .forgot-password-link {
+    color: #007bff !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    text-align: center !important;
+  }
+  
+  .forgot-password-link:hover {
+    text-decoration: underline !important;
+  }
+  
+  .login-form {
+    background-color: #fff !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    padding: 30px !important;
+  }
+  
+  .bottom-footer {
+    margin-top: 20px !important;
+  }
+  
+  .bottom-footer p {
+    color: #fff !important;
+    font-size: 14px !important;
+  }
+  
+  .site-button {
+    padding: 12px 30px !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 5px !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease !important;
+    background-color: #007bff !important;
+  }
+  
+  .site-button:hover {
+    background-color: #0056b3 !important;
+  }
+  
+  .width-form {
+    width: 100% !important;
+    margin-top: 15px !important;
+  }
+  
+  .text-center {
+    text-align: center !important;
+  }
+  
+  .text-muted {
+    color: #6c757d !important;
+  }
+  
+  .text-align-center {
+    text-align: center !important;
+  }
+  

@@ -38,7 +38,8 @@ const RegisterSection = () => {
   });
 
   const handleSubmit = async (values: any) => {
-    const { name, email, mobile_number, company_name, company_website, role } = values;
+    const { name, email, mobile_number, company_name, company_website, role } =
+      values;
 
     try {
       const res = await register({
@@ -217,7 +218,27 @@ const RegisterSection = () => {
                               {errors?.role?.[0]}
                             </span>
                           </div>
-
+                          {/* Terms and Conditions Checkbox */}
+                          <div className="form-group form-check">
+                            <Field
+                              type="checkbox"
+                              name="terms"
+                              className="form-check-input"
+                            />
+                            <label className="form-check-label">
+                              I agree to the{" "}
+                              <Link href="/terms-of-service" target="_blank">
+                                Terms of Service
+                              </Link>{" "}
+                              and{" "}
+                              <Link href="/privacy-policy" target="_blank">
+                                Privacy Policy
+                              </Link>
+                            </label>
+                            <span className="text-danger">
+                              <ErrorMessage name="terms" />
+                            </span>
+                          </div>
                           {/* Register Button */}
                           <div className="form-group w-full d-flex justify-content-center">
                             <button

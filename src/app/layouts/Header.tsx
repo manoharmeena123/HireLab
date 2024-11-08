@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import LoginDrawer from '@/markup/Element/LoginDrawer';
+import RegisterDrawer from "@/markup/Element/RegisterDrawer";
 
 const Header = () => {
   const router = useRouter();
@@ -62,10 +63,30 @@ const Header = () => {
       {/* <ProfileDropdown  /> */}
       </Link>
     );
+    //LoginDrawer
     const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
-    const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
-    const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
+    // const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
+    // const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
+
+   // SignUpDrawer
+    const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
+    // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
+    const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
   
+
+    const handleLoginClick = () => {
+      setShowLoginSidebar(true);
+      setShowSignUpSidebar(false);
+    };
+  
+    const handleSignUpClick = () => {
+      setShowSignUpSidebar(true);
+      setShowLoginSidebar(false);
+    };
+    const handleCloseSidebar = () => {
+      setShowLoginSidebar(false);
+      setShowSignUpSidebar(false);
+    };
     const renderLoginRegisterButtons = !isLoginPage && !isRegisterPage && !token && (
       <>
         <button
@@ -75,9 +96,13 @@ const Header = () => {
         >
           Login
         </button>
-        <Link href="/register" className="btn btn-primary ml-2" style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}>
+        <button 
+        onClick={handleSignUpClick}
+        // href="/register" 
+        className="btn btn-primary ml-2"
+         style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}>
           Sign Up
-        </Link>
+        </button>
       </>
     );
   // const renderLoginRegisterButtons = !isLoginPage &&
@@ -505,7 +530,19 @@ const Header = () => {
             <button onClick={handleCloseSidebar} className="close-btn" style={{ float: "right", fontSize: "1.5rem", border: "none", background:"none", top:"20px" }}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
-            <LoginDrawer /> {/* Render only the Login form */}
+            {/* <LoginDrawer /> Render only the Login form */}
+            <LoginDrawer onClose={handleCloseSidebar} onSwitchToRegister={handleSignUpClick} />
+          </div>
+        </div>
+      )}
+       {showSignUpSidebar && (
+        <div className={`sidebar ${styles.sidebar}`}>
+          <div className="sidebar-content">
+            <button onClick={handleCloseSidebar} className="close-btn" style={{ float: "right", fontSize: "1.5rem", border: "none", background:"none", top:"20px" }}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+           {/* // <RegisterDrawer  /> Render only the RegisterDrawer form */}
+            <RegisterDrawer onClose={handleCloseSidebar} onSwitchToLogin={handleLoginClick} />
           </div>
         </div>
       )}
