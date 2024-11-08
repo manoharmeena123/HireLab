@@ -150,6 +150,7 @@ const IndexBanner: React.FC = () => {
       maxWidth: "900px", // Matches the maxWidth of formContainer
       width: "100%",
       margin: "0 auto",
+      maxHeight: "300"
     },
   };
 
@@ -231,7 +232,7 @@ const IndexBanner: React.FC = () => {
               alt="Home Banner"
               width={900} // Matches the maxWidth of formContainer
               height={300} // Adjust height to maintain aspect ratio
-              style={{ objectFit: "cover", borderRadius: "20px" }}
+              style={{ objectFit: "cover", borderRadius: "20px", maxHeight: "200px"}}
             />
           </div>
         )}
