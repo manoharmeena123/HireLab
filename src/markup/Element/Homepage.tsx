@@ -29,7 +29,7 @@ const Homepage = () => {
         className="page-content"
         style={{
           backgroundColor: "#fff3f3",
-          backgroundImage: "url(" + bnr7.default.src + ")",
+          // backgroundImage: "url(" + bnr7.default.src + ")",
         }}
       >
         <div className="section-full content-inner-2 overlay-white-middle">

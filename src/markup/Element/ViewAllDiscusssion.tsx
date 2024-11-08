@@ -9,7 +9,7 @@ import Loading from "@/components/Loading";
 import parse from "html-react-parser";
 import { useRouter } from "next/navigation";
 import Pagination from "./Pagination";
-
+import styles from '@/styles/ViewAllDiscusssion.module.css'
 // Images
 var bnr = require("./../../images/banner/bnr1.jpg");
 
@@ -62,10 +62,10 @@ const ViewAllDiscusssion = () => {
             <div className="dez-blog-grid-3 row" id="masonry">
               {currentBlogs?.map((item: any, index: number) => (
                 <div
-                  className="post card-container col-lg-4 col-md-6 col-sm-6"
+                  className={`post col-lg-4 col-md-6 col-sm-6 ${styles.cardContainer}`}
                   key={index}
                 >
-                  <div className="blog-post blog-grid blog-style-1">
+                  <div className={styles.sectionContainer}>
                     <div className="dez-info">
                       <div className="dez-post-meta">
                         <ul className="d-flex align-items-center">
@@ -84,7 +84,7 @@ const ViewAllDiscusssion = () => {
                         </h5>
                       </div>
                       <div className="dez-post-text">
-                        <p>{parse(truncateText(item?.description, 30))}</p>
+                        <p>{parse(truncateText(item?.description, 15))}</p>
                       </div>
                       <div className="dez-post-readmore blog-share">
                         <span

@@ -14,7 +14,7 @@ import styles from "@/styles/RegisterDrawer.module.css";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
-const RegisterDrawer = ({onClose, onSwitchToLogin} :any) => {
+const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
   const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
   const errors = useSelector(selectRegisterErrors);
@@ -35,7 +35,7 @@ const RegisterDrawer = ({onClose, onSwitchToLogin} :any) => {
     role: Yup.string().required("Please select a role"),
   });
 
-  const handleSubmit = async (values :any) => {
+  const handleSubmit = async (values: any) => {
     try {
       const res = await register(values).unwrap();
       if (res.code === 200) {
@@ -74,7 +74,10 @@ const RegisterDrawer = ({onClose, onSwitchToLogin} :any) => {
             >
               {() => (
                 <Form>
-                  <h3 className={`${styles["form-title"]} ${styles["rubik-font"]}`} style={{ fontWeight: "600", color: "#2A6310",  }}>
+                  <h3
+                    className={`${styles["form-title"]} ${styles["rubik-font"]}`}
+                    style={{ fontWeight: "600", color: "#2A6310" }}
+                  >
                     Sign Up
                   </h3>
                   <div className="dez-separator-outer mb-3">
@@ -148,7 +151,9 @@ const RegisterDrawer = ({onClose, onSwitchToLogin} :any) => {
 
                   {/* Role Field - Radio Buttons */}
                   <div className="form-group">
-                    <label className={styles["lato-font"]}>Select a Role:</label>
+                    <label className={styles["lato-font"]}>
+                      Select a Role:
+                    </label>
                     <div className="d-flex justify-content-around">
                       <label>
                         <Field type="radio" name="role" value="job_seeker" />
@@ -164,22 +169,17 @@ const RegisterDrawer = ({onClose, onSwitchToLogin} :any) => {
                       {errors?.role?.[0]}
                     </span>
                   </div>
-                           {/* Terms and Conditions Checkbox */}
-                           <div className="form-group form-check">
+                  {/* Terms and Conditions Checkbox */}
+                  <div className="form-group form-check">
                     <Field
                       type="checkbox"
                       name="terms"
                       className="form-check-input"
                     />
-                    <label className="form-check-label">
+                    <label className={`form-check-label ${styles.termandcondititon}`}>
                       I agree to the{" "}
-                      <span className="text-success">
-                        Terms of Service
-                      </span>{" "}
-                      and{" "}
-                      <span className="text-success">
-                        Privacy Policy
-                        </span>{" "}
+                      <span className="text-success">Terms of Service</span> and{" "}
+                      <span className="text-success">Privacy Policy</span>{" "}
                     </label>
                     <span className="text-danger">
                       <ErrorMessage name="terms" />

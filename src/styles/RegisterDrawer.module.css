@@ -36,6 +36,7 @@
     font-family: "Lato", sans-serif !important;
     letter-spacing: 0.03em !important;
     width: 100% !important;
+    font-size: 16px !important;
   }
   
   .lato-fonts {
@@ -148,3 +149,6 @@
     text-align: center !important;
   }
   
+  .termandcondititon {
+    font-weight: 200 !important;
+  }

@@ -3,16 +3,32 @@
 .discussionCard {
   background: white !important;
   padding: 20px !important;
-  border-radius: 8px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
-  transition: box-shadow 0.3s ease, max-height 0.3s ease !important;
   display: flex !important;
   flex-direction: column !important;
-  min-height: 350px !important; /* Ensure same initial height */
-  max-height: 350px !important; /* Limit height initially */
+  transition: box-shadow 0.3s ease, max-height 0.3s ease !important;
+  min-height: 340px !important;
+  max-height: 350px !important; 
   overflow: hidden; /* Hide overflow */
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 20px !important;
 }
 
+
+/* .discussionCard {
+  padding: 20px !important;
+  background-color: #fff !important;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px !important;
+  min-height: 300px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  cursor: pointer !important;
+  transition: 0.3s !important;
+  position: relative !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 20px !important;
+} */
 .discussionCard:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8) !important;
 }
@@ -59,12 +75,13 @@
 }
 
 .link {
+  color: #2a6310;
   font-weight: 600 !important;
 }
 
 .link:hover {
   cursor: pointer !important;
-  text-decoration: underline !important;
+  text-decoration: none !important;
 }
 
 .read-more-btn {

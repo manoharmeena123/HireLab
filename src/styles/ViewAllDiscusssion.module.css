@@ -1,0 +1,22 @@
+
+
+.sectionContainer {
+    padding: 20px !important;
+    background-color: #fff !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    cursor: pointer !important;
+    position: relative !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 20px !important;
+    transition: box-shadow 0.3s ease, max-height 0.3s ease !important;
+    min-height: 300px !important;
+    max-height: 350px !important;
+  }
+  .sectionContainer:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8) !important;
+  }
+  .cardContainer {
+    margin-bottom: 20px !important; /* Add space between rows */
+  }

@@ -634,9 +634,10 @@
   text-align: left;
 }
 .find-job-bx h2 {
-  font-size: 45px;
-  line-height: 60px;
+  text-align: center;
+  line-height: 12px;
   font-weight: 500;
+  font-size: 30px;
 }
 .find-job-bx p {
   margin-bottom: 10px;

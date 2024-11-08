@@ -208,11 +208,26 @@ const LatestDiscussions = () => {
           {discussionData?.data
             ?.slice(0, 3)
             .map((discussion: any, index: number) => (
-              <div key={index} className="col-lg-4 col-md-6 mb-4">
+              <div key={index} className="col-lg-4 col-md-6 mb-4" >
                 <div
                   className={`card ${styles.discussionCard} ${
                     expandedIndex === index ? styles.expanded : ""
                   }`}
+                  // style={{
+                  //   padding: "20px",
+                  //   backgroundColor: "#fff",
+                  //   boxShadow:
+                  //   "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                  //   minHeight: "300px",
+                  //   display: "flex",
+                  //   flexDirection: "column",
+                  //   justifyContent: "space-between",
+                  //   cursor: "pointer",
+                  //   transition: "0.3s",
+                  //   position: "relative", // Position relative for like button
+                  //   border: "1px solid #e0e0e0",
+                  //   borderRadius: "20px",
+                  // }}
                 >
                   <div className="card-body d-flex flex-column">
                     <p className="text-muted mb-2">
