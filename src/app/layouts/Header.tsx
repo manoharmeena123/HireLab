@@ -71,7 +71,7 @@ const Header = () => {
    // SignUpDrawer
     const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
     // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
-    const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
+    // const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
   
 
     const handleLoginClick = () => {
@@ -91,7 +91,7 @@ const Header = () => {
       <>
         <button
           onClick={handleLoginClick}
-          className="btn btn-primary"
+          className="btn btn-success"
           style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}
         >
           Login
@@ -99,7 +99,7 @@ const Header = () => {
         <button 
         onClick={handleSignUpClick}
         // href="/register" 
-        className="btn btn-primary ml-2"
+        className="btn btn-success ml-2"
          style={{ backgroundColor: "#2A6310", borderRadius: "20px", fontWeight: "600" }}>
           Sign Up
         </button>
@@ -546,6 +546,10 @@ const Header = () => {
           </div>
         </div>
       )}
+ {/* Overlay for blurring the background */}
+ {(showLoginSidebar || showSignUpSidebar) && (
+        <div className="overlay" onClick={handleCloseSidebar}></div>
+      )}
 
    <style jsx>{`
   .sidebar {
@@ -553,7 +557,7 @@ const Header = () => {
     top: 0;
     right: 0;
     height: 100vh;
-    width: 350px;
+    width: 400px;
     background: #fff;
     z-index: 1000;
     overflow-y: auto;
@@ -562,6 +566,16 @@ const Header = () => {
     border-bottom-left-radius: 20px;
      box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
   }
+       .overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5); /* Dark semi-transparent background */
+          backdrop-filter: blur(2px); /* Adds blur effect */
+          z-index: 999; /* Places overlay below sidebar */
+        }
 `}</style>
 
     </header>
