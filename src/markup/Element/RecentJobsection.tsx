@@ -140,16 +140,17 @@ const RecentJobSection = () => {
                       </li>
                     </ul>
                   </div>
-                  <div className={styles.jobTags}>
+                  {/* <div className={styles.jobTags}> */}
+                  <div className="job-time m-t15 m-b10">
                     {item.tags?.split(",").map((tag, index) => (
                       <Link key={index} href="#" className="mr-1">
-                        <span className={styles.tag}>{tag.trim()}</span>
+                        <span className="tag">{tag.trim()}</span>
                       </Link>
                     ))}
                   </div>
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <span className={`badge text-white p-2 ${styles.ctcBadge}`}>
-                      <i className="fa fa-money mr-1" /> {getCtcTitleById(item.ctc)}
+                    <span className="mr-1">₹</span> {getCtcTitleById(item.ctc)}
                     </span>
                     <span className={`badge text-white p-2 ${styles.ctcBadge}`} onClick={() => viewJobHandler(item.id)}>
                       View Job

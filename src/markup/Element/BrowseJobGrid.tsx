@@ -349,7 +349,8 @@ const BrowseJobGrid: React.FC = () => {
                                   </div>
                                   <div className="salary-bx">
                                     <span className="ctc-badge">
-                                      <i className="fa fa-money"></i>{" "}
+                                      {/* <i className="fa fa-money"></i>{" "} */}
+                                      <span className="mr-1">₹</span> {getCtcTitleById(item.ctc)}
                                       {getCtcTitleById(item.ctc)}
                                     </span>
                                   </div>
@@ -422,8 +423,13 @@ const BrowseJobGrid: React.FC = () => {
                                     <span className="checkmark"></span>
                                   </label>
                                 </div>
-                                <div className="d-flex">
-                                  <div className="job-time mr-auto">
+                                <div className="d-flex justify-content-between">
+                                   <div className="job-time">
+                                    <span className="tag">
+                                    <span>₹</span> 
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
+                                  </div> <div className="job-time">
                                     <Link href="#">
                                       <span
                                         className="badge text-white p-2"
@@ -437,12 +443,7 @@ const BrowseJobGrid: React.FC = () => {
                                       </span>
                                     </Link>
                                   </div>
-                                  <div className="salary-bx">
-                                    <span className="ctc-badge">
-                                      <i className="fa fa-money"></i>{" "}
-                                      {getCtcTitleById(item.ctc)}
-                                    </span>
-                                  </div>
+                                
                                 </div>
                               </div>
                             </li>
