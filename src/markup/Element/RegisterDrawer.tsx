@@ -81,7 +81,7 @@ const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
                     Sign Up
                   </h3>
                   <div className="dez-separator-outer mb-3">
-                    <div className="dez-separator bg-primary style-liner"></div>
+                    <div className="dez-separator bg-success style-liner"></div>
                   </div>
                   <p className={styles["lato-font"]}>
                     Enter your personal details below:

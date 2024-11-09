@@ -20,7 +20,7 @@ import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { toast } from "react-toastify";
-import Script from 'next/script';
+import Script from "next/script";
 
 const SingleEvent = () => {
   const { user } = useLoggedInUser();
@@ -34,17 +34,15 @@ const SingleEvent = () => {
   );
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
-  const events = searchParams.get("event")
-  console.log('events', events)
+  const events = searchParams.get("event");
+  console.log("events", events);
 
-// Detect the `events` parameter and set the active tab accordingly
-useEffect(() => {
-  if (events) {
-    setActiveButton(events === "upcoming" ? "upcoming" : "past");
-  }
-}, [events]);
-
-
+  // Detect the `events` parameter and set the active tab accordingly
+  useEffect(() => {
+    if (events) {
+      setActiveButton(events === "upcoming" ? "upcoming" : "past");
+    }
+  }, [events]);
 
   const [removeEvent] = useRemoveEventMutation();
   const [
@@ -79,13 +77,12 @@ useEffect(() => {
     if (query) {
       getSingleEventByTitle(query);
     }
-  
+
     // Set the active button based on the `events` parameter
     if (events) {
       setActiveButton(events === "upcoming" ? "upcoming" : "past");
     }
   }, [getSingleEventByTitle, query, events]);
-  
 
   // Update the selected event when the single event data changes
   useEffect(() => {
@@ -197,7 +194,7 @@ useEffect(() => {
   const handleBuyPass = async (event: any) => {
     setSelectedEvent(event);
     setProcessingEventId(event.id);
-  
+
     const result = await Swal.fire({
       title: "Are you sure?",
       text: "Do you want to buy this pass?",
@@ -207,61 +204,64 @@ useEffect(() => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, buy it!",
     });
-  
+
     if (result.isConfirmed) {
       const event_id = event?.id?.toString();
       const amount = event?.amount;
-  
+
       if (event_id && amount) {
         try {
           // Fetch Razorpay order details from the backend
-          const response = await fetch('/api/order', {
-            method: 'POST',
+          const response = await fetch("/api/order", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
               amount: Number(amount) * 100, // Amount in paise
-              currency: 'INR',
+              currency: "INR",
             }),
           });
-  
+
           if (!response.ok) {
-            throw new Error('Failed to create order. Please try again.');
+            throw new Error("Failed to create order. Please try again.");
           }
-  
+
           const jsonResponse = await response.json();
           const { orderId } = jsonResponse;
-  
+
           // Create a new Razorpay instance
           const options = {
-            key: 'rzp_test_6Yk0yEiSfOEYXv', // Replace with your Razorpay key
+            key: "rzp_test_6Yk0yEiSfOEYXv", // Replace with your Razorpay key
             amount: Number(amount) * 100, // Amount in paise
-            currency: 'INR',
+            currency: "INR",
             name: event?.title,
             description: "Event Pass Purchase",
             order_id: orderId, // Razorpay Order ID
             handler: async function (response: any) {
               try {
                 // Capture payment directly
-                const captureRes = await fetch('/api/capture', {
-                  method: 'POST',
+                const captureRes = await fetch("/api/capture", {
+                  method: "POST",
                   headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                   },
                   body: JSON.stringify({
                     paymentId: response.razorpay_payment_id,
                     amount: Number(amount) * 100, // Amount in paise
                   }),
                 });
-  
+
                 if (!captureRes.ok) {
-                  throw new Error('Payment capture failed. Please try again.');
+                  throw new Error("Payment capture failed. Please try again.");
                 }
-  
+
                 const captureData = await captureRes.json();
-  
-                if (captureData.message === 'Payment captured successfully' || captureData.alreadyCaptured) {
+
+                if (
+                  captureData.message === "Payment captured successfully" ||
+                  captureData.alreadyCaptured
+                ) {
                   const payload = {
                     event_id: event_id,
                     amount: captureData.data.amount,
@@ -271,32 +271,40 @@ useEffect(() => {
                     payment_type: captureData.data.method,
                     is_true: true,
                   };
-  
+
                   await buyPassForEvent(payload).unwrap();
-                  Swal.fire("Purchased!", "Your pass was successfully purchased!", "success");
+                  Swal.fire(
+                    "Purchased!",
+                    "Your pass was successfully purchased!",
+                    "success"
+                  );
                 } else {
-                  throw new Error('Payment capture failed.');
+                  throw new Error("Payment capture failed.");
                 }
-              } catch (error) {
+              } catch (error :any) {
                 // Call buyPassForEvent in failure case
                 const failedPayload = {
                   event_id: event_id,
                   amount: Number(amount) * 100,
                   id: response.razorpay_payment_id,
-                  status: 'failed',
+                  status: "failed",
                   order_id: response.razorpay_order_id,
-                  payment_type: 'unknown',
+                  payment_type: "unknown",
                   is_true: false,
                 };
-  
+
                 // Always call the API, even if payment fails
                 try {
                   await buyPassForEvent(failedPayload).unwrap();
-                } catch (apiError) {
-                  Swal.fire('Error', `Failed to update pass in the API: ${apiError.message}`, 'error');
+                } catch (apiError :any) {
+                  Swal.fire(
+                    "Error",
+                    `Failed to update pass in the API: ${apiError.message}`,
+                    "error"
+                  );
                 }
-  
-                Swal.fire('Error', `Payment failed: ${error.message}`, 'error');
+
+                Swal.fire("Error", `Payment failed: ${error.message}`, "error");
               }
             },
             prefill: {
@@ -304,25 +312,25 @@ useEffect(() => {
               email: user?.user?.email, // User's email
             },
             theme: {
-              color: '#2a6310',
+              color: "#2a6310",
             },
           };
-  
+
           const rzp = new (window as any).Razorpay(options);
           rzp.open();
-        } catch (error) {
-          Swal.fire('Error', `Failed to initialize payment: ${error.message}`, 'error');
+        } catch (error :any) {
+          Swal.fire(
+            "Error",
+            `Failed to initialize payment: ${error.message}`,
+            "error"
+          );
         }
       } else {
-        Swal.fire('Error', 'Event ID or amount is missing.', 'error');
+        Swal.fire("Error", "Event ID or amount is missing.", "error");
       }
     }
     setProcessingEventId(null);
   };
-  
-  
-  
-  
 
   const mapDescriptionWithIndex = (description: string) => {
     const paragraphs = description.split("</p><p>").map((para, index) => {
@@ -330,6 +338,33 @@ useEffect(() => {
     });
     return paragraphs.join("");
   };
+
+  useEffect(() => {
+    if (query) {
+      // If a query parameter is present, fetch and set the event by title
+      getSingleEventByTitle(query);
+    } else if (events) {
+      // If there's no query parameter, set the default event based on the events type
+      if (events === "upcoming" && upcomingEventsData?.data?.length > 0) {
+        setSelectedEvent(upcomingEventsData.data[0]);
+      } else if (events === "past" && pastEventsData?.data?.length > 0) {
+        setSelectedEvent(pastEventsData.data[0]);
+      }
+    }
+  }, [
+    getSingleEventByTitle,
+    query,
+    events,
+    upcomingEventsData,
+    pastEventsData,
+  ]);
+
+  useEffect(() => {
+    // Set selectedEvent based on fetched single event when the query is used
+    if (singleEventByTitle?.data) {
+      setSelectedEvent(singleEventByTitle.data);
+    }
+  }, [singleEventByTitle]);
 
   return (
     <>

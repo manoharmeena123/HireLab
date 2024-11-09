@@ -283,9 +283,9 @@ const Header = () => {
                       </li>
                     )}
 
-                    <li className={isActive("/single-event") ? "active" : ""}>
+                    {/* <li className={isActive("/single-event") ? "active" : ""}>
                       <Link href="/single-event">Meetups and Events</Link>
-                    </li>
+                    </li> */}
 
                     <li
                       className={

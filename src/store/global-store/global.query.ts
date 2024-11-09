@@ -155,8 +155,8 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       providesTags: ["PastEvents"],
     }),
     buyPassForEvent: builder.mutation<
-      WritableBuyPassResponse,
-      WritableBuyPassData
+      any,
+      any
     >({
       query: (data) => queries.buyPassForEvent.query(data),
       invalidatesTags: ["BuyPassForEvent"],

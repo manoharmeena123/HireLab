@@ -122,7 +122,7 @@ const RegisterSection = () => {
                             Sign Up
                           </h3>
                           <div className="dez-separator-outer m-b5">
-                            <div className="dez-separator bg-primary style-liner"></div>
+                          <div className="dez-separator bg-success"></div>
                           </div>
                           <p className={styles["lato-fonts"]}>
                             Enter your Personal details below:

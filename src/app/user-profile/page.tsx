@@ -2,10 +2,14 @@
 import React from "react";
 import Image from "next/image";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
-export const ProfileDropdown = ({ toggleDrawer }: { toggleDrawer: () => void }) => {
+export const ProfileDropdown = ({
+  toggleDrawer,
+}: {
+  toggleDrawer: () => void;
+}) => {
   const { user } = useLoggedInUser();
 
   return (
@@ -13,18 +17,27 @@ export const ProfileDropdown = ({ toggleDrawer }: { toggleDrawer: () => void }) 
       <div className="profile-header">
         {user?.user?.image ? (
           <Image
-            src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
+            src={`${IMAGE_URL + user.user.image}`}
             className="profile-image"
             alt="Profile Image"
             width={41}
             height={41}
-            objectFit="cover"
-            style={{ borderRadius: "3rem" }}
+            // onError={(e) => {
+            //   e.currentTarget.src = profileIcon;
+            // }}
+            style={{ borderRadius: "3rem", objectFit: "cover" }}
           />
         ) : (
-          <FontAwesomeIcon icon={faUser} style={{ fontSize: "1.2rem" }} />
+          <Image
+            src={profileIcon}
+            alt="Profile Picture"
+            width={41}
+            height={41}
+            className="profile-image"
+            style={{ borderRadius: "3rem" }}
+          />
         )}
-        <span className="profile-name">{user?.user?.name}</span>
+        <span className="profile-name">{user?.user?.name || "Guest"}</span>
       </div>
 
       <style jsx>{`
@@ -43,11 +56,9 @@ export const ProfileDropdown = ({ toggleDrawer }: { toggleDrawer: () => void }) 
         .profile-name {
           color: #000;
           font-size: 14px;
-          font-style: normal;
           font-weight: 600;
-          line-height: 21px; /* 150% */
+          line-height: 21px;
           text-transform: uppercase;
-          margin-right: 10px;
           margin-left: 10px;
         }
       `}</style>

@@ -10,7 +10,7 @@ import {
   useGetSectorQuery,
   useGetDesignationQuery,
   useGetCtcDataQuery,
-  useGetProfileDataQuery
+  useGetProfileDataQuery,
 } from "@/store/global-store/global.query";
 import { WritableProfileFormData } from "@/app/job-seeker/types/index";
 import { toast } from "react-toastify";
@@ -42,8 +42,9 @@ const JobSeekerSection = () => {
     useGetDesignationQuery();
   const { data: getCtcData, isLoading: getCtcDataLoading } =
     useGetCtcDataQuery();
- const {data : getProfileData , isLoading :getProfileDataLoading } = useGetProfileDataQuery()
- console.log('getProfileData', getProfileData)
+  const { data: getProfileData, isLoading: getProfileDataLoading } =
+    useGetProfileDataQuery({});
+  console.log("getProfileData", getProfileData);
   const [selectedIndustry, setSelectedIndustry] =
     useState<SingleValue<OptionType> | null>(null);
   const [selectedDesignation, setSelectedDesignation] =
@@ -67,7 +68,6 @@ const JobSeekerSection = () => {
     designation: "",
     company_name: "",
     experience: "",
-    yearOfExperience: "",
     country: "",
     expected_ctc: "",
     current_ctc: "", // added as per payload
@@ -76,8 +76,8 @@ const JobSeekerSection = () => {
     location: "",
     industry_id: "", // added as per payload
     image: null,
-    current_city: "",
-    permanent_address: "",
+    city: "",
+    address: "",
     linkedin_profile: "",
     gender: "",
     availability_to_join: "",
@@ -89,21 +89,28 @@ const JobSeekerSection = () => {
     additional_certifications: "",
     key_skills: "",
     languages_known: "",
-    preferred_job_locations: "",
     willing_to_relocate: "",
     willing_to_work_remotely: "",
     website: "", // added as per payload
-    work_experiences: [ // updated structure to hold array of work experiences
-        {
-            job_title: "",
-            company_name: "",
-            start_date: "",
-            end_date: "",
-            key_responsibilities: "",
-        },
+    work_experiences: [
+      // updated structure to hold array of work experiences
+      {
+        job_title: "",
+        company_name: "",
+        start_date: "",
+        end_date: "",
+        key_responsibilities: "",
+      },
     ],
-});
+  });
 
+  const handleTagsChange = (newTags: string[]) => {
+    setTags(newTags);
+    setProfileForm((prevForm: any) => ({
+      ...prevForm,
+      key_skills: newTags.join(", "), // Joining tags as a single comma-separated string
+    }));
+  };
   const [validationErrors, setValidationErrors] = useState<{
     [key: string]: string;
   }>({});
@@ -134,8 +141,14 @@ const JobSeekerSection = () => {
       id: sector.id.toString(),
     })) || [];
 
-  const handleSectorSelectChange = (option: any) => {
-    setSelectedSector(option);
+  const handleSectorSelectChange = (
+    selectedOption: SingleValue<OptionType>
+  ) => {
+    setSelectedSector(selectedOption);
+    setProfileForm((prevForm: any) => ({
+      ...prevForm,
+      industry_id: selectedOption ? selectedOption.value : "",
+    }));
   };
 
   useEffect(() => {
@@ -190,7 +203,7 @@ const JobSeekerSection = () => {
       "name",
       "email",
       "mobile_number",
-      "current_city",
+      "city",
       "gender",
       "date_of_birth",
       "highest_qualification",
@@ -199,10 +212,11 @@ const JobSeekerSection = () => {
       "year_of_graduation",
       "resume",
       "key_skills",
-      "preferred_job_locations",
+      "location",
       "willing_to_relocate",
-      "sector",
-      "yearOfExperience",
+      "industry_id",
+      "experience",
+      "languages_known"
     ];
 
     requiredFields.forEach((field) => {
@@ -282,11 +296,11 @@ const JobSeekerSection = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!validateForm()) {
-    //   toast.error("Please fill all mandatory fields.");
-    //   return;
-    // }
-console.log('profileForm', profileForm)
+    if (!validateForm()) {
+      toast.error("Please fill all mandatory fields.");
+      return;
+    }
+    console.log("profileForm", profileForm);
     const formData = new FormData();
     Object.entries(profileForm).forEach(([key, value]) => {
       if (value !== null) {
@@ -298,11 +312,17 @@ console.log('profileForm', profileForm)
     // Append each work experience individually as an array item
     workExperiences.forEach((exp, index) => {
       formData.append(`work_experiences[${index}][job_title]`, exp.job_title);
-      formData.append(`work_experiences[${index}][company_name]`, exp.company_name);
+      formData.append(
+        `work_experiences[${index}][company_name]`,
+        exp.company_name
+      );
       formData.append(`work_experiences[${index}][start_date]`, exp.start_date);
       formData.append(`work_experiences[${index}][end_date]`, exp.end_date);
-      formData.append(`work_experiences[${index}][key_responsibilities]`, exp.key_responsibilities);
-  });
+      formData.append(
+        `work_experiences[${index}][key_responsibilities]`,
+        exp.key_responsibilities
+      );
+    });
     console.log("formData", formData);
     try {
       setSaveLoading(true);
@@ -348,9 +368,7 @@ console.log('profileForm', profileForm)
           <div className="section-full bg-white browse-job p-t50 p-b20">
             <div className="container">
               <div className="row">
-                <Profilesidebar
-                  refetch={refetch}
-                />
+                <Profilesidebar refetch={refetch} />
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx job-profile">
                     {/* Personal Information Section */}
@@ -491,18 +509,16 @@ console.log('profileForm', profileForm)
                             <input
                               type="text"
                               className={`form-control ${
-                                validationErrors.current_city
-                                  ? "is-invalid"
-                                  : ""
+                                validationErrors.city ? "is-invalid" : ""
                               }`}
                               placeholder="Enter Your Current City"
-                              name="current_city"
-                              value={profileForm.current_city || ""}
+                              name="city"
+                              value={profileForm.city || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.current_city && (
+                            {validationErrors.city && (
                               <div className="invalid-feedback">
-                                {validationErrors.current_city}
+                                {validationErrors.city}
                               </div>
                             )}
                           </div>
@@ -515,18 +531,16 @@ console.log('profileForm', profileForm)
                             <input
                               type="text"
                               className={`form-control ${
-                                validationErrors.permanent_address
-                                  ? "is-invalid"
-                                  : ""
+                                validationErrors.address ? "is-invalid" : ""
                               }`}
                               placeholder="Enter Your Permanent Address"
-                              name="permanent_address"
-                              value={profileForm.permanent_address || ""}
+                              name="address"
+                              value={profileForm.address || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.permanent_address && (
+                            {validationErrors.address && (
                               <div className="invalid-feedback">
-                                {validationErrors.permanent_address}
+                                {validationErrors.address}
                               </div>
                             )}
                           </div>
@@ -548,11 +562,11 @@ console.log('profileForm', profileForm)
                               value={profileForm.linkedin_profile || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.linkedin_profile && (
+                            {/* {validationErrors.linkedin_profile && (
                               <div className="invalid-feedback">
                                 {validationErrors.linkedin_profile}
                               </div>
-                            )}
+                            )} */}
                           </div>
                         </div>
 
@@ -629,18 +643,18 @@ console.log('profileForm', profileForm)
                             <input
                               type="text"
                               className={`form-control ${
-                                validationErrors.job_1_company
+                                validationErrors.company_name
                                   ? "is-invalid"
                                   : ""
                               }`}
                               placeholder="Enter Company Name"
-                              name="job_1_company"
-                              value={profileForm.job_1_company || ""}
+                              name="company_name"
+                              value={profileForm.company_name || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.job_1_company && (
+                            {validationErrors.company_name && (
                               <div className="invalid-feedback">
-                                {validationErrors.job_1_company}
+                                {validationErrors.company_name}
                               </div>
                             )}
                           </div>
@@ -696,14 +710,17 @@ console.log('profileForm', profileForm)
                           <div className="form-group">
                             <label>Industry:</label>
                             <Select
-                              value={selectedSector}
+                              value={sectorOptions.find(
+                                (option) =>
+                                  option.value === profileForm.industry_id
+                              )}
                               onChange={handleSectorSelectChange}
                               options={sectorOptions}
                               placeholder="Select Industry"
                             />
-                            {validationErrors.sector && (
+                            {validationErrors.industry_id && (
                               <span className="text-red-500 text-danger">
-                                {validationErrors.sector}
+                                {validationErrors.industry_id}
                               </span>
                             )}
                           </div>
@@ -735,17 +752,17 @@ console.log('profileForm', profileForm)
                             <Select
                               value={experienceOptions.find(
                                 (option) =>
-                                  option.value === profileForm.yearOfExperience
+                                  option.value === profileForm.experience
                               )}
                               onChange={(option) =>
-                                handleSelectChange("yearOfExperience", option)
+                                handleSelectChange("experience", option)
                               }
                               options={experienceOptions}
                               placeholder="Select Year of Experience"
                             />
-                            {validationErrors.yearOfExperience && (
+                            {validationErrors.experience && (
                               <span className="text-red-500 text-danger">
-                                {validationErrors.yearOfExperience}
+                                {validationErrors.experience}
                               </span>
                             )}
                           </div>
@@ -1008,7 +1025,7 @@ console.log('profileForm', profileForm)
                       <div className="col-lg-12 col-md-12">
                         <button
                           type="button"
-                          className="btn btn-secondary d-flex justify-content-end"
+                          className="btn btn-secondary"
                           style={{
                             backgroundColor: "#2A6310",
                             color: "#fff",
@@ -1067,14 +1084,16 @@ console.log('profileForm', profileForm)
                               <div className="tags-container">
                                 <ReactTagInput
                                   tags={tags}
-                                  onChange={(newTags: any) => setTags(newTags)}
+                                  onChange={handleTagsChange}
                                   placeholder="Type tags and press Enter"
                                 />
                               </div>
                             </div>
-                            <span className="text-red-500 text-danger">
-                              {/* {errors?.tags?.[0]} */}
-                            </span>
+                            {validationErrors.key_skills && (
+                              <span className="text-red-500 text-danger">
+                                {validationErrors.key_skills}
+                              </span>
+                            )}
                           </div>
                         </div>
 
@@ -1116,18 +1135,18 @@ console.log('profileForm', profileForm)
                             <input
                               type="text"
                               className={`form-control ${
-                                validationErrors.preferred_job_locations
+                                validationErrors.location
                                   ? "is-invalid"
                                   : ""
                               }`}
                               placeholder="Enter Preferred Job Locations"
-                              name="preferred_job_locations"
-                              value={profileForm.preferred_job_locations || ""}
+                              name="location"
+                              value={profileForm.location || ""}
                               onChange={handleInputChange}
                             />
-                            {validationErrors.preferred_job_locations && (
+                            {validationErrors.location && (
                               <div className="invalid-feedback">
-                                {validationErrors.preferred_job_locations}
+                                {validationErrors.location}
                               </div>
                             )}
                           </div>
@@ -1201,8 +1220,8 @@ console.log('profileForm', profileForm)
                               type="url"
                               className="form-control"
                               placeholder="Enter Portfolio URL"
-                              name="portfolio"
-                              value={profileForm.portfolio || ""}
+                              name="website"
+                              value={profileForm.website || ""}
                               onChange={handleInputChange}
                             />
                           </div>
