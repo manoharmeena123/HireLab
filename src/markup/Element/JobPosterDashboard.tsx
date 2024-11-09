@@ -82,7 +82,7 @@ const JobPosterDashboard = () => {
 
   return (
     <>
-      {jobsLoading && <Loading />}
+      {jobsLoading && <Loading />}                            
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">

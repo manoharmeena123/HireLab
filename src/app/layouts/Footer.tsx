@@ -23,7 +23,7 @@ const Footer = () => {
                     alt=""
                   />
                 </div>
-                <p className="text-capitalize m-b20">
+                <p className="text-capitalize m-b20 text-white">
                   Lorem Ipsum is simply dummy text of the printing and
                   typesetting industry has been the industry's standard dummy
                   text ever since the.
@@ -103,16 +103,16 @@ const Footer = () => {
             <div className="col-xl-6 col-lg-5 col-md-8 col-sm-8 col-12 d-flex gap-2">
               <div className="widget border-0 w-100">
                 <h5 className="m-b30 text-white">Information</h5>
-                <ul className="list-2 list-line d-flex flex-column">
+                <ul className="list-2 list-line d-flex flex-column ">
                   <li>
-                    <Link href={"/"}>Home</Link>
+                    <Link href={"/"} className="text-white">Home</Link>
                   </li>
                   <li>
-                    <Link href={"/about-us"}>About Us</Link>
+                    <Link href={"/about-us"} className="text-white">About Us</Link>
                   </li>
 
                   <li>
-                    <Link href={"/faq-sections"}>FAQs</Link>
+                    <Link href={"/faq-sections"} className="text-white">FAQs</Link>
                   </li>
                 </ul>
               </div>
@@ -120,13 +120,13 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 list-line d-flex flex-column">
                   <li>
-                    <Link href={"/contact-us"}>Contact</Link>
+                    <Link href={"/contact-us"} className="text-white">Contact</Link>
                   </li>
                   <li>
-                    <Link href={"/privacy-policy"}>Privacy</Link>
+                    <Link href={"/privacy-policy"} className="text-white">Privacy</Link>
                   </li>
                   <li>
-                    <Link href={"/terms-conditions"}>Terms and Conditions</Link>
+                    <Link href={"/terms-conditions"} className="text-white">Terms and Conditions</Link>
                   </li>
                   {/* <li>
                     <Link href={"/referral"}>Referral Terms</Link>
@@ -142,10 +142,10 @@ const Footer = () => {
                 <h5 className="m-b30 text-white">Information</h5>
                 <ul className="list-2 w10 list-line">
                   <li>
-                    <Link href={"/grievances"}>Grievances</Link>
+                    <Link href={"/grievances"} className="text-white">Grievances</Link>
                   </li>
                   <li>
-                    <Link href={"/refund-policy"}>Refund Policy</Link>
+                    <Link href={"/refund-policy"} className="text-white">Refund Policy</Link>
                   </li>
                 </ul>
               </div>

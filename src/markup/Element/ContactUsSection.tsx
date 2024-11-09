@@ -51,7 +51,7 @@ const Contact = () => {
         <div className="section-full content-inner bg-white contact-style-1">
           <div className="container">
             <div className="row">
-              <div className="col-lg-4 col-md-6 d-lg-flex d-md-flex">
+              <div className="col-lg-6 col-md-6 col-sm-12 d-lg-flex d-md-flex">
                 <div className="p-a30 border m-b30 contact-area border-1 align-self-stretch radius-sm">
                   <h4 className="m-b10">Quick Contact</h4>
                   <p>
@@ -59,7 +59,7 @@ const Contact = () => {
                     details.
                   </p>
                   <ul className="no-margin">
-                    <li className="icon-bx-wraper left m-b30">
+                    {/* <li className="icon-bx-wraper left m-b30">
                       <div className="icon-bx-xs border-1">
                         <Link href={"#"} className="icon-cell">
                           <i className="ti-location-pin"></i>
@@ -71,7 +71,7 @@ const Contact = () => {
                         </h6>
                         <p>{setting?.address}</p>
                       </div>
-                    </li>
+                    </li> */}
                     <li className="icon-bx-wraper left  m-b30">
                       <div className="icon-bx-xs border-1">
                         <Link href={"#"} className="icon-cell">
@@ -105,7 +105,7 @@ const Contact = () => {
                         <li>
                           <Link
                             href={setting.facebook}
-                            className="fa fa-facebook bg-primary mr-1"
+                            className="fa fa-facebook bg-success mr-1"
                           ></Link>
                         </li>
                       )}
@@ -113,7 +113,7 @@ const Contact = () => {
                         <li>
                           <Link
                             href={setting.twitter}
-                            className="fa fa-twitter bg-primary mr-1"
+                            className="fa fa-twitter bg-success mr-1"
                           ></Link>
                         </li>
                       )}
@@ -121,7 +121,7 @@ const Contact = () => {
                         <li>
                           <Link
                             href={setting.linkedin}
-                            className="fa fa-linkedin bg-primary mr-1"
+                            className="fa fa-linkedin bg-success mr-1"
                           ></Link>
                         </li>
                       )}
@@ -129,7 +129,7 @@ const Contact = () => {
                         <li>
                           <Link
                             href={setting.instagram}
-                            className="fa fa-instagram bg-primary mr-1"
+                            className="fa fa-instagram bg-success mr-1"
                           ></Link>
                         </li>
                       )}
@@ -137,7 +137,7 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-6">
+              <div className="col-lg-6 col-md-6 col-sm-12">
                 <div className="p-a30 m-b30 radius-sm bg-gray clearfix">
                   <h4>Send Message Us</h4>
                   <div className="dzFormMsg">
@@ -214,7 +214,7 @@ const Contact = () => {
                   </form>
                 </div>
               </div>
-              <div className="col-lg-4 col-md-12 d-lg-flex m-b30">
+              {/* <div className="col-lg-4 col-md-12 d-lg-flex m-b30"> */}
                 {/* <GoogleMaps
                   apiKey={"AIzaSyBPDjB2qkV4Yxn9h0tGSk2X5uH6NKmssXw"}
                   style={{ height: "500px", width: "100%", border: "0" }}
@@ -222,7 +222,7 @@ const Contact = () => {
                   center={{ lat: 37.4224764, lng: -122.0842499 }}
                   markers={{ lat: 37.4224764, lng: -122.0842499 }} //optional
                 /> */}
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>

@@ -270,7 +270,7 @@ const BrowseJobGrid: React.FC = () => {
                             view === "list" ? styles.active : ""
                           }`}
                           onClick={() => setView("list")}
-                          style={{ marginRight: "10px" }}
+                          style={{ marginRight: "10px", cursor: "pointer" }}
                         >
                           <i className="fa fa-th-list"></i>
                         </span>
@@ -279,6 +279,7 @@ const BrowseJobGrid: React.FC = () => {
                             view === "grid" ? styles.active : ""
                           }`}
                           onClick={() => setView("grid")}
+                          style={{ marginRight: "10px", cursor: "pointer" }}
                         >
                           <i className="fa fa-th"></i>
                         </span>
@@ -302,16 +303,16 @@ const BrowseJobGrid: React.FC = () => {
                     <>
                       {view === "list" ? (
                         <ul className="post-job-bx">
-                          {paginatedJobs.map((item) => (
+                          {paginatedJobs.map((item: any) => (
                             <li
                               key={item.id}
                               onClick={() => viewJobHandler(item.id)}
                             >
-                              <div className="post-bx">
+                              <div className={styles.sectionContainer}>
                                 <div className="d-flex m-b30">
                                   <div className="job-post-info">
-                                    <h5>
-                                      <Link href="/job-detail">
+                                    <h5 className={styles.jobTitle}>
+                                      <Link href="/job-detail" >
                                         {item.job_title}
                                       </Link>
                                     </h5>
@@ -332,8 +333,31 @@ const BrowseJobGrid: React.FC = () => {
                                     </ul>
                                   </div>
                                 </div>
-                                <div className="d-flex">
-                                  <div className="job-time mr-auto">
+                                <div className="job-time m-t15 m-b10">
+                                  {item.tags
+                                    ?.split(",")
+                                    .map((tag: any, index: number) => (
+                                      <Link
+                                        key={index}
+                                        href="#"
+                                        className="mr-1"
+                                      >
+                                        <span className="tag">
+                                          {tag.trim()}
+                                        </span>
+                                      </Link>
+                                    ))}
+                                </div>
+                                <div className="d-flex justify-content-between">
+                                  <div>
+                                    <span
+                                      className={`badge text-white p-2 ${styles.ctcBadge}`}
+                                    >
+                                      <span className="mr-1">₹</span>
+                                      {getCtcTitleById(item.ctc)}
+                                    </span>
+                                  </div>
+                                  <div className="job-time">
                                     <Link href="#">
                                       <span
                                         className="badge text-white p-2"
@@ -346,13 +370,6 @@ const BrowseJobGrid: React.FC = () => {
                                         View Job
                                       </span>
                                     </Link>
-                                  </div>
-                                  <div className="job-time">
-                                  <span className="tag">
-                                      {/* <i className="fa fa-money"></i>{" "} */}
-                                      <span className="mr-1">₹</span>
-                                      {getCtcTitleById(item.ctc)}
-                                    </span>
                                   </div>
                                 </div>
                                 <label
@@ -378,16 +395,16 @@ const BrowseJobGrid: React.FC = () => {
                           className="post-job-bx browse-job-grid row"
                           style={{ display: "flex", flexWrap: "wrap" }}
                         >
-                          {paginatedJobs.map((item) => (
+                          {paginatedJobs.map((item: any) => (
                             <li
                               className="col-lg-6 col-md-6 col-sm-12"
                               key={item.id}
                               onClick={() => viewJobHandler(item.id)}
                             >
-                              <div className="post-bx">
+                              <div className={styles.sectionContainer}>
                                 <div className="d-flex m-b30">
                                   <div className="job-post-info">
-                                    <h5>
+                                  <h5 className={styles.jobTitle}>
                                       <Link href="/job-detail">
                                         {item.job_title}
                                       </Link>
@@ -423,13 +440,31 @@ const BrowseJobGrid: React.FC = () => {
                                     <span className="checkmark"></span>
                                   </label>
                                 </div>
+                                <div className="job-time m-t15 m-b10">
+                                  {item.tags
+                                    ?.split(",")
+                                    .map((tag: any, index: number) => (
+                                      <Link
+                                        key={index}
+                                        href="#"
+                                        className="mr-1"
+                                      >
+                                        <span className="tag">
+                                          {tag.trim()}
+                                        </span>
+                                      </Link>
+                                    ))}
+                                </div>
                                 <div className="d-flex justify-content-between">
-                                   <div className="job-time">
-                                    <span className="tag">
-                                    <span>₹</span> 
+                                  <div>
+                                    <span
+                                      className={`badge text-white p-2 ${styles.ctcBadge}`}
+                                    >
+                                      <span className="mr-1">₹</span>
                                       {getCtcTitleById(item.ctc)}
                                     </span>
-                                  </div> <div className="job-time">
+                                  </div>
+                                  <div className="job-time">
                                     <Link href="#">
                                       <span
                                         className="badge text-white p-2"
@@ -443,7 +478,6 @@ const BrowseJobGrid: React.FC = () => {
                                       </span>
                                     </Link>
                                   </div>
-                                
                                 </div>
                               </div>
                             </li>

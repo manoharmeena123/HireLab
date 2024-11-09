@@ -39,10 +39,10 @@ const LatestDiscussions = () => {
     useGetDiscussionQuery();
   const { data: getCounts, isLoading: getCountsLoading } = useGetCountsQuery();
 
-  const initialJobPosted = getCounts?.data?.job_posted;
-  const initialQuestionsPosted = getCounts?.data?.question_posted;
-  const initialAnswersGiven = getCounts?.data?.answers_given;
-  const initialTotalForum = getCounts?.data?.total_forum;
+  const initialJobPosted = getCounts?.data?.job_listing;
+  const initialQuestionsPosted = getCounts?.data?.community_query;
+  const initialAnswersGiven = getCounts?.data?.active_jobs;
+  const initialTotalForum = getCounts?.data?.active_thread;
 
   useEffect(() => {
     const observer = new IntersectionObserver(
