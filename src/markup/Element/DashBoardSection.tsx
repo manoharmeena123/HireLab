@@ -162,10 +162,7 @@ const DashboardSection = () => {
                           borderRadius: "20px",
                           boxShadow:
                             "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                          minHeight: "200px", // Adjust height as needed
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
+                     
                         }}
                       >
                         <h6 className="text-dark mb-2 fw-semibold">
@@ -362,10 +359,6 @@ const DashboardSection = () => {
                           borderRadius: "20px",
                           boxShadow:
                             "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
-                          minHeight: "200px", // Adjust height as needed
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
                         }}
                       >
                         <h6 className="text-dark mb-2 fw-semibold">
