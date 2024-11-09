@@ -72,7 +72,7 @@ const Companyprofile = () => {
                               className="fa fa-file-text-o"
                               aria-hidden="true"
                             ></i>
-                            <span>Post A job</span>
+                            <span>Create new job</span>
                           </Link>
                         </li>
 

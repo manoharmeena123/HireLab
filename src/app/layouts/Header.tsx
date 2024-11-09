@@ -283,9 +283,9 @@ const Header = () => {
                       </li>
                     )}
 
-                    {/* <li className={isActive("/single-event") ? "active" : ""}>
+                    <li className={isActive("/single-event") ? "active" : ""}>
                       <Link href="/single-event">Meetups and Events</Link>
-                    </li> */}
+                    </li>
 
                     <li
                       className={
@@ -494,7 +494,7 @@ const Header = () => {
                       <Link href="/blogs">BLOG</Link>
                     </li> */}
                     <li className={isActive("#") ? "active" : ""}>
-                      <Link href="/blogs">Why choose use</Link>
+                      <Link href="/why-choose-us">Why choose use</Link>
                     </li>
                   </>
                 )}

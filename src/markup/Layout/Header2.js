@@ -178,7 +178,7 @@ class Header2 extends Component {
                         </li>
                         <li>
                           <Link to={"/company-post-jobs"} className="dez-page">
-                            Post A Jobs <span className="new-page">New</span>
+                            Create new jobs <span className="new-page">New</span>
                           </Link>
                         </li>
                         <li>

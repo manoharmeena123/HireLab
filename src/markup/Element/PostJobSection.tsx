@@ -487,7 +487,7 @@ const PostJobSection = () => {
                             className="fa fa-file-text-o"
                             aria-hidden="true"
                           ></i>
-                          <span>Post A job</span>
+                          <span>Create new job</span>
                         </Link>
                       </li>
                       {/* <li>
@@ -576,7 +576,7 @@ const PostJobSection = () => {
                 <div className="job-bx submit-resume">
                   <div className="job-bx-title clearfix">
                     <h5 className="font-weight-700 pull-left text-uppercase">
-                      Post A Job
+                      Create new job
                     </h5>
                     <button
                       onClick={() => router.back()}
@@ -1101,7 +1101,7 @@ const PostJobSection = () => {
                       className="site-button m-b30"
                       style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                     >
-                      {isLoading ? "Loading..." : "Post a Job"}
+                      {isLoading ? "Loading..." : "Create new job"}
                     </button>
                   </form>
                 </div>

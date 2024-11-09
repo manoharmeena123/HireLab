@@ -148,7 +148,7 @@ const JobPosterDashboard = () => {
                         <li>
                           <Link href="/post-job">
                             <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                            <span>Post A job</span>
+                            <span>Create new job</span>
                           </Link>
                         </li>
                       

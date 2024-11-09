@@ -397,6 +397,11 @@ export const queries = {
       url :"api/page/home-banner"
     })
   },
+  whyChooseUs :{
+    query :()=>({
+      url :"api/page/why-choose-us"
+    })
+  },
   //Post===================================================================================>
 
   buyPassForEvent: {

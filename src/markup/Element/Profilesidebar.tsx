@@ -152,7 +152,7 @@ const Profilesidebar = ({
                   onClick={(e) => handleNavigation(e, "/post-job")}
                 >
                   <i  className="fa fa-briefcase" aria-hidden="true"></i>
-                  Post a Job
+                  Create new job
                 </Link>
               </li> */}
               {/* <li>
