@@ -20,7 +20,10 @@ import { JobData } from "@/app/manage-job/types/index";
 import { formatDate } from "@/utils/formateDate";
 import ModalPopup from "../../components/ModalPopup";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import {
+  useGetDesignationQuery,
+  useAddScreenShotMutation,
+} from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
@@ -30,7 +33,10 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Pagination from "./Pagination";
 
 const ManageJobs = () => {
+  const { user, refetch } = useLoggedInUser();
   const { push } = useRouter();
+  const [logout] = useLogoutMutation();
+  const { removeToken } = useAuthToken();
   const router = useRouter();
 
   const {
@@ -39,13 +45,11 @@ const ManageJobs = () => {
     isLoading: jobsLoading,
     refetch: manageRefetch,
   } = useGetManageJobQuery();
-  const [logout] = useLogoutMutation();
-  const { removeToken } = useAuthToken();
   const [deleteManageJob] = useDeleteManageJobMutation();
   const [updatePostJob] = useUpdateManageJobMutation();
   const [getJobUser, { data: getJobuser }] = useGetJobUserMutation();
-  console.log("getJobuser", getJobuser);
-  const { user, refetch } = useLoggedInUser();
+  const [addScreenShot] = useAddScreenShotMutation();
+
   const [company, setCompany] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobData | null>(null);
   const [show, setShow] = useState(false);
@@ -252,7 +256,40 @@ const ManageJobs = () => {
   const handleChatClick = (item: any) => {
     push(`/chats?jobId=${item?.id}&email=${item?.email}`);
   };
+  const handleUploadScreenshot = async (jobId: any) => {
+    const { value: file } = await Swal.fire({
+      title: "Upload Screenshot",
+      input: "file",
+      inputAttributes: {
+        accept: "image/*",
+        "aria-label": "Upload your job screenshot",
+      },
+      showCancelButton: true,
+      confirmButtonText: "Upload",
+      cancelButtonText: "Cancel",
+    });
 
+    if (file) {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("job_id", jobId);
+      formData.append("user_id", user?.user?.id);
+
+      try {
+        const response = await addScreenShot(formData).unwrap();
+        if (response.code === 200 || response.code === 201) {
+          toast.success("Screenshot uploaded successfully!", {
+            theme: "colored",
+          });
+        } else {
+          toast.error("Failed to upload screenshot", { theme: "colored" });
+        }
+      } catch (error: any) {
+        console.error("Upload error:", error);
+        toast.error(error?.message, { theme: "colored" });
+      }
+    }
+  };
   return (
     <>
       {jobsLoading && <Loading />}
@@ -307,14 +344,14 @@ const ManageJobs = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/job-poster-dashboard" >
+                          <Link href="/job-poster-dashboard">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
                           </Link>
                         </li>
                         <li>
                           <Link href="/manage-job" className="active">
-                          <i className="fa fa-cog" aria-hidden="true"></i>
+                            <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Manage jobs</span>
                           </Link>
                         </li>
@@ -339,7 +376,7 @@ const ManageJobs = () => {
                             <span>Credit Earned</span>
                           </Link>
                         </li> */}
-                     
+
                         {/* <li>
                           <Link href="/job-posted">
                             <i
@@ -519,12 +556,23 @@ const ManageJobs = () => {
                                   >
                                     <i className="fa fa-edit"></i>
                                   </div>
+                                      {/* Upload icon */}
+                                  <div
+                                    className="nav-link mn-icon"
+                                    onClick={() =>
+                                      handleUploadScreenshot(job.id)
+                                    }
+                                  >
+                                    <i className="fa fa-upload"></i>{" "}
+                                    {/* Add upload icon */}
+                                  </div>
                                   <div
                                     className="nav-link mn-icon"
                                     onClick={() => handleDeleteJob(job?.id)}
                                   >
                                     <i className="ti-trash"></i>
                                   </div>
+                              
                                 </td>
                               </tr>
                             ))

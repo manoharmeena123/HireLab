@@ -439,16 +439,22 @@ const JobEditSection = () => {
                       </div>
                     </div>
                     <ul>
-                      <li>
-                        <Link href="/job-poster">
-                          <i className="fa fa-user-o" aria-hidden="true"></i>
-                          <span> Profile</span>
+                    <li>
+                        <Link href="/job-poster-dashboard">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          <span>Dashboard</span>
                         </Link>
                       </li>
                       <li>
-                        <Link href="/dashboard-section">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Dashboard</span>
+                        <Link href="/manage-job">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Manage jobs</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/job-poster">
+                          <i className="fa fa-user-o" aria-hidden="true"></i>
+                          <span>Profile</span>
                         </Link>
                       </li>
                       <li>
@@ -461,15 +467,42 @@ const JobEditSection = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="/credit-earned">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Credit Earned</span>
+                        <Link href="/cv-manager">
+                          <i className="fa fa-id-card-o" aria-hidden="true"></i>
+                          CV Manager
                         </Link>
                       </li>
                       <li>
-                        <Link href="/manage-job">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          <span>Manage Jobs</span>
+                        <Link href="/switch-plan">
+                          <i className="fa fa-money" aria-hidden="true"></i>
+                          Switch Plan
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/transaction">
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
+                          <span>Transaction</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
+                          <span>Analytics & Report</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Account Setting</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-life-ring" aria-hidden="true"></i>
+                          <span>Support</span>
                         </Link>
                       </li>
                       <li>

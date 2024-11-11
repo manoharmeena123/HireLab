@@ -505,5 +505,12 @@ export const queries = {
       method :"POST",
       body : data
     })
+  },
+  addScreenShot : {
+    query : (data :any) =>({
+      url : "api/add-job-screenshot",
+      method : "POST",
+      body : data
+    })
   }
 };

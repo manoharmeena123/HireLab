@@ -300,11 +300,9 @@ const Transaction = () => {
                             <span>Transaction</span>
                           </Link>
                         </li>
-                        {user?.user?.role === "job_poster" && ( 
-                          <>
                           
                         <li>
-                          <Link href="#">
+                          <Link href="/analytics-and-report">
                             <i
                               className="fa fa-bar-chart"
                               aria-hidden="true"
@@ -313,13 +311,13 @@ const Transaction = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Account Setting</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/support">
                             <i
                               className="fa fa-life-ring"
                               aria-hidden="true"
@@ -327,8 +325,6 @@ const Transaction = () => {
                             <span>Support</span>
                           </Link>
                         </li>
-                          </>
-                        )}
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i

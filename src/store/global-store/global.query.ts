@@ -120,7 +120,8 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "GetCommunity",
     "GetProfileData",
     "GetHomeBanner",
-    "WhyChooseUs"
+    "WhyChooseUs",
+    "AddScreenShot"
   ],
 });
 
@@ -451,6 +452,10 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     whyChooseUs : builder.query<any,any>({
       query : queries.whyChooseUs.query,
       providesTags :["WhyChooseUs"]
+    }),
+    addScreenShot : builder.mutation<any,any>({
+      query : (data)=> queries.addScreenShot.query(data),
+      invalidatesTags :["AddScreenShot"]
     })
   }),
 
@@ -533,6 +538,7 @@ export const {
   useGetCommunityMutation,
   useGetProfileDataQuery,
   useGetHomeBannerQuery,
-  useWhyChooseUsQuery
+  useWhyChooseUsQuery,
+  useAddScreenShotMutation
 } = globalApi;
 export default globalApi;

@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -11,10 +12,7 @@ import {
   useUpdateManageJobMutation,
   useGetJobUserMutation,
 } from "@/app/manage-job/store/manage-job.query";
-import {
-  useAcceptJobCandidateMutation,
-  useRejectJobCandidateMutation,
-} from "@/app/my-resume/store/resume.query";
+
 import { JobData } from "@/app/manage-job/types/index";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
@@ -25,7 +23,7 @@ import Loading from "@/components/Loading";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 
-const JobPosterDashboard = () => {
+const AccountSetting = () => {
   const { push } = useRouter();
   const router = useRouter();
 
@@ -36,8 +34,6 @@ const JobPosterDashboard = () => {
   } = useGetManageJobQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
-  const [deleteManageJob] = useDeleteManageJobMutation();
-  const [updatePostJob] = useUpdateManageJobMutation();
   const { user, refetch } = useLoggedInUser();
   const [totalJobsPosted, setTotalJobsPosted] = useState(0);
   const [activeListings, setActiveListings] = useState(0);
@@ -128,7 +124,7 @@ const JobPosterDashboard = () => {
                       </div>
                       <ul>
                         <li>
-                          <Link href="/job-poster-dashboard" className="active">
+                          <Link href="/job-poster-dashboard">
                             <i className="fa fa-heart-o" aria-hidden="true"></i>
                             <span>Dashboard</span>
                           </Link>
@@ -180,7 +176,7 @@ const JobPosterDashboard = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/account-setting">
+                          <Link href="/account-setting" className="active">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Account Setting</span>
                           </Link>
@@ -221,8 +217,9 @@ const JobPosterDashboard = () => {
                       </div>
                     </div>
                     <div className="row">
+                        <h5>Coming soon</h5>
                       {/* Total Jobs Posted */}
-                      <div className="col-lg-6 col-md-6 mb-2">
+                      {/* <div className="col-lg-6 col-md-6 mb-2">
                         <div className="card bg-light shadow-sm">
                           <div className="card-body text-center">
                             <h4 className="card-title">Total Jobs Posted</h4>
@@ -230,10 +227,10 @@ const JobPosterDashboard = () => {
                             <p className="text-muted">All the jobs you have posted</p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* Active Listings */}
-                      <div className="col-lg-6 col-md-6 mb-2">
+                      {/* <div className="col-lg-6 col-md-6 mb-2">
                         <div className="card bg-light shadow-sm">
                           <div className="card-body text-center">
                             <h4 className="card-title">Active Listings</h4>
@@ -241,10 +238,10 @@ const JobPosterDashboard = () => {
                             <p className="text-muted">Currently active job listings</p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* Applications Received */}
-                      <div className="col-lg-6 col-md-6">
+                      {/* <div className="col-lg-6 col-md-6">
                         <div className="card bg-light shadow-sm">
                           <div className="card-body text-center">
                             <h4 className="card-title">Applications Received</h4>
@@ -252,10 +249,10 @@ const JobPosterDashboard = () => {
                             <p className="text-muted">Total applications received</p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
 
                       {/* Pending Applications */}
-                      <div className="col-lg-6 col-md-6">
+                      {/* <div className="col-lg-6 col-md-6">
                         <div className="card bg-light shadow-sm">
                           <div className="card-body text-center">
                             <h4 className="card-title">Pending Applications</h4>
@@ -263,7 +260,7 @@ const JobPosterDashboard = () => {
                             <p className="text-muted">Applications awaiting review</p>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
 
                     {/* Pagination or more content can go here */}
@@ -278,4 +275,4 @@ const JobPosterDashboard = () => {
   );
 };
 
-export default JobPosterDashboard;
+export default AccountSetting;

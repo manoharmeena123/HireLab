@@ -132,7 +132,7 @@ const Footer = () => {
                     <Link href={"/referral"}>Referral Terms</Link>
                   </li>
                   <li>
-                    <Link href={"/support"}>Support</Link>
+                    <Link href={"/supports"}>Support</Link>
                   </li> */}
                 </ul>
               </div>

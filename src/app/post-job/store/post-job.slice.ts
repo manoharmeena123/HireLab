@@ -17,10 +17,11 @@ const initialPostJobState: PostJobState = {
   job_description: "",
   errors: {},
   city: "",
-  state:"",
+  state: "",
   tags: "",
   ctc: "",
   sector: "",
+  status: ""
 };
 
 const initialUpdateJobState: UpdatePostJobType = {
