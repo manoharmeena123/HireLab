@@ -113,8 +113,8 @@ const Contact = () => {
                         <li>
                           <Link
                             href={setting.twitter}
-                            className="fa fa-twitter bg-success mr-1"
-                          ></Link>
+                            className="bg-success mr-1"
+                          ><i className="fa fa-x-twitter">X</i></Link>
                         </li>
                       )}
                       {setting?.linkedin && (

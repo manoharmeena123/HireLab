@@ -6,16 +6,10 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import Image from "next/image";
-import {
-  useGetManageJobQuery,
-  useDeleteManageJobMutation,
-  useUpdateManageJobMutation,
-  useGetJobUserMutation,
-} from "@/app/manage-job/store/manage-job.query";
 
-import { JobData } from "@/app/manage-job/types/index";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import {   useGetBillingQuery,
+  useGetSubscriptionQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
@@ -24,30 +18,15 @@ import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 
 const AccountSetting = () => {
-  const { push } = useRouter();
-  const router = useRouter();
 
-  const {
-    data: jobsData,
-    isLoading: jobsLoading,
-    refetch: manageRefetch,
-  } = useGetManageJobQuery();
+  const { data: getBilling, isLoading: getBillingLoading } = useGetBillingQuery({});
+  const { data: getSubscription, isLoading: getSubscriptionLoading } = useGetSubscriptionQuery({});
+  
+
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
-  const [totalJobsPosted, setTotalJobsPosted] = useState(0);
-  const [activeListings, setActiveListings] = useState(0);
-  const [applicationsReceived, setApplicationsReceived] = useState(0);
-  const [pendingApplications, setPendingApplications] = useState(0);
 
-  useEffect(() => {
-    if (jobsData) {
-      setTotalJobsPosted(user?.total_job_posted || 0);
-      setActiveListings(user?.active_listing || 0);
-      setApplicationsReceived(user?.application_recived || 0);
-      setPendingApplications(user?.pendingApplication || 0);
-    }
-  }, [jobsData]);
 
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -78,7 +57,7 @@ const AccountSetting = () => {
 
   return (
     <>
-      {jobsLoading && <Loading />}                            
+      {getBillingLoading && getSubscriptionLoading  && <Loading />}                            
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -218,49 +197,7 @@ const AccountSetting = () => {
                     </div>
                     <div className="row">
                         <h5>Coming soon</h5>
-                      {/* Total Jobs Posted */}
-                      {/* <div className="col-lg-6 col-md-6 mb-2">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Total Jobs Posted</h4>
-                            <h2 className="font-weight-bold">{totalJobsPosted}</h2>
-                            <p className="text-muted">All the jobs you have posted</p>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* Active Listings */}
-                      {/* <div className="col-lg-6 col-md-6 mb-2">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Active Listings</h4>
-                            <h2 className="font-weight-bold">{activeListings}</h2>
-                            <p className="text-muted">Currently active job listings</p>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* Applications Received */}
-                      {/* <div className="col-lg-6 col-md-6">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Applications Received</h4>
-                            <h2 className="font-weight-bold">{applicationsReceived}</h2>
-                            <p className="text-muted">Total applications received</p>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* Pending Applications */}
-                      {/* <div className="col-lg-6 col-md-6">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Pending Applications</h4>
-                            <h2 className="font-weight-bold">{pendingApplications}</h2>
-                            <p className="text-muted">Applications awaiting review</p>
-                          </div>
-                        </div>
-                      </div> */}
+                  
                     </div>
 
                     {/* Pagination or more content can go here */}

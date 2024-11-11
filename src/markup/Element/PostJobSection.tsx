@@ -531,23 +531,29 @@ const PostJobSection = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="#">
-                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
-                          <span>Analytics & Report</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
-                          <i className="fa fa-cog" aria-hidden="true"></i>
-                          <span>Account Setting</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
-                          <i className="fa fa-life-ring" aria-hidden="true"></i>
-                          <span>Support</span>
-                        </Link>
-                      </li>
+                          <Link href="/analytics-and-report">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/account-setting">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/support">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
+                          </Link>
+                        </li>
                       <li>
                         <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>

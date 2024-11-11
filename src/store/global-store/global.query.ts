@@ -121,7 +121,17 @@ const hirelabEnhancedSlice = hirelabApiSlice.enhanceEndpoints({
     "GetProfileData",
     "GetHomeBanner",
     "WhyChooseUs",
-    "AddScreenShot"
+    "AddScreenShot",
+    "GetSubscription",
+    "GetBilling",
+    "MakeUserPrivate",
+    "MakeUserPublic",
+    "MakeUserActivate",
+    "MakeUserDeactivate",
+    "GetFeedback",
+    "SaveFeedback",
+    "DeleteUser",
+    "GetJobTitleSuggestion"
   ],
 });
 
@@ -456,6 +466,47 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
     addScreenShot : builder.mutation<any,any>({
       query : (data)=> queries.addScreenShot.query(data),
       invalidatesTags :["AddScreenShot"]
+    }),
+    getSubscription : builder.query<any,any>({
+      query : queries.getSubscription.query,
+      providesTags :["GetSubscription"]
+    }),
+    getBilling : builder.query<any,any>({
+      query : queries.getBilling.query,
+      providesTags :["GetBilling"]
+    }),
+    makeUserPrivate :builder.query<any,any>({
+      query : queries.makeUserPrivate.query,
+      providesTags :["MakeUserPrivate"]
+    }),
+    makeUserPublic : builder.query<any,any>({
+      query : queries.makeUserPublic.query,
+      providesTags :["MakeUserPublic"]
+    }),
+    makeUserActivate : builder.query<any,any>({
+      query :queries.makeUserActivate.query,
+      providesTags :["MakeUserActivate"]
+    }),
+    makeUserDeactivate : builder.query<any,any>({
+      query : queries.makeUserDeactivate.query,
+      providesTags :["MakeUserDeactivate"]
+    }),
+    getFeedback : builder.query<any,any>({
+      query : queries.getFeedback.query,
+      providesTags :["GetFeedback"]
+    }),
+    saveFeedback : builder.mutation<any,any>({
+      query : (data) => queries.saveFeedback.query(data),
+      invalidatesTags :["SaveFeedback"]
+    }),
+    deleteUser : builder.query<any,any>({
+      query : queries.deleteUser.query,
+      providesTags :["DeleteUser"]
+    }),
+    getJobTitleSuggestion : builder.mutation<any,any>({
+      query : (data)=> queries.getJobTitleSuggestion.query(data),
+      invalidatesTags :["GetJobTitleSuggestion"]
+
     })
   }),
 
@@ -539,6 +590,16 @@ export const {
   useGetProfileDataQuery,
   useGetHomeBannerQuery,
   useWhyChooseUsQuery,
-  useAddScreenShotMutation
+  useAddScreenShotMutation,
+  useMakeUserActivateQuery,
+  useMakeUserDeactivateQuery,
+  useMakeUserPrivateQuery,
+  useMakeUserPublicQuery,
+  useGetFeedbackQuery,
+  useSaveFeedbackMutation,
+  useDeleteUserQuery,
+  useGetBillingQuery,
+  useGetSubscriptionQuery,
+  useGetJobTitleSuggestionMutation
 } = globalApi;
 export default globalApi;

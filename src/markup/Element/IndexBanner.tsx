@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import {
   useGetBannerQuery,
   useGetHomeBannerQuery,
+  useGetJobTitleSuggestionMutation
 } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
@@ -30,7 +31,7 @@ const IndexBanner: React.FC = () => {
   const { data: bannerData, isLoading: isBannerLoading } = useGetBannerQuery();
   const { data: getHomeBanner, isLoading: getHomeBannerLoading } =
     useGetHomeBannerQuery({});
-
+const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
   const [filters, setFilters] = useState<Filters>({
     job_title: null,
     experience: null,

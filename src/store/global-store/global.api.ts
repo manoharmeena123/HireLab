@@ -389,19 +389,70 @@ export const queries = {
   },
   getProfileData :{
     query :() =>({
-      url : `api/logged-user1`
+      url : `api/logged-user1`,
+      method: "GET",
     })
   },
   getHomeBanner :{
     query :() =>({
-      url :"api/page/home-banner"
+      url :"api/page/home-banner",
+      method: "GET",
     })
   },
   whyChooseUs :{
     query :()=>({
-      url :"api/page/why-choose-us"
+      url :"api/page/why-choose-us",
+      method: "GET",
     })
   },
+  getSubscription :{
+    query : ()=>({
+      url :"api/get_subscription",
+      method: "GET",
+    })
+  },
+  getBilling :{
+    query :()=>({
+      url :"api/get_billing",
+      method: "GET",
+    })
+  },
+  makeUserPrivate :{
+    query : () =>({
+      url :"api/make_user_private",
+      method: "GET",
+    })
+  },
+  makeUserPublic :{
+    query : () =>({
+      url :"api/make_user_public",
+      method: "GET",
+    })
+  },
+  makeUserActivate :{
+    query : () =>({
+      url :"api/activate-user",
+      method: "GET",
+    })
+  },
+  makeUserDeactivate :{
+    query : () =>({
+      url :"api/deactivate-user",
+      method: "GET",
+    })
+  },
+  getFeedback :{
+    query : () =>({
+      url :"api/get-feedback",
+      method: "GET",
+    })
+  },
+ deleteUser :{
+  query : () =>({
+    url :"api/delete-user",
+    method: "GET",
+  })
+ },
   //Post===================================================================================>
 
   buyPassForEvent: {
@@ -512,5 +563,28 @@ export const queries = {
       method : "POST",
       body : data
     })
-  }
+  },
+  requestReedemCoins :{
+    query :(data :any)=>({
+      url :"api/request-redeem-coins",
+      method :"POST",
+      body :data
+    })
+  }, 
+   saveFeedback : {
+      query : (data:any) =>({
+        url :"api/save-feedback",
+        method: "GET",
+        body : data
+      })
+    },
+    getJobTitleSuggestion :{
+      query :(data:any)=>({
+        url :"api/job-suggestions",
+        method: "POST",
+        body : data
+      })
+    },
 };
+
+  

@@ -94,7 +94,7 @@ const Footer = () => {
                         href={getSafeUrl(getSetting?.data?.twitter)}
                       className="site-button white twitter circle "
                     >
-                      <i className="fa fa-x-twitter"></i>
+                      <i className="fa fa-x-twitter">X</i>
                     </Link>
                   </li>
                 </ul>

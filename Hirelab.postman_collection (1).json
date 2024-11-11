@@ -1,0 +1,4848 @@
+{
+	"info": {
+		"_postman_id": "0c621e24-096f-44b6-915d-f2deaf9e3a77",
+		"name": "Hirelab",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26451618"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mobile_number\" : \"7573863694\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/login",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"raj\",\r\n    \"email\" : \"araj979231@gmail.com\",\r\n    \"mobile_number\" : \"8758979231\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/register",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "519|IR2zAW1G1lZZ8WE4i1gQmO418yQS0eg2Xkmv5MVT619192b9",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/logout",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post a job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "64|qxbdGqQDQbbn53wtsdmuqDVxirOcfzClSnjIO1ee1b772d78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company_name\" : \"Dreams Technology\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\",\r\n    \"tags\" : \"1,2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/post-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"post-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add job screenshot",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "64|qxbdGqQDQbbn53wtsdmuqDVxirOcfzClSnjIO1ee1b772d78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company_name\" : \"Dreams Technology\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\",\r\n    \"tags\" : \"1,2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/post-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"post-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "request redeem coins",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "64|qxbdGqQDQbbn53wtsdmuqDVxirOcfzClSnjIO1ee1b772d78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company_name\" : \"Dreams Technology\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\",\r\n    \"tags\" : \"1,2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/post-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"post-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save feedback",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "64|qxbdGqQDQbbn53wtsdmuqDVxirOcfzClSnjIO1ee1b772d78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company_name\" : \"Dreams Technology\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\",\r\n    \"tags\" : \"1,2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/post-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"post-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "r",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "64|qxbdGqQDQbbn53wtsdmuqDVxirOcfzClSnjIO1ee1b772d78",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"company_name\" : \"Dreams Technology\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\",\r\n    \"tags\" : \"1,2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/post-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"post-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get categories",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deactive users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "active users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get subscription",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get billing",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get make user private",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get make user public",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get feedback",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logged user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thinkdream.in/hirelab/api/logged-user",
+					"protocol": "https",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"logged-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Testimonials",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-testimonials",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-testimonials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get compensations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-compensations",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-compensations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get additonal perks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-additonal-perks",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-additonal-perks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get locations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-locations",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-locations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get educations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-educations",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-educations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get tags",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-tags",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get tiers",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-tiers",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-tiers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-job-types",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-job-types"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get experiences",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-educations",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-educations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "manage jobs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/manage-jobs",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"manage-jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Blogs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/blogs",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"blogs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Single Blog",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/blog/16",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"blog",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get membership plan",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1042|565b5g18fqjPXbqcqtu0lBg3EGxcT1aqjaknNpgf67f26149",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-membership-plan",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-membership-plan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get events",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-events",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get discussions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-discussions",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-discussions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "66|SIG3UfLG7FbjenaR2aoFYBo83SW6boK92PX5lXKU51dd3ddb",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"test@gmail.com\",\r\n    \"mobile_number\" : \"1234567890\",\r\n    \"company_name\" : \"test company_name\",\r\n    \"college_id\" : \"1\",\r\n    \"designation_id\" : \"1\",\r\n    \"industry_id\" : \"1\",\r\n    \"ctc_id\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/update-profile",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"update-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "verify otp",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "167|9oIBhzFEotTeg3X2pA9bwAZOxGIXutiqyjPMVXtRfb2ca9c0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"otp\" : \"123456\",\r\n   \"mobile_number\" : \"8758979231\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/verify-otp",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"verify-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single Job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/job/9",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"job",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "43|yl0ExFuvzlzlUHDr4ccK3NRJsqr15b5NpjIlZBgN39a30857",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/delete-job/9",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"delete-job",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "apply job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1046|FXKEuwGUFsyILF1vxqRFXYrpKtlyeybb1VZ2mIjba2de0550",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"job_id\" : \"149\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/apply-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"apply-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-setting",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-setting",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-sector",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-sector",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-sector"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-college",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-college",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-college"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-applied-job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1046|FXKEuwGUFsyILF1vxqRFXYrpKtlyeybb1VZ2mIjba2de0550",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-applied-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-applied-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-saved-job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "175|oXe6LWi6pq2hsKuyHPKWRdTiJuEyCBYcSGUqtPcp2ba7488f",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-saved-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-saved-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "saved-job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"job_id\" : \"9\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/saved-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"saved-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-industry",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-industry",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-industry"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-ctc",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-ctc",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-ctc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Post Job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "42|KxySMxhDCmpbms9g0kkXgo05FIEcmmkluIbvDDC57071bd9e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : \"9\",\r\n    \"company_name\" : \"Dreams Technology Dummy\",\r\n    \"job_title\" : \"teest title\",\r\n    \"job_type\" : \"2\",\r\n    \"experience\" : \"2\",\r\n    \"location\" : \"1\",\r\n    \"address\" : \"address\",\r\n    \"compensation\" : \"1\",\r\n    \"additional_perk\" : \"2\",\r\n    \"joining_fee\" : \"1000\",\r\n    \"candidate_requirement\" : \"test candidate_requirement\",\r\n    \"maximum_education\" : \"1\",\r\n    \"total_experience\" : \"1\",\r\n    \"job_description\" : \"this is test address\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/update-job",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"update-job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recent jobs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-jobs",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get designations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-designations",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-designations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-applied-job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "133|EwGbwRVpkOj92LHEevJTdRpRHOAgGpQm4MgNfFprb6efdb07",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/delete-applied-job/8",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"delete-applied-job",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-saved-job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "67|YVCO8g59BXLCSL12J97JLyQBGxqWgGIBU7b2b7eO4aafd646",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/delete-saved-job/9",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"delete-saved-job",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contact us",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\" : \"john doe\",\r\n    \"email\" : \"john@gmail.com\",\r\n    \"message\" : \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/save-contact",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"save-contact"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/event/mumbai-meetup",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"event",
+						"mumbai-meetup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single discussion",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/discussion/what-is-lorem-Ipsum",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"discussion",
+						"what-is-lorem-Ipsum"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ctc base jobs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/ctc/3 - 5 Lpa",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"ctc",
+						"3 - 5 Lpa"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filter Jobs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/filter-jobs?city=Agra",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"filter-jobs"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "Agra"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get states",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-states",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-states"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get cities",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "3|WPRbug38kstqbIHEOCuzrOFUS4sdHlHTADoPw5ge2be91f6e",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"company_name\": \"reczee\",\r\n  \"job_title\": \"react developer\",\r\n  \"job_type\": 3,  // Assuming these are numeric IDs\r\n  \"experience\": \"3\",\r\n  \"location\": 2,\r\n  \"address\": \"Indore, Indore-452001, Madhya Pradesh, India\",\r\n  \"compensation\": 2,  // Assuming numeric value for compensation\r\n  \"additional_perk\": \"Weekly Pay\",\r\n  \"joining_fee\": 2,  // Assuming numeric value for joining fee\r\n  \"candidate_requirement\": \"accomodation and food\",\r\n  \"maximum_education\": 3,  // Assuming these are numeric IDs\r\n  \"total_experience\": 2,  // Assuming numeric value for total experience\r\n  \"job_description\": \"thsi is test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/get-cities",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"get-cities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Newsletter",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"mobile_number\" : \"9090909091\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab-api/public/api/login",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab-api",
+						"public",
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Job Seeker Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "66|SIG3UfLG7FbjenaR2aoFYBo83SW6boK92PX5lXKU51dd3ddb",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Raj",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "test@gmail.com",
+							"type": "default"
+						},
+						{
+							"key": "mobile_number",
+							"value": "1234567890",
+							"type": "default"
+						},
+						{
+							"key": "college",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "designation",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "company_name",
+							"value": "test",
+							"type": "default"
+						},
+						{
+							"key": "experience",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "country",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "expected_ctc",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "resume",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "location",
+							"value": "location",
+							"type": "default"
+						},
+						{
+							"key": "industry",
+							"value": "",
+							"type": "default"
+						},
+						{
+							"key": "image",
+							"type": "file",
+							"src": []
+						}
+					]
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-job-seeker-profile",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-job-seeker-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Job Poster Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "66|SIG3UfLG7FbjenaR2aoFYBo83SW6boK92PX5lXKU51dd3ddb",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Raj 123",
+							"type": "default"
+						},
+						{
+							"key": "email",
+							"value": "test@gmail.com",
+							"type": "default"
+						},
+						{
+							"key": "website",
+							"value": "www.google.com",
+							"type": "default"
+						},
+						{
+							"key": "founded_date",
+							"value": "01/07/2024",
+							"type": "default"
+						},
+						{
+							"key": "category_id",
+							"value": "1",
+							"type": "default"
+						},
+						{
+							"key": "country",
+							"value": "india",
+							"type": "default"
+						},
+						{
+							"key": "description",
+							"value": "description",
+							"type": "default"
+						},
+						{
+							"key": "mobile_number",
+							"value": "9090909090",
+							"type": "default"
+						},
+						{
+							"key": "city",
+							"value": "test",
+							"type": "default"
+						},
+						{
+							"key": "zip",
+							"value": "2434",
+							"type": "text"
+						},
+						{
+							"key": "address",
+							"value": "location",
+							"type": "default"
+						},
+						{
+							"key": "facebook",
+							"value": "facebook",
+							"type": "default"
+						},
+						{
+							"key": "twitter",
+							"value": "twitter",
+							"type": "text"
+						},
+						{
+							"key": "google",
+							"value": "google",
+							"type": "default"
+						},
+						{
+							"key": "linkedin",
+							"value": "linkedin",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-job-poster-profile",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-job-poster-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "411|EX60DaQqA2U85Zxenl0FkbKfdhj39pQwDHuB3vhDa16c5346",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question_id\" : \"5\",\r\n    \"body\" : \"hello kelvi \"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinkdream.in/hirelab/api/create-comment",
+					"protocol": "https",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-comments-for-question",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "94|tT0YnUdOrKE4CcElWyrnV6hLx5EWpXoatAEDmZ7l4d245464",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "question_id",
+							"value": "1",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "test",
+							"value": "tets",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-comments-for-question/5",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-comments-for-question",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-comments-for-parent-comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "94|tT0YnUdOrKE4CcElWyrnV6hLx5EWpXoatAEDmZ7l4d245464",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "question_id",
+							"value": "1",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "test",
+							"value": "tets",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-comments-for-parent-comment/5/19",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-comments-for-parent-comment",
+						"5",
+						"19"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "94|tT0YnUdOrKE4CcElWyrnV6hLx5EWpXoatAEDmZ7l4d245464",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "question_id",
+							"value": "1",
+							"type": "default",
+							"disabled": true
+						},
+						{
+							"key": "test",
+							"value": "tets",
+							"type": "default",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/delete-comment/3",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"delete-comment",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-job-users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-job-users/4",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-job-users",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "recent-jobs-for-job-seeker",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/recent-jobs-for-job-seeker",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"recent-jobs-for-job-seeker"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buy Pass",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "133|EwGbwRVpkOj92LHEevJTdRpRHOAgGpQm4MgNfFprb6efdb07",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"event_id\" : \"2\",\r\n    \"amount\" : \"5000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/buy-pass",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"buy-pass"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like Discussion",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "133|EwGbwRVpkOj92LHEevJTdRpRHOAgGpQm4MgNfFprb6efdb07",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"discussion_id\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/like-discussion",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"like-discussion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get ctc base job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "43|yl0ExFuvzlzlUHDr4ccK3NRJsqr15b5NpjIlZBgN39a30857",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-ctc-base-job/2",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-ctc-base-job",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Discussion",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "133|EwGbwRVpkOj92LHEevJTdRpRHOAgGpQm4MgNfFprb6efdb07",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"discussion_id\" : \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/like-discussion",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"like-discussion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update resume headline",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"headline_id\" : \"5\",\r\n    \"description\" : \"laravel\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-headline",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-headline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-employment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "217|Na8TNGjRqbcWFqOGupvKH03jR7F1EP1RkbJxGS6Ufa38f5ef",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"employment_id\" : \"7\",\r\n            \"designation\" : \"React Developer\",\r\n            \"organization\" : \"Test organization\",\r\n            \"current_company\": \"yes\",\r\n            \"start_from_year\" : \"2023\",\r\n            \"start_from_month\" : \"March\",\r\n            \"worked_till_year\" : \"2024\",\r\n            \"worked_till_month\" : \"April\",\r\n            \"describe_job_profile\" : \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-resume-employment",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-employment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update resume key skill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key_skill_id\" : \"9\",\r\n    \"title\" : \"Solid js\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-key-skill",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-key-skill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create resume headline",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "194|zLUcClYyaJpsV4OH51MjC5nFOei16Z4OQLZWli2l21d35a35",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"new title\",\r\n    \"description\" : \"livewire\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-headline",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-headline"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create resume key skill",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"alpine\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-key-skill",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-key-skill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-employment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "217|Na8TNGjRqbcWFqOGupvKH03jR7F1EP1RkbJxGS6Ufa38f5ef",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n            \"designation\" : \"Laravel Developer\",\r\n            \"organization\" : \"Test organization\",\r\n            \"current_company\": \"yes\",\r\n            \"start_from_year\" : \"2023\",\r\n            \"start_from_month\" : \"March\",\r\n            \"worked_till_year\" : \"2024\",\r\n            \"worked_till_month\" : \"April\",\r\n            \"describe_job_profile\" : \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-resume-employment",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-employment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-education",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "217|Na8TNGjRqbcWFqOGupvKH03jR7F1EP1RkbJxGS6Ufa38f5ef",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"education_id\" : \"7\",\r\n    \"title\" : \"London - 12th\",\r\n    \"year\" : \"2025\",\r\n    \"description\" : \"lorem ipsum\",\r\n    \"education\" : \"BCA\",\r\n    \"course\" : \"php and javascript programing\",\r\n    \"university\" : \"test\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-resume-education",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-education"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-education",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "217|Na8TNGjRqbcWFqOGupvKH03jR7F1EP1RkbJxGS6Ufa38f5ef",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"London - 12th\",\r\n    \"year\" : \"2023\",\r\n    \"description\" : \"learn vue js\",\r\n    \"education\" : \"BCA\",\r\n    \"course\" : \"php programing\",\r\n    \"university\" : \"test\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-resume-education",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-education"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-it-skill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"it_skill_id\" : \"6\",\r\n    \"skill\" : \"php\",\r\n    \"version\" : \"8.3\",\r\n    \"last_used\" : \"2024\",\r\n    \"experience\" : \"3\",\r\n    \"description\" : \"php is best\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-it-skill",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-it-skill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-it-skill",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"skill\" : \"laravel\",\r\n    \"version\" : \"11\",\r\n    \"last_used\" : \"2024\",\r\n    \"experience\" : \"3\",\r\n    \"description\" : \"php is best\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-it-skill",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-it-skill"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"project_id\" : \"7\",\r\n    \"title\" : \"php project\",\r\n    \"project_employment\": \"class 12th\",\r\n    \"client\" : \"john doe\",\r\n    \"project_status\" : \"finished\",\r\n    \"start_from_year\" : \"2015\",\r\n    \"start_from_month\" : \"march\",\r\n    \"worked_till_year\" : \"2015\",\r\n    \"worked_till_month\" : \"december\",\r\n    \"detail_of_project\" : \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-resume-projects",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "217|Na8TNGjRqbcWFqOGupvKH03jR7F1EP1RkbJxGS6Ufa38f5ef",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"title\" : \"php project\",\r\n    \"project_employment\": \"class 12th\",\r\n    \"client\" : \"john doe\",\r\n    \"project_status\" : \"finished\",\r\n    \"start_from_year\" : \"2015\",\r\n    \"start_from_month\" : \"march\",\r\n    \"worked_till_year\" : \"2015\",\r\n    \"worked_till_month\" : \"december\",\r\n    \"detail_of_project\" : \"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-resume-projects",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "194|zLUcClYyaJpsV4OH51MjC5nFOei16Z4OQLZWli2l21d35a35",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\" : \"hello php\",\r\n    \"description\" : \"test php\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-a-event",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-a-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my events",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "194|zLUcClYyaJpsV4OH51MjC5nFOei16Z4OQLZWli2l21d35a35",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\" : \"hello php\",\r\n    \"description\" : \"test php\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-a-event",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-a-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my-resume",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "758|PhbTBt7Ye3sFnSmnljwAkl96IffhxiBdyuBLw14m3a802395",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost/hirelab/api/my-resume",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"my-resume"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my-get-cv",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "964|4C83jmMZyj5yrQSQ42NHV2MtCOAIdDFcMqnde7tkffbabf46",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\" : \"1233\",\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-my-cv",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-my-cv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resume-download",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "229|UPS3oTBRAfcJixWWwNQb0plyJf2YIOak2JSA5IPZ5bc3a3c1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user_id\" : \"1233\",\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/resume-download",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"resume-download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-profile-summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"first Project\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-profile-summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-profile-summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-profile-summary",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"profile_summary_id\" : \"17\",\r\n    \"description\": \"first Laravel Project 123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-profile-summary",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-profile-summary"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-accomplishments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "229|UPS3oTBRAfcJixWWwNQb0plyJf2YIOak2JSA5IPZ5bc3a3c1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"online_social_profille\" : \"Online Profile\",\r\n    \"online_social_url\": \"Online Profile\",\r\n    \"online_social_description\" : \"test\",\r\n    \"work_title\" : \"test\",\r\n    \"work_url\" : \"url\",\r\n    \"work_duration_from\" : \"march\",\r\n    \"work_duration_to\" : \"2024\",\r\n    \"work_I_am_currently_working_on_this\" : \"yes\",\r\n    \"work_description\" : \"test description\",\r\n    \"white_paper_title\" : \"paper title\",\r\n    \"white_paper_url\" : \"test.com\",\r\n    \"white_paper_published_on_year\" : \"2021\",\r\n    \"white_paper_published_on_month\" : \"April\",\r\n    \"white_paper_description\" : \"test description\",\r\n    \"presentation_title\" : \"test\",\r\n    \"presentation_url\" : \"test.com\",\r\n    \"presentation_description\" : \"description\",\r\n    \"patent_title\" : \"title\",\r\n    \"patent_url\" : \"test.com\",\r\n    \"patent_office\" : \"test\",\r\n    \"patent_status\" : \"patent_status\",\r\n    \"patent_application_number\" : \"1234\",\r\n    \"patent_published_on_year\" : \"2024\",\r\n    \"patent_published_on_month\" : \"May\",\r\n    \"patent_description\" : \"test\",\r\n    \"certification_name\" : \"hello\",\r\n    \"certification_body\" : \"test\",\r\n    \"certification_year\" : \"2025\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-resume-accomplishments",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-accomplishments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-accomplishments",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "229|UPS3oTBRAfcJixWWwNQb0plyJf2YIOak2JSA5IPZ5bc3a3c1",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accomplishment_id\" : \"6\",\r\n   \"online_social_profille\" : \"Online Profile 123\",\r\n    \"online_social_url\": \"Online Profile 123\",\r\n    \"online_social_description\" : \"test 12w3we3d\",\r\n    \"work_title\" : \"test\",\r\n    \"work_url\" : \"url\",\r\n    \"work_duration_from\" : \"march\",\r\n    \"work_duration_to\" : \"2024\",\r\n    \"work_I_am_currently_working_on_this\" : \"yes\",\r\n    \"work_description\" : \"test description\",\r\n    \"white_paper_title\" : \"paper title\",\r\n    \"white_paper_url\" : \"test.com\",\r\n    \"white_paper_published_on_year\" : \"2021\",\r\n    \"white_paper_published_on_month\" : \"April\",\r\n    \"white_paper_description\" : \"test description\",\r\n    \"presentation_title\" : \"test\",\r\n    \"presentation_url\" : \"test.com\",\r\n    \"presentation_description\" : \"description\",\r\n    \"patent_title\" : \"title\",\r\n    \"patent_url\" : \"test.com\",\r\n    \"patent_office\" : \"test\",\r\n    \"patent_status\" : \"patent_status\",\r\n    \"patent_application_number\" : \"1234\",\r\n    \"patent_published_on_year\" : \"2024\",\r\n    \"patent_published_on_month\" : \"May\",\r\n    \"patent_description\" : \"test\",\r\n    \"certification_name\" : \"hello\",\r\n    \"certification_body\" : \"test\",\r\n    \"certification_year\" : \"2025\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-resume-accomplishments",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-accomplishments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-career-profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"industry\" : \"IT-Software/Software Services\",\r\n    \"functional_area\": \"Design / Creative / User Experience\",\r\n    \"role\" : \"Web Designer\",\r\n    \"job_type\" : \"permanent\",\r\n    \"employment_type\" : \"Full Time\",\r\n    \"desired_shift\" : \"Add Desired Shift\",\r\n    \"availability_to_join\" : \"12 july\",\r\n    \"expected_salary\" : \"1 Lakhs\",\r\n    \"desired_location\": \"Add Desired Location\",\r\n    \"desired_industry\": \"Add Desired Industry\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-career-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-career-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-career-profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"career_profile_id\" : \"1\",\r\n    \"industry\" : \"IT\",\r\n    \"functional_area\": \"Design / Creative / User Experience\",\r\n    \"role\" : \"Web Designer\",\r\n    \"job_type\" : \"permanent\",\r\n    \"employment_type\" : \"Full Time\",\r\n    \"desired_shift\" : \"Add Desired Shift\",\r\n    \"availability_to_join\" : \"12 july\",\r\n    \"expected_salary\" : \"1 Lakhs\",\r\n    \"desired_location\": \"Add Desired Location\",\r\n    \"desired_industry\": \"Add Desired Industry\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-career-profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-career-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-personal-detail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dob\" : \"31 July 1998\",\r\n    \"permanent_address\" : \"india\",\r\n    \"gender\": \"Male\",\r\n    \"pin_code\" : \"302010\",\r\n    \"marital_status\" : \"single\",\r\n    \"hometown\" : \"delhi\",\r\n    \"passport_number\" : \"+1234567890\",\r\n    \"work_permit_of_other_country\" : \"USA\",\r\n    \"differently_abled\" : \"none\",\r\n    \"languages\": \"english,hindi\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-personal-detail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-personal-detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-personal-detail",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dob\" : \"31 July 1998\",\r\n    \"permanent_address\" : \"india\",\r\n    \"gender\": \"Male\",\r\n    \"pin_code\" : \"302010\",\r\n    \"marital_status\" : \"single\",\r\n    \"hometown\" : \"delhi\",\r\n    \"passport_number\" : \"+1234567890\",\r\n    \"work_permit_of_other_country\" : \"USA\",\r\n    \"differently_abled\" : \"none\",\r\n    \"languages\": \"english,hindi\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-personal-detail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-personal-detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create-resume-file",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/HP/Downloads/member-form-pdf-3.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/create-resume-file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-resume-file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-resume-file",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "123|yPdkmoHlaJlk4NKFKji5wTP7MFoPJMX5w4mwDiqHe773bfd4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/HP/Downloads/recurring-ledger003939-7.pdf"
+						},
+						{
+							"key": "file_id",
+							"value": "3",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost/hirelab/api/update-resume-file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-resume-file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Freeze link",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "94|tT0YnUdOrKE4CcElWyrnV6hLx5EWpXoatAEDmZ7l4d245464",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question_id\" : \"5\",\r\n    \"body\" : \"hello message\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinkdream.in/hirelab/api/create-comment",
+					"protocol": "https",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Resume Profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/resume-profile",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"resume-profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job poster faq",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/faqs/job_poster",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"faqs",
+						"job_poster"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job seeker faq",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/faqs/job_seeker",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"faqs",
+						"job_seeker"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get monthly meetup faq",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/faqs/monthly_meetups",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"faqs",
+						"monthly_meetups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get general question faq",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/faqs/general_question",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"faqs",
+						"general_question"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "about us",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/page/about-us",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"about-us"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "privacy policy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/page/privacy-policy",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"privacy-policy"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Term and conditon",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/page/terms-and-conditions",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"terms-and-conditions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "services",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/services",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "single services",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/service/interview-coaching",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"service",
+						"interview-coaching"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Job Candidate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"job_id\" : \"32\",\r\n    \"user_id\" : \"80\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/reject-job-candidate",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"reject-job-candidate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Job Candidate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"job_id\" : \"43\",\r\n    \"user_id\" : \"69\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/accept-job-candidate",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"accept-job-candidate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save membership",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"membership_id\" : \"1\",\r\n    \"user_id\" : \"74\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/save-membership",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"save-membership"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "save event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"event_id\" : \"6\",\r\n    \"user_id\" : \"74\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/save-event",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"save-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "my event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/my-event",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"my-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove event",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "255|oZKqSwcLtkS056rksMSPC5G2EtTFjmi44Si6stsycf32e864",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"event_id\" : \"6\",\r\n    \"user_id\" : \"74\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/save-event",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"save-event"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get membership page detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://thinkdream.in/hirelab/api/page/membership-plan",
+					"protocol": "https",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"membership-plan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get banner page detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/page/banner",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"banner"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get testimonial page detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/page/testimonials",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"page",
+						"testimonials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get-setting-detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-setting",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-setting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create a blog comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "411|EX60DaQqA2U85Zxenl0FkbKfdhj39pQwDHuB3vhDa16c5346",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question_id\" : \"16\",\r\n    \"body\" : \"blog comment by kelvi\",\r\n    \"parent_comment_id\" : \"24\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/create-blog-comment",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"create-blog-comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get blog comments for question",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "313|UpoOKPiMgMJ8Koi9NqLTyMmlOKsQSStXaD5NqwbW0f9fd840",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question_id\" : \"16\",\r\n    \"body\" : \"nice blog 1234\",\r\n    \"parent_comment_id\" : \"24\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-blog-comments-for-question/16",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-blog-comments-for-question",
+						"16"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get blog comments for parent comment",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "313|UpoOKPiMgMJ8Koi9NqLTyMmlOKsQSStXaD5NqwbW0f9fd840",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question_id\" : \"16\",\r\n    \"body\" : \"nice blog updated\",\r\n    \"parent_comment_id\" : \"16\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/get-blog-comments-for-parent-comment/16/24",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"get-blog-comments-for-parent-comment",
+						"16",
+						"24"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "411|EX60DaQqA2U85Zxenl0FkbKfdhj39pQwDHuB3vhDa16c5346",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"44\",\r\n    \"question_id\" : \"5\",\r\n    \"body\" : \"hello message 123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://thinkdream.in/hirelab/api/update-comment",
+					"protocol": "https",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a blog comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "411|EX60DaQqA2U85Zxenl0FkbKfdhj39pQwDHuB3vhDa16c5346",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\" : \"78\",\r\n    \"question_id\" : \"16\",\r\n    \"body\" : \"blog commeent 1234 by Raj Abhishek\",\r\n    \"parent_comment_id\" : \"24\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/api/update-blog-comment",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"update-blog-comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user_resume",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://thinkdream.in/hirelab/public/user_resume/hirelabkelvi1727959203.pdf",
+					"protocol": "http",
+					"host": [
+						"thinkdream",
+						"in"
+					],
+					"path": [
+						"hirelab",
+						"public",
+						"user_resume",
+						"hirelabkelvi1727959203.pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "send-job-email",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1041|GqLD3jX8CC5IdNlmRZ83HF7V43PDgQJveuAAJjec5d856c5b",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost/hirelab/api/send-job-email/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"hirelab",
+						"api",
+						"send-job-email",
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
