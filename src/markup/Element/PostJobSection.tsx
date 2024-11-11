@@ -126,14 +126,12 @@ const PostJobSection = () => {
     );
   };
 
-
   const [selectedExperience, setSelectedExperience] = useState(null);
 
-  const handleExperienceChange = (selectedOption :any) => {
+  const handleExperienceChange = (selectedOption: any) => {
     setSelectedExperience(selectedOption);
     dispatch(setPostJobData({ experience: selectedOption?.value || "" }));
   };
-  
 
   const handleMouseLeave = (
     index: number,
@@ -178,8 +176,9 @@ const PostJobSection = () => {
       );
     }
   };
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit = async (status: any) => {
+    console.log("status", status);
+    dispatch(setPostJobData({ status })); // Adds status to the payload
 
     // Check if user has membership
     if (!user?.user?.membership) {
@@ -193,56 +192,44 @@ const PostJobSection = () => {
       });
 
       if (membershipResult.isConfirmed) {
-        // Redirect to the subscription page (cart)
         router.push("/cart");
       } else {
-        // Stay on the job posting page
         return;
       }
     } else {
       // Proceed with the job posting process
       const result = await Swal.fire({
         title: "Are you sure?",
-        text: "You are about to post this job.",
+        text: `You are about to ${
+          status === "draft" ? "save as draft" : "publish"
+        } this job.`,
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, post it!",
+        confirmButtonText: `Yes, ${
+          status === "draft" ? "save draft" : "publish"
+        } it!`,
         cancelButtonText: "No, cancel",
       });
 
       if (result.isConfirmed) {
         try {
           const response = await postJob(profileData).unwrap();
-          if (response.code == 200) {
+          if (response.code === 200) {
             Swal.fire({
               icon: "success",
-              title: "Job Posted",
+              title: `Job ${status === "draft" ? "Drafted" : "Posted"}`,
               text: response?.message,
             });
             router.push("/manage-job");
-            await addNotificationToFirestore(
-              "New Job Posted",
-              "A job has been posted"
-            );
-          } else if (response.code == 401) {
+          } else {
             Swal.fire({
               icon: "error",
-              title: "Unauthorized",
-              text: response?.message,
-            });
-          } else if (response.code == 404) {
-            console.error("Error posting job:", response);
-            Swal.fire({
-              icon: "error",
-              title: "Not Found",
+              title: "Error",
               text: response?.message,
             });
             dispatch(setPostJobErrors(response.errors));
-          } else {
-            console.error("Unexpected error format:", response);
           }
         } catch (err: any) {
-          console.error("Error posting job:", err);
           Swal.fire({
             icon: "error",
             title: "Error",
@@ -252,7 +239,6 @@ const PostJobSection = () => {
       }
     }
   };
-
   const [inputValue, setInputValue] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [jobDescription, setJobDescription] = useState<string>("");
@@ -623,40 +609,40 @@ const PostJobSection = () => {
                         </div>
                       </div>
                       <div className="col-lg-12 col-md-12">
-      <div className="form-group">
-        <label>Experience</label>
-        <Select
-          options={experienceOptions}
-          value={selectedExperience}
-          onChange={handleExperienceChange}
-          placeholder="Select experience"
-          isClearable
-          styles={{
-            menu: (provided) => ({
-              ...provided,
-              maxHeight: "500px", // Limits the height of the dropdown menu
-            }),
-            control: (base) => ({
-              ...base,
-              padding: "10px",
-              borderRadius: "20px",
-              border: "none",
-              boxShadow: "none",
-              backgroundColor: "#F8F8F8",
-              width: "100%",
-            }),
-            placeholder: (base) => ({
-              ...base,
-              color: "#6F6F6F",
-              fontSize: "15px",
-            }),
-          }}
-        />
-      </div>
-      <span className="text-red-500 text-danger">
-        {errors?.experience?.[0]}
-      </span>
-    </div>
+                        <div className="form-group">
+                          <label>Experience</label>
+                          <Select
+                            options={experienceOptions}
+                            value={selectedExperience}
+                            onChange={handleExperienceChange}
+                            placeholder="Select experience"
+                            isClearable
+                            styles={{
+                              menu: (provided) => ({
+                                ...provided,
+                                maxHeight: "500px", // Limits the height of the dropdown menu
+                              }),
+                              control: (base) => ({
+                                ...base,
+                                padding: "10px",
+                                borderRadius: "20px",
+                                border: "none",
+                                boxShadow: "none",
+                                backgroundColor: "#F8F8F8",
+                                width: "100%",
+                              }),
+                              placeholder: (base) => ({
+                                ...base,
+                                color: "#6F6F6F",
+                                fontSize: "15px",
+                              }),
+                            }}
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.experience?.[0]}
+                        </span>
+                      </div>
                       <div className="col-lg-12 col-md-12">
                         <div className="form-group">
                           <label>Job Type</label>
@@ -1096,13 +1082,33 @@ const PostJobSection = () => {
                         </span>
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="site-button m-b30"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      {isLoading ? "Loading..." : "Create new job"}
-                    </button>
+                    <div className="button-group">
+                      <button type="button" className="site-button m-b30" disabled>
+                        Previous Job
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleSubmit("draft");
+                        }}
+                        style={{ marginLeft: "10px" }}
+                        className="site-button m-b30"
+                      >
+                        {isLoading ? "Loading..." : "Save as Draft"}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleSubmit("publish");
+                        }}
+                        className="site-button m-b30"
+                        style={{ marginLeft: "10px" }}
+                      >
+                        {isLoading ? "Loading..." : "Create New Job"}
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>

@@ -16,11 +16,7 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
 import { Modal, Button } from "react-bootstrap"; // Importing modal from react-bootstrap
 
-const Profilesidebar = ({
-  refetch,
-}: {
-  refetch: any;
-}) => {
+const Profilesidebar = ({ refetch }: { refetch: any }) => {
   const router = useRouter();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
   const { removeToken } = useAuthToken();
@@ -214,8 +210,8 @@ const Profilesidebar = ({
                   href="/switch-plan"
                   // onClick={(e) => handleNavigation(e, "/cv-manager")}
                 >
-               <i className="fa fa-money" aria-hidden="true"></i>
-                 Switch Plan
+                  <i className="fa fa-money" aria-hidden="true"></i>
+                  Switch Plan
                 </Link>
               </li>
               <li>
@@ -225,6 +221,24 @@ const Profilesidebar = ({
                 >
                   <i className="fa fa-file-text-o" aria-hidden="true"></i>
                   Transaction
+                </Link>
+              </li>
+              <li>
+                <Link href="#">
+                  <i className="fa fa-bar-chart" aria-hidden="true"></i>
+                  <span>Analytics & Report</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#">
+                  <i className="fa fa-cog" aria-hidden="true"></i>
+                  <span>Account Setting</span>
+                </Link>
+              </li>
+              <li>
+                <Link href="#">
+                  <i className="fa fa-life-ring" aria-hidden="true"></i>
+                  <span>Support</span>
                 </Link>
               </li>
               <li>

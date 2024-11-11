@@ -72,6 +72,7 @@ export interface PostJobResponse {
     tags: string;
     id: number;
     sector: string;
+    status: string
   }>;
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }
@@ -95,5 +96,6 @@ export interface PostJobState {
   state :string;
   tags: string;
   sector: string;
+  status: string
   errors: Partial<Record<keyof Omit<PostJobType, "errors">, string[]>>;
 }

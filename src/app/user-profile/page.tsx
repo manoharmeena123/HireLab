@@ -22,9 +22,6 @@ export const ProfileDropdown = ({
             alt="Profile Image"
             width={41}
             height={41}
-            // onError={(e) => {
-            //   e.currentTarget.src = profileIcon;
-            // }}
             style={{ borderRadius: "3rem", objectFit: "cover" }}
           />
         ) : (

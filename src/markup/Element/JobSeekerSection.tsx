@@ -103,6 +103,51 @@ const JobSeekerSection = () => {
       },
     ],
   });
+  useEffect(() => {
+    if (getProfileData?.user) {
+      const userData = getProfileData.user;
+
+      setProfileForm((prevForm: any) => ({
+        ...prevForm,
+        name: userData.name || "",
+        email: userData.email || "",
+        mobile_number: userData.mobile_number || "",
+        designation: userData.current_job_title || "",
+        company_name: userData.company_name || "",
+        experience: userData.experience || "",
+        expected_ctc: userData.expected_ctc || "",
+        current_ctc: userData.current_ctc || "",
+        sector: userData.industry_id || "",
+        location: userData.location || "",
+        city: userData.city || "",
+        address: userData.address || "",
+        linkedin_profile: userData.linkedin || "",
+        resume: userData.resume || null,  // Set initial resume if available
+        gender: userData.gender || "",
+        availability_to_join: userData.availability_to_join || "",
+        date_of_birth: userData.date_of_birth || "",
+        highest_qualification: userData.highest_qualification || "",
+        degree: userData.degree || "",
+        institute: userData.institute || "",
+        year_of_graduation: userData.year_of_graduation || "",
+        additional_certifications: userData.additional_certifications || "",
+        key_skills: userData.key_skills || "",
+        languages_known: userData.languages_known || "",
+        willing_to_relocate: userData.willing_to_relocate || "",
+        willing_to_work_remotely: userData.willing_to_work_remotely || "",
+        website: userData.website || "",
+        work_experiences: userData.work_experience || [],
+      }));
+
+      // Set tags for the key_skills field
+      setTags(userData.key_skills ? userData.key_skills.split(", ") : []);
+      setResumeName(userData.resume || "");
+      setImageName(userData.image || "");
+      setImagePreviewUrl(
+        userData.image ? `${IMAGE_URL}/${userData.image}` : ""
+      );
+    }
+  }, [getProfileData]);
 
   const handleTagsChange = (newTags: string[]) => {
     setTags(newTags);
@@ -147,7 +192,7 @@ const JobSeekerSection = () => {
     setSelectedSector(selectedOption);
     setProfileForm((prevForm: any) => ({
       ...prevForm,
-      industry_id: selectedOption ? selectedOption.value : "",
+      industry_id: selectedOption ? selectedOption.id : "",
     }));
   };
 
@@ -210,20 +255,27 @@ const JobSeekerSection = () => {
       "degree",
       "institute",
       "year_of_graduation",
-      "resume",
       "key_skills",
       "location",
       "willing_to_relocate",
       "industry_id",
       "experience",
-      "languages_known"
+      "languages_known",
     ];
 
-    requiredFields.forEach((field) => {
-      if (!profileForm[field]) {
-        errors[field] = `${field.replace("_", " ")} is required.`;
-      }
-    });
+ // Check required fields
+  requiredFields.forEach((field) => {
+    if (!profileForm[field]) {
+      const errorMessage = `${field.replace("_", " ")} is required.`;
+      errors[field] = errorMessage;
+      console.error(`Validation error: ${errorMessage}`);  // Log each error
+    }
+  });
+
+   // Show resume error only if there’s no initial resume or newly uploaded file
+   if (!profileForm.resume && !resumeName) {
+    errors.resume = "Resume is required.";
+  }
 
     // Validate start and end dates for work experiences
     workExperiences.forEach((experience, index) => {
@@ -259,47 +311,50 @@ const JobSeekerSection = () => {
     | "end_date"
     | "key_responsibilities";
 
-  const handleWorkExperienceChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-
-    // Ensure `name` is typed as a specific work experience field
-    const fieldName = name as WorkExperienceField;
-
-    const updatedExperiences = [...workExperiences];
-    updatedExperiences[index][fieldName] = value;
-    setWorkExperiences(updatedExperiences);
-  };
-
-  // Add new experience
-  const addExperience = () => {
-    setWorkExperiences([
-      ...workExperiences,
-      {
-        job_title: "",
-        company_name: "",
-        start_date: "",
-        end_date: "",
-        key_responsibilities: "",
-      },
-    ]);
-  };
-
-  // Remove experience
-  const removeExperience = (index: number) => {
-    const updatedExperiences = workExperiences.filter((_, i) => i !== index);
-    setWorkExperiences(updatedExperiences);
-  };
+    const handleWorkExperienceChange = (
+      index: number,
+      e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+      const { name, value } = e.target;
+      setProfileForm((prevForm :any) => {
+        const updatedExperiences = [...prevForm.work_experiences];
+        updatedExperiences[index] = { ...updatedExperiences[index], [name]: value };
+        return { ...prevForm, work_experiences: updatedExperiences };
+      });
+    };
+    
+    const addExperience = () => {
+      setProfileForm((prevForm :any) => ({
+        ...prevForm,
+        work_experiences: [
+          ...prevForm.work_experiences,
+          {
+            id: Date.now(),  // Temporary ID for new experience
+            job_title: "",
+            company_name: "",
+            start_date: "",
+            end_date: "",
+            key_responsibilities: "",
+          },
+        ],
+      }));
+    };
+    
+    const removeExperience = (index: number) => {
+      setProfileForm((prevForm :any) => ({
+        ...prevForm,
+        work_experiences: prevForm.work_experiences.filter((_: any, i: number) => i !== index),
+      }));
+    };
+    
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      toast.error("Please fill all mandatory fields.");
-      return;
-    }
+    // if (!validateForm()) {
+    //   toast.error("Please fill all mandatory fields.");
+    //   return;
+    // }
     console.log("profileForm", profileForm);
     const formData = new FormData();
     Object.entries(profileForm).forEach(([key, value]) => {
@@ -896,8 +951,8 @@ const JobSeekerSection = () => {
                         </h5>
                       </div>
                       {/* // Updated work experience fields in the return section */}
-                      {workExperiences.map((experience, index) => (
-                        <div className="row m-b30" key={index}>
+                      {profileForm.work_experiences.map((experience :any, index :number) => (
+                        <div className="row m-b30" key={experience.id}>
                           {/* Job Title */}
                           <div className="col-lg-6 col-md-6">
                             <div className="form-group">
@@ -938,13 +993,7 @@ const JobSeekerSection = () => {
                               <label>Start Date:</label>
                               <input
                                 type="date"
-                                className={`form-control ${
-                                  validationErrors[
-                                    `workExperiences_${index}_date`
-                                  ]
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
+                                className="form-control"
                                 name="start_date"
                                 value={experience.start_date}
                                 onChange={(e) =>
@@ -960,30 +1009,13 @@ const JobSeekerSection = () => {
                               <label>End Date:</label>
                               <input
                                 type="date"
-                                className={`form-control ${
-                                  validationErrors[
-                                    `workExperiences_${index}_date`
-                                  ]
-                                    ? "is-invalid"
-                                    : ""
-                                }`}
+                                className="form-control"
                                 name="end_date"
                                 value={experience.end_date}
                                 onChange={(e) =>
                                   handleWorkExperienceChange(index, e)
                                 }
                               />
-                              {validationErrors[
-                                `workExperiences_${index}_date`
-                              ] && (
-                                <div className="invalid-feedback">
-                                  {
-                                    validationErrors[
-                                      `workExperiences_${index}_date`
-                                    ]
-                                  }
-                                </div>
-                              )}
                             </div>
                           </div>
 
@@ -993,7 +1025,7 @@ const JobSeekerSection = () => {
                               <label>Key Responsibilities:</label>
                               <CKEditor
                                 editor={ClassicEditor}
-                                data={experience.key_responsibilities || ""}
+                                data={experience.key_responsibilities}
                                 onChange={(event, editor) => {
                                   const data = editor.getData();
                                   handleWorkExperienceChange(index, {
@@ -1021,51 +1053,51 @@ const JobSeekerSection = () => {
                           )}
                         </div>
                       ))}
+
                       {/* Add New Experience Button */}
                       <div className="col-lg-12 col-md-12">
                         <button
                           type="button"
                           className="btn btn-secondary"
-                          style={{
-                            backgroundColor: "#2A6310",
-                            color: "#fff",
-                          }}
                           onClick={addExperience}
                         >
                           Add Another Job
                         </button>
                       </div>
+
                       {/* Resume Upload Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Resume Upload
                         </h5>
                       </div>
-                      <div className="row m-b30">
                         {/* Upload Resume */}
-                        <div className="col-lg-6 col-md-6">
-                          <div className="form-group">
-                            <label>Upload Resume:</label>
-                            <input
-                              type="file"
-                              className="form-control"
-                              name="resume"
-                              onChange={handleInputChange}
-                              accept=".pdf,.docx"
-                            />
-                            {resumeName && (
-                              <div className="mt-2">
-                                <span>{resumeName}</span>
-                              </div>
-                            )}
-                            {validationErrors.resume && (
-                              <div className="invalid-feedback">
-                                {validationErrors.resume}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                        <div className="row m-b30">
+  <div className="col-lg-6 col-md-6">
+    <div className="form-group">
+      <label>Upload Resume:</label>
+      <input
+        type="file"
+        className={`form-control ${validationErrors.resume ? "is-invalid" : ""}`}
+        name="resume"
+        onChange={handleInputChange}
+        accept=".pdf,.docx"
+      />
+      {resumeName && (
+        <div className="mt-2">
+          <span>{resumeName}</span>
+        </div>
+      )}
+      {/* Only display error if neither existing resume nor new upload */}
+      {validationErrors.resume && (
+        <div className="invalid-feedback">
+          {validationErrors.resume}
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
                       {/* Skills Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
@@ -1135,9 +1167,7 @@ const JobSeekerSection = () => {
                             <input
                               type="text"
                               className={`form-control ${
-                                validationErrors.location
-                                  ? "is-invalid"
-                                  : ""
+                                validationErrors.location ? "is-invalid" : ""
                               }`}
                               placeholder="Enter Preferred Job Locations"
                               name="location"

@@ -150,19 +150,19 @@ const AppliedJobSection = () => {
                       </div>
                     </div>
                     <ul>
-                    <li>
-                          <Link href="/dashboard-section">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href={"/job-seeker"}>
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Profile</span>
-                          </Link>
-                        </li>
-                        {/* <li>
+                      <li>
+                        <Link href="/dashboard-section">
+                          <i className="fa fa-heart-o" aria-hidden="true"></i>
+                          <span>Dashboard</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href={"/job-seeker"}>
+                          <i className="fa fa-user-o" aria-hidden="true"></i>
+                          <span>Profile</span>
+                        </Link>
+                      </li>
+                      {/* <li>
                           <Link href="/post-job">
                             <i
                               className="fa fa-file-text-o"
@@ -211,17 +211,36 @@ const AppliedJobSection = () => {
                         </Link>
                       </li> */}
                       <li>
-                          <Link
-                            href={"/switch-plan"}
-                          >
-                            <i className="fa fa-money" aria-hidden="true"></i>
-                            Switch Plan
-                          </Link>
-                        </li>
+                        <Link href={"/switch-plan"}>
+                          <i className="fa fa-money" aria-hidden="true"></i>
+                          Switch Plan
+                        </Link>
+                      </li>
                       <li>
                         <Link href={"/transaction"}>
-                          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+                          <i
+                            className="fa fa-file-text-o"
+                            aria-hidden="true"
+                          ></i>
                           <span>Transaction</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
+                          <span>Analytics & Report</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Account Setting</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="#">
+                          <i className="fa fa-life-ring" aria-hidden="true"></i>
+                          <span>Support</span>
                         </Link>
                       </li>
                       <li>
@@ -255,22 +274,20 @@ const AppliedJobSection = () => {
                       <div className="post-bx">
                         <div className="job-post-info m-a0">
                           <h4>
-                            <Link href={"/job-detail"}>
-                              {item?.job_title}
-                            </Link>
+                            <Link href={"/job-detail"}>{item?.job_title}</Link>
                           </h4>
                           <ul>
                             <li>
                               <Link href={"/company-profile"}>
-                              {item?.company_name}
+                                {item?.company_name}
                               </Link>
                             </li>
                             <li>
                               <i className="fa fa-map-marker"></i>{" "}
                               {item?.address}
                             </li>
-                            <li> 
-                              <i className="fa fa-money"></i> {item?.ctc}{" "} lakhs
+                            <li>
+                              <i className="fa fa-money"></i> {item?.ctc} lakhs
                             </li>
                           </ul>
                           <div className="job-time m-t15 m-b10">
@@ -288,7 +305,7 @@ const AppliedJobSection = () => {
                               {formatDateAgo(item?.created_at)}
                             </p>
                             <div className="float-right">
-                            <button
+                              <button
                                 className="site-button button-sm mr-2"
                                 onClick={() => viewJobHandler(item?.id)}
                               >

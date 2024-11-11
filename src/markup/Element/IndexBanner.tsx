@@ -8,8 +8,8 @@ import {
 import Loading from "@/components/Loading";
 import parse from "html-react-parser";
 import { toast } from "react-toastify";
-import Select from "react-select"; // For dynamic search
-import cityData from "@/data/in.json"; // Import your JSON data
+import Select from "react-select";
+import cityData from "@/data/in.json";
 import { experienceOptions, jobTitleOptions } from "@/data/indexSearch";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
@@ -20,9 +20,9 @@ interface City {
 }
 
 interface Filters {
-  job_title: string;
+  job_title: { value: string; label: string } | null;
   experience: { value: string; label: string } | null;
-  location: string;
+  location: { value: string; label: string } | null;
 }
 
 const IndexBanner: React.FC = () => {
@@ -32,43 +32,41 @@ const IndexBanner: React.FC = () => {
     useGetHomeBannerQuery({});
 
   const [filters, setFilters] = useState<Filters>({
-    job_title: "",
+    job_title: null,
     experience: null,
-    location: "",
+    location: null,
   });
 
-  // Handle input changes for search inputs
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFilters((prevFilters) => ({ ...prevFilters, [name]: value }));
+  // Handle changes for job title (designation) dropdown
+  const handleJobTitleChange = (selectedOption: { value: string; label: string } | null) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      job_title: selectedOption,
+    }));
   };
 
   // Handle changes for experience dropdown
-  const handleExperienceChange = (
-    selectedOption: { value: string; label: string } | null
-  ) => {
+  const handleExperienceChange = (selectedOption: { value: string; label: string } | null) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       experience: selectedOption,
     }));
   };
 
-  // Dynamic filtering of city data
-  const loadCitySuggestions = (inputValue: string) => {
-    return cityData
-      .filter((city) =>
-        city.city.toLowerCase().includes(inputValue.toLowerCase())
-      )
-      .slice(0, 5) // Limit to 5 suggestions
-      .map((city) => city.city);
+  // Handle changes for location dropdown
+  const handleLocationChange = (selectedOption: { value: string; label: string } | null) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      location: selectedOption,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const queryParams = new URLSearchParams({
-      job_title: filters.job_title || "",
+      job_title: filters.job_title?.value || "",
       experience: filters.experience?.value || "",
-      location: filters.location || "",
+      location: filters.location?.value || "",
     }).toString();
     try {
       if (filters.job_title || filters.experience || filters.location) {
@@ -85,6 +83,12 @@ const IndexBanner: React.FC = () => {
   if (isBannerLoading || getHomeBannerLoading) {
     return <Loading />;
   }
+
+  // Generate location options from city data
+  const locationOptions = cityData.map((city) => ({
+    value: city.city,
+    label: city.city,
+  }));
 
   // Safely ensure that bannerData.heading and description are strings before using replace
   const heading =
@@ -146,11 +150,11 @@ const IndexBanner: React.FC = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      marginTop: "60px", // Adds 20px space above the image
-      maxWidth: "900px", // Matches the maxWidth of formContainer
+      marginTop: "60px",
+      maxWidth: "900px",
       width: "100%",
       margin: "0 auto",
-      maxHeight: "300"
+      maxHeight: "300px",
     },
   };
 
@@ -163,25 +167,30 @@ const IndexBanner: React.FC = () => {
               {parse(description)} <br />
             </h2>
             <form onSubmit={handleSubmit} style={styles.formContainer}>
-              <input
-                type="search"
+              <Select
                 name="job_title"
-                value={filters.job_title}
-                onChange={handleInputChange}
-                placeholder="Enter keyword / designation / companies"
-                style={styles.inputField}
-                list="job-titles"
+                options={jobTitleOptions}
+                onChange={handleJobTitleChange}
+                placeholder="Select title"
+                isClearable
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    padding: "10px",
+                    borderRadius: "50px",
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "#F8F8F8",
+                    width: "100%",
+                    cursor :"pointer"
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: "#6F6F6F",
+                    fontSize: "15px",
+                  }),
+                }}
               />
-              <datalist id="job-titles">
-                {jobTitleOptions
-                  .filter((job) =>
-                    job.value.toLowerCase().includes(filters.job_title.toLowerCase())
-                  )
-                  .slice(0, 3)
-                  .map((job) => (
-                    <option key={job.value} value={job.label} />
-                  ))}
-              </datalist>
               <Select
                 name="experience"
                 options={experienceOptions}
@@ -197,6 +206,7 @@ const IndexBanner: React.FC = () => {
                     boxShadow: "none",
                     backgroundColor: "#F8F8F8",
                     width: "100%",
+                    cursor :"pointer"
                   }),
                   placeholder: (base) => ({
                     ...base,
@@ -205,20 +215,30 @@ const IndexBanner: React.FC = () => {
                   }),
                 }}
               />
-              <input
-                type="search"
+              <Select
                 name="location"
-                value={filters.location}
-                onChange={handleInputChange}
+                options={locationOptions}
+                onChange={handleLocationChange}
                 placeholder="Enter location"
-                style={styles.inputField}
-                list="city-names"
+                isClearable
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    padding: "10px",
+                    borderRadius: "50px",
+                    border: "none",
+                    boxShadow: "none",
+                    backgroundColor: "#F8F8F8",
+                    width: "100%",
+                    cursor :"pointer"
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: "#6F6F6F",
+                    fontSize: "15px",
+                  }),
+                }}
               />
-              <datalist id="city-names">
-                {loadCitySuggestions(filters.location).map((city) => (
-                  <option key={city} value={city} />
-                ))}
-              </datalist>
               <button type="submit" style={styles.searchBtn}>
                 <i className="fa fa-search" style={{ fontSize: "16px", marginRight: "5px" }}></i> Search
               </button>
@@ -230,8 +250,8 @@ const IndexBanner: React.FC = () => {
             <Image
               src={bannerImageUrl}
               alt="Home Banner"
-              width={900} // Matches the maxWidth of formContainer
-              height={300} // Adjust height to maintain aspect ratio
+              width={900}
+              height={300}
               style={{ objectFit: "cover", borderRadius: "20px", maxHeight: "200px"}}
             />
           </div>
