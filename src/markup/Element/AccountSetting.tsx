@@ -10,10 +10,10 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import {
   useGetBillingQuery,
   useGetSubscriptionQuery,
-  useMakeUserPrivateQuery,
-  useMakeUserPublicQuery,
-  useMakeUserActivateQuery,
-  useMakeUserDeactivateQuery,
+  useMakeUserPrivateMutation,
+  useMakeUserPublicMutation,
+  useMakeUserActivateMutation,
+  useMakeUserDeactivateMutation,
 } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
@@ -30,14 +30,16 @@ const AccountSetting = () => {
   const { data: getSubscription, isLoading: getSubscriptionLoading } =
     useGetSubscriptionQuery({});
 
-  const { data: makeUserPrivate, isLoading: makeUserPrivateLoading } =
-    useMakeUserPrivateQuery({});
-  const { data: makeUserPublic, isLoading: makeUserPublicLoading } =
-    useMakeUserPublicQuery({});
-  const { data: makeUserActivate, isLoading: makeUserActivateLoading } =
-    useMakeUserActivateQuery({});
-  const { data: makeUserDeactivate, isLoading: makeUserDeactivateLoading } =
-    useMakeUserDeactivateQuery({});
+ // Use mutations instead of queries for actions
+ const [makeUserPrivate, { isLoading: makeUserPrivateLoading }] =
+ useMakeUserPrivateMutation();
+const [makeUserPublic, { isLoading: makeUserPublicLoading }] =
+ useMakeUserPublicMutation();
+const [makeUserActivate, { isLoading: makeUserActivateLoading }] =
+ useMakeUserActivateMutation();
+const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
+ useMakeUserDeactivateMutation();
+
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
@@ -70,6 +72,46 @@ const AccountSetting = () => {
           "error"
         );
       }
+    }
+  };
+  // Handlers for Privacy Settings
+  const handleMakePrivate = async () => {
+    try {
+      const response = await makeUserPrivate({}).unwrap();
+      Swal.fire("Success", response.message, "success");
+      refetch(); // Refresh user data
+    } catch (error) {
+      Swal.fire("Error", "Failed to make profile private.", "error");
+    }
+  };
+
+  const handleMakePublic = async () => {
+    try {
+      const response = await makeUserPublic({}).unwrap();
+      Swal.fire("Success", response.message, "success");
+      refetch();
+    } catch (error) {
+      Swal.fire("Error", "Failed to make profile public.", "error");
+    }
+  };
+
+  const handleActivate = async () => {
+    try {
+      const response = await makeUserActivate({}).unwrap();
+      Swal.fire("Success", response.message, "success");
+      refetch();
+    } catch (error) {
+      Swal.fire("Error", "Failed to activate account.", "error");
+    }
+  };
+
+  const handleDeactivate = async () => {
+    try {
+      const response = await makeUserDeactivate({}).unwrap();
+      Swal.fire("Success", response.message, "success");
+      refetch();
+    } catch (error) {
+      Swal.fire("Error", "Failed to deactivate account.", "error");
     }
   };
 
@@ -271,7 +313,7 @@ const AccountSetting = () => {
                         </div>
 
                         <div className="col-md-6 mb-4">
-                           {/* Additional Features */}
+                          {/* Additional Features */}
                           <div className={styles.card}>
                             <h4 className={styles.cardTitle}>
                               Additional Benefits
@@ -378,7 +420,56 @@ const AccountSetting = () => {
                               <p>Loading billing information...</p>
                             )}
                           </div>{" "}
-                         
+                        </div>
+                      </div>
+
+                      {/* Privacy Settings */}
+                      <div className={styles.card}>
+                        <h4 className={styles.cardTitle}>Privacy Settings</h4>
+                        <div className="row">
+                          <div className="col-md-6 mb-3">
+                            <p>
+                              <strong>Profile Visibility:</strong>{" "}
+                              {user?.user?.is_public === "1" ?  "Public" : "Private"  }
+                            </p>
+                            {user?.user?.is_public === "1" ? (
+                              <button
+                                className="btn btn-warning"
+                                onClick={handleMakePrivate}
+                              >
+                                Make Profile Private
+                              </button>
+                            ) : ( 
+                             <button
+                                className="btn btn-success"
+                                onClick={handleMakePublic}
+                              >
+                                Make Profile Public
+                              </button>
+                             
+                            )}
+                          </div>
+                          <div className="col-md-6 mb-3">
+                            <p>
+                              <strong>Account Status:</strong>{" "}
+                              {user?.user?.status === "1" ? "Active" : "Inactive"}
+                            </p>
+                            {user?.user?.status === "1" ? (
+                              <button
+                                className="btn btn-danger"
+                                onClick={handleDeactivate}
+                              >
+                                Deactivate Account
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-primary"
+                                onClick={handleActivate}
+                              >
+                                Activate Account
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

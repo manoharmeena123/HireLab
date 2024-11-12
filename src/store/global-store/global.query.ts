@@ -475,21 +475,21 @@ const globalApi = hirelabEnhancedSlice.injectEndpoints({
       query : queries.getBilling.query,
       providesTags :["GetBilling"]
     }),
-    makeUserPrivate :builder.query<any,any>({
+    makeUserPrivate :builder.mutation<any,any>({
       query : queries.makeUserPrivate.query,
-      providesTags :["MakeUserPrivate"]
+      invalidatesTags :["MakeUserPrivate"]
     }),
-    makeUserPublic : builder.query<any,any>({
+    makeUserPublic : builder.mutation<any,any>({
       query : queries.makeUserPublic.query,
-      providesTags :["MakeUserPublic"]
+      invalidatesTags :["MakeUserPublic"]
     }),
-    makeUserActivate : builder.query<any,any>({
+    makeUserActivate : builder.mutation<any,any>({
       query :queries.makeUserActivate.query,
-      providesTags :["MakeUserActivate"]
+      invalidatesTags :["MakeUserActivate"]
     }),
-    makeUserDeactivate : builder.query<any,any>({
+    makeUserDeactivate : builder.mutation<any,any>({
       query : queries.makeUserDeactivate.query,
-      providesTags :["MakeUserDeactivate"]
+      invalidatesTags :["MakeUserDeactivate"]
     }),
     getFeedback : builder.query<any,any>({
       query : queries.getFeedback.query,
@@ -591,10 +591,10 @@ export const {
   useGetHomeBannerQuery,
   useWhyChooseUsQuery,
   useAddScreenShotMutation,
-  useMakeUserActivateQuery,
-  useMakeUserDeactivateQuery,
-  useMakeUserPrivateQuery,
-  useMakeUserPublicQuery,
+  useMakeUserPrivateMutation,
+  useMakeUserPublicMutation,
+  useMakeUserActivateMutation,
+  useMakeUserDeactivateMutation,
   useGetFeedbackQuery,
   useSaveFeedbackMutation,
   useDeleteUserQuery,

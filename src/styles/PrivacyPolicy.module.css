@@ -10,7 +10,12 @@
     font-weight: bold !important;
     color: #2A6310 !important;
   }
-  
+   .bannerTitle {
+    color: #fff !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    font-weight: bold !important;
+  }
   .cardImgTop {
     max-height: 400px !important;
     object-fit: cover !important;
@@ -28,7 +33,7 @@
     margin-top: 0 !important;
   }
   
-  .privacyPolicy h1,
+  /* .privacyPolicy h1, */
   .privacyPolicy h2,
   .privacyPolicy h3,
   .privacyPolicy h4,
@@ -61,7 +66,5 @@
     background: rgba(0, 0, 0, 0.5) !important;
   }
   
-  .bannerTitle {
-    color: #fff !important;
-  }
+ 
   

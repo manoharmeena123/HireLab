@@ -401,7 +401,7 @@ export const queries = {
   },
   whyChooseUs :{
     query :()=>({
-      url :"api/page/why-choose-us",
+      url :"api/why-choose-us",
       method: "GET",
     })
   },

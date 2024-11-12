@@ -1,24 +1,25 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthToken, useLoggedInUser } from "@/hooks";
-import { IMAGE_URL } from "@/lib/apiEndPoints";
 import profileIcon from "../../images/favicon.png";
 import { useLogoutMutation } from "@/app/login/store/login.query";
-import { navigateSource } from "@/lib/action";
 import Swal from "sweetalert2";
-import Loading from "@/components/Loading";
+import { FaCrown } from "react-icons/fa"; // Placeholder icon
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 
-const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer: () => void }) => {
-  const {push} = useRouter();
-  const { user ,isLoading} = useLoggedInUser();
-  const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
+const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
+  const { push } = useRouter();
+  const { user, isLoading } = useLoggedInUser();
+  const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
+  
+  // Explicitly define drawerRef as a reference to an HTMLDivElement
+  const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleViewProfile = () => {
-    push(user?.user?.role === "job_seeker" ? "/job-seeker" : "/job-poster");
+    push("/profile-section");
     toggleDrawer();
   };
 
@@ -36,155 +37,171 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: { isOpen: boolean; toggleDrawer
       try {
         await logout().unwrap();
         removeToken();
-        navigateSource("/");
-        Swal.fire(
-          "Logged out!",
-          "You have been logged out successfully.",
-          "success"
-        );
+        Swal.fire("Logged out!", "You have been logged out successfully.", "success");
+        push("/");
       } catch (error) {
-        console.error("Logout failed:", error);
-        Swal.fire(
-          "Logout failed",
-          "Failed to log out. Please try again.",
-          "error"
-        );
+        Swal.fire("Logout failed", "Failed to log out. Please try again.", "error");
       }
     }
   };
 
-  const handleViewAndUpdateProfile =()=>{
-    push("/profile-section")
-  }
+  const handleAccountSetting = () => {
+    push("/account-setting");
+  };
+
+  const handleClickOutside = (event: MouseEvent) => {
+    // Ensure drawerRef is not null before using contains method
+    if (drawerRef.current && !drawerRef.current.contains(event.target as Node)) {
+      toggleDrawer();
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
-    <> 
-    {isLoading && <Loading/>}
-    <div className={`profile-drawer ${isOpen ? "open" : ""}`}>
-      <button
-        type="button"
-        className="btn-close text-reset"
-        onClick={toggleDrawer}
-      >
-        &times;
-      </button>
-
-      <div className="profile-drawer-header">
-        <div className="candidate-detail text-center">
-          <div className="candidate-img">
-            {user?.user?.image ? (
-              <Image
-                src={`${IMAGE_URL + user?.user?.image}`}
-                alt="profile picture"
-                width={100}
-                height={100}
-                onError={(e: any) => (e.currentTarget.src = profileIcon)}
-                className="rounded-circle"
-                style={{ borderRadius: "50%" }}
-              />
-            ) : (
-              <Image
-                src={profileIcon}
-                alt="profile picture"
-                width={100}
-                height={100}
-                className="rounded-circle"
-                style={{ borderRadius: "50%" }}
-              />
-            )}
+    <>
+      {isOpen && (
+        <div className="profile-popup" ref={drawerRef}>
+          <div className="profile-header">
+            <Image
+              src={user?.user?.image ? `${IMAGE_URL + user?.user?.image}` : profileIcon}
+              alt="profile picture"
+              width={60}
+              height={60}
+              className="rounded-circle"
+            />
+            <h4 className="profile-name">{user?.user?.name || "Not available"}</h4>
+            <p className="profile-title">
+              {user?.user?.role === "job_seeker" ? "Job Seeker" : "Job Poster"}
+            </p>
+            <button className="view-profile-btn" onClick={handleViewProfile}>
+              View Profile
+            </button>
           </div>
-          <div className="candidate-title mt-3">
-            <h4>{user?.user?.name || "User Name"}</h4>
+
+          <div className="profile-section">
+            <h5 className="section-title">Account</h5>
+            <ul className="list-group">
+              <li className="list-group-item" onClick={handleAccountSetting}>
+                Settings & Privacy
+              </li>
+            </ul>
+          </div>
+
+          <div className="profile-section">
+            <h5 className="section-title">Manage</h5>
+            <ul className="list-group">
+              <li className="list-group-item">Posts & Activity</li>
+              <li className="list-group-item">Job Posting Account</li>
+              <li className="list-group-item" onClick={handleLogout}>
+                Sign Out
+              </li>
+            </ul>
           </div>
         </div>
-      </div>
-      <div className="profile-drawer-body">
-        <ul className="list-group">
-          <li className="list-group-item" onClick={handleViewAndUpdateProfile} style={{ cursor: "pointer" }}>
-            View Profile
-          </li>
-     
-            <li
-              className="list-group-item"
-              onClick={handleViewProfile}
-              style={{ cursor: "pointer" }}
-            >
-              Edit Profile
-            </li>
-          <li
-            className="list-group-item"
-            onClick={handleLogout}
-            style={{ cursor: "pointer" }}
-          >
-            Logout
-          </li>
-        </ul>
-      </div>
+      )}
 
-      {/* Custom Styles */}
       <style jsx>{`
-        .profile-drawer {
-          position: fixed !important;
-          top: 0 !important;
-          right: 0 !important;
-          width: 300px !important;
-          height: 100% !important;
-          background-color: white !important;
-          box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
-          transform: translateX(100%) !important;
-          transition: transform 0.3s ease-in-out !important;
-          z-index: 1050 !important;
-          border-top-left-radius: 20px !important;
-          border-bottom-left-radius: 20px !important;
+        .profile-popup {
+          position: absolute;
+          top: 90%;
+          right: 160px;
+          width: 280px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          padding: 1rem;
+          z-index: 1000;
+          font-family: Arial, sans-serif;
+          border: 1px solid #e0e0e0;
+          text-align: left;
         }
 
-        .profile-drawer.open {
-          transform: translateX(0) !important;
+        .profile-header {
+          text-align: center;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #ddd;
         }
 
-        .profile-drawer-header {
-          display: flex !important;
-          flex-direction: column !important;
-          justify-content: center !important;
-          align-items: center !important;
-          padding: 1rem !important;
-          border-bottom: 1px solid #ddd !important;
-          margin-top: 2rem !important;
+        .profile-image {
+          border-radius: 50%;
+          border: 2px solid #e0e0e0;
         }
 
-        .candidate-img {
-          display: flex !important;
-          justify-content: center !important;
+        .profile-name {
+          margin: 0.5rem 0;
+          font-size: 1rem;
+          font-weight: 600;
+          color: #333;
         }
 
-        .candidate-title h4 {
-          margin-bottom: 0.5rem !important;
-          font-size: 1.25rem !important;
-          text-align: center !important;
+        .profile-title {
+          color: #555;
+          font-size: 0.85rem;
+          margin: 0.2rem 0 1rem;
+          line-height: 1.3;
+        }
+
+        .view-profile-btn {
+          display: inline-block;
+          padding: 0.3rem 1rem;
+          font-size: 0.85rem;
+          color: #2a6310;
+          border: 1px solid #2a6310;
+          border-radius: 20px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .view-profile-btn:hover {
+           background: linear-gradient(135deg, #2a6310, #6cc047) !important;
+          color: white;
+        }
+
+        .profile-section {
+          margin-top: 0px;
+          padding-top: 0px;
+        }
+
+        .section-title {
+          font-size: 0.9rem;
+          color: #333;
+          font-weight: 600;
+          margin-bottom: 0.5rem;
+          margin-top: 0.5rem;
+        }
+
+        .list-group {
+          list-style: none;
+          padding: 0;
+          margin: 0;
         }
 
         .list-group-item {
-          cursor: pointer !important;
-          padding: 10px 15px !important;
+          cursor: pointer;
+          padding: 0.6rem 0;
+          font-size: 0.85rem;
+          color: #555;
+          display: flex;
+          align-items: center;
+          transition: background-color 0.3s;
+          border: none;
         }
 
         .list-group-item:hover {
-          background-color: #f1f1f1 !important;
-        }
-
-        .btn-close {
-          background: none !important;
-          border: none !important;
-          font-size: 2rem !important;
-          line-height: 1 !important;
-          cursor: pointer !important;
-          color: black !important;
-          position: absolute !important;
-          left: 1rem !important;
-          top: 1rem !important;
+          background-color: #f5f5f5;
         }
       `}</style>
-    </div>
     </>
   );
 };
