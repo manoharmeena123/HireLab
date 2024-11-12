@@ -1,0 +1,144 @@
+/* AccountSetting.module.css */
+.pageContent {
+    background-color: #f8f9fa !important;
+    min-height: 100vh !important;
+  }
+  
+  .sidebar {
+    position: sticky !important;
+    top: 20px !important;
+  }
+  
+  .profileCard {
+    background-color: #ffffff !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .profileImage img {
+    border-radius: 50% !important;
+  }
+  
+  .profileInfo {
+    margin-top: 15px !important;
+  }
+  
+  .profileInfo h4 {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+  }
+  
+  .profileInfo p {
+    color: #6c757d !important;
+  }
+  
+  .navigationList {
+    list-style: none !important;
+    padding: 0 !important;
+    margin-top: 20px !important;
+  }
+  
+  .navigationList li {
+    margin-bottom: 10px !important;
+  }
+  
+  .navigationList li a {
+    color: #343a40 !important;
+    font-size: 1rem !important;
+    text-decoration: none !important;
+  }
+  
+  .navigationList li a:hover {
+    color: #007bff !important;
+  }
+  
+  .navigationList li a i {
+    margin-right: 10px !important;
+  }
+  
+  .navigationList .active {
+    font-weight: 700 !important;
+    color: #007bff !important;
+  }
+  
+  .mainContent {
+    background-color: #ffffff !important;
+    padding: 30px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+  
+  .header h3 {
+    font-size: 1.75rem !important;
+    font-weight: 700 !important;
+  }
+  
+  .logoutButton {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+  }
+  
+  .contentSection {
+    margin-top: 30px !important;
+  }
+  
+  .card {
+    background-color: #f8f9fa !important;
+    padding: 20px !important;
+    border-radius: 8px !important;
+  }
+  
+  .cardTitle {
+    font-size: 1.25rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 15px !important;
+  }
+  
+  .benefitsList {
+    list-style: none !important;
+    padding: 0 !important;
+  }
+  
+  .benefitsList li {
+    font-size: 1rem !important;
+    margin-bottom: 10px !important;
+  }
+  
+  .benefitsList li i {
+    color: #28a745 !important;
+    margin-right: 10px !important;
+  }
+  
+  .benefitsList li i.fa-times-circle {
+    color: #dc3545 !important;
+  }
+  
+  .getstartedbtn,
+  .selected-plan-btn {
+    padding: 12px 28px  !important;
+    border-radius: 8px  !important;
+    font-size: 16px  !important;
+    font-weight: 600;
+    transition: all 0.3s ease  !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1)  !important;
+    display: inline-block  !important;
+    border: none  !important;
+  }
+
+  .getstartedbtn {
+     background: linear-gradient(135deg, #2a6310, #6cc047) !important;
+    color: white;
+  }
+
+  .getstartedbtn:hover {
+   background: linear-gradient(135deg, #57cc21, #223918)!important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }

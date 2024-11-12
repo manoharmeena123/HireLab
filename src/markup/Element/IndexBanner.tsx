@@ -11,7 +11,7 @@ import parse from "html-react-parser";
 import { toast } from "react-toastify";
 import Select from "react-select";
 import cityData from "@/data/in.json";
-import { experienceOptions, jobTitleOptions } from "@/data/indexSearch";
+import { experienceOptions } from "@/data/indexSearch";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Image from "next/image";
 
@@ -31,14 +31,21 @@ const IndexBanner: React.FC = () => {
   const { data: bannerData, isLoading: isBannerLoading } = useGetBannerQuery();
   const { data: getHomeBanner, isLoading: getHomeBannerLoading } =
     useGetHomeBannerQuery({});
-const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
+  const [getJobTitleSuggestion, { data: jobTitleData, isLoading: jobTitleDataLoading }] = useGetJobTitleSuggestionMutation();
+  
   const [filters, setFilters] = useState<Filters>({
     job_title: null,
     experience: null,
     location: null,
   });
 
-  // Handle changes for job title (designation) dropdown
+  // Handle changes for job title (designation) dropdown with dynamic suggestions
+  const handleJobTitleInputChange = (inputValue: string) => {
+    if (inputValue) {
+      getJobTitleSuggestion({ search: inputValue });
+    }
+  };
+
   const handleJobTitleChange = (selectedOption: { value: string; label: string } | null) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -170,10 +177,17 @@ const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
             <form onSubmit={handleSubmit} style={styles.formContainer}>
               <Select
                 name="job_title"
-                options={jobTitleOptions}
+                options={
+                  jobTitleData?.data.map((title: string) => ({
+                    value: title,
+                    label: title,
+                  })) || []
+                }
+                onInputChange={handleJobTitleInputChange}
                 onChange={handleJobTitleChange}
                 placeholder="Select title"
                 isClearable
+                isLoading={jobTitleDataLoading}
                 styles={{
                   control: (base) => ({
                     ...base,
@@ -182,8 +196,8 @@ const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
                     border: "none",
                     boxShadow: "none",
                     backgroundColor: "#F8F8F8",
-                    width: "100%",
-                    cursor :"pointer"
+                    width: "250px", 
+                    cursor: "pointer"
                   }),
                   placeholder: (base) => ({
                     ...base,
@@ -207,7 +221,7 @@ const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
                     boxShadow: "none",
                     backgroundColor: "#F8F8F8",
                     width: "100%",
-                    cursor :"pointer"
+                    cursor: "pointer"
                   }),
                   placeholder: (base) => ({
                     ...base,
@@ -231,7 +245,7 @@ const [getJobTitleSuggestion] = useGetJobTitleSuggestionMutation()
                     boxShadow: "none",
                     backgroundColor: "#F8F8F8",
                     width: "100%",
-                    cursor :"pointer"
+                    cursor: "pointer"
                   }),
                   placeholder: (base) => ({
                     ...base,

@@ -109,57 +109,115 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
     ?.map((req: any) => req.trim())
     ?.filter((req: any) => req.length > 0);
 
-  const handleApplyJob = async (jobId: string) => {
-    // Check if user has membership
-    if (!user?.user?.membership) {
-      Swal.fire({
-        title: "No Membership Plan",
-        text: "You don't have any membership plan to apply for jobs. Would you like to buy one?",
-        icon: "warning",
+    const handleApplyJob = async (jobId: string) => {
+      if (!user) {
+        router.push("/login");
+        return;
+      }
+    
+      if (!user.user?.membership) {
+        Swal.fire({
+          title: "No Membership Plan",
+          text: "You don't have any membership plan to apply for jobs. Would you like to buy one?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Buy Subscription",
+          cancelButtonText: "Go Back to Job",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            router.push("/cart");
+          }
+        });
+        return;
+      }
+    
+      let resumeFile = null;
+    
+      // Prompt the user to choose between uploading a new resume or using the existing one
+      const resumeChoice = await Swal.fire({
+        title: "Choose Resume Option",
+        text: "Would you like to upload a new resume or use your existing resume?",
+        icon: "question",
+        showDenyButton: true,
         showCancelButton: true,
-        confirmButtonText: "Buy Subscription",
-        cancelButtonText: "Go Back to Job",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Redirect to the subscription page (cart)
-          router.push("/cart");
-        } else {
-          // Stay on the job details page
+        confirmButtonText: "Upload New Resume",
+        denyButtonText: "Use Existing Resume",
+        cancelButtonText: "Cancel",
+      });
+    
+      if (resumeChoice.isConfirmed) {
+        // User chose to upload a new resume
+        const { value: file } = await Swal.fire({
+          title: "Upload New Resume",
+          input: "file",
+          inputAttributes: {
+            accept: "application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "aria-label": "Upload your resume",
+          },
+          showCancelButton: true,
+          confirmButtonText: "Upload",
+          cancelButtonText: "Cancel",
+        });
+    
+        if (!file) {
+          Swal.fire({
+            icon: "warning",
+            title: "Resume Required",
+            text: "Please upload a resume to proceed with your application.",
+          });
           return;
         }
-      });
-      return;
-    }
-
-    if (!user) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      setLoadingJobs([...loadingJobs, jobId]);
-      const { data } = await applyJob({ job_id: jobId });
-      if (data?.success) {
-        getJobs(jobId);
-        refetch();
+    
+        // Set the uploaded file as resumeFile
+        resumeFile = file;
+    
+      } else if (resumeChoice.isDenied) {
+        // User chose to use the existing resume
+        resumeFile = user.user.resume; // Use the existing resume directly from user data
         Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "Job applied successfully!",
+          icon: "info",
+          title: "Using Existing Resume",
+          text: "Proceeding with the job application.",
         });
+      } else {
+        return; // User canceled the process, so stop here
       }
-    } catch (error) {
-      console.error("Error applying job:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to apply for the job.",
-      });
-    } finally {
-      setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
-    }
-  };
-
+    
+      try {
+        setLoadingJobs([...loadingJobs, jobId]);
+    
+        // Prepare form data to send with applyJob request
+        const formData = new FormData();
+        formData.append("job_id", jobId);
+        if (resumeFile instanceof File) {
+          formData.append("resume", resumeFile); // Include the new resume file if uploaded
+        } else {
+          formData.append("resumeUrl", resumeFile); // Use the existing resume URL/reference
+        }
+    
+        const { data } = await applyJob(formData); // Send formData containing job ID and resume
+    
+        if (data?.success) {
+          getJobs(jobId);
+          refetch();
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Job applied successfully!",
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to apply for the job.",
+        });
+      } finally {
+        setLoadingJobs(loadingJobs.filter((id) => id !== jobId));
+      }
+    };
+    
+    
   // Sanitize the job description
   const sanitizedDescription = DOMPurify.sanitize(
     job?.data?.job_description || ""
