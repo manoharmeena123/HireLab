@@ -123,7 +123,7 @@ const RecentJobSection = () => {
           <Slider {...sliderSettings}>
             {recentJob?.data?.map((item: RecentJobData, index) => (
               <div key={index} className="p-3">
-                <div className={styles.sectionContainer}>
+                <div className={styles.sectionContainer} onClick={() => viewJobHandler(item.id)}>
                   <div>
                     <h4 onClick={() => viewJobHandler(item.id)} className={styles.jobTitle}>
                       {item.job_title}
