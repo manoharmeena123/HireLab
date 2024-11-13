@@ -476,39 +476,6 @@ const PostJobSection = () => {
                           <span>Create new job</span>
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link href="/job-posted">
-                          <i className="fa fa-briefcase" aria-hidden="true"></i>
-                          Job Posted
-                        </Link>
-                      </li> */}
-                      {/* <li>
-                        <Link href="/my-resume">
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
-                          My Resume
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/saved-jobs">
-                          <i className="fa fa-heart-o" aria-hidden="true"></i>
-                          Saved Jobs
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/applied-job">
-                          <i className="fa fa-briefcase" aria-hidden="true"></i>
-                          Applied Jobs
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/job-alert">
-                          <i className="fa fa-bell-o" aria-hidden="true"></i>
-                          Job Alerts
-                        </Link>
-                      </li> */}
                       <li>
                         <Link href="/cv-manager">
                           <i className="fa fa-id-card-o" aria-hidden="true"></i>

@@ -21,33 +21,36 @@ const WhyChooseUs = () => {
     useWhyChooseUsQuery({});
 
   return (
-    <section className={styles.whyChooseUsSection}>
-      <div className={styles.container}>
-        <h2 className={styles.title}>Why Choose Us</h2>
-        <p className={styles.subtitle}>
-          We offer the best features and services in the industry.
-        </p>
-        <div className={styles.featuresGrid}>
-          {whyChooseUsData?.data?.map((feature: any, index: any) => (
-            <div className={styles.featureCard} key={index}>
-              <div className={styles.iconWrapper}>
-                {/* {feature?.icon} */}
-                <Image
-                  src={`${IMAGE_URL + feature.image}`}
-                  className="profile-image"
-                  alt="Profile Image"
-                  width={41}
-                  height={41}
-                  style={{ borderRadius: "3rem", objectFit: "cover" }}
-                />
+    <>
+      {whyChooseUsDataLoading && <Loading />}
+      <section className={styles.whyChooseUsSection}>
+        <div className={styles.container}>
+          <h2 className={styles.title}>Why Choose Us</h2>
+          <p className={styles.subtitle}>
+            We offer the best features and services in the industry.
+          </p>
+          <div className={styles.featuresGrid}>
+            {whyChooseUsData?.data?.map((feature: any, index: any) => (
+              <div className={styles.featureCard} key={index}>
+                <div className={styles.iconWrapper}>
+                  {/* {feature?.icon} */}
+                  <Image
+                    src={`${IMAGE_URL + feature.image}`}
+                    className="profile-image"
+                    alt="Profile Image"
+                    width={41}
+                    height={41}
+                    style={{ borderRadius: "3rem", objectFit: "cover" }}
+                  />
+                </div>
+                <h3 className={styles.featureTitle}>{feature?.name}</h3>
+                <p className={styles.featureDescription}>{feature?.content}</p>
               </div>
-              <h3 className={styles.featureTitle}>{feature?.name}</h3>
-              <p className={styles.featureDescription}>{feature?.content}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 

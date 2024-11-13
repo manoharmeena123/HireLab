@@ -128,6 +128,11 @@ const DashboardSection = () => {
       }
     }
   };
+  const handleRecentJobClick = (jobId: any) => {
+    // Use Next.js router to navigate to the job details page with the job ID
+    push(`/job-detail?jobId=${jobId}`);
+  };
+  
   return (
     <div className="container page-content bg-white mt-5">
       <div className="row">
@@ -151,7 +156,7 @@ const DashboardSection = () => {
               {recentJobs.length > 0 ? (
                 <Slider {...carouselSettings}>
                   {recentJobs.map((job: any) => (
-                    <div key={job.id} className="p-3">
+                    <div key={job.id} className="p-3" >
                       <div
                         className="job-card p-4 shadow-sm"
                         style={{
@@ -164,6 +169,7 @@ const DashboardSection = () => {
                             "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
                      
                         }}
+                        onClick={() => handleRecentJobClick(job.id)}
                       >
                         <h6 className="text-dark mb-2 fw-semibold">
                           {job.job_title}
@@ -360,6 +366,7 @@ const DashboardSection = () => {
                           boxShadow:
                             "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
                         }}
+                        onClick={() => handleRecentJobClick(job.id)}
                       >
                         <h6 className="text-dark mb-2 fw-semibold">
                           {job.job_title}

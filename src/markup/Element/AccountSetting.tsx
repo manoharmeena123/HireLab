@@ -30,15 +30,15 @@ const AccountSetting = () => {
   const { data: getSubscription, isLoading: getSubscriptionLoading } =
     useGetSubscriptionQuery({});
 
- // Use mutations instead of queries for actions
- const [makeUserPrivate, { isLoading: makeUserPrivateLoading }] =
- useMakeUserPrivateMutation();
-const [makeUserPublic, { isLoading: makeUserPublicLoading }] =
- useMakeUserPublicMutation();
-const [makeUserActivate, { isLoading: makeUserActivateLoading }] =
- useMakeUserActivateMutation();
-const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
- useMakeUserDeactivateMutation();
+  // Use mutations instead of queries for actions
+  const [makeUserPrivate, { isLoading: makeUserPrivateLoading }] =
+    useMakeUserPrivateMutation();
+  const [makeUserPublic, { isLoading: makeUserPublicLoading }] =
+    useMakeUserPublicMutation();
+  const [makeUserActivate, { isLoading: makeUserActivateLoading }] =
+    useMakeUserActivateMutation();
+  const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
+    useMakeUserDeactivateMutation();
 
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
@@ -168,58 +168,146 @@ const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
                         </div>
                       </div>
                       <ul>
-                        <li>
-                          <Link href="/job-poster-dashboard">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage jobs</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-poster">
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Profile</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/post-job">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Create new job</span>
-                          </Link>
-                        </li>
+                        {user?.user?.role === "job_poster" ? (
+                          <>
+                            <li>
+                              <Link href="/job-poster-dashboard">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-poster">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/post-job">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Create New Job</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/cv-manager">
+                                <i
+                                  className="fa fa-id-card-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>CV Manager</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href="/dashboard-section">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-seeker">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/jobs-my-resume">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>My Resume</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/saved-jobs">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Saved Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/applied-job">
+                                <i
+                                  className="fa fa-briefcase"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Applied Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-alert">
+                                <i
+                                  className="fa fa-bell-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Job Alerts</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        )}
 
-                        <li>
-                          <Link href="/cv-manager">
-                            <i
-                              className="fa fa-id-card-o"
-                              aria-hidden="true"
-                            ></i>
-                            CV Manager
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/switch-plan">
-                            <i className="fa fa-money" aria-hidden="true"></i>
-                            Switch Plan
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/transaction">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
                         <li>
                           <Link href="/analytics-and-report">
                             <i
@@ -430,7 +518,9 @@ const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
                           <div className="col-md-6 mb-3">
                             <p>
                               <strong>Profile Visibility:</strong>{" "}
-                              {user?.user?.is_public === "1" ?  "Public" : "Private"  }
+                              {user?.user?.is_public === "1"
+                                ? "Public"
+                                : "Private"}
                             </p>
                             {user?.user?.is_public === "1" ? (
                               <button
@@ -439,20 +529,21 @@ const [makeUserDeactivate, { isLoading: makeUserDeactivateLoading }] =
                               >
                                 Make Profile Private
                               </button>
-                            ) : ( 
-                             <button
+                            ) : (
+                              <button
                                 className="btn btn-success"
                                 onClick={handleMakePublic}
                               >
                                 Make Profile Public
                               </button>
-                             
                             )}
                           </div>
                           <div className="col-md-6 mb-3">
                             <p>
                               <strong>Account Status:</strong>{" "}
-                              {user?.user?.status === "1" ? "Active" : "Inactive"}
+                              {user?.user?.status === "1"
+                                ? "Active"
+                                : "Inactive"}
                             </p>
                             {user?.user?.status === "1" ? (
                               <button

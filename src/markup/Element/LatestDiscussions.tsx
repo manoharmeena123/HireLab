@@ -196,14 +196,14 @@ const LatestDiscussions = () => {
             </div>
           </div>
         </div>
-        <div className="row align-items-center mb-4">
+        {/* <div className="row align-items-center mb-4">
           <div className="col"></div>
           <div className="col text-right">
             <Link href={"/view-all-discussion"}  className="site-button button-sm" style={{fontWeight:"600"}}>
                 View All
             </Link>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           {discussionData?.data
             ?.slice(0, 3)

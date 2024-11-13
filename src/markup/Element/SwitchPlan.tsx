@@ -23,9 +23,14 @@ const SwitchPlan = () => {
   };
 
   const handleGetStarted = async (membershipId: any) => {
-    router.push(`/cart?plan=${membershipId}`);
+    if (!user) {
+      // Set a flag in localStorage to indicate that the user needs to log in
+      router.push("/login");
+    } else {
+      // Proceed to the cart page
+      router.push(`/cart?plan=${membershipId}`);
+    }
   };
-
   return (
     <>
       {isLoading && <Loading />}

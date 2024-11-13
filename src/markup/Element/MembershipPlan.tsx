@@ -23,7 +23,13 @@ const SwitchPlan = () => {
   };
 
   const handleGetStarted = async (membershipId: any) => {
-    router.push(`/cart?plan=${membershipId}`);
+    if (!user) {
+      // Set a flag in localStorage to indicate that the user needs to log in
+      router.push("/login");
+    } else {
+      // Proceed to the cart page
+      router.push(`/cart?plan=${membershipId}`);
+    }
   };
 
   return (
@@ -43,7 +49,7 @@ const SwitchPlan = () => {
               <thead>
                 <tr>
                   <th>Features</th>
-                  {reorderedPlans().map((plan :any, index :number) => (
+                  {reorderedPlans().map((plan: any, index: number) => (
                     <th
                       key={index}
                       className={
@@ -60,7 +66,7 @@ const SwitchPlan = () => {
               <tbody>
                 <tr>
                   <td>Job listing CTC based</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -75,7 +81,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Priority Application</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -90,7 +96,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Advanced Job Search Filters</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -105,7 +111,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Resume & Cover Letter Reviews</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -114,13 +120,15 @@ const SwitchPlan = () => {
                           : ""
                       }
                     >
-                      {plan.resume_and_cover_letter_reviews === "yes" ? "✓" : "×"}
+                      {plan.resume_and_cover_letter_reviews === "yes"
+                        ? "✓"
+                        : "×"}
                     </td>
                   ))}
                 </tr>
                 <tr>
                   <td>Mock Interviews</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -135,7 +143,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Connect with Job Poster</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -150,7 +158,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>City Meetups & Events</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -165,7 +173,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Credits for Successful Job Application</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -180,7 +188,7 @@ const SwitchPlan = () => {
                 </tr>
                 <tr>
                   <td>Price (Monthly)</td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -196,7 +204,7 @@ const SwitchPlan = () => {
                 {/* New Row for the Buttons */}
                 <tr>
                   <td></td>
-                  {reorderedPlans().map((plan :any, index) => (
+                  {reorderedPlans().map((plan: any, index) => (
                     <td
                       key={index}
                       className={
@@ -212,7 +220,9 @@ const SwitchPlan = () => {
                             ? "selected-plan-btn"
                             : "get-started-btn"
                         }`}
-                        disabled={user?.user?.membership?.membership_id === plan.id}
+                        disabled={
+                          user?.user?.membership?.membership_id === plan.id
+                        }
                       >
                         {user?.user?.membership?.membership_id === plan.id
                           ? "Selected Plan"
@@ -276,18 +286,18 @@ const SwitchPlan = () => {
         }
 
         .get-started-btn {
-           background: linear-gradient(135deg, #2a6310, #6cc047) !important;
+          background: linear-gradient(135deg, #2a6310, #6cc047) !important;
           color: white;
         }
 
         .get-started-btn:hover {
-         background: linear-gradient(135deg, #57cc21, #223918)!important;
+          background: linear-gradient(135deg, #57cc21, #223918) !important;
           transform: translateY(-2px);
           box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .selected-plan-btn {
-      background: linear-gradient(135deg, #57cc21, #223918)!important;
+          background: linear-gradient(135deg, #57cc21, #223918) !important;
           color: white;
           cursor: not-allowed;
           opacity: 0.8;

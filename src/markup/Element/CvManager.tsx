@@ -234,7 +234,7 @@ const CvManager = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/analytics-and-report">
                             <i
                               className="fa fa-bar-chart"
                               aria-hidden="true"
@@ -243,13 +243,13 @@ const CvManager = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Account Setting</span>
                           </Link>
                         </li>
                         <li>
-                          <Link href="#">
+                          <Link href="/support">
                             <i
                               className="fa fa-life-ring"
                               aria-hidden="true"

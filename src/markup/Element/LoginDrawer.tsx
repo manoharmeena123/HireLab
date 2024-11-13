@@ -9,8 +9,9 @@ import { toast } from "react-toastify";
 import styles from "@/styles/LoginDrawer.module.css";
 import { navigateSource } from "@/lib/action";
 import { useSearchParams, useRouter } from "next/navigation";
+import OtpVerificationDrawer from "./OtpVerficationDrawer"; // Import OTP Drawer
 
-const Login = ({onClose, onSwitchToRegister}:any) => {
+const Login = ({ onClose, onSwitchToRegister }: any) => {
   const searchParams = useSearchParams();
   const queryTitle = searchParams.get("page");
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
   const [mobileNumberError, setMobileNumberError] = useState<string | null>(null);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isOtpDrawerOpen, setIsOtpDrawerOpen] = useState(false); // OTP Drawer State
 
   const endpoint = queryTitle ? `/send-otp?page=${queryTitle}` : "/send-otp";
 
@@ -70,7 +72,8 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
       setLoading(false);
       if (res.code === 200 && res?.data) {
         toast.success(res?.message, { theme: "colored" });
-        navigateSource(endpoint);
+        // navigateSource(endpoint);
+        setIsOtpDrawerOpen(true);
       } else if (res.code === 401) {
         toast.error("User not found!", { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {
@@ -83,9 +86,9 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
   };
 
   return (
-    <div className={`${styles["page-wraper"]} ${styles.sidebar}`}>
+    <div className={`${styles["page-wraper"]}`}>
       <div className={`login-form p-4  ${styles.sidebarContent}`} >
-        <h3 className={`form-title mb-1 ${styles["rubik-font"]}`} style={{ fontWeight: "600", color: "#2A6310",  }}>
+        <h3 className={`form-title mb-1 ${styles["rubik-font"]}`} style={{ fontWeight: "600", color: "#2A6310", }}>
           Login
         </h3>
         <div className="dez-separator-outer mb-3">
@@ -121,7 +124,7 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
               type="submit"
               className={`btn btn-success btn-block ${styles["lato-font"]}`}
               disabled={isLoading}
-              style={{ width: "100%", borderRadius: "5px", padding: "0.75rem",backgroundColor: "#2A6310" }}
+              style={{ width: "100%", borderRadius: "15px", padding: "0.75rem",backgroundColor: "#2A6310" }}
             >
               {isLoading ? "Loading..." : "Get OTP"}
             </button>
@@ -137,6 +140,13 @@ const Login = ({onClose, onSwitchToRegister}:any) => {
           </div>
         </form>
       </div>
+      
+      {/* OTP Verification Drawer */}
+      {isOtpDrawerOpen && (
+        <OtpVerificationDrawer
+          onClose={() => setIsOtpDrawerOpen(false)} // Close OTP Drawer
+        />
+      )}
     </div>
   );
 };

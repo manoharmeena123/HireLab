@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -71,14 +70,18 @@ const AnalyticsReport = () => {
         );
       } catch (error) {
         console.error("Logout failed:", error);
-        Swal.fire("Logout failed", "Failed to log out. Please try again.", "error");
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
       }
     }
   };
 
   return (
     <>
-      {jobsLoading && <Loading />}                            
+      {jobsLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -96,7 +99,8 @@ const AnalyticsReport = () => {
                               width={300}
                               height={300}
                               onError={(e) =>
-                                (e.currentTarget.src = "../../images/favicon.png")
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
                               }
                               style={{ borderRadius: "50%" }}
                             />
@@ -107,7 +111,8 @@ const AnalyticsReport = () => {
                               width={300}
                               height={300}
                               onError={(e) =>
-                                (e.currentTarget.src = "../../images/favicon.png")
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
                               }
                               style={{ borderRadius: "50%" }}
                             />
@@ -115,57 +120,158 @@ const AnalyticsReport = () => {
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
                           </h4>
                           <p className="m-b0">
-                            <Link href={"#"}>{user?.user?.designation || "Not available"}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.designation || "Not available"}
+                            </Link>
                           </p>
                         </div>
                       </div>
                       <ul>
-                        <li>
-                          <Link href="/job-poster-dashboard">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage jobs</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-poster">
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Profile</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/post-job">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                            <span>Create new job</span>
-                          </Link>
-                        </li>
-                      
-                        <li>
-                          <Link href="/cv-manager">
-                            <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                            CV Manager
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/switch-plan">
-                            <i className="fa fa-money" aria-hidden="true"></i>
-                            Switch Plan
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/transaction">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
+                        {user?.user?.role === "job_poster" ? (
+                          <>
+                            <li>
+                              <Link href="/job-poster-dashboard">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-poster">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/post-job">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Create New Job</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/cv-manager">
+                                <i
+                                  className="fa fa-id-card-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>CV Manager</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href="/dashboard-section">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-seeker">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/jobs-my-resume">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>My Resume</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/saved-jobs">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Saved Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/applied-job">
+                                <i
+                                  className="fa fa-briefcase"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Applied Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-alert">
+                                <i
+                                  className="fa fa-bell-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Job Alerts</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        )}
+
                         <li>
                           <Link href="/analytics-and-report" className="active">
                             <i
@@ -176,7 +282,7 @@ const AnalyticsReport = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/account-setting" >
+                          <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Account Setting</span>
                           </Link>
@@ -192,7 +298,10 @@ const AnalyticsReport = () => {
                         </li>
                         <li>
                           <Link href="#" onClick={handleLogout}>
-                            <i className="fa fa-sign-out" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
                             <span>Log Out</span>
                           </Link>
                         </li>
@@ -205,9 +314,11 @@ const AnalyticsReport = () => {
                     <div className="job-bx-title clearfix">
                       <div className="row">
                         <div className="col-lg-12 mb-2">
-                        <h5 className="font-weight-700 pull-left text-uppercase">Welcome,{user?.user?.name || "User Name"}</h5>
+                          <h5 className="font-weight-700 pull-left text-uppercase">
+                            Welcome,{user?.user?.name || "User Name"}
+                          </h5>
                           <button
-                           onClick={handleLogout}
+                            onClick={handleLogout}
                             className="site-button right-arrow button-sm float-right mb-1"
                             style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
@@ -217,7 +328,7 @@ const AnalyticsReport = () => {
                       </div>
                     </div>
                     <div className="row">
-                        <h5>Coming soon</h5>
+                      <h5>Coming soon</h5>
                       {/* Total Jobs Posted */}
                       {/* <div className="col-lg-6 col-md-6 mb-2">
                         <div className="card bg-light shadow-sm">

@@ -33,6 +33,7 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+  
   const handleChatClick = () => {
     router.push("/chats");
   };
@@ -47,6 +48,7 @@ const Header = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
+  
   // Function to toggle drawer
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -72,6 +74,20 @@ const Header = () => {
   const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
   // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
   // const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
+
+
+
+  useEffect(() => {
+    const loginDrawerStatus = localStorage.getItem("loginDrawer");
+    if (loginDrawerStatus === "open") {
+      setShowLoginSidebar(true);// Open the login drawer if the key is set
+      localStorage.removeItem("loginDrawer"); // Remove the key after opening the drawer
+    }
+  }, []); // Empty dependency array to run only once when the component mounts
+
+
+
+
 
   const handleLoginClick = () => {
     setShowLoginSidebar(true);

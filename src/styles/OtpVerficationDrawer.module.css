@@ -1,0 +1,152 @@
+/* Ensure the page fills the viewport */
+.page-wraper {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    height: 100vh !important;
+  }
+  
+  /* Drawer-style container */
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    right: 0 !important;
+    height: 100vh !important;
+    width: 400px !important;
+    background: #fff !important;
+    z-index: 1000 !important;
+    overflow-y: auto !important;
+    transition: transform 0.3s ease-in-out !important;
+    border-top-left-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3) !important;
+  }
+  .sidebarContent {
+    max-width: 380px !important;
+    width: 100% !important;
+    border-radius: 8px !important;
+  }
+
+  .width-form {
+    width: 100% !important;
+    margin-top: 15px !important;
+  }
+  
+  /* Title of the form */
+  .form-title {
+    color: #2a6310 !important;
+    text-align: center !important;
+    font-weight: 600 !important;
+  }
+  
+  /* Lato font styling */
+  .lato-font {
+    font-family: "Lato", sans-serif !important;
+    letter-spacing: 0.03em !important;
+  }
+  
+  /* Input field for OTP with custom styling */
+  .otp-input {
+    padding: 12px !important;
+    font-size: 16px !important;
+    border-radius: 5px !important;
+    width: 100% !important;
+    border: 1px solid #ccc !important;
+  }
+  
+  .otp-input:focus {
+    border-color: #2a6310 !important;
+    outline: none !important;
+  }
+  
+  /* Error message styling for OTP validation */
+  .text-danger {
+    color: #d9534f !important;
+  }
+  
+  /* Button styling */
+  .otp-button {
+    background-color: #2a6310 !important;
+    color: white !important;
+    padding: 12px 28px !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    width: 100% !important;
+    cursor: pointer !important;
+  }
+  
+  .otp-button:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed !important;
+  }
+  
+  /* Separator for visual separation */
+  .dez-separator-outer {
+    margin-bottom: 15px !important;
+  }
+  
+  .dez-separator {
+    width: 50px !important;
+    height: 2px !important;
+    background-color: #57cc21 !important;
+  }
+  
+  /* Center text styles */
+  .text-center {
+    text-align: center !important;
+  }
+  
+  /* Margin top for some spacing */
+  .mt-3 {
+    margin-top: 30px !important;
+  }
+  
+  /* Margin bottom for some spacing */
+  .mb-3 {
+    margin-bottom: 30px !important;
+  }
+  
+  /* Centering the back-to-login link */
+  .account-button-center {
+    text-align: center !important;
+    margin-top: 15px !important;
+  }
+  
+  /* Styling the "Back to Login" link */
+  .site-button {
+    background: #2a6310 !important;
+    color: white !important;
+    border-radius: 5px !important;
+    padding: 0.75rem !important;
+    width: 100% !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  .site-button:hover {
+    background: linear-gradient(135deg, #57cc21, #223918) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  /* Logo header styling */
+  .logo-header {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+  }
+  
+  /* Styling the "Back to Login" link */
+  .lato-font {
+    font-family: "Lato", sans-serif !important;
+  }
+  
+  /* No wrap text */
+  .no-wrap {
+    white-space: nowrap !important;
+  }
+  

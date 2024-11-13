@@ -17,7 +17,8 @@ import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useRouter } from "next/navigation";
-
+import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 const MySwal = withReactContent(Swal);
 
 const AppliedJobSection = () => {
@@ -125,14 +126,31 @@ const AppliedJobSection = () => {
                   <div className="candidate-info">
                     <div className="candidate-detail text-center">
                       <div className="canditate-des">
-                        <Link href={"#"}>
-                          <Image
-                            src={`http://thinkdream.in/hirelab/public/images/${user?.user?.image}`}
-                            alt="Company Logo"
-                            width={300}
-                            height={300}
-                          />
-                        </Link>
+                      {user?.user?.image ? (
+                            <Image
+                              src={`${IMAGE_URL + user?.user?.image}`}
+                              alt="profile picture"
+                              width={300}
+                              height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          ) : (
+                            <Image
+                              src={profileIcon}
+                              alt="profile picture"
+                              width={300}
+                              height={300}
+                              onError={(e) =>
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
+                              } // Fallback image
+                              style={{ borderRadius: "50%" }}
+                            />
+                          )}
                       </div>
                       <div className="candidate-title">
                         <div className="">
@@ -162,21 +180,6 @@ const AppliedJobSection = () => {
                           <span>Profile</span>
                         </Link>
                       </li>
-                      {/* <li>
-                          <Link href="/post-job">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Create new job</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-posted">
-                            <i  className="fa fa-briefcase" aria-hidden="true"></i>
-                            Job Posted
-                          </Link>
-                        </li> */}
                       <li>
                         <Link href={"/jobs-my-resume"}>
                           <i
@@ -204,12 +207,6 @@ const AppliedJobSection = () => {
                           <span>Job Alerts</span>
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link href={"/cv-manager"}>
-                          <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                          <span>CV Manager</span>
-                        </Link>
-                      </li> */}
                       <li>
                         <Link href={"/switch-plan"}>
                           <i className="fa fa-money" aria-hidden="true"></i>
@@ -226,23 +223,29 @@ const AppliedJobSection = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link href="#">
-                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
-                          <span>Analytics & Report</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
-                          <i className="fa fa-cog" aria-hidden="true"></i>
-                          <span>Account Setting</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="#">
-                          <i className="fa fa-life-ring" aria-hidden="true"></i>
-                          <span>Support</span>
-                        </Link>
-                      </li>
+                          <Link href="/analytics-and-report">
+                            <i
+                              className="fa fa-bar-chart"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Analytics & Report</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/account-setting">
+                            <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Account Setting</span>
+                          </Link>
+                        </li>
+                        <li>
+                          <Link href="/support">
+                            <i
+                              className="fa fa-life-ring"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Support</span>
+                          </Link>
+                        </li>
                       <li>
                         <Link href={"#"} onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>

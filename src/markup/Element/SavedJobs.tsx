@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 import { formaterDate } from "@/utils/formateDate";
 import Loading from "@/components/Loading";
+import Pagination from "./Pagination"; // Import Pagination component
 
 interface Job {
   id: number | string;
@@ -53,6 +54,14 @@ const SavedJobs = () => {
     date: "",
     image: "",
   });
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Set the number of items per page
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // Delete data
   const handleDeleteClick = async (contactId: string) => {
@@ -163,15 +172,20 @@ const SavedJobs = () => {
     push(`/job-detail?jobId=${id}`);
   };
 
+  // Get current jobs for the current page
+  const indexOfLastJob = currentPage * itemsPerPage;
+  const indexOfFirstJob = indexOfLastJob - itemsPerPage;
+  const currentJobs = savedJob?.data.slice(indexOfFirstJob, indexOfLastJob);
+
   return (
     <>
       {savedJobLoading && deleteSavedJobLoading && <Loading />}
       <div className="job-bx save-job browse-job table-job-bx clearfix">
         <div className="row">
           <div className="col-lg-12">
-          <h5 className="font-weight-700 pull-left text-uppercase">
-            {savedJob?.data.length} Saved Jobs
-          </h5>
+            <h5 className="font-weight-700 pull-left text-uppercase">
+              {savedJob?.data.length} Saved Jobs
+            </h5>
             <button
               onClick={() => router.back()}
               className="site-button right-arrow button-sm float-right"
@@ -181,19 +195,10 @@ const SavedJobs = () => {
             </button>
           </div>
         </div>
-        <div className="job-bx-title clearfix">
-          <div className="float-left">
-            <input
-              type="search"
-              className="form-control"
-              placeholder="Search..."
-            />
-          </div>
-        </div>
         <table>
           <thead>
             <tr>
-              <th>jobs</th>
+              <th>Jobs</th>
               <th>Company</th>
               <th>Date</th>
               <th>Action</th>
@@ -207,7 +212,7 @@ const SavedJobs = () => {
                 </td>
               </tr>
             ) : (
-              savedJob?.data?.map((contact: any, index: number) => (
+              currentJobs?.map((contact: any, index: number) => (
                 <tr key={index}>
                   <td className="job-name">
                     <Link href={"/job-detail"}>{contact?.job_title}</Link>
@@ -216,7 +221,10 @@ const SavedJobs = () => {
                     {contact?.company_name}
                   </td>
                   <td className="date">{formaterDate(contact?.created_at)}</td>
-                  <td className="job-links pencil">
+                  <td
+                    className="job-links pencil"
+                    style={{ cursor: "pointer" }}
+                  >
                     <span onClick={() => viewJobHandler(contact?.id)}>
                       <i className="fa fa-eye"></i>
                     </span>
@@ -232,203 +240,164 @@ const SavedJobs = () => {
             )}
           </tbody>
         </table>
+
+        {/* Pagination Component */}
         {savedJob?.data?.length !== 0 && (
-          <div className="pagination-bx float-right">
-            <ul className="pagination">
-              <li className="previous">
-                <Link href={"#"}>
-                  <i className="ti-arrow-left"></i> Prev
-                </Link>
-              </li>
-              <li className="active">
-                <Link href={"#"}>1</Link>
-              </li>
-              <li>
-                <Link href={"#"}>2</Link>
-              </li>
-              <li>
-                <Link href={"#"}>3</Link>
-              </li>
-              <li className="next">
-                <Link href={"#"}>
-                  Next <i className="ti-arrow-right"></i>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItems={savedJob?.data.length}
+            onPageChange={handlePageChange}
+          />
         )}
       </div>
 
+      {/* Modal for adding new job */}
       <Modal
         className="modal modal-bx-info fade"
         show={postModal}
         onHide={() => setPostModal(false)}
       >
-        <div className="">
-          <div className="">
-            <form onSubmit={handleAddFormSubmit}>
-              <div className="modal-header">
-                <h4 className="modal-title fs-20">Add Task</h4>
-                <button
-                  type="button"
-                  className="close"
-                  onClick={() => setPostModal(false)}
-                >
-                  <span>×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <i className="flaticon-cancel-12 close"></i>
-                <div className="add-contact-box">
-                  <div className="add-contact-content">
-                    <div className="form-group">
-                      <label className="text-black font-w500">Job Title</label>
-                      <div className="contact-name">
-                        <input
-                          type="text"
-                          className="form-control"
-                          autoComplete="off"
-                          name="title"
-                          required
-                          onChange={handleAddFormChange}
-                          placeholder="title"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="text-black font-w500">
-                        Company Name
-                      </label>
-                      <div className="contact-name">
-                        <input
-                          type="text"
-                          className="form-control"
-                          autoComplete="off"
-                          name="company"
-                          required
-                          onChange={handleAddFormChange}
-                          placeholder="Company Name"
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="text-black font-w500">Date</label>
-                      <div className="contact-occupation">
-                        <input
-                          type="text"
-                          autoComplete="off"
-                          name="date"
-                          required
-                          className="form-control"
-                          placeholder="date"
-                          onChange={handleAddFormChange}
-                        />
-                      </div>
-                    </div>
-                  </div>
+        <form onSubmit={handleAddFormSubmit}>
+          <div className="modal-header">
+            <h4 className="modal-title fs-20">Add Task</h4>
+            <button
+              type="button"
+              className="close"
+              onClick={() => setPostModal(false)}
+            >
+              <span>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="add-contact-box">
+              <div className="add-contact-content">
+                <div className="form-group">
+                  <label className="text-black font-w500">Job Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="title"
+                    value={addFormData.title}
+                    required
+                    onChange={handleAddFormChange}
+                    placeholder="Job Title"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-black font-w500">Company Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="company"
+                    value={addFormData.company}
+                    required
+                    onChange={handleAddFormChange}
+                    placeholder="Company Name"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-black font-w500">Date</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="date"
+                    value={addFormData.date}
+                    required
+                    onChange={handleAddFormChange}
+                    placeholder="Date"
+                  />
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="submit" className="btn btn-primary">
-                  Add
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPostModal(false)}
-                  className="btn btn-danger"
-                >
-                  <i className="flaticon-delete-1"></i> Discard
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+          <div className="modal-footer">
+            <button type="submit" className="btn btn-primary">
+              Add
+            </button>
+            <button
+              type="button"
+              onClick={() => setPostModal(false)}
+              className="btn btn-danger"
+            >
+              Discard
+            </button>
+          </div>
+        </form>
       </Modal>
 
+      {/* Modal for editing job */}
       <Modal
         className="modal modal-bx-info"
         show={editModal}
         onHide={() => setEditModal(false)}
       >
-        <div className="">
-          <div className="">
-            <form onSubmit={handleEditFormSubmit}>
-              <div className="modal-header">
-                <h4 className="modal-title fs-20">Edit Task</h4>
-                <button
-                  type="button"
-                  className="close"
-                  onClick={() => setEditModal(false)}
-                >
-                  <span>×</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <i className="flaticon-cancel-12 close"></i>
-                <div className="add-contact-box">
-                  <div className="add-contact-content">
-                    <div className="form-group">
-                      <label className="text-black font-w500">Job Title</label>
-                      <div className="contact-name">
-                        <input
-                          type="text"
-                          className="form-control"
-                          autoComplete="off"
-                          name="title"
-                          required
-                          value={editFormData.title}
-                          onChange={handleEditFormChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="text-black font-w500">
-                        Company Name
-                      </label>
-                      <div className="contact-name">
-                        <input
-                          type="text"
-                          className="form-control"
-                          autoComplete="off"
-                          name="company"
-                          required
-                          value={editFormData.company}
-                          onChange={handleEditFormChange}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="text-black font-w500">Client</label>
-                      <div className="contact-occupation">
-                        <input
-                          type="text"
-                          autoComplete="off"
-                          name="date"
-                          required
-                          className="form-control"
-                          value={editFormData.date}
-                          onChange={handleEditFormChange}
-                        />
-                      </div>
-                    </div>
-                  </div>
+        <form onSubmit={handleEditFormSubmit}>
+          <div className="modal-header">
+            <h4 className="modal-title fs-20">Edit Task</h4>
+            <button
+              type="button"
+              className="close"
+              onClick={() => setEditModal(false)}
+            >
+              <span>×</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="add-contact-box">
+              <div className="add-contact-content">
+                <div className="form-group">
+                  <label className="text-black font-w500">Job Title</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="title"
+                    value={editFormData.title}
+                    required
+                    onChange={handleEditFormChange}
+                    placeholder="Job Title"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-black font-w500">Company Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="company"
+                    value={editFormData.company}
+                    required
+                    onChange={handleEditFormChange}
+                    placeholder="Company Name"
+                  />
+                </div>
+                <div className="form-group">
+                  <label className="text-black font-w500">Date</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="date"
+                    value={editFormData.date}
+                    required
+                    onChange={handleEditFormChange}
+                    placeholder="Date"
+                  />
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="submit" className="btn btn-primary">
-                  Save
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEditModal(false)}
-                  className="btn btn-danger"
-                >
-                  <i className="flaticon-delete-1"></i> Discard
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+          <div className="modal-footer">
+            <button type="submit" className="btn btn-primary">
+              Save
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditModal(false)}
+              className="btn btn-danger"
+            >
+              Discard
+            </button>
+          </div>
+        </form>
       </Modal>
     </>
   );

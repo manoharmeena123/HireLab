@@ -122,51 +122,148 @@ const SupportSection = () => {
                         </div>
                       </div>
                       <ul>
+                        {user?.user?.role === "job_poster" ? (
+                          <>
+                            <li>
+                              <Link href="/job-poster-dashboard">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-poster">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/post-job">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Create New Job</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/cv-manager">
+                                <i
+                                  className="fa fa-id-card-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>CV Manager</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        ) : (
+                          <>
+                            <li>
+                              <Link href="/dashboard-section">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-seeker">
+                                <i
+                                  className="fa fa-user-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Profile</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/jobs-my-resume">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>My Resume</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/saved-jobs">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Saved Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/applied-job">
+                                <i
+                                  className="fa fa-briefcase"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Applied Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/job-alert">
+                                <i
+                                  className="fa fa-bell-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Job Alerts</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/switch-plan">
+                                <i
+                                  className="fa fa-money"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Switch Plan</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Transaction</span>
+                              </Link>
+                            </li>
+                          </>
+                        )}
+
                         <li>
-                          <Link href="/job-poster-dashboard" className="active">
-                            <i className="fa fa-heart-o" aria-hidden="true"></i>
-                            <span>Dashboard</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/manage-job">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage jobs</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/job-poster">
-                            <i className="fa fa-user-o" aria-hidden="true"></i>
-                            <span>Profile</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/post-job">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                            <span>Create new job</span>
-                          </Link>
-                        </li>
-                      
-                        <li>
-                          <Link href="/cv-manager">
-                            <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                            CV Manager
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/switch-plan">
-                            <i className="fa fa-money" aria-hidden="true"></i>
-                            Switch Plan
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/transaction">
-                            <i className="fa fa-file-text-o" aria-hidden="true"></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/analytics-and-report">
+                          <Link href="/analytics-and-report" >
                             <i
                               className="fa fa-bar-chart"
                               aria-hidden="true"
@@ -175,7 +272,7 @@ const SupportSection = () => {
                           </Link>
                         </li>
                         <li>
-                          <Link href="/account-setting" >
+                          <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Account Setting</span>
                           </Link>
@@ -191,7 +288,10 @@ const SupportSection = () => {
                         </li>
                         <li>
                           <Link href="#" onClick={handleLogout}>
-                            <i className="fa fa-sign-out" aria-hidden="true"></i>
+                            <i
+                              className="fa fa-sign-out"
+                              aria-hidden="true"
+                            ></i>
                             <span>Log Out</span>
                           </Link>
                         </li>

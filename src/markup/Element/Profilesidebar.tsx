@@ -196,15 +196,6 @@ const Profilesidebar = ({ refetch }: { refetch: any }) => {
                   Job Alerts
                 </Link>
               </li>
-              {/* <li>
-                <Link
-                  href="/cv-manager"
-                  onClick={(e) => handleNavigation(e, "/cv-manager")}
-                >
-                  <i className="fa fa-id-card-o" aria-hidden="true"></i>
-                  CV Manager
-                </Link>
-              </li> */}
               <li>
                 <Link
                   href="/switch-plan"

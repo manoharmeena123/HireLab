@@ -142,12 +142,15 @@ const RecentJobSection = () => {
                   </div>
                   {/* <div className={styles.jobTags}> */}
                   <div className="job-time m-t15 m-b10">
-                    {item.tags?.split(",").map((tag, index) => (
-                      <Link key={index} href="#" className="mr-1">
-                        <span className="tag">{tag.trim()}</span>
-                      </Link>
-                    ))}
-                  </div>
+                        {item.tags
+                          ?.split(",")
+                          .slice(0, 2)
+                          .map((tag, index) => (
+                            <Link key={index} href="#" className="mr-1">
+                              <span className="tag">{tag.trim()}</span>
+                            </Link>
+                          ))}
+                      </div>
                   <div className="d-flex justify-content-between align-items-center mt-3">
                     <span className={`badge text-white p-2 ${styles.ctcBadge}`}>
                     <span className="mr-1">₹</span> {getCtcTitleById(item.ctc)}

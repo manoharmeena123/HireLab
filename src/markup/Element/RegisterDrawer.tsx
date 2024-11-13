@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState,  } from "react";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { useRegisterMutation } from "@/app/register/store/register.query";
@@ -13,12 +13,13 @@ import { navigateSource } from "@/lib/action";
 import styles from "@/styles/RegisterDrawer.module.css";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import OtpVerificationDrawer from "./OtpVerficationDrawer"; // Import OTP Drawer
 
 const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
   const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
   const errors = useSelector(selectRegisterErrors);
-
+  const [isOtpDrawerOpen, setIsOtpDrawerOpen] = useState(false); // OTP Drawer State
   // Form validation schema
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -42,7 +43,8 @@ const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
         localStorage.setItem("registerData", JSON.stringify(res));
         dispatch(saveRegisterData(values));
         toast.success(res?.message, { theme: "colored" });
-        navigateSource("/send-otp");
+        setIsOtpDrawerOpen(true);
+        // navigateSource("/send-otp");
       } else if (res.code === 500) {
         toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data) {
@@ -192,6 +194,7 @@ const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
                       type="submit"
                       className={`site-button ${styles["lato-font"]}`}
                       disabled={isLoading}
+                      style={{ width: "100%", borderRadius: "15px", padding: "0.75rem",backgroundColor: "#2A6310" }}
                     >
                       {isLoading ? "Loading..." : "Create Account"}
                     </button>
@@ -211,6 +214,12 @@ const RegisterDrawer = ({ onClose, onSwitchToLogin }: any) => {
           </div>
         </div>
       </div>
+         {/* OTP Verification Drawer */}
+         {isOtpDrawerOpen && (
+        <OtpVerificationDrawer
+          onClose={() => setIsOtpDrawerOpen(false)} // Close OTP Drawer
+        />
+      )}
     </div>
   );
 };
