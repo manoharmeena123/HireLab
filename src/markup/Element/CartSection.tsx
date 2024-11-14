@@ -7,24 +7,34 @@ import Loading from "@/components/Loading";
 import { useSaveMemberShipMutation } from "@/app/my-resume/store/resume.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Swal from "sweetalert2";
-import Script from 'next/script';
+import Script from "next/script";
 
 const CartSection = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { data: membershipData, isLoading: membershipLoading } =
     useGetMembershipQuery();
-    console.log('membershipData', membershipData)
+  console.log("membershipData", membershipData);
   const planId = searchParams.get("plan");
   const [saveMemberShip] = useSaveMemberShipMutation();
   const { user } = useLoggedInUser();
   const selectedPlan = membershipData?.data?.find(
     (plan) => plan.id.toString() === planId
   );
-
-  const parseHtml = (htmlString: any) => {
-    return { __html: htmlString };
+  const reorderedPlans = () => {
+    if (!membershipData?.data) return [];
+    const userMembershipId = user?.user?.membership?.membership_id;
+    const selectedPlan = membershipData.data.find(
+      (plan) => plan.id === userMembershipId
+    );
+    const otherPlans = membershipData.data.filter(
+      (plan) => plan.id !== userMembershipId
+    );
+    return selectedPlan ? [selectedPlan, ...otherPlans] : membershipData.data;
   };
+  // const parseHtml = (htmlString: any) => {
+  //   return { __html: htmlString };
+  // };
 
   const handleGetStarted = async (membershipId: any) => {
     console.log("membershipId", membershipId);
@@ -44,47 +54,47 @@ const CartSection = () => {
         if (result.isConfirmed) {
           try {
             // Create an order by calling the backend order API
-            const response = await fetch('/api/order', {
-              method: 'POST',
+            const response = await fetch("/api/order", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({
                 amount: Number(selectedPlan?.price) * 100, // Amount in paise
-                currency: 'INR',
+                currency: "INR",
               }),
             });
-  
+
             const { orderId } = await response.json();
-  
+
             // Setup Razorpay payment options
             const options: RazorpayOptions = {
-              key: 'rzp_test_6Yk0yEiSfOEYXv', // Replace with your Razorpay test key
+              key: "rzp_test_6Yk0yEiSfOEYXv", // Replace with your Razorpay test key
               amount: Number(selectedPlan?.price) * 100, // Amount in paise
-              currency: 'INR', // Currency
+              currency: "INR", // Currency
               name: selectedPlan.title,
-              description: 'Membership Purchase',
+              description: "Membership Purchase",
               order_id: orderId, // Order ID from the backend
               handler: async (response: any) => {
                 // Capture payment and save membership
                 const paymentData = {
                   paymentId: response.razorpay_payment_id,
                   amount: Number(selectedPlan?.price) * 100,
-                  currency: 'INR',
+                  currency: "INR",
                 };
-  
-                const captureResponse = await fetch('/api/capture', {
-                  method: 'POST',
+
+                const captureResponse = await fetch("/api/capture", {
+                  method: "POST",
                   headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                   },
                   body: JSON.stringify(paymentData),
                 });
-  
+
                 const captureResult = await captureResponse.json();
-  
+
                 if (
-                  captureResult.message === 'Payment captured successfully' ||
+                  captureResult.message === "Payment captured successfully" ||
                   captureResult.alreadyCaptured
                 ) {
                   const payload = {
@@ -97,16 +107,20 @@ const CartSection = () => {
                     payment_type: captureResult.data.method,
                     is_true: true,
                   };
-  
+
                   const res: any = await saveMemberShip(payload).unwrap();
-  
+
                   if (res?.code === 200) {
-                    Swal.fire('Success', res.message, 'success');
-                    router.push('/dashboard-section'); // Navigate to dashboard
+                    Swal.fire("Success", res.message, "success");
+                    router.push("/dashboard-section"); // Navigate to dashboard
                   } else if (res?.code === 401) {
-                    Swal.fire('Error', res.message, 'error');
+                    Swal.fire("Error", res.message, "error");
                   } else {
-                    Swal.fire('Error', 'Unexpected success response. Please check!', 'error');
+                    Swal.fire(
+                      "Error",
+                      "Unexpected success response. Please check!",
+                      "error"
+                    );
                   }
                 } else {
                   // Handle failed membership saving
@@ -120,15 +134,19 @@ const CartSection = () => {
                     payment_type: captureResult.data.method,
                     is_true: false,
                   };
-  
+
                   const res: any = await saveMemberShip(failedPayload).unwrap();
-  
+
                   if (res?.code === 200) {
-                    Swal.fire('Error', res.message, 'error');
+                    Swal.fire("Error", res.message, "error");
                   } else if (res?.code === 401) {
-                    Swal.fire('Error', res.message, 'error');
+                    Swal.fire("Error", res.message, "error");
                   } else {
-                    Swal.fire('Error', 'Payment capture failed. Please try again.', 'error');
+                    Swal.fire(
+                      "Error",
+                      "Payment capture failed. Please try again.",
+                      "error"
+                    );
                   }
                 }
               },
@@ -137,31 +155,32 @@ const CartSection = () => {
                 email: user.user.email,
               },
               theme: {
-                color: '#3399cc',
+                color: "#3399cc",
               },
             };
-  
+
             // Open Razorpay checkout
             const paymentObject = new window.Razorpay(options);
-            paymentObject.on('payment.failed', (response: any) => {
-              Swal.fire('Error', response.error.description, 'error');
+            paymentObject.on("payment.failed", (response: any) => {
+              Swal.fire("Error", response.error.description, "error");
             });
             paymentObject.open();
           } catch (error) {
-            console.error('Error in processing payment:', error);
-            Swal.fire('Error', 'Failed to initiate payment. Please try again.', 'error');
+            console.error("Error in processing payment:", error);
+            Swal.fire(
+              "Error",
+              "Failed to initiate payment. Please try again.",
+              "error"
+            );
           }
         }
       });
     }
   };
-  
-  
-  
-  
+
   return (
     <>
-    <Script
+      <Script
         id="razorpay-checkout-js"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
@@ -170,11 +189,11 @@ const CartSection = () => {
         <div className="browse-job login-style3">
           <div className="bg-img-fix">
             <div className="row">
-              <div className="col-lg-4 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll left-bottom shadow rounded">
+              <div className="col-lg-3 col-md-12 col-sm-12 bg-white z-index2 relative p-a0 content-scroll left-bottom shadow rounded">
                 <div className="login-form style-2 p-4">
-                  <h3 className="text-center">
-                    <strong>Cart</strong>
-                  </h3>
+                  <h4 className="text-center">
+                  Cart
+                  </h4>
                   <div className="cart-content my-3 p-3 bg-light rounded shadow-sm">
                     <h5>
                       <b>{selectedPlan?.title}</b>
@@ -199,15 +218,15 @@ const CartSection = () => {
                         </div>
                         <hr />
                       </div>
-                    <div>
-                      <Button
-                        className="w-100 checkout-btn"
-                        variant=""
-                        onClick={handleContinueToCheckout}
-                      >
-                        <i className="fa fa-box"></i> Continue to Checkout
-                      </Button>
-                    </div>
+                      <div>
+                        <Button
+                          className="w-100 checkout-btn"
+                          variant=""
+                          onClick={handleContinueToCheckout}
+                        >
+                          <i className="fa fa-box"></i> Continue to Checkout
+                        </Button>
+                      </div>
                     </div>
                   </div>
                   {/* <div className="cart-total-wrap shadow bg-white p-3 mt-3 rounded">
@@ -241,108 +260,324 @@ const CartSection = () => {
                   </div> */}
                 </div>
               </div>
-              <div className="col-lg-8 col-md-6 col-sm-12 bg-white z-index2 relative p-a0 content-scroll left-bottom shadow rounded">
+              <div className="col-lg-9 col-md-12 col-sm-12 bg-white z-index2 relative p-a0 content-scroll left-bottom shadow rounded">
                 <div className="login-form style-2 p-4">
                   <div className="clearfix"></div>
                   <div className="section-content box-sort-in button-example m-t80">
                     <div className="pricingtable-row">
-                      <div className="display-property">
-                        {membershipData?.data
-                          ?.filter((plan) => plan.id.toString() !== planId)
-                          .map((text, index) => (
-                            <div
-                              key={index}
-                              className="pricingtable-wrapper style2 bg-white member-ship-div shadow-sm rounded"
-                              onMouseEnter={(e) => {
-                                const button = e.currentTarget.querySelector(
-                                  ".site-button"
-                                ) as HTMLElement;
-                                button.style.backgroundColor = "#fff";
-                                button.style.color = "#000";
-
-                                const title = e.currentTarget.querySelector(
-                                  ".pricingtable-title"
-                                ) as HTMLElement;
-                                title.style.color = "#000";
-
-                                const description =
-                                  e.currentTarget.querySelector(
-                                    ".pricingtable-description"
-                                  ) as HTMLElement;
-                                description.style.color = "#fff";
-                              }}
-                              onMouseLeave={(e) => {
-                                const button = e.currentTarget.querySelector(
-                                  ".site-button"
-                                ) as HTMLElement;
-                                button.style.backgroundColor = "#2A6310";
-                                button.style.color = "#fff";
-
-                                const title = e.currentTarget.querySelector(
-                                  ".pricingtable-title"
-                                ) as HTMLElement;
-                                title.style.color = "";
-
-                                const description =
-                                  e.currentTarget.querySelector(
-                                    ".pricingtable-description"
-                                  ) as HTMLElement;
-                                description.style.color = "";
-                              }}
-                            >
-                              <div className="pricingtable-inner p-4">
-                                <div className="pricingtable-price">
-                                  <h4 className="font-weight-900 m-t10 m-b0 text-center pricingtable-title">
-                                    {text?.title}
-                                  </h4>
-                                  <p
-                                    className="text-left my-2 pricingtable-description"
-                                    dangerouslySetInnerHTML={parseHtml(
-                                      text?.description
-                                    )}
-                                  ></p>
-                                </div>
-                                <div className="price-info-wrapper mt-auto text-center">
-                                  <h3 className="font-weight-300 m-t10 m-b0 price-title">
-                                    Price
-                                  </h3>
-                                  <ul className="price-list list-unstyled">
-                                    <li className="price-item">
-                                      <b>{text?.monthly_price}</b>
-                                    </li>
-                                    <li className="price-item">
-                                      <del className="text-red">
-                                        {text?.quarterly_price}
-                                      </del>
-                                    </li>
-                                  </ul>
-                                  <div className="text-center button-wrap">
-                                    <button
-                                      onClick={() => handleGetStarted(text?.id)}
-                                      className="site-button radius-xl white-hover btn-primary"
-                                    >
-                                      <span className="p-lr30 button-text">
-                                        Get Started
-                                      </span>
-                                    </button>
-                                  </div>
-                                </div>
-                                {text.info?.map((e, i) => (
-                                  <ul
-                                    key={i}
-                                    className="mp-cards list-unstyled mt-3"
+                      <div className="pricing-table">
+                        <table>
+                          <thead>
+                            <tr>
+                              <th>Features</th>
+                              {reorderedPlans().map(
+                                (plan: any, index: number) => (
+                                  <th
+                                    key={index}
+                                    className={
+                                      user?.user?.membership?.membership_id ===
+                                      plan.id
+                                        ? "highlight-column"
+                                        : ""
+                                    }
                                   >
-                                    <li className="mp-card-item">
-                                      {e?.content}
-                                    </li>
-                                  </ul>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
+                                    {plan.title}
+                                  </th>
+                                )
+                              )}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Job listing CTC based</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.job_listing_CTC_based === "optional"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Priority Application</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.priority_application === "yes"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Advanced Job Search Filters</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.advanced_job_search_filters === "yes"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Resume & Cover Letter Reviews</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.resume_and_cover_letter_reviews ===
+                                  "yes"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Mock Interviews</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.mock_interviews === "yes" ? "✓" : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Connect with Job Poster</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.connect_with_job_poster === "yes"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>City Meetups & Events</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.city_meetups_and_events === "yes"
+                                    ? "✓"
+                                    : "×"}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Credits for Successful Job Application</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.credit}
+                                </td>
+                              ))}
+                            </tr>
+                            <tr>
+                              <td>Price (Monthly)</td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  {plan.monthly_price}
+                                </td>
+                              ))}
+                            </tr>
+                            {/* New Row for the Buttons */}
+                            <tr>
+                              <td></td>
+                              {reorderedPlans().map((plan: any, index) => (
+                                <td
+                                  key={index}
+                                  className={
+                                    user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "highlight-column"
+                                      : ""
+                                  }
+                                >
+                                  <button
+                                    onClick={() => handleGetStarted(plan.id)}
+                                    className={`${
+                                      user?.user?.membership?.membership_id ===
+                                      plan.id
+                                        ? "selected-plan-btn"
+                                        : "get-started-btn"
+                                    }`}
+                                    disabled={
+                                      user?.user?.membership?.membership_id ===
+                                      plan.id
+                                    }
+                                  >
+                                    {user?.user?.membership?.membership_id ===
+                                    plan.id
+                                      ? "Selected Plan"
+                                      : "Get Started"}
+                                  </button>
+                                </td>
+                              ))}
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                     <style jsx>{`
+                      .pricing-table {
+                        margin-top: 20px;
+                        width: 100%;
+                        text-align: center;
+                        border-collapse: separate;
+                        border-spacing: 0 10px;
+                      }
+
+                      table {
+                        width: 100%;
+                        border-collapse: collapse;
+                      }
+
+                      th,
+                      td {
+                        border: 1px solid #ddd;
+                        padding: 12px;
+                        font-size: 16px;
+                      }
+
+                      th {
+                        background-color: #f2f2f2;
+                        font-weight: bold;
+                      }
+
+                      td {
+                        text-align: center;
+                        padding: 15px;
+                      }
+
+                      .highlight-column {
+                        background-color: #e7f9e7;
+                        font-weight: bold;
+                      }
+
+                      .get-started-btn,
+                      .selected-plan-btn {
+                        padding: 12px 28px;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                        display: inline-block;
+                        border: none;
+                      }
+
+                      .get-started-btn {
+                        background: linear-gradient(
+                          135deg,
+                          #2a6310,
+                          #6cc047
+                        ) !important;
+                        color: white;
+                      }
+
+                      .get-started-btn:hover {
+                        background: linear-gradient(
+                          135deg,
+                          #57cc21,
+                          #223918
+                        ) !important;
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+                      }
+
+                      .selected-plan-btn {
+                        background: linear-gradient(
+                          135deg,
+                          #57cc21,
+                          #223918
+                        ) !important;
+                        color: white;
+                        cursor: not-allowed;
+                        opacity: 0.8;
+                      }
+
+                      .selected-plan-btn:disabled {
+                        cursor: not-allowed;
+                      }
+
+                      @media (max-width: 768px) {
+                        table,
+                        th,
+                        td {
+                          font-size: 14px;
+                        }
+
+                        .get-started-btn,
+                        .selected-plan-btn {
+                          width: 80%;
+                          margin: 10px auto;
+                        }
+                      }
                       .member-ship-div {
                         min-height: 500px;
                         border-radius: 20px;

@@ -214,12 +214,12 @@ const Profilesidebar = ({ refetch }: { refetch: any }) => {
                   Transaction
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link href="#">
                   <i className="fa fa-bar-chart" aria-hidden="true"></i>
                   <span>Analytics & Report</span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link href="#">
                   <i className="fa fa-cog" aria-hidden="true"></i>

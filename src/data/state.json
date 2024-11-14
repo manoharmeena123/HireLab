@@ -1,0 +1,293 @@
+[
+    {
+      "state": "Andhra Pradesh",
+      "lat": "15.9129",
+      "lng": "79.73999",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Amaravati",
+      "population": "49577103",
+      "population_proper": "49577103"
+    },
+    {
+      "state": "Arunachal Pradesh",
+      "lat": "27.1330",
+      "lng": "93.6018",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Itanagar",
+      "population": "1382611",
+      "population_proper": "1382611"
+    },
+    {
+      "state": "Assam",
+      "lat": "26.2006",
+      "lng": "92.9376",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Dispur",
+      "population": "31169272",
+      "population_proper": "31169272"
+    },
+    {
+      "state": "Bihar",
+      "lat": "25.0961",
+      "lng": "85.3131",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Patna",
+      "population": "104099452",
+      "population_proper": "104099452"
+    },
+    {
+      "state": "Chhattisgarh",
+      "lat": "21.2787",
+      "lng": "81.8661",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Raipur",
+      "population": "25545198",
+      "population_proper": "25545198"
+    },
+    {
+      "state": "Goa",
+      "lat": "15.2993",
+      "lng": "74.1240",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Panaji",
+      "population": "1458545",
+      "population_proper": "1458545"
+    },
+    {
+      "state": "Gujarat",
+      "lat": "22.2587",
+      "lng": "71.1924",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Gandhinagar",
+      "population": "60439692",
+      "population_proper": "60439692"
+    },
+    {
+      "state": "Haryana",
+      "lat": "29.0588",
+      "lng": "76.0856",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Chandigarh",
+      "population": "25353081",
+      "population_proper": "25353081"
+    },
+    {
+      "state": "Himachal Pradesh",
+      "lat": "32.0590",
+      "lng": "77.1734",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Shimla",
+      "population": "6864602",
+      "population_proper": "6864602"
+    },
+    {
+      "state": "Jammu and Kashmir",
+      "lat": "33.7782",
+      "lng": "76.5762",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Srinagar",
+      "population": "12541302",
+      "population_proper": "12541302"
+    },
+    {
+      "state": "Jharkhand",
+      "lat": "23.3441",
+      "lng": "85.3096",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Ranchi",
+      "population": "32988134",
+      "population_proper": "32988134"
+    },
+    {
+      "state": "Karnataka",
+      "lat": "15.3173",
+      "lng": "75.7139",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Bangalore",
+      "population": "61095297",
+      "population_proper": "61095297"
+    },
+    {
+      "state": "Kerala",
+      "lat": "10.8505",
+      "lng": "76.2711",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Thiruvananthapuram",
+      "population": "33406061",
+      "population_proper": "33406061"
+    },
+    {
+      "state": "Madhya Pradesh",
+      "lat": "23.4730",
+      "lng": "77.9470",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Bhopal",
+      "population": "72626809",
+      "population_proper": "72626809"
+    },
+    {
+      "state": "Maharashtra",
+      "lat": "19.9517",
+      "lng": "75.7139",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Mumbai",
+      "population": "112374333",
+      "population_proper": "112374333"
+    },
+    {
+      "state": "Manipur",
+      "lat": "24.8032",
+      "lng": "93.9368",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Imphal",
+      "population": "2855794",
+      "population_proper": "2855794"
+    },
+    {
+      "state": "Meghalaya",
+      "lat": "25.4670",
+      "lng": "91.3662",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Shillong",
+      "population": "2966889",
+      "population_proper": "2966889"
+    },
+    {
+      "state": "Mizoram",
+      "lat": "23.1645",
+      "lng": "92.9376",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Aizawl",
+      "population": "1097206",
+      "population_proper": "1097206"
+    },
+    {
+      "state": "Nagaland",
+      "lat": "26.1584",
+      "lng": "94.5624",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Kohima",
+      "population": "1980602",
+      "population_proper": "1980602"
+    },
+    {
+      "state": "Odisha",
+      "lat": "20.9517",
+      "lng": "85.0985",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Bhubaneswar",
+      "population": "41890219",
+      "population_proper": "41890219"
+    },
+    {
+      "state": "Punjab",
+      "lat": "31.1471",
+      "lng": "75.3412",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Chandigarh",
+      "population": "27704236",
+      "population_proper": "27704236"
+    },
+    {
+      "state": "Rajasthan",
+      "lat": "27.0238",
+      "lng": "74.2179",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Jaipur",
+      "population": "68548437",
+      "population_proper": "68548437"
+    },
+    {
+      "state": "Sikkim",
+      "lat": "27.5330",
+      "lng": "88.5122",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Gangtok",
+      "population": "610577",
+      "population_proper": "610577"
+    },
+    {
+      "state": "Tamil Nadu",
+      "lat": "11.1271",
+      "lng": "78.6569",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Chennai",
+      "population": "72138958",
+      "population_proper": "72138958"
+    },
+    {
+      "state": "Telangana",
+      "lat": "17.2041",
+      "lng": "78.1126",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Hyderabad",
+      "population": "35003674",
+      "population_proper": "35003674"
+    },
+    {
+      "state": "Tripura",
+      "lat": "23.9408",
+      "lng": "91.9882",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Agartala",
+      "population": "3671035",
+      "population_proper": "3671035"
+    },
+    {
+      "state": "Uttar Pradesh",
+      "lat": "27.2046",
+      "lng": "79.0389",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Lucknow",
+      "population": "199812341",
+      "population_proper": "199812341"
+    },
+    {
+      "state": "Uttarakhand",
+      "lat": "30.0668",
+      "lng": "79.0193",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Dehradun",
+      "population": "10086292",
+      "population_proper": "10086292"
+    },
+    {
+      "state": "West Bengal",
+      "lat": "22.9868",
+      "lng": "87.8550",
+      "country": "India",
+      "iso2": "IN",
+      "capital": "Kolkata",
+      "population": "91276115",
+      "population_proper": "91276115"
+    }
+  ]
+  

@@ -272,7 +272,7 @@ const AnalyticsReport = () => {
                             </li>
                           </>
                         )}
-
+{/* 
                         <li>
                           <Link href="/analytics-and-report" className="active">
                             <i
@@ -281,7 +281,7 @@ const AnalyticsReport = () => {
                             ></i>
                             <span>Analytics & Report</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>

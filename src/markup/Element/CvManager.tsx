@@ -234,7 +234,7 @@ const CvManager = () => {
                             <span>Transaction</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="/analytics-and-report">
                             <i
                               className="fa fa-bar-chart"
@@ -242,7 +242,7 @@ const CvManager = () => {
                             ></i>
                             <span>Analytics & Report</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="/account-setting">
                             <i className="fa fa-cog" aria-hidden="true"></i>

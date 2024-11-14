@@ -349,7 +349,7 @@ const ManageJobs = () => {
                             <span>Dashboard</span>
                           </Link>
                         </li>
-                     
+
                         <li>
                           <Link href="/job-poster">
                             <i className="fa fa-user-o" aria-hidden="true"></i>
@@ -364,8 +364,8 @@ const ManageJobs = () => {
                             ></i>
                             <span>Create new job</span>
                           </Link>
-                        </li> 
-                          <li>
+                        </li>
+                        <li>
                           <Link href="/manage-job" className="active">
                             <i className="fa fa-cog" aria-hidden="true"></i>
                             <span>Manage jobs</span>
@@ -412,7 +412,7 @@ const ManageJobs = () => {
                             <span>Transaction</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="#">
                             <i
                               className="fa fa-bar-chart"
@@ -420,7 +420,7 @@ const ManageJobs = () => {
                             ></i>
                             <span>Analytics & Report</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="#">
                             <i className="fa fa-cog" aria-hidden="true"></i>
@@ -557,23 +557,21 @@ const ManageJobs = () => {
                                   >
                                     <i className="fa fa-edit"></i>
                                   </div>
-                                      {/* Upload icon */}
-                                  <div
+                                  {/* Upload icon */}
+                                  {/* <div
                                     className="nav-link mn-icon"
                                     onClick={() =>
                                       handleUploadScreenshot(job.id)
                                     }
                                   >
                                     <i className="fa fa-upload"></i>{" "}
-                                    {/* Add upload icon */}
-                                  </div>
+                                  </div> */}
                                   <div
                                     className="nav-link mn-icon"
                                     onClick={() => handleDeleteJob(job?.id)}
                                   >
                                     <i className="ti-trash"></i>
                                   </div>
-                              
                                 </td>
                               </tr>
                             ))
@@ -655,6 +653,7 @@ const ManageJobs = () => {
                                   >
                                     <i className="fa fa-edit"></i>
                                   </div>
+
                                   <div
                                     className="nav-link mn-icon"
                                     onClick={() => handleDeleteJob(job.id)}
@@ -705,6 +704,31 @@ const ManageJobs = () => {
                                 >
                                   CHAT
                                 </Button>
+                                <div
+                                  className="nav-link mn-icon text-success"
+                                  onClick={() =>
+                                    handleUploadScreenshot(item.id)
+                                  }
+                                  style={{
+                                    cursor: "pointer", // Make the icon interactive
+                                    fontSize: "20px", // Adjust the size of the icon
+                                    color: "#007bff", // Icon color (blue in this case)
+                                    marginLeft: "10px", // Space between buttons
+                                    transition: "color 0.3s ease", // Smooth transition for hover effect
+                                  }}
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.color = "#0056b3"; // Darker color on hover
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.color = "#007bff"; // Reset color
+                                  }}
+                                  aria-label="Upload screenshot"
+                                >
+                                  <i
+                                    className="fa fa-upload"
+                                    aria-hidden="true"
+                                  ></i>
+                                </div>
                               </div>
                             </div>
                           ))

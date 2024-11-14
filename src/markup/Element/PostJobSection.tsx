@@ -41,8 +41,10 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
-import { addNotificationToFirestore } from "@/app/notifications/firebaseConfig"; // Import the function
+import cityData from "@/data/in.json";
+import indianStateOptions from "@/data/state.json";
 import { experienceOptions } from "@/data/indexSearch";
+
 
 const PostJobSection = () => {
   const router = useRouter();
@@ -69,7 +71,7 @@ const PostJobSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-  const { data: getExperience } = useGetExperienceQuery();
+  const { data: getExperience } = useGetExperienceQuery({});
   console.log("getExperience", getExperience);
   const { removeToken } = useAuthToken();
   const [isJobTypeHovered, setIsJobTypeHovered] = useState(
@@ -95,11 +97,7 @@ const PostJobSection = () => {
   );
   const [isTagHovered, setIsTagHovered] = useState(Array(10).fill(false));
 
-  const [selectedJobType, setSelectedJobType] = useState<number | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-  const [selectedCompensation, setSelectedCompensation] = useState<
-    number | null
-  >(null);
   const [selectedJoiningFee, setSelectedJoiningFee] = useState<number | null>(
     null
   );
@@ -131,6 +129,74 @@ const PostJobSection = () => {
   const handleExperienceChange = (selectedOption: any) => {
     setSelectedExperience(selectedOption);
     dispatch(setPostJobData({ experience: selectedOption?.value || "" }));
+  };
+
+  const [selectedJobType, setSelectedJobType] = useState<number | null>(null);
+
+  const handleJobTypeChange = (selectedOption: any) => {
+    // Store only the job type id (value) in selectedJobType
+    setSelectedJobType(selectedOption?.value || null);
+
+    // Dispatch the job type id (value) to Redux
+    dispatch(setPostJobData({ job_type: selectedOption?.value || "" }));
+  };
+
+  const [selectedCompensation, setSelectedCompensation] = useState<
+    number | null
+  >(null);
+
+  const handleCompensationChange = (selectedOption: any) => {
+    console.log("selectedOption", selectedOption);
+    // Update the selected compensation with the compensation id (value)
+    setSelectedCompensation(selectedOption?.value || null);
+
+    // Dispatch the selected compensation id to Redux
+    dispatch(setPostJobData({ compensation: selectedOption?.value || "" }));
+  };
+
+  const handleAdditionalPerkChange = (selectedOptions: any) => {
+    // Extract the selected values (IDs)
+    const selectedValues =
+      selectedOptions?.map((option: any) => option.value) || [];
+    setSelectedAdditionalPerks(selectedValues);
+
+    // Dispatch the selected perks as a comma-separated list to Redux
+    dispatch(setPostJobData({ additional_perk: selectedValues.join(",") }));
+  };
+
+  const handleEducationChange = (selectedOption: any) => {
+    // Update the selected education with the education id (value)
+    setSelectedMaximumEducation(selectedOption?.value || null);
+
+    // Dispatch the selected education id to Redux
+    dispatch(
+      setPostJobData({ maximum_education: selectedOption?.value || "" })
+    );
+  };
+  const handleTotalExperienceChange = (selectedOption: any) => {
+    // Update the selected experience with the experience id (value)
+    setSelectedTotalExperience(selectedOption?.value || null);
+
+    // Dispatch the selected experience id to Redux
+    dispatch(setPostJobData({ total_experience: selectedOption?.value || "" }));
+  };
+  const [selectedCity, setSelectedCity] = useState<number | null>(null);
+  const handleLocationChange = (selectedOption: any) => {
+    // Update the selected city with the location id (value)
+    setSelectedCity(selectedOption?.value || null);
+
+    // Dispatch the selected city id to Redux
+    dispatch(setPostJobData({ city: selectedOption?.value || "" }));
+  };
+
+  const [selectedState, setSelectedState] = useState<number | null>(null);
+
+  const handleStateChange = (selectedOption: any) => {
+    // Update the selected state with the state id (value)
+    setSelectedState(selectedOption?.value || null);
+
+    // Dispatch the selected state id to Redux
+    dispatch(setPostJobData({ state: selectedOption?.value || "" }));
   };
 
   const handleMouseLeave = (
@@ -399,6 +465,53 @@ const PostJobSection = () => {
     dispatch(setPostJobData({ sector: option?.id }));
   };
 
+  const jobtypeOption =
+    jobtTypeData?.data?.map((job_type) => ({
+      value: job_type.id,
+      label: job_type.title,
+    })) || [];
+
+  // Generate compensation options
+  const compensationOptions =
+    compensationData?.data?.map((compensation) => ({
+      value: compensation.id, // compensation id
+      label: compensation.title, // compensation title
+    })) || [];
+
+  // Generate additional perks options
+  const additionalPerkOptions =
+    additionalPerkData?.data?.map((perk) => ({
+      value: perk.id, // Use the perk ID as the value
+      label: perk.title.replace(" +", ""), // Use the perk title as the label
+    })) || [];
+  // Generate education options
+  const educationOptions =
+    educationData?.data?.map((education) => ({
+      value: education.id, // Use the education ID as the value
+      label: education.name, // Use the education name as the label
+    })) || [];
+
+  // Generate experience options
+  const totalexperienceOptions =
+    getExperience?.data?.map((experience: any) => ({
+      value: experience.id, // Experience ID as the value
+      label: experience.title, // Experience title as the label
+    })) || [];
+
+  // Generate location options from city data
+  const locationOptions =
+    cityData.map((city) => ({
+      value: city.city,
+      label: city.city,
+    })) || [];
+
+  const stateOptionList = indianStateOptions.map((state: any) => ({
+    value: state.state, // This should be a unique identifier for each state
+    label: state.state, // This should be the display name (state name)
+  }));
+
+  console.log(stateOptionList); // This should show an array with 'value' and 'label' properties
+
   return (
     <div className="page-content bg-white">
       <div className="content-block">
@@ -482,12 +595,12 @@ const PostJobSection = () => {
                           CV Manager
                         </Link>
                       </li>
-                      <li>
+                      {/* <li>
                         <Link href="/switch-plan">
                           <i className="fa fa-money" aria-hidden="true"></i>
                           Switch Plan
                         </Link>
-                      </li>
+                      </li> */}
                       <li>
                         <Link href="/transaction">
                           <i
@@ -497,30 +610,24 @@ const PostJobSection = () => {
                           <span>Transaction</span>
                         </Link>
                       </li>
+                      {/* <li>
+                        <Link href="/analytics-and-report">
+                          <i className="fa fa-bar-chart" aria-hidden="true"></i>
+                          <span>Analytics & Report</span>
+                        </Link>
+                      </li> */}
                       <li>
-                          <Link href="/analytics-and-report">
-                            <i
-                              className="fa fa-bar-chart"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Analytics & Report</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/account-setting">
-                            <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Account Setting</span>
-                          </Link>
-                        </li>
-                        <li>
-                          <Link href="/support">
-                            <i
-                              className="fa fa-life-ring"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Support</span>
-                          </Link>
-                        </li>
+                        <Link href="/account-setting">
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                          <span>Account Setting</span>
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/support">
+                          <i className="fa fa-life-ring" aria-hidden="true"></i>
+                          <span>Support</span>
+                        </Link>
+                      </li>
                       <li>
                         <Link href="#" onClick={handleLogout}>
                           <i className="fa fa-sign-out" aria-hidden="true"></i>
@@ -551,7 +658,7 @@ const PostJobSection = () => {
                     className={styles.customScrollbar}
                   >
                     <div className="row">
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Company you are hiring for</label>
                           <input
@@ -566,7 +673,7 @@ const PostJobSection = () => {
                           {errors?.company_name?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Job Title / Designation</label>
                           <input
@@ -581,7 +688,138 @@ const PostJobSection = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Job Type</label>
+                          <Select
+                            options={jobtypeOption}
+                            onChange={handleJobTypeChange}
+                            value={
+                              jobtypeOption?.find(
+                                (option) => option.value === selectedJobType
+                              ) || null
+                            } // Find the selected option object
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Job Type"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.job_type?.[0]}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Compensation</label>
+                          <Select
+                            options={compensationOptions}
+                            onChange={handleCompensationChange}
+                            value={
+                              compensationOptions.find(
+                                (compensation) =>
+                                  compensation.value === selectedCompensation
+                              ) || null
+                            }
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Compensation"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.compensation?.[0]}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Do You Offer any additional Perks?</label>
+                          <Select
+                            options={additionalPerkOptions}
+                            onChange={handleAdditionalPerkChange}
+                            value={additionalPerkOptions.filter((option) =>
+                              selectedAdditionalPerks.includes(option.value)
+                            )}
+                            isMulti // Allow multiple selection
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: "100%",
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Additional Perks"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.additional_perk?.[0]}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Maximum Education</label>
+                          <Select
+                            options={educationOptions}
+                            onChange={handleEducationChange}
+                            value={
+                              educationOptions.find(
+                                (education) =>
+                                  education.value === selectedMaximumEducation
+                              ) || null
+                            } // Find the option with matching id
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Maximum Education"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.maximum_education?.[0]}
+                          </span>
+                        </div>
+                      </div>
+                      {/* <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Total Experience Required</label>
+                          <Select
+                            options={totalexperienceOptions}
+                            onChange={handleTotalExperienceChange}
+                            value={
+                              totalexperienceOptions.find(
+                                (experience: any) =>
+                                  experience.value === selectedTotalExperience
+                              ) || null
+                            } // Find the option with matching id
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Total Experience"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.total_experience?.[0]}
+                          </span>
+                        </div>
+                      </div> */}
+
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Experience</label>
                           <Select
@@ -591,23 +829,10 @@ const PostJobSection = () => {
                             placeholder="Select experience"
                             isClearable
                             styles={{
-                              menu: (provided) => ({
-                                ...provided,
-                                maxHeight: "500px", // Limits the height of the dropdown menu
-                              }),
                               control: (base) => ({
                                 ...base,
-                                padding: "10px",
-                                borderRadius: "20px",
-                                border: "none",
-                                boxShadow: "none",
-                                backgroundColor: "#F8F8F8",
-                                width: "100%",
-                              }),
-                              placeholder: (base) => ({
-                                ...base,
-                                color: "#6F6F6F",
-                                fontSize: "15px",
+                                height: 38,
+                                minHeight: 38,
                               }),
                             }}
                           />
@@ -616,314 +841,35 @@ const PostJobSection = () => {
                           {errors?.experience?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Job Type</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {jobtTypeData?.data?.map((job_type, index) => (
-                              <div
-                                key={job_type.id}
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    job_type.id,
-                                    "job_type",
-                                    setSelectedJobType,
-                                    selectedJobType
-                                  )
-                                }
-                                onMouseEnter={() =>
-                                  handleMouseEnter(index, setIsJobTypeHovered)
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(index, setIsJobTypeHovered)
-                                }
-                                style={spanStyles(
-                                  isJobTypeHovered[index],
-                                  selectedJobType === job_type.id
-                                )}
-                              >
-                                {job_type?.title}
-                              </div>
-                            ))}
-                          </div>
+                          <label>CTC</label>
+                          <Select
+                            value={selectedSalary}
+                            onChange={handleSelectChange}
+                            options={ctcOptions}
+                            placeholder="Select Salary"
+                          />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.job_type?.[0]}
+                          {errors?.ctc?.[0]}
                         </span>
                       </div>
-
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Location</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {locationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isLocationHovered[index],
-                                  selectedLocation === index + 1
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(index, setIsLocationHovered)
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(index, setIsLocationHovered)
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "location",
-                                    setSelectedLocation,
-                                    selectedLocation
-                                  )
-                                }
-                              >
-                                {text?.title}
-                              </span>
-                            ))}
-                          </div>
+                          <label>Industry</label>
+                          <Select
+                            value={selectedSector}
+                            onChange={handleSectorSelectChange}
+                            options={sectorOptions}
+                            placeholder="Select Industry"
+                          />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.location?.[0]}
+                          {errors?.sector?.[0]}
                         </span>
                       </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Compensation</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {compensationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isCompensationHovered[index],
-                                  selectedCompensation === index + 1
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsCompensationHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsCompensationHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "compensation",
-                                    setSelectedCompensation,
-                                    selectedCompensation
-                                  )
-                                }
-                              >
-                                {text?.title}
-                              </span>
-                            ))}
-                          </div>
-                          <span className="text-red-500 text-danger">
-                            {errors?.compensation?.[0]}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Do You Offer any additional Perks?</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {additionalPerkData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isAdditionalPerkHovered[index],
-                                  selectedAdditionalPerks.includes(index + 1)
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsAdditionalPerkHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsAdditionalPerkHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "additional_perk",
-                                    setSelectedAdditionalPerks,
-                                    selectedAdditionalPerks,
-                                    true
-                                  )
-                                }
-                              >
-                                {text?.title?.replace(" +", "")}
-                                <span style={plusStyle}>+</span>
-                              </span>
-                            ))}
-                          </div>
-                          <span className="text-red-500 text-danger">
-                            {errors?.additional_perk?.[0]}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>
-                            Is There Any Joining Fee or Deposit Required from
-                            the Candidate?
-                          </label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {["No", "YES"].map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isJoiningFeeHovered[index],
-                                  selectedJoiningFee === index + 1
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsJoiningFeeHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsJoiningFeeHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "joining_fee",
-                                    setSelectedJoiningFee,
-                                    selectedJoiningFee
-                                  )
-                                }
-                              >
-                                {text}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.joining_fee?.[0]}
-                        </span>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Maximum Education</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {educationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isMaximumEducationHovered[index],
-                                  selectedMaximumEducation === index + 1
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsMaximumEducationHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsMaximumEducationHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "maximum_education",
-                                    setSelectedMaximumEducation,
-                                    selectedMaximumEducation
-                                  )
-                                }
-                              >
-                                {text?.name}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.maximum_education?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Total Experience Required</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {getExperience?.data?.map(
-                              (text: any, index: any) => (
-                                <span
-                                  key={index}
-                                  style={spanStyles(
-                                    isTotalExperienceHovered[index],
-                                    selectedTotalExperience === index + 1
-                                  )}
-                                  onMouseEnter={() =>
-                                    handleMouseEnter(
-                                      index,
-                                      setIsTotalExperienceHovered
-                                    )
-                                  }
-                                  onMouseLeave={() =>
-                                    handleMouseLeave(
-                                      index,
-                                      setIsTotalExperienceHovered
-                                    )
-                                  }
-                                  onClick={() =>
-                                    handleToggleSelect(
-                                      index + 1,
-                                      "total_experience",
-                                      setSelectedTotalExperience,
-                                      selectedTotalExperience
-                                    )
-                                  }
-                                >
-                                  {text?.title}
-                                </span>
-                              )
-                            )}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.total_experience?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Tags</label>
                           <div
@@ -943,77 +889,54 @@ const PostJobSection = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>CTC</label>
-                          <Select
-                            value={selectedSalary}
-                            onChange={handleSelectChange}
-                            options={ctcOptions}
-                            placeholder="Select Salary"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.ctc?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Industry</label>
-                          <Select
-                            value={selectedSector}
-                            onChange={handleSectorSelectChange}
-                            options={sectorOptions}
-                            placeholder="Select Industry"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.sector?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>City</label>
-                          <input
-                            type="text"
+                          <Select
                             name="city"
-                            onChange={handleInputChange}
-                            placeholder="Enter City"
-                            className="form-control tags_input"
+                            options={locationOptions}
+                            onChange={handleLocationChange}
+                            placeholder="Enter city"
+                            isClearable
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
                           {errors?.city?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>State</label>
-                          <input
-                            type="text"
+                          <Select
                             name="state"
-                            onChange={handleInputChange}
-                            placeholder="Enter State"
-                            className="form-control tags_input"
+                            options={stateOptionList} // Should be distinct from city options
+                            onChange={handleStateChange}
+                            value={
+                              stateOptionList.find(
+                                (state) => state.value === selectedState
+                              ) || null
+                            }
+                            placeholder="Select State"
+                            isClearable
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
                           {errors?.state?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Office Address/Landmark</label>
-                          <input
-                            type="text"
-                            name="address"
-                            onChange={handleInputChange}
-                            placeholder="Enter a address"
-                            className="form-control tags_input"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.address?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -1056,7 +979,11 @@ const PostJobSection = () => {
                       </div>
                     </div>
                     <div className="button-group">
-                      <button type="button" className="site-button m-b30" disabled>
+                      <button
+                        type="button"
+                        className="site-button m-b30"
+                        disabled
+                      >
                         Previous Job
                       </button>
                       <button

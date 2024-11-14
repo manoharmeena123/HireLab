@@ -319,7 +319,7 @@ const JobPosterSection = () => {
                             <span>Transaction</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="#">
                             <i
                               className="fa fa-bar-chart"
@@ -327,7 +327,7 @@ const JobPosterSection = () => {
                             ></i>
                             <span>Analytics & Report</span>
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="#">
                             <i className="fa fa-cog" aria-hidden="true"></i>
