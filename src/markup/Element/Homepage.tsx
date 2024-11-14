@@ -27,19 +27,9 @@ const Homepage = () => {
       <IndexBanner />
       <div
         className="page-content"
-        style={{
-          backgroundColor: "#fff3f3",
-          // backgroundImage: "url(" + bnr7.default.src + ")",
-        }}
       >
         <div className="section-full content-inner-2 overlay-white-middle">
           <div className="container">
-            {/* <div className="section-head text-black text-center">
-              <h2 style={{ fontWeight: "600" }} className="m-b0">
-                Membership Plans
-              </h2>
-              <p>Empowering Careers: CTC-BasedTiers,Your Path to Success</p>
-            </div> */}
             <MembershipPlans/>
           </div>
         </div>

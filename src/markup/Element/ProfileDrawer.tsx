@@ -19,7 +19,8 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   const handleViewProfile = () => {
-    push("/profile-section");
+
+    push(user?.user?.role ==="job_seeker" ? "/job-seeker" : "/job-poster");
     toggleDrawer();
   };
 

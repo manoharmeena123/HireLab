@@ -180,12 +180,6 @@ const AccountSetting = () => {
                               </Link>
                             </li>
                             <li>
-                              <Link href="/manage-job">
-                                <i className="fa fa-cog" aria-hidden="true"></i>
-                                <span>Manage Jobs</span>
-                              </Link>
-                            </li>
-                            <li>
                               <Link href="/job-poster">
                                 <i
                                   className="fa fa-user-o"
@@ -204,6 +198,12 @@ const AccountSetting = () => {
                               </Link>
                             </li>
                             <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
                               <Link href="/cv-manager">
                                 <i
                                   className="fa fa-id-card-o"
@@ -212,7 +212,7 @@ const AccountSetting = () => {
                                 <span>CV Manager</span>
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link href="/switch-plan">
                                 <i
                                   className="fa fa-money"
@@ -220,7 +220,7 @@ const AccountSetting = () => {
                                 ></i>
                                 <span>Switch Plan</span>
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link href="/transaction">
                                 <i
@@ -365,7 +365,7 @@ const AccountSetting = () => {
                     </div>
                     {/* Subscription and Billing Details */}
                     <div className={styles.contentSection}>
-                      <div className="row">
+                      {/* <div className="row">
                         <div className="col-md-6 mb-4">
                           <div className={styles.card}>
                             <h4 className={styles.cardTitle}>
@@ -402,7 +402,7 @@ const AccountSetting = () => {
 
                         <div className="col-md-6 mb-4">
                           {/* Additional Features */}
-                          <div className={styles.card}>
+                          {/* <div className={styles.card}>
                             <h4 className={styles.cardTitle}>
                               Additional Benefits
                             </h4>
@@ -507,9 +507,9 @@ const AccountSetting = () => {
                             ) : (
                               <p>Loading billing information...</p>
                             )}
-                          </div>{" "}
-                        </div>
-                      </div>
+                          </div>{" "} */}
+                        {/* </div> */}
+                      {/* </div> */} 
 
                       {/* Privacy Settings */}
                       <div className={styles.card}>

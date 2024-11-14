@@ -14,7 +14,7 @@ import {
 
 import { JobData } from "@/app/manage-job/types/index";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
-import { useGetDesignationQuery } from "@/store/global-store/global.query";
+import { useGetSettingDataQuery } from "@/store/global-store/global.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
 import { navigateSource } from "@/lib/action";
 import { useLogoutMutation } from "@/app/login/store/login.query";
@@ -25,28 +25,12 @@ import { IMAGE_URL } from "@/lib/apiEndPoints";
 const SupportSection = () => {
   const { push } = useRouter();
   const router = useRouter();
+  const { data, error, isLoading } = useGetSettingDataQuery();
+  const setting = data?.data;
 
-  const {
-    data: jobsData,
-    isLoading: jobsLoading,
-    refetch: manageRefetch,
-  } = useGetManageJobQuery();
   const [logout] = useLogoutMutation();
   const { removeToken } = useAuthToken();
   const { user, refetch } = useLoggedInUser();
-  const [totalJobsPosted, setTotalJobsPosted] = useState(0);
-  const [activeListings, setActiveListings] = useState(0);
-  const [applicationsReceived, setApplicationsReceived] = useState(0);
-  const [pendingApplications, setPendingApplications] = useState(0);
-
-  useEffect(() => {
-    if (jobsData) {
-      setTotalJobsPosted(user?.total_job_posted || 0);
-      setActiveListings(user?.active_listing || 0);
-      setApplicationsReceived(user?.application_recived || 0);
-      setPendingApplications(user?.pendingApplication || 0);
-    }
-  }, [jobsData]);
 
   const handleLogout = async () => {
     const result = await Swal.fire({
@@ -70,14 +54,18 @@ const SupportSection = () => {
         );
       } catch (error) {
         console.error("Logout failed:", error);
-        Swal.fire("Logout failed", "Failed to log out. Please try again.", "error");
+        Swal.fire(
+          "Logout failed",
+          "Failed to log out. Please try again.",
+          "error"
+        );
       }
     }
   };
 
   return (
     <>
-      {jobsLoading && <Loading />}                            
+      {isLoading && <Loading />}
       <div className="page-content bg-white">
         <div className="content-block">
           <div className="section-full bg-white p-t50 p-b20">
@@ -95,7 +83,8 @@ const SupportSection = () => {
                               width={300}
                               height={300}
                               onError={(e) =>
-                                (e.currentTarget.src = "../../images/favicon.png")
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
                               }
                               style={{ borderRadius: "50%" }}
                             />
@@ -106,7 +95,8 @@ const SupportSection = () => {
                               width={300}
                               height={300}
                               onError={(e) =>
-                                (e.currentTarget.src = "../../images/favicon.png")
+                                (e.currentTarget.src =
+                                  "../../images/favicon.png")
                               }
                               style={{ borderRadius: "50%" }}
                             />
@@ -114,10 +104,14 @@ const SupportSection = () => {
                         </div>
                         <div className="candidate-title">
                           <h4 className="m-b5">
-                            <Link href={"#"}>{user?.user?.name || "User Name"}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.name || "User Name"}
+                            </Link>
                           </h4>
                           <p className="m-b0">
-                            <Link href={"#"}>{user?.user?.designation || "Not available"}</Link>
+                            <Link href={"#"}>
+                              {user?.user?.designation || "Not available"}
+                            </Link>
                           </p>
                         </div>
                       </div>
@@ -131,12 +125,6 @@ const SupportSection = () => {
                                   aria-hidden="true"
                                 ></i>
                                 <span>Dashboard</span>
-                              </Link>
-                            </li>
-                            <li>
-                              <Link href="/manage-job">
-                                <i className="fa fa-cog" aria-hidden="true"></i>
-                                <span>Manage Jobs</span>
                               </Link>
                             </li>
                             <li>
@@ -155,6 +143,12 @@ const SupportSection = () => {
                                   aria-hidden="true"
                                 ></i>
                                 <span>Create New Job</span>
+                              </Link>
+                            </li>
+                            <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
                               </Link>
                             </li>
                             <li>
@@ -241,7 +235,7 @@ const SupportSection = () => {
                                 <span>Job Alerts</span>
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link href="/switch-plan">
                                 <i
                                   className="fa fa-money"
@@ -249,7 +243,7 @@ const SupportSection = () => {
                                 ></i>
                                 <span>Switch Plan</span>
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link href="/transaction">
                                 <i
@@ -263,7 +257,7 @@ const SupportSection = () => {
                         )}
 
                         <li>
-                          <Link href="/analytics-and-report" >
+                          <Link href="/analytics-and-report">
                             <i
                               className="fa fa-bar-chart"
                               aria-hidden="true"
@@ -304,9 +298,11 @@ const SupportSection = () => {
                     <div className="job-bx-title clearfix">
                       <div className="row">
                         <div className="col-lg-12 mb-2">
-                        <h5 className="font-weight-700 pull-left text-uppercase">Welcome,{user?.user?.name || "User Name"}</h5>
+                          <h5 className="font-weight-700 pull-left text-uppercase">
+                            Welcome,{user?.user?.name || "User Name"}
+                          </h5>
                           <button
-                           onClick={handleLogout}
+                            onClick={handleLogout}
                             className="site-button right-arrow button-sm float-right mb-1"
                             style={{ fontFamily: "__Inter_Fallback_aaf875" }}
                           >
@@ -316,50 +312,83 @@ const SupportSection = () => {
                       </div>
                     </div>
                     <div className="row">
-                        <h5>Coming soon</h5>
+                      {/* <h5>Coming soon</h5> */}
                       {/* Total Jobs Posted */}
-                      {/* <div className="col-lg-6 col-md-6 mb-2">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Total Jobs Posted</h4>
-                            <h2 className="font-weight-bold">{totalJobsPosted}</h2>
-                            <p className="text-muted">All the jobs you have posted</p>
+                      <div className="col-lg-12 col-md-6 col-sm-12 d-lg-flex d-md-flex">
+                        <div className="p-a30 border m-b30 contact-area border-1 align-self-stretch radius-sm">
+                          <h4 className="m-b10">Quick Support</h4>
+                          <p>
+                            If you have any questions simply use the following
+                            contact details.
+                          </p>
+                          <ul className="no-margin">
+                            <li className="icon-bx-wraper left  m-b30">
+                              <div className="icon-bx-xs border-1">
+                                <Link href={"#"} className="icon-cell">
+                                  <i className="ti-email"></i>
+                                </Link>
+                              </div>
+                              <div className="icon-content">
+                                <h6 className="text-uppercase m-tb0 dez-tilte">
+                                  Email:
+                                </h6>
+                                <p>{setting?.email}</p>
+                              </div>
+                            </li>
+                            <li className="icon-bx-wraper left">
+                              <div className="icon-bx-xs border-1">
+                                <Link href={"#"} className="icon-cell">
+                                  <i className="ti-mobile"></i>
+                                </Link>
+                              </div>
+                              <div className="icon-content">
+                                <h6 className="text-uppercase m-tb0 dez-tilte">
+                                  PHONE
+                                </h6>
+                                <p>{setting?.number}</p>
+                              </div>
+                            </li>
+                          </ul>
+                          <div className="m-t20">
+                            <ul className="dez-social-icon dez-social-icon-lg">
+                              {setting?.facebook && (
+                                <li>
+                                  <Link
+                                    href={setting.facebook}
+                                    className="fa fa-facebook bg-success mr-1"
+                                  ></Link>
+                                </li>
+                              )}
+                              {setting?.twitter && (
+                                <li>
+                                  <Link
+                                    href={setting.twitter}
+                                    className="bg-success mr-1"
+                                  >
+                                    <i className="fa fa-x-twitter">X</i>
+                                  </Link>
+                                </li>
+                              )}
+                              {setting?.linkedin && (
+                                <li>
+                                  <Link
+                                    href={setting.linkedin}
+                                    className="fa fa-linkedin bg-success mr-1"
+                                  ></Link>
+                                </li>
+                              )}
+                              {setting?.instagram && (
+                                <li>
+                                  <Link
+                                    href={setting.instagram}
+                                    className="fa fa-instagram bg-success mr-1"
+                                  ></Link>
+                                </li>
+                              )}
+                            </ul>
                           </div>
                         </div>
-                      </div> */}
-
-                      {/* Active Listings */}
-                      {/* <div className="col-lg-6 col-md-6 mb-2">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Active Listings</h4>
-                            <h2 className="font-weight-bold">{activeListings}</h2>
-                            <p className="text-muted">Currently active job listings</p>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* Applications Received */}
-                      {/* <div className="col-lg-6 col-md-6">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Applications Received</h4>
-                            <h2 className="font-weight-bold">{applicationsReceived}</h2>
-                            <p className="text-muted">Total applications received</p>
-                          </div>
-                        </div>
-                      </div> */}
-
-                      {/* Pending Applications */}
-                      {/* <div className="col-lg-6 col-md-6">
-                        <div className="card bg-light shadow-sm">
-                          <div className="card-body text-center">
-                            <h4 className="card-title">Pending Applications</h4>
-                            <h2 className="font-weight-bold">{pendingApplications}</h2>
-                            <p className="text-muted">Applications awaiting review</p>
-                          </div>
-                        </div>
-                      </div> */}
+                      </div>
                     </div>
 
                     {/* Pagination or more content can go here */}

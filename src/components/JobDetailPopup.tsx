@@ -21,6 +21,7 @@ import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formaterDate } from "@/utils/formateDate";
 import Link from "next/link";
 import parse from "html-react-parser";
+import { showLoginSidebar as showLogin, showSignUpSidebar as showSignUp, closeSidebars as close } from "@/store/global-store/global.slice"; // Import actions with aliases
 
 type JobDetailPopupType = {
   show: boolean;
@@ -111,7 +112,8 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
 
     const handleApplyJob = async (jobId: string) => {
       if (!user) {
-        router.push("/login");
+        dispatch(showLogin()); 
+        // router.push("/login");
         return;
       }
     
@@ -223,7 +225,8 @@ const JobDetailPopup = ({ job, getJobs }: JobDetailPopupType) => {
     job?.data?.job_description || ""
   );
   const handleLoginToApply = () => {
-    router.push(`/login?page=job-detail?jobId=${job?.data?.id}`);
+    dispatch(showLogin()); 
+    // router.push(`/login?page=job-detail?jobId=${job?.data?.id}`);
   };
 
   const isJobApplied = appliedJob?.data?.some(

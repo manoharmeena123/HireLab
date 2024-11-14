@@ -44,7 +44,6 @@ const JobSeekerSection = () => {
     useGetCtcDataQuery();
   const { data: getProfileData, isLoading: getProfileDataLoading } =
     useGetProfileDataQuery({});
-  console.log("getProfileData", getProfileData);
   const [selectedIndustry, setSelectedIndustry] =
     useState<SingleValue<OptionType> | null>(null);
   const [selectedDesignation, setSelectedDesignation] =
@@ -156,11 +155,11 @@ const JobSeekerSection = () => {
       key_skills: newTags.join(", "), // Joining tags as a single comma-separated string
     }));
   };
+
   const [validationErrors, setValidationErrors] = useState<{
     [key: string]: string;
   }>({});
 
-  // Predefined options for Availability to Join
   const availabilityOptions = [
     { value: "Immediate", label: "Immediate" },
     { value: "1 week", label: "1 Week" },
@@ -169,13 +168,11 @@ const JobSeekerSection = () => {
     { value: "3 months", label: "3 Months" },
   ];
 
-  // Designation options
   const [designationOptions, setDesignationOptions] = useState<OptionType[]>(
     []
   );
   const [ctcOptions, setCtcOptions] = useState<OptionType[]>([]);
 
-  // Generate years for Year of Graduation
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 50 }, (_, index) => currentYear - index);
 
@@ -263,7 +260,6 @@ const JobSeekerSection = () => {
       "languages_known",
     ];
 
-    // Check required fields
     requiredFields.forEach((field) => {
       if (!profileForm[field]) {
         const errorMessage = `${field.replace("_", " ")} is required.`;
@@ -272,19 +268,17 @@ const JobSeekerSection = () => {
       }
     });
 
-    // Show resume error only if there’s no initial resume or newly uploaded file
     if (!profileForm.resume && !resumeName) {
       errors.resume = "Resume is required.";
     }
 
-    // Validate start and end dates for work experiences
     workExperiences.forEach((experience, index) => {
       const startDate = new Date(experience.start_date);
       const endDate = new Date(experience.end_date);
 
       if (experience.start_date && experience.end_date && startDate > endDate) {
         errors[
-          `workExperiences_${index}_date`
+          `work_experiences_${index}_date`
         ] = `Start date should be earlier than end date for Job ${index + 1}.`;
       }
     });
@@ -292,7 +286,6 @@ const JobSeekerSection = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Dynamic Work Experience Management
   const [workExperiences, setWorkExperiences] = useState([
     {
       job_title: "",
@@ -302,14 +295,6 @@ const JobSeekerSection = () => {
       key_responsibilities: "",
     },
   ]);
-
-  // Define allowed keys for work experience fields
-  type WorkExperienceField =
-    | "job_title"
-    | "company_name"
-    | "start_date"
-    | "end_date"
-    | "key_responsibilities";
 
   const handleWorkExperienceChange = (
     index: number,
@@ -332,7 +317,7 @@ const JobSeekerSection = () => {
       work_experiences: [
         ...prevForm.work_experiences,
         {
-          id: Date.now(), // Temporary ID for new experience
+          id: Date.now(),
           job_title: "",
           company_name: "",
           start_date: "",
@@ -355,10 +340,10 @@ const JobSeekerSection = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!validateForm()) {
-    //   toast.error("Please fill all mandatory fields.");
-    //   return;
-    // }
+    if (!validateForm()) {
+      toast.error("Please fill all mandatory fields.");
+      return;
+    }
     console.log("profileForm", profileForm);
     const formData = new FormData();
     Object.entries(profileForm).forEach(([key, value]) => {
@@ -367,8 +352,6 @@ const JobSeekerSection = () => {
       }
     });
 
-    // Append dynamic work experiences
-    // Append each work experience individually as an array item
     workExperiences.forEach((exp, index) => {
       formData.append(`work_experiences[${index}][job_title]`, exp.job_title);
       formData.append(
@@ -382,7 +365,7 @@ const JobSeekerSection = () => {
         exp.key_responsibilities
       );
     });
-    console.log("formData", formData);
+
     try {
       setSaveLoading(true);
       const res = await postProfile(formData).unwrap();
@@ -393,7 +376,7 @@ const JobSeekerSection = () => {
       toast.error(error.message || "Failed to save profile.");
     }
   };
-  // Qualification options array
+
   const qualificationOptions = [
     { value: "High School", label: "High School" },
     { value: "Diploma", label: "Diploma" },
@@ -403,7 +386,6 @@ const JobSeekerSection = () => {
     { value: "Other", label: "Other" },
   ];
 
-  // Degree/Program options array
   const degreeOptions = [
     { value: "B.Sc", label: "B.Sc" },
     { value: "B.Tech", label: "B.Tech" },
@@ -416,6 +398,7 @@ const JobSeekerSection = () => {
     { value: "PhD", label: "PhD" },
     { value: "Other", label: "Other" },
   ];
+
   return (
     <>
       {(collageDataLoading ||
@@ -430,7 +413,6 @@ const JobSeekerSection = () => {
                 <Profilesidebar refetch={refetch} />
                 <div className="col-xl-9 col-lg-8 m-b30">
                   <div className="job-bx job-profile">
-                    {/* Personal Information Section */}
                     <div className="job-bx-title clearfix">
                       <h5 className="font-weight-700 pull-left text-uppercase">
                         Personal Information
@@ -611,21 +593,12 @@ const JobSeekerSection = () => {
                             <label>LinkedIn Profile:</label>
                             <input
                               type="url"
-                              className={`form-control ${
-                                validationErrors.linkedin_profile
-                                  ? "is-invalid"
-                                  : ""
-                              }`}
+                              className="form-control"
                               placeholder="Enter LinkedIn Profile URL"
                               name="linkedin_profile"
                               value={profileForm.linkedin_profile || ""}
                               onChange={handleInputChange}
                             />
-                            {/* {validationErrors.linkedin_profile && (
-                              <div className="invalid-feedback">
-                                {validationErrors.linkedin_profile}
-                              </div>
-                            )} */}
                           </div>
                         </div>
 
@@ -638,7 +611,7 @@ const JobSeekerSection = () => {
                               className="form-control"
                               name="image"
                               onChange={handleInputChange}
-                              accept="image/*"  
+                              accept="image/*"
                             />
                             {imagePreviewUrl ? (
                               <Image
@@ -666,14 +639,12 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-                      {/* Professional Information Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Professional Information
                         </h5>
                       </div>
                       <div className="row m-b30">
-                        {/* Current Job Title */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Current Job Title:</label>
@@ -696,7 +667,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
 
-                        {/* Company Name */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Company Name:</label>
@@ -828,7 +798,7 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-                      {/* Education Details Section */}
+
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Education Details
@@ -861,6 +831,7 @@ const JobSeekerSection = () => {
                             )}
                           </div>
                         </div>
+
                         {/* Degree/Program */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
@@ -904,6 +875,7 @@ const JobSeekerSection = () => {
                             )}
                           </div>
                         </div>
+
                         {/* Year of Graduation */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
@@ -930,7 +902,8 @@ const JobSeekerSection = () => {
                             )}
                           </div>
                         </div>
-                        {/* Additional Certifications/Courses (Non-Mandatory) */}
+
+                        {/* Additional Certifications/Courses */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>
@@ -949,17 +922,17 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
+
                       {/* Work Experience Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Work Experience
                         </h5>
                       </div>
-                      {/* // Updated work experience fields in the return section */}
+                      {/* Work Experience Fields */}
                       {profileForm.work_experiences.map(
                         (experience: any, index: number) => (
                           <div className="row m-b30" key={experience.id}>
-                            {/* Job Title */}
                             <div className="col-lg-6 col-md-6">
                               <div className="form-group">
                                 <label>Job Title:</label>
@@ -976,7 +949,6 @@ const JobSeekerSection = () => {
                               </div>
                             </div>
 
-                            {/* Company Name */}
                             <div className="col-lg-6 col-md-6">
                               <div className="form-group">
                                 <label>Company Name:</label>
@@ -993,7 +965,6 @@ const JobSeekerSection = () => {
                               </div>
                             </div>
 
-                            {/* Start Date */}
                             <div className="col-lg-6 col-md-6">
                               <div className="form-group">
                                 <label>Start Date:</label>
@@ -1009,7 +980,6 @@ const JobSeekerSection = () => {
                               </div>
                             </div>
 
-                            {/* End Date */}
                             <div className="col-lg-6 col-md-6">
                               <div className="form-group">
                                 <label>End Date:</label>
@@ -1025,7 +995,6 @@ const JobSeekerSection = () => {
                               </div>
                             </div>
 
-                            {/* Key Responsibilities */}
                             <div className="col-lg-12 col-md-12">
                               <div className="form-group">
                                 <label>Key Responsibilities:</label>
@@ -1045,7 +1014,6 @@ const JobSeekerSection = () => {
                               </div>
                             </div>
 
-                            {/* Remove Experience Button */}
                             {index > 0 && (
                               <div className="col-lg-12 col-md-12">
                                 <button
@@ -1061,7 +1029,6 @@ const JobSeekerSection = () => {
                         )
                       )}
 
-                      {/* Add New Experience Button */}
                       <div className="col-lg-12 col-md-12">
                         <button
                           type="button"
@@ -1072,13 +1039,12 @@ const JobSeekerSection = () => {
                         </button>
                       </div>
 
-                      {/* Resume Upload Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Resume Upload
                         </h5>
                       </div>
-                      {/* Upload Resume */}
+
                       <div className="row m-b30">
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
@@ -1097,7 +1063,6 @@ const JobSeekerSection = () => {
                                 <span>{resumeName}</span>
                               </div>
                             )}
-                            {/* Only display error if neither existing resume nor new upload */}
                             {validationErrors.resume && (
                               <div className="invalid-feedback">
                                 {validationErrors.resume}
@@ -1107,14 +1072,13 @@ const JobSeekerSection = () => {
                         </div>
                       </div>
 
-                      {/* Skills Section */}
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Skills
                         </h5>
                       </div>
+
                       <div className="row m-b30">
-                        {/* Key Skills */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Key Skills</label>
@@ -1138,7 +1102,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
 
-                        {/* Languages Known */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Languages Known:</label>
@@ -1162,14 +1125,14 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
-                      {/* Other Details Section */}
+
                       <div className="job-bx-title clearfix">
                         <h5 className="font-weight-700 pull-left text-uppercase">
                           Other Details
                         </h5>
                       </div>
+
                       <div className="row m-b30">
-                        {/* Preferred Job Locations */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Preferred Job Locations:</label>
@@ -1190,7 +1153,7 @@ const JobSeekerSection = () => {
                             )}
                           </div>
                         </div>
-                        {/* Willing to Relocate */}
+
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Willing to Relocate:</label>
@@ -1223,7 +1186,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
 
-                        {/* Willing to Work Remotely */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Willing to Work Remotely:</label>
@@ -1251,7 +1213,6 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
 
-                        {/* Portfolio or Website */}
                         <div className="col-lg-6 col-md-6">
                           <div className="form-group">
                             <label>Portfolio or Website (Optional):</label>
@@ -1266,6 +1227,7 @@ const JobSeekerSection = () => {
                           </div>
                         </div>
                       </div>
+
                       <button type="submit" className="site-button">
                         {saveLoading ? "Saving..." : "Save Changes"}
                       </button>

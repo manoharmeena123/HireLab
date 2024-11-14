@@ -150,12 +150,7 @@ const CvManager = () => {
                             <span>Dashboard</span>
                           </Link>
                         </li>
-                        <li>
-                          <Link href="/manage-job" >
-                          <i className="fa fa-cog" aria-hidden="true"></i>
-                            <span>Manage jobs</span>
-                          </Link>
-                        </li>
+                       
                         <li>
                           <Link href={"/job-poster"}>
                             <i className="fa fa-user-o" aria-hidden="true"></i>
@@ -169,6 +164,12 @@ const CvManager = () => {
                               aria-hidden="true"
                             ></i>
                             <span>Create new job</span>
+                          </Link>
+                        </li> 
+                        <li>
+                          <Link href="/manage-job" >
+                          <i className="fa fa-cog" aria-hidden="true"></i>
+                            <span>Manage jobs</span>
                           </Link>
                         </li>
                         {/* <li>
@@ -216,14 +217,14 @@ const CvManager = () => {
                             <span>CV Manager</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link
                             href={"/switch-plan"}
                           >
                             <i className="fa fa-money" aria-hidden="true"></i>
                             Switch Plan
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href={"/transaction"}>
                             <i

@@ -20,7 +20,11 @@ import { useSearchParams } from "next/navigation";
 import { navigateSource } from "@/lib/action";
 import { selectLoginState } from "@/app/login/store/login.selectors";
 import { selectRegisterState } from "@/app/register/store/register.selectors";
-
+import {
+  showLoginSidebar as showLogin,
+  showSignUpSidebar as showSignUp,
+  closeSidebars as close,
+} from "@/store/global-store/global.slice"; // Import actions with aliases
 interface RegisterData {
   data: {
     otp: string;
@@ -121,14 +125,16 @@ const OtpVerificationDrawer = ({ onClose }: any) => {
         localStorage.removeItem("registerData");
         localStorage.removeItem("logindata");
         const loggedInUser :any = await fetchUser();
-        console.log('loggedInUser', loggedInUser)
-        const endpoint = queryTitle
-        ? `${queryTitle}`
-        : (loggedInUser?.user?.role === "job_poster" ? "/job-poster-dashboard" : "/dashboard-section");
+        // console.log('loggedInUser', loggedInUser)
+        // const endpoint = queryTitle
+        // ? `${queryTitle}`
+        // : (loggedInUser?.user?.role === "job_poster" ? "/job-poster-dashboard" : "/dashboard-section");
       
-        if (loggedInUser) {
-          navigateSource(endpoint);
-        }
+        // if (loggedInUser) {
+        //   navigateSource(endpoint);
+        // }
+        dispatch(close());
+        onClose()
       } else if (res.code === 401) {
         toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {

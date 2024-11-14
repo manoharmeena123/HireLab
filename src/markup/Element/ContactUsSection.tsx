@@ -5,6 +5,7 @@ import PageTitle from "@/markup/Layout/PageTitle";
 import bnr from "../../../src/images/banner/bnr1.jpg";
 import { useGetSettingDataQuery, usePostSaveContactMutation } from "@/store/global-store/global.query";
 import Loading from "@/components/Loading";
+import Swal from "sweetalert2";
 
 const Contact = () => {
   const { data, error, isLoading } = useGetSettingDataQuery();
@@ -26,17 +27,27 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Form data before API call:", formData);
-    
+  
     try {
       const response = await postSaveContact(formData).unwrap();
       console.log("API response:", response);
-      alert("Message sent successfully");
+      Swal.fire({
+        icon: "success",
+        title: "Message sent",
+        text: "Your message has been sent successfully!",
+      });
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
       console.error("Error sending message:", err);
       setFormError("Failed to send message. Please try again later.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Failed to send message. Please try again later.",
+      });
     }
   };
+  
   
   return (
     <>

@@ -25,8 +25,15 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
 import Swal from "sweetalert2";
+import {
+  showLoginSidebar as showLogin,
+  showSignUpSidebar as showSignUp,
+  closeSidebars as close,
+} from "@/store/global-store/global.slice"; // Import actions with aliases
+import { useDispatch } from 'react-redux';
 
 const SingleBlogSection = () => {
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const query = searchParams.get("query");
   const { user } = useLoggedInUser();
@@ -84,7 +91,7 @@ const SingleBlogSection = () => {
   ) => {
     event.preventDefault();
     if (!user) {
-      router.push("/login");
+      dispatch(showLogin());
     } else {
       try {
         const form = event.currentTarget;
@@ -112,7 +119,7 @@ const SingleBlogSection = () => {
   ) => {
     event.preventDefault();
     if (!user) {
-      router.push("/login");
+      dispatch(showLogin());
     } else {
       try {
         const form = event.currentTarget;
@@ -432,9 +439,7 @@ const SingleBlogSection = () => {
                               <button
                                 className="site-button"
                                 onClick={() =>
-                                  router.push(
-                                    `/login?page=single-discussion?query=${query}`
-                                  )
+                                  dispatch(showLogin())
                                 }
                               >
                                 Login to post comment

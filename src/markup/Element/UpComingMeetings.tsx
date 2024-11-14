@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useDispatch } from 'react-redux';
 import {
   useGetEventsQuery,
   useGetEventTextQuery,
@@ -16,8 +17,10 @@ import { toast } from "react-toastify";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { formatEventDate } from "@/utils/formateDate";
 import Swal from "sweetalert2";
+import { showLoginSidebar as showLogin, showSignUpSidebar as showSignUp, closeSidebars as close } from "@/store/global-store/global.slice"; // Import actions with aliases
 
 const UpComingMeetings = () => {
+  const dispatch = useDispatch();
   const { push } = useRouter();
   const { data: eventsData, isLoading, isError } = useGetEventsQuery();
   const { data: eventText } = useGetEventTextQuery();
@@ -49,7 +52,8 @@ const UpComingMeetings = () => {
 
   const handleIconClick = async (index: number, event: any) => {
     if (!user) {
-      push(`/login?page=/`);
+      dispatch(showLogin());
+      // push(`/login?page=/`);
       return;
     }
 

@@ -172,12 +172,7 @@ const Transaction = () => {
                                  <span>Dashboard</span>
                                </Link>
                              </li>
-                             <li>
-                               <Link href="/manage-job" >
-                                 <i className="fa fa-cog" aria-hidden="true"></i>
-                                 <span>Manage jobs</span>
-                               </Link>
-                             </li>
+                      
                           </>
                         ) : (
                           <li>
@@ -223,6 +218,12 @@ const Transaction = () => {
                                 <span>Create new job</span>
                               </Link>
                             </li>
+                            <li>
+                               <Link href="/manage-job" >
+                                 <i className="fa fa-cog" aria-hidden="true"></i>
+                                 <span>Manage jobs</span>
+                               </Link>
+                             </li>
                             {/* <li>
                               <Link href="/job-posted">
                                 <i
@@ -285,12 +286,12 @@ const Transaction = () => {
                           </>
                         )}
 
-                        <li>
+                        {/* <li>
                           <Link href="/switch-plan">
                             <i className="fa fa-money" aria-hidden="true"></i>
                             Switch Plan
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link href="/transaction" className="active">
                             <i

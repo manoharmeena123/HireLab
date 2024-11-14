@@ -143,12 +143,7 @@ const AnalyticsReport = () => {
                                 <span>Dashboard</span>
                               </Link>
                             </li>
-                            <li>
-                              <Link href="/manage-job">
-                                <i className="fa fa-cog" aria-hidden="true"></i>
-                                <span>Manage Jobs</span>
-                              </Link>
-                            </li>
+                            
                             <li>
                               <Link href="/job-poster">
                                 <i
@@ -168,6 +163,12 @@ const AnalyticsReport = () => {
                               </Link>
                             </li>
                             <li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage Jobs</span>
+                              </Link>
+                            </li>
+                            <li>
                               <Link href="/cv-manager">
                                 <i
                                   className="fa fa-id-card-o"
@@ -176,7 +177,7 @@ const AnalyticsReport = () => {
                                 <span>CV Manager</span>
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link href="/switch-plan">
                                 <i
                                   className="fa fa-money"
@@ -184,7 +185,7 @@ const AnalyticsReport = () => {
                                 ></i>
                                 <span>Switch Plan</span>
                               </Link>
-                            </li>
+                            </li> */}
                             <li>
                               <Link href="/transaction">
                                 <i

@@ -185,7 +185,7 @@ const IndexBanner: React.FC = () => {
                 }
                 onInputChange={handleJobTitleInputChange}
                 onChange={handleJobTitleChange}
-                placeholder="Select title"
+                placeholder="Enter skills / designations / companies"
                 isClearable
                 isLoading={jobTitleDataLoading}
                 styles={{
@@ -196,13 +196,17 @@ const IndexBanner: React.FC = () => {
                     border: "none",
                     boxShadow: "none",
                     backgroundColor: "#F8F8F8",
-                    width: "250px", 
+                    width: "300px", 
                     cursor: "pointer"
                   }),
                   placeholder: (base) => ({
                     ...base,
                     color: "#6F6F6F",
                     fontSize: "15px",
+                  }),
+                  indicatorsContainer: (base) => ({
+                    ...base,
+                    display: "none", // Hide the dropdown indicator
                   }),
                 }}
               />
@@ -228,6 +232,7 @@ const IndexBanner: React.FC = () => {
                     color: "#6F6F6F",
                     fontSize: "15px",
                   }),
+                  
                 }}
               />
               <Select

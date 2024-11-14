@@ -72,6 +72,11 @@ const initialSaveContactState: SaveContactDataState = {
   saveContactLoading: false,
   saveContactError: null,
 };
+// Initial state for the login sidebar visibility
+const initialLoginState :any = {
+  showLoginSidebar: false,
+  showSignUpSidebar: false,
+};
 
 const globalSlice = createSlice({
   name: 'global',
@@ -87,8 +92,24 @@ const globalSlice = createSlice({
     ...initialSettingState,
     ...initialBannerState,
     ...initialSaveContactState,
+    ...initialLoginState
   },
   reducers: {
+     // Action to show the login sidebar
+     showLoginSidebar: (state) => {
+      state.showLoginSidebar = true;
+      state.showSignUpSidebar = false;  // Close the signup sidebar
+    },
+    // Action to show the signup sidebar
+    showSignUpSidebar: (state) => {
+      state.showSignUpSidebar = true;
+      state.showLoginSidebar = false;  // Close the login sidebar
+    },
+    // Action to close both sidebars
+    closeSidebars: (state) => {
+      state.showLoginSidebar = false;
+      state.showSignUpSidebar = false;
+    },
     // Reducers for managing blogs state
     fetchBlogsStart: (state) => {
       state.loading = true;
@@ -274,6 +295,8 @@ export const {
   fetchSaveContactStart,
   fetchSaveContactSuccess,
   fetchSaveContactFailure,
+  showLoginSidebar, showSignUpSidebar, closeSidebars
 } = globalSlice.actions;
+// Export actions
 
 export const globalEventReducer = globalSlice.reducer;

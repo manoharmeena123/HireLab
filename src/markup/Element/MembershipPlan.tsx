@@ -4,12 +4,15 @@ import { useRouter } from "next/navigation";
 import { useGetMembershipQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import Loading from "@/components/Loading";
+import { useDispatch } from 'react-redux';
+import { showLoginSidebar as showLogin, showSignUpSidebar as showSignUp, closeSidebars as close } from "@/store/global-store/global.slice"; // Import actions with aliases
 
-const SwitchPlan = () => {
+const MemberShip = () => {
   const { data: membershipData, isLoading } = useGetMembershipQuery();
   const { user } = useLoggedInUser();
   const router = useRouter();
-
+  const dispatch = useDispatch();
+  // const { showLoginSidebar, showSignUpSidebar } = useSelector((state :any) => state.login);
   const reorderedPlans = () => {
     if (!membershipData?.data) return [];
     const userMembershipId = user?.user?.membership?.membership_id;
@@ -24,8 +27,9 @@ const SwitchPlan = () => {
 
   const handleGetStarted = async (membershipId: any) => {
     if (!user) {
+      dispatch(showLogin()); 
       // Set a flag in localStorage to indicate that the user needs to log in
-      router.push("/login");
+      // router.push("/login");
     } else {
       // Proceed to the cart page
       router.push(`/cart?plan=${membershipId}`);
@@ -325,4 +329,4 @@ const SwitchPlan = () => {
   );
 };
 
-export default SwitchPlan;
+export default MemberShip;

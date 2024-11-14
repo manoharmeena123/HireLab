@@ -29,8 +29,15 @@ import profileIcon from "../../images/favicon.png";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash, faReply } from "@fortawesome/free-solid-svg-icons"; // Import Font Awesome icons
+import { useDispatch } from "react-redux";
+import {
+  showLoginSidebar as showLogin,
+  showSignUpSidebar as showSignUp,
+  closeSidebars as close,
+} from "@/store/global-store/global.slice"; // Import actions with aliases
 
 const SingleBlogSection = () => {
+  const dispatch = useDispatch();
   const { data: getSetting } = useGetSettingsQuery();
   const { user } = useLoggedInUser();
   const router = useRouter();
@@ -211,7 +218,8 @@ const SingleBlogSection = () => {
   };
 
   const handleLoginToPost = () => {
-    router.push(`/login?page=single-blog?query=${queryTitle}`);
+    dispatch(showLogin());
+    // router.push(`/login?page=single-blog?query=${queryTitle}`);
   };
 
   const handleUpdateComment = async (

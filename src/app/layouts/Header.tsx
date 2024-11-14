@@ -14,6 +14,8 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import LoginDrawer from "@/markup/Element/LoginDrawer";
 import RegisterDrawer from "@/markup/Element/RegisterDrawer";
+import { useDispatch, useSelector } from "react-redux";
+import { showLoginSidebar as showLogin, showSignUpSidebar as showSignUp, closeSidebars as close } from "@/store/global-store/global.slice"; // Import actions with aliases
 
 const Header = () => {
   const router = useRouter();
@@ -22,7 +24,9 @@ const Header = () => {
   const pathname = usePathname();
   const isLoginPage = pathname === "/login";
   const isRegisterPage = pathname === "/register";
-
+  const [hideMembership, setHideMembership] = useState(false);
+  const dispatch = useDispatch();
+  const { showLoginSidebar, showSignUpSidebar,closeSidebars } = useSelector((state :any) => state.global); // Access the state
   const [menuOpen, setMenuOpen] = useState(false);
   const [showServiceDropdown, setShowServiceDropdown] = useState(false);
   // Function to check if the link is active
@@ -33,7 +37,6 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
-  
   const handleChatClick = () => {
     router.push("/chats");
   };
@@ -48,7 +51,6 @@ const Header = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  
   // Function to toggle drawer
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -66,42 +68,27 @@ const Header = () => {
       </Link>
     );
   //LoginDrawer
-  const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
+  // const [showLoginSidebar, setShowLoginSidebar] = useState(false); // Sidebar state
   // const handleLoginClick = () => setShowLoginSidebar(true); // Show login sidebar
   // const handleCloseSidebar = () => setShowLoginSidebar(false); // Close login sidebar
 
   // SignUpDrawer
-  const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
+  // const [showSignUpSidebar, setShowSignUpSidebar] = useState(false); // Sidebar state
   // const handleSignUpClick = () => setShowSignUpSidebar(true); // Show login sidebar
   // const handleCloseSignUpSidebar = () => setShowSignUpSidebar(false); // Close login sidebar
 
+ // Dispatch actions to show login and sign up sidebars
+ const handleLoginClick = () => {
+  dispatch(showLogin()); // Dispatch action to show login sidebar
+};
 
+const handleSignUpClick = () => {
+  dispatch(showSignUp()); // Dispatch action to show sign-up sidebar
+};
 
-  useEffect(() => {
-    const loginDrawerStatus = localStorage.getItem("loginDrawer");
-    if (loginDrawerStatus === "open") {
-      setShowLoginSidebar(true);// Open the login drawer if the key is set
-      localStorage.removeItem("loginDrawer"); // Remove the key after opening the drawer
-    }
-  }, []); // Empty dependency array to run only once when the component mounts
-
-
-
-
-
-  const handleLoginClick = () => {
-    setShowLoginSidebar(true);
-    setShowSignUpSidebar(false);
-  };
-
-  const handleSignUpClick = () => {
-    setShowSignUpSidebar(true);
-    setShowLoginSidebar(false);
-  };
-  const handleCloseSidebar = () => {
-    setShowLoginSidebar(false);
-    setShowSignUpSidebar(false);
-  };
+const handleCloseSidebar = () => {
+  dispatch(close()); // Dispatch action to close both sidebars
+};
   const renderLoginRegisterButtons = !isLoginPage &&
     !isRegisterPage &&
     !token && (
@@ -159,8 +146,27 @@ const Header = () => {
   const handleServiceMouseLeave = () => {
     setShowServiceDropdown(false);
   };
+
+  const handleJobSeekerClick = () => {
+    if (!token) {
+      handleLoginClick(); // Open the login drawer
+    } else {
+      router.push("/job-seeker");
+    }
+  };
+
+  const handleJobPosterClick = () => {
+    if (!token) {
+      handleLoginClick(); // Open the login drawer
+    } else {
+      router.push("/job-poster");
+    }
+  };
   return (
-    <header className="site-header mo-left header fullwidth">
+    <header
+      className="site-header mo-left header fullwidth"
+      style={{ position: "sticky", top: "0", zIndex: "1000", width: "100%" }}
+    >
       <div className="sticky-header main-bar-wraper navbar-expand-lg">
         <div className="main-bar clearfix">
           <div className={`container-fluid ${styles.containerFluid} pr-5`}>
@@ -316,7 +322,7 @@ const Header = () => {
                       onMouseLeave={handleServiceMouseLeave}
                     >
                       <Link href="#" className={styles.menuLink}>
-                        Services
+                        Book a Session
                       </Link>
                       {showServiceDropdown && (
                         <div className={`dropdown-menu ${styles.dropdownMenu}`}>
@@ -405,13 +411,41 @@ const Header = () => {
                   </>
                 ) : (
                   <>
-                    <li className={isActive("/job-seeker") ? "active" : ""}>
-                      <Link href="/job-seeker">I'M A Job SEEKER</Link>
-                    </li>
+                    {user?.user ? (
+                      <>
+                        <li
+                          className={isActive("/job-seeker") ? "active" : ""}
+                          onClick={handleJobSeekerClick}
+                        >
+                          <Link href="/job-seeker" onClick={handleLoginClick}>
+                            I'M A Job SEEKER
+                          </Link>
+                        </li>
 
-                    <li className={isActive("/job-poster") ? "active" : ""}>
-                      <Link href="/job-poster">I'M A Job Poster</Link>
-                    </li>
+                        <li
+                          className={isActive("/job-poster") ? "active" : ""}
+                          onClick={handleJobPosterClick}
+                        >
+                          <Link href="/job-poster" onClick={handleLoginClick}>
+                            I'M A Job Poster
+                          </Link>
+                        </li>
+                      </>
+                    ) : (
+                      <>
+                        <li onClick={handleJobSeekerClick}>
+                          <Link href="#" onClick={handleLoginClick}>
+                            I'M A Job SEEKER
+                          </Link>
+                        </li>
+
+                        <li onClick={handleJobPosterClick}>
+                          <Link href="#" onClick={handleLoginClick}>
+                            I'M A Job Poster
+                          </Link>
+                        </li>
+                      </>
+                    )}
 
                     <li
                       className={`${styles.dropdown}`}
@@ -419,7 +453,7 @@ const Header = () => {
                       onMouseLeave={handleServiceMouseLeave}
                     >
                       <Link href="#" className={styles.menuLink}>
-                        Services
+                        Book a Session
                       </Link>
                       {showServiceDropdown && (
                         <div className={`dropdown-menu ${styles.dropdownMenu}`}>

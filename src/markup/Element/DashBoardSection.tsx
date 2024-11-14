@@ -436,7 +436,7 @@ const DashboardSection = () => {
             }}
           >
             <div className="d-flex justify-content-between align-items-center mb-2">
-              <h4 className="fw-bold">Meetups and Events</h4>
+              <h4 className="fw-bold">Meet Ups and Events</h4>
               <Link href="/single-event" className="btn btn-link text-success">
                 View All
               </Link>
