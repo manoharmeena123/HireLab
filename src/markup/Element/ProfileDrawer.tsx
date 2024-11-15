@@ -8,6 +8,7 @@ import { useLogoutMutation } from "@/app/login/store/login.query";
 import Swal from "sweetalert2";
 import { FaCrown } from "react-icons/fa"; // Placeholder icon
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import { navigateSource } from "@/lib/action";
 
 const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
   const { push } = useRouter();
@@ -38,8 +39,8 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
       try {
         await logout().unwrap();
         removeToken();
+        navigateSource("/");
         Swal.fire("Logged out!", "You have been logged out successfully.", "success");
-        push("/");
       } catch (error) {
         Swal.fire("Logout failed", "Failed to log out. Please try again.", "error");
       }

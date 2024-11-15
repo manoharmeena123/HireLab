@@ -2,6 +2,8 @@
 import React from "react";
 import Link from "next/link";
 import { useGetSettingsQuery} from "@/store/global-store/global.query";
+import logo2 from "../../images/hiralablogo.png";
+import Image from "next/image";
 
 const Footer = () => {
   const { data: getSetting } = useGetSettingsQuery();
@@ -16,12 +18,16 @@ const Footer = () => {
             <div className="col-xl-4 col-lg-4 col-md-12 col-sm-12">
               <div className="widget">
                 <div className="d-flex align-items-center">
-                  <img
-                    src={require("./../../images/hiralablogo.png").default.src}
-                    style={{ width: "60px", height: "67px" }}
-                    className="m-b15 mr-1"
-                    alt=""
-                  />
+                <Link href="/">
+                <Image
+                  src={logo2}
+                  className="logo"
+                  alt="img"
+                  width={70}
+                  height={65}
+                  objectFit={"contain"}
+                />
+              </Link>
                 </div>
                 <p className="text-capitalize m-b20 text-white">
                   Lorem Ipsum is simply dummy text of the printing and
@@ -31,7 +37,7 @@ const Footer = () => {
                 <div className="subscribe-form m-b20">
                   <form
                     className="dzSubscribe"
-                    action="script/mailchamp.php"
+                    // action="script/mailchamp.php"
                     method="post"
                   >
                     <div className="dzSubscribeMsg"></div>
@@ -162,7 +168,7 @@ const Footer = () => {
                 {" "}
                 © Copyright by{" "}
                 <i className="fa fa-heart m-lr5 text-red heart"></i>
-                <Link href={""}>HireLab </Link> All rights reserved.
+                <Link href={"#"}>HireLab </Link> All rights reserved.
               </span>
             </div>
           </div>

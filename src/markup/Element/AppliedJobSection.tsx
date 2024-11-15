@@ -1,24 +1,24 @@
-"use client";
-import React, { useEffect, useState } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import Header from "@/app/layouts/Header";
-import Footer from "@/app/layouts/Footer";
 import {
   useGetAppliedJobsQuery,
   useDeleteAppliedJobMutation,
 } from "@/store/global-store/global.query";
-import { formatDateAgo } from "@/utils/formateDate";
 import { useGetDesignationQuery } from "@/store/global-store/global.query";
 import { useLoggedInUser } from "@/hooks/useLoggedInUser";
 import { useLogoutMutation } from "@/app/login/store/login.query";
 import { useAuthToken } from "@/hooks/useAuthToken";
-import { navigateSource } from "@/lib/action";
 import { useRouter } from "next/navigation";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
+import { formatDateAgo } from "@/utils/formateDate";
+import Pagination from "./Pagination"; // Pagination component import
+import { navigateSource } from "@/lib/action";
+
 const MySwal = withReactContent(Swal);
 
 const AppliedJobSection = () => {
@@ -31,6 +31,10 @@ const AppliedJobSection = () => {
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
   const { push } = useRouter();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5; // Number of items per page
+
   useEffect(() => {
     if (designationData?.data) {
       const options = designationData.data.map((designation: any) => ({
@@ -88,6 +92,7 @@ const AppliedJobSection = () => {
       }
     }
   };
+
   const handleDeleteJob = async (jobId: string) => {
     try {
       const result = await MySwal.fire({
@@ -115,13 +120,19 @@ const AppliedJobSection = () => {
     push(`/job-detail?jobId=${id}`);
   };
 
+  // Pagination logic
+  const indexOfLastJob = currentPage * itemsPerPage;
+  const indexOfFirstJob = indexOfLastJob - itemsPerPage;
+  const currentJobs = appliedJob?.data?.slice(indexOfFirstJob, indexOfLastJob);
+  const totalJobs = appliedJob?.data?.length || 0;
+
   return (
     <div className="page-content bg-white">
       <div className="content-block">
         <div className="section-full bg-white p-t50 p-b20">
           <div className="container">
             <div className="row">
-              <div className="col-xl-3 col-lg-4 m-b30">
+             <div className="col-xl-3 col-lg-4 m-b30">
                 <div className="sticky-top">
                   <div className="candidate-info">
                     <div className="candidate-detail text-center">
@@ -270,99 +281,86 @@ const AppliedJobSection = () => {
                 </div>
               </div>
               <div className="col-xl-9 col-lg-8 m-b30 browse-job">
-                <div className="job-bx-title  clearfix">
+                <div className="job-bx-title clearfix">
                   <h5 className="font-weight-700 pull-left text-uppercase">
-                    {appliedJob?.data?.length} Jobs Found
+                    {totalJobs} Jobs Found
                   </h5>
-                  <div className="float-right">
-                    <span className="select-title">Sort by freshness</span>
-                    <select className="custom-btn">
-                      <option>Last 2 Months</option>
-                      <option>Last Months</option>
-                      <option>Last Weeks</option>
-                      <option>Last 3 Days</option>
-                    </select>
-                  </div>
                 </div>
-                <ul className="post-job-bx browse-job">
-                  {appliedJob?.data?.map((item: any, index: number) => (
-                    <li key={index}>
-                      <div className="post-bx">
-                        <div className="job-post-info m-a0">
-                          <h4>
-                            <Link href={"/job-detail"}>{item?.job_title}</Link>
-                          </h4>
-                          <ul>
-                            <li>
-                              <Link href={"/company-profile"}>
-                                {item?.company_name}
-                              </Link>
-                            </li>
-                            <li>
-                              <i className="fa fa-map-marker"></i>{" "}
-                              {item?.address}
-                            </li>
-                            <li>
-                              <i className="fa fa-money"></i> {item?.ctc} lakhs
-                            </li>
-                          </ul>
-                          <div className="job-time m-t15 m-b10">
-                            {item?.tags
-                              ?.split(",")
-                              .map((tag: string, index: number) => (
-                                <Link href={"#"} key={index} className="mr-1">
-                                  <span>{tag}</span>
+
+                {totalJobs === 0 ? (
+                   <div  style={{ display :"flex", justifyContent:"center"}}>
+                     No applied job available
+                   </div>
+                ) : (
+                  <ul className="post-job-bx browse-job">
+                    {currentJobs?.map((item: any, index: number) => (
+                      <li key={index}>
+                        <div className="post-bx">
+                          <div className="job-post-info m-a0">
+                            <h4>
+                              <Link href="/job-detail">{item?.job_title}</Link>
+                            </h4>
+                            <ul>
+                              <li>
+                                <Link href="/company-profile">
+                                  {item?.company_name}
                                 </Link>
-                              ))}
-                          </div>
-                          <div className="posted-info clearfix">
-                            <p className="m-tb0 text-primary float-left">
-                              <span className="text-black m-r10">Posted:</span>{" "}
-                              {formatDateAgo(item?.created_at)}
-                            </p>
-                            <div className="float-right">
-                              <button
-                                className="site-button button-sm mr-2"
-                                onClick={() => viewJobHandler(item?.id)}
-                              >
-                                <i className="fa fa-eye"></i>
-                              </button>
-                              <button
-                                className="site-button button-sm"
-                                onClick={() => handleDeleteJob(item?.id)}
-                              >
-                                <i className="ti-trash"></i>
-                              </button>
+                              </li>
+                              <li>
+                                <i className="fa fa-map-marker"></i>{" "}
+                                {item?.address}
+                              </li>
+                              <li>
+                                <i className="fa fa-money"></i> {item?.ctc}{" "}
+                                lakhs
+                              </li>
+                            </ul>
+                            <div className="job-time m-t15 m-b10">
+                              {item?.tags
+                                ?.split(",")
+                                .map((tag: string, index: number) => (
+                                  <Link href="#" key={index} className="mr-1">
+                                    <span>{tag}</span>
+                                  </Link>
+                                ))}
+                            </div>
+                            <div className="posted-info clearfix">
+                              <p className="m-tb0 text-primary float-left">
+                                <span className="text-black m-r10">
+                                  Posted:
+                                </span>{" "}
+                                {formatDateAgo(item?.created_at)}
+                              </p>
+                              <div className="float-right">
+                                <button
+                                  className="site-button button-sm mr-2"
+                                  onClick={() => viewJobHandler(item?.id)}
+                                >
+                                  <i className="fa fa-eye"></i>
+                                </button>
+                                <button
+                                  className="site-button button-sm"
+                                  onClick={() => handleDeleteJob(item?.id)}
+                                >
+                                  <i className="ti-trash"></i>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <div className="pagination-bx m-t30">
-                  <ul className="pagination">
-                    <li className="previous">
-                      <Link href={"#"}>
-                        <i className="ti-arrow-left"></i> Prev
-                      </Link>
-                    </li>
-                    <li className="active">
-                      <Link href={"#"}>1</Link>
-                    </li>
-                    <li>
-                      <Link href={"#"}>2</Link>
-                    </li>
-                    <li>
-                      <Link href={"#"}>3</Link>
-                    </li>
-                    <li className="next">
-                      <Link href={"#"}>
-                        Next <i className="ti-arrow-right"></i>
-                      </Link>
-                    </li>
+                      </li>
+                    ))}
                   </ul>
-                </div>
+                )}
+
+                {totalJobs > 0 && (
+                  <Pagination
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalJobs}
+                    onPageChange={(page) => setCurrentPage(page)}
+                  />
+                )}
               </div>
             </div>
           </div>

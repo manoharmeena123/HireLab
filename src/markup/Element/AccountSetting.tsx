@@ -22,6 +22,7 @@ import Loading from "@/components/Loading";
 import profileIcon from "../../images/favicon.png";
 import { IMAGE_URL } from "@/lib/apiEndPoints";
 import styles from "@/styles/AccountSetting.module.css";
+import { useGetDesignationQuery } from "@/store/global-store/global.query";
 
 const AccountSetting = () => {
   const { data: getBilling, isLoading: getBillingLoading } = useGetBillingQuery(
@@ -158,7 +159,23 @@ const handleDeactivate = async () => {
     }
   }
 };
-
+const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+const [designationLabel, setDesignationLabel] = useState<string>("");
+useEffect(() => {
+  if (user && user.user?.designation_id !== null) {
+    const designationId = user.user.designation_id.toString();
+    const designation = designationOptions.find(
+      (option) => option.id === designationId
+    );
+    if (designation) {
+      setDesignationLabel(designation.label);
+    } else {
+      setDesignationLabel("Designation not found");
+    }
+  } else {
+    setDesignationLabel("Designation not available");
+  }
+}, [user, designationOptions, refetch]);
 
   return (
     <>
@@ -207,7 +224,7 @@ const handleDeactivate = async () => {
                           </h4>
                           <p className="m-b0">
                             <Link href={"#"}>
-                              {user?.user?.designation || "Not available"}
+                              {designationLabel || "Not available"}
                             </Link>
                           </p>
                         </div>

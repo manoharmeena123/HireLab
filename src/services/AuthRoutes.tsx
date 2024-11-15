@@ -27,7 +27,7 @@ const AuthRoutes = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!loading && !authenticated) {
-      router.push("/login");
+      router.push("/");
     }
   }, [loading, authenticated, router]);
 
