@@ -75,7 +75,17 @@ const AccountSetting = () => {
     }
   };
   // Handlers for Privacy Settings
-  const handleMakePrivate = async () => {
+const handleMakePrivate = async () => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to make your profile private.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, make it private!",
+    cancelButtonText: "No, keep it public"
+  });
+
+  if (result.isConfirmed) {
     try {
       const response = await makeUserPrivate({}).unwrap();
       Swal.fire("Success", response.message, "success");
@@ -83,9 +93,20 @@ const AccountSetting = () => {
     } catch (error) {
       Swal.fire("Error", "Failed to make profile private.", "error");
     }
-  };
+  }
+};
 
-  const handleMakePublic = async () => {
+const handleMakePublic = async () => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to make your profile public.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, make it public!",
+    cancelButtonText: "No, keep it private"
+  });
+
+  if (result.isConfirmed) {
     try {
       const response = await makeUserPublic({}).unwrap();
       Swal.fire("Success", response.message, "success");
@@ -93,9 +114,20 @@ const AccountSetting = () => {
     } catch (error) {
       Swal.fire("Error", "Failed to make profile public.", "error");
     }
-  };
+  }
+};
 
-  const handleActivate = async () => {
+const handleActivate = async () => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to activate your account.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, activate!",
+    cancelButtonText: "No, keep it deactivated"
+  });
+
+  if (result.isConfirmed) {
     try {
       const response = await makeUserActivate({}).unwrap();
       Swal.fire("Success", response.message, "success");
@@ -103,9 +135,20 @@ const AccountSetting = () => {
     } catch (error) {
       Swal.fire("Error", "Failed to activate account.", "error");
     }
-  };
+  }
+};
 
-  const handleDeactivate = async () => {
+const handleDeactivate = async () => {
+  const result = await Swal.fire({
+    title: "Are you sure?",
+    text: "You are about to deactivate your account.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, deactivate!",
+    cancelButtonText: "No, keep it active"
+  });
+
+  if (result.isConfirmed) {
     try {
       const response = await makeUserDeactivate({}).unwrap();
       Swal.fire("Success", response.message, "success");
@@ -113,7 +156,9 @@ const AccountSetting = () => {
     } catch (error) {
       Swal.fire("Error", "Failed to deactivate account.", "error");
     }
-  };
+  }
+};
+
 
   return (
     <>
@@ -221,15 +266,28 @@ const AccountSetting = () => {
                                 <span>Switch Plan</span>
                               </Link>
                             </li> */}
-                            <li>
+                            {user?.user?.role === "job_poster" ? (
+                              <li>
                               <Link href="/transaction">
                                 <i
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Coins and voucher</span>
                               </Link>
                             </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
+                            
                           </>
                         ) : (
                           <>
@@ -287,7 +345,7 @@ const AccountSetting = () => {
                                 <span>Job Alerts</span>
                               </Link>
                             </li>
-                            <li>
+                            {/* <li>
                               <Link href="/switch-plan">
                                 <i
                                   className="fa fa-money"
@@ -295,16 +353,28 @@ const AccountSetting = () => {
                                 ></i>
                                 <span>Switch Plan</span>
                               </Link>
-                            </li>
-                            <li>
+                            </li> */}
+                         {user?.user?.role === "job_poster" ? (
+                              <li>
                               <Link href="/transaction">
                                 <i
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Coins and voucher</span>
                               </Link>
                             </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                           </>
                         )}
 

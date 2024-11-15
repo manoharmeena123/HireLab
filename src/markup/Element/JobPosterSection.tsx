@@ -310,15 +310,27 @@ const JobPosterSection = () => {
                             Switch Plan
                           </Link>
                         </li> */}
-                        <li>
-                          <Link href="/transaction">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
+                      {user?.user?.role === "job_poster" ? (
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Coins and voucher</span>
+                              </Link>
+                            </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                         {/* <li>
                           <Link href="#">
                             <i

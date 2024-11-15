@@ -293,9 +293,9 @@ const handleCloseSidebar = () => {
                         >
                           <Link href="/dashboard-section">Dashboard</Link>
                         </li>
-                        <li className={isActive("/job-seeker") ? "active" : ""}>
+                        {/* <li className={isActive("/job-seeker") ? "active" : ""}>
                           <Link href="/job-seeker">Profile</Link>
-                        </li>{" "}
+                        </li>{" "} */}
                       </>
                     )}
 

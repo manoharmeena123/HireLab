@@ -95,10 +95,13 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
               <li className="list-group-item" onClick={handleAccountSetting}>
                 Settings & Privacy
               </li>
+              <li className="list-group-item" onClick={handleLogout}>
+                Sign Out
+              </li>
             </ul>
           </div>
 
-          <div className="profile-section">
+          {/* <div className="profile-section">
             <h5 className="section-title">Manage</h5>
             <ul className="list-group">
               <li className="list-group-item">Posts & Activity</li>
@@ -107,7 +110,7 @@ const ProfileDrawer = ({ isOpen, toggleDrawer }: any) => {
                 Sign Out
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       )}
 

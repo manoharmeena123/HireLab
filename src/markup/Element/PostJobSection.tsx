@@ -45,7 +45,6 @@ import cityData from "@/data/in.json";
 import indianStateOptions from "@/data/state.json";
 import { experienceOptions } from "@/data/indexSearch";
 
-
 const PostJobSection = () => {
   const router = useRouter();
   const dispatch = useDispatch();
@@ -74,39 +73,11 @@ const PostJobSection = () => {
   const { data: getExperience } = useGetExperienceQuery({});
   console.log("getExperience", getExperience);
   const { removeToken } = useAuthToken();
-  const [isJobTypeHovered, setIsJobTypeHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isLocationHovered, setIsLocationHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isCompensationHovered, setIsCompensationHovered] = useState(
-    Array(2).fill(false)
-  );
-  const [isAdditionalPerkHovered, setIsAdditionalPerkHovered] = useState(
-    Array(5).fill(false)
-  );
-  const [isJoiningFeeHovered, setIsJoiningFeeHovered] = useState(
-    Array(2).fill(false)
-  );
-  const [isMaximumEducationHovered, setIsMaximumEducationHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isTotalExperienceHovered, setIsTotalExperienceHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isTagHovered, setIsTagHovered] = useState(Array(10).fill(false));
 
-  const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-  const [selectedJoiningFee, setSelectedJoiningFee] = useState<number | null>(
-    null
-  );
   const [selectedMaximumEducation, setSelectedMaximumEducation] = useState<
     number | null
   >(null);
-  const [selectedTotalExperience, setSelectedTotalExperience] = useState<
-    number | null
-  >(null);
+
   const [selectedAdditionalPerks, setSelectedAdditionalPerks] = useState<
     number[]
   >([]);
@@ -114,16 +85,6 @@ const PostJobSection = () => {
     useState<SingleValue<OptionType>>(null);
   const [selectedSector, setSelectedSector] =
     useState<SingleValue<OptionType>>(null);
-
-  const handleMouseEnter = (
-    index: number,
-    setIsHovered: React.Dispatch<React.SetStateAction<boolean[]>>
-  ) => {
-    setIsHovered((prev) =>
-      prev.map((hovered, i) => (i === index ? true : hovered))
-    );
-  };
-
   const [selectedExperience, setSelectedExperience] = useState(null);
 
   const handleExperienceChange = (selectedOption: any) => {
@@ -138,7 +99,7 @@ const PostJobSection = () => {
     setSelectedJobType(selectedOption?.value || null);
 
     // Dispatch the job type id (value) to Redux
-    dispatch(setPostJobData({ job_type: selectedOption?.value || "" }));
+    dispatch(setPostJobData({ job_type: String(selectedOption?.value || "") }));
   };
 
   const [selectedCompensation, setSelectedCompensation] = useState<
@@ -151,7 +112,9 @@ const PostJobSection = () => {
     setSelectedCompensation(selectedOption?.value || null);
 
     // Dispatch the selected compensation id to Redux
-    dispatch(setPostJobData({ compensation: selectedOption?.value || "" }));
+    dispatch(
+      setPostJobData({ compensation: String(selectedOption?.value || "") })
+    );
   };
 
   const handleAdditionalPerkChange = (selectedOptions: any) => {
@@ -170,16 +133,12 @@ const PostJobSection = () => {
 
     // Dispatch the selected education id to Redux
     dispatch(
-      setPostJobData({ maximum_education: selectedOption?.value || "" })
+      setPostJobData({
+        maximum_education: String(selectedOption?.value || ""),
+      })
     );
   };
-  const handleTotalExperienceChange = (selectedOption: any) => {
-    // Update the selected experience with the experience id (value)
-    setSelectedTotalExperience(selectedOption?.value || null);
 
-    // Dispatch the selected experience id to Redux
-    dispatch(setPostJobData({ total_experience: selectedOption?.value || "" }));
-  };
   const [selectedCity, setSelectedCity] = useState<number | null>(null);
   const handleLocationChange = (selectedOption: any) => {
     // Update the selected city with the location id (value)
@@ -199,49 +158,6 @@ const PostJobSection = () => {
     dispatch(setPostJobData({ state: selectedOption?.value || "" }));
   };
 
-  const handleMouseLeave = (
-    index: number,
-    setIsHovered: React.Dispatch<React.SetStateAction<boolean[]>>
-  ) => {
-    setIsHovered((prev) =>
-      prev.map((hovered, i) => (i === index ? false : hovered))
-    );
-  };
-
-  const handleToggleSelect = (
-    index: number,
-    field: string,
-    setSelectedState:
-      | React.Dispatch<React.SetStateAction<number | null>>
-      | React.Dispatch<React.SetStateAction<number[]>>,
-    selectedState: number | null | number[],
-    isMultiSelect = false
-  ) => {
-    if (isMultiSelect) {
-      let newSelected: number[] = Array.isArray(selectedState)
-        ? [...selectedState]
-        : [];
-      if (newSelected.includes(index)) {
-        newSelected = newSelected.filter((i) => i !== index);
-      } else {
-        newSelected.push(index);
-      }
-      (setSelectedState as React.Dispatch<React.SetStateAction<number[]>>)(
-        newSelected
-      );
-      dispatch(setPostJobData({ [field]: newSelected.join(",") }));
-    } else {
-      const valueToDispatch = index === selectedState ? null : index;
-      (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
-        valueToDispatch
-      );
-      dispatch(
-        setPostJobData({
-          [field]: valueToDispatch !== null ? valueToDispatch.toString() : "",
-        })
-      );
-    }
-  };
   const handleSubmit = async (status: any) => {
     console.log("status", status);
     dispatch(setPostJobData({ status })); // Adds status to the payload
@@ -305,16 +221,15 @@ const PostJobSection = () => {
       }
     }
   };
-  const [inputValue, setInputValue] = useState<string>("");
-  const [tags, setTags] = useState<string[]>([]);
   const [jobDescription, setJobDescription] = useState<string>("");
   const [candidateRequirement, setCandidateRequirement] = useState<string>("");
 
-  const handleInputSelectChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setInputValue(e.target.value);
-    const tagValues = tags.join(",");
+  const [tags, setTags] = useState<string[]>([]);
+
+  // Update tags when they change in the ReactTagInput component
+  const handleTagChange = (newTags: string[]) => {
+    setTags(newTags);
+    const tagValues = newTags.join(",");
     dispatch(setPostJobData({ tags: tagValues }));
   };
 
@@ -325,11 +240,6 @@ const PostJobSection = () => {
     const tagValues = tags.join(",");
     dispatch(setPostJobData({ tags: tagValues }));
     dispatch(setPostJobData({ [name]: value }));
-  };
-
-  const handleAddTag = (tag: string) => {
-    setTags([...tags, tag]);
-    setInputValue("");
   };
 
   const handleRemoveTag = (index: number) => {
@@ -595,21 +505,28 @@ const PostJobSection = () => {
                           CV Manager
                         </Link>
                       </li>
-                      {/* <li>
-                        <Link href="/switch-plan">
-                          <i className="fa fa-money" aria-hidden="true"></i>
-                          Switch Plan
-                        </Link>
-                      </li> */}
-                      <li>
-                        <Link href="/transaction">
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
+      
+                      {user?.user?.role === "job_poster" ? (
+                        <li>
+                          <Link href="/transaction">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Coins and voucher</span>
+                          </Link>
+                        </li>
+                      ) : (
+                        <li>
+                          <Link href="/transaction">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Billing</span>
+                          </Link>
+                        </li>
+                      )}
                       {/* <li>
                         <Link href="/analytics-and-report">
                           <i className="fa fa-bar-chart" aria-hidden="true"></i>
@@ -792,33 +709,6 @@ const PostJobSection = () => {
                           </span>
                         </div>
                       </div>
-                      {/* <div className="col-lg-6 col-md-12">
-                        <div className="form-group">
-                          <label>Total Experience Required</label>
-                          <Select
-                            options={totalexperienceOptions}
-                            onChange={handleTotalExperienceChange}
-                            value={
-                              totalexperienceOptions.find(
-                                (experience: any) =>
-                                  experience.value === selectedTotalExperience
-                              ) || null
-                            } // Find the option with matching id
-                            styles={{
-                              control: (base) => ({
-                                ...base,
-                                height: 38,
-                                minHeight: 38,
-                              }),
-                            }}
-                            placeholder="Select Total Experience"
-                          />
-                          <span className="text-red-500 text-danger">
-                            {errors?.total_experience?.[0]}
-                          </span>
-                        </div>
-                      </div> */}
-
                       <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Experience</label>
@@ -879,7 +769,7 @@ const PostJobSection = () => {
                             <div className="tags-container">
                               <ReactTagInput
                                 tags={tags}
-                                onChange={(newTags: any) => setTags(newTags)}
+                                onChange={handleTagChange}
                                 placeholder="Type tags and press Enter"
                               />
                             </div>

@@ -34,19 +34,23 @@ import {
   useGetCtcDataQuery,
   useGetDesignationQuery,
   useGetSectorQuery,
-  useGetJobByIdMutation,
   useGetExperienceQuery,
+  useGetJobByIdMutation,
 } from "@/store/global-store/global.query";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
+import Loading from "@/components/Loading";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { IMAGE_URL } from "@/lib/apiEndPoints";
 import profileIcon from "../../images/favicon.png";
+import { IMAGE_URL } from "@/lib/apiEndPoints";
 import Swal from "sweetalert2";
-import { addNotificationToFirestore } from "@/app/notifications/firebaseConfig"; // Import the function
+import cityData from "@/data/in.json";
+import indianStateOptions from "@/data/state.json";
+import { experienceOptions } from "@/data/indexSearch";
 
 const JobEditSection = () => {
+  const { removeToken } = useAuthToken();
   const router = useRouter();
   const dispatch = useDispatch();
   const profileData = useSelector(selectPostJobState);
@@ -76,78 +80,173 @@ const JobEditSection = () => {
     useGetCtcDataQuery();
   const { data: getSectorData, isLoading: getSectorDataLoading } =
     useGetSectorQuery();
-  const {
-    data: getExperience,
-  } = useGetExperienceQuery();
+  const { data: getExperience } = useGetExperienceQuery({});
 
-  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
-  const [designationLabel, setDesignationLabel] = useState<string>("");
-
-  const { removeToken } = useAuthToken();
-  const [isJobTypeHovered, setIsJobTypeHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isLocationHovered, setIsLocationHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isCompensationHovered, setIsCompensationHovered] = useState(
-    Array(2).fill(false)
-  );
-  const [isAdditionalPerkHovered, setIsAdditionalPerkHovered] = useState(
-    Array(5).fill(false)
-  );
-  const [isJoiningFeeHovered, setIsJoiningFeeHovered] = useState(
-    Array(2).fill(false)
-  );
-  const [isMaximumEducationHovered, setIsMaximumEducationHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isTotalExperienceHovered, setIsTotalExperienceHovered] = useState(
-    Array(3).fill(false)
-  );
-  const [isTagHovered, setIsTagHovered] = useState(Array(10).fill(false));
-  const [selectedJobType, setSelectedJobType] = useState<number | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
-  const [selectedCompensation, setSelectedCompensation] = useState<
-    number | null
-  >(null);
-  const [selectedJoiningFee, setSelectedJoiningFee] = useState<number | null>(
-    null
-  );
   const [selectedMaximumEducation, setSelectedMaximumEducation] = useState<
     number | null
   >(null);
-  const [selectedTotalExperience, setSelectedTotalExperience] = useState<
-    number | null
-  >(null);
+
   const [selectedAdditionalPerks, setSelectedAdditionalPerks] = useState<
     number[]
   >([]);
+
   const [selectedSalary, setSelectedSalary] =
     useState<SingleValue<OptionType>>(null);
   const [selectedSector, setSelectedSector] =
     useState<SingleValue<OptionType>>(null);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [tags, setTags] = useState<string[]>([]);
-  const [jobDescription, setJobDescription] = useState<string>("");
-  const [candidateRequirement, setCandidateRequirement] = useState<string>("");
+  const [selectedExperience, setSelectedExperience] = useState(null);
 
-  const handleMouseEnter = (
-    index: number,
-    setIsHovered: React.Dispatch<React.SetStateAction<boolean[]>>
-  ) => {
-    setIsHovered((prev) =>
-      prev.map((hovered, i) => (i === index ? true : hovered))
+  const handleExperienceChange = (selectedOption: any) => {
+    setSelectedExperience(selectedOption);
+    dispatch(setPostJobData({ experience: selectedOption?.value || "" }));
+  };
+
+  const [selectedJobType, setSelectedJobType] = useState<any | null>(null);
+
+  // const handleJobTypeChange = (selectedOption: any) => {
+  //   setSelectedJobType(selectedOption?.value || null);
+  //   dispatch(setPostJobData({ job_type: String(selectedOption?.value || "") }));
+  // };
+  const handleJobTypeChange = (selectedOption: any) => {
+    console.log('handleJobTypeChange', selectedOption)
+    // Ensure job_type is stored as a string
+    const jobType = String(selectedOption?.value || "");
+    console.log('handleJobTypeChange', jobType)
+
+    setSelectedJobType(jobType);
+    dispatch(setPostJobData({ job_type: jobType }));
+};
+
+
+  const [selectedCompensation, setSelectedCompensation] = useState<
+    any | null
+  >(null);
+
+  const handleCompensationChange = (selectedOption: any) => {
+    // Ensure compensation is stored as a string
+    const compensation = String(selectedOption?.value || "");
+    setSelectedCompensation(compensation);
+    dispatch(setPostJobData({ compensation }));
+};
+
+
+const handleAdditionalPerkChange = (selectedOptions: any) => {
+  const selectedValues = selectedOptions?.map((option: any) => option.value) || [];
+  setSelectedAdditionalPerks(selectedValues); // Set selected perks as an array of ids
+  
+  // Update the form data with the comma-separated string of perk ids
+  dispatch(setPostJobData({ additional_perk: selectedValues.join(",") }));
+};
+
+  const handleEducationChange = (selectedOption: any) => {
+    setSelectedMaximumEducation(selectedOption?.value || null);
+    dispatch(
+      setPostJobData({
+        maximum_education: String(selectedOption?.value || ""),
+      })
     );
   };
 
-  const handleMouseLeave = (
-    index: number,
-    setIsHovered: React.Dispatch<React.SetStateAction<boolean[]>>
-  ) => {
-    setIsHovered((prev) =>
-      prev.map((hovered, i) => (i === index ? false : hovered))
-    );
+  const [selectedCity, setSelectedCity] = useState<any | null>(null);
+  const handleLocationChange = (selectedOption: any) => {
+    setSelectedCity(selectedOption?.value || null);
+    dispatch(setPostJobData({ city: selectedOption?.value || "" }));
+  };
+
+  const [selectedState, setSelectedState] = useState<any | null>(null);
+
+  const handleStateChange = (selectedOption: any) => {
+    setSelectedState(selectedOption?.value || null);
+    dispatch(setPostJobData({ state: selectedOption?.value || "" }));
+  };
+
+  const handleSelectChange = (option: any) => {
+    setSelectedSalary(option);
+    dispatch(setPostJobData({ ctc: option?.id }));
+  };
+
+  const handleSectorSelectChange = (option: any) => {
+    setSelectedSector(option);
+    dispatch(setPostJobData({ sector: option?.id }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault()
+    if (!user?.user?.membership) {
+      const membershipResult = await Swal.fire({
+        title: "No Membership Plan",
+        text: "You don't have any membership plan to apply for jobs. Would you like to buy one?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Buy Subscription",
+        cancelButtonText: "Go Back to Job",
+      });
+
+      if (membershipResult.isConfirmed) {
+        router.push("/cart");
+      } else {
+        return;
+      }
+    } else {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: `You are about to update this job.`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: `Yes, want to update it!`,
+        cancelButtonText: "No, cancel",
+      });
+
+      if (result.isConfirmed) {
+        // Prepare the payload data
+      const payload = { ...profileData };
+
+         // If job type is not changed, retain the original value (ensure it's a string)
+         if (!selectedJobType) {
+          payload.job_type = String(profileData.job_type); // Ensure job_type is a string
+        } else {
+          payload.job_type = String(selectedJobType); // Convert to string if edited
+        }
+  
+        // If compensation is not changed, retain the original value (ensure it's a string)
+        if (!selectedCompensation) {
+          payload.compensation = String(profileData.compensation); // Ensure compensation is a string
+        } else {
+          payload.compensation = String(selectedCompensation); // Convert to string if edited
+        }
+      // If additional perks are not changed, retain the original value
+      if (selectedAdditionalPerks.length === 0) {
+        payload.additional_perk = profileData.additional_perk; // Retain current additional_perk if not changed
+      } else {
+        payload.additional_perk = selectedAdditionalPerks.join(","); // Store selected perks
+      }
+
+        try {
+          const response = await updateJob(payload).unwrap();
+          if (response.code === 200) {
+            Swal.fire({
+              icon: "success",
+              title: `Job updated successfully`,
+              text: response?.message,
+            });
+            router.push("/manage-job");
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: response?.message,
+            });
+            dispatch(setPostJobErrors(response.errors));
+          }
+        } catch (err: any) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: err?.message,
+          });
+        }
+      }
+    }
   };
 
   const handleLogout = async () => {
@@ -181,185 +280,27 @@ const JobEditSection = () => {
     }
   };
 
-  const handleToggleSelect = (
-    index: number,
-    field: string,
-    setSelectedState:
-      | React.Dispatch<React.SetStateAction<number | null>>
-      | React.Dispatch<React.SetStateAction<number[]>>,
-    selectedState: number | null | number[],
-    isMultiSelect = false
-  ) => {
-    if (isMultiSelect) {
-      let newSelected: number[] = Array.isArray(selectedState)
-        ? [...selectedState]
-        : [];
-      if (newSelected.includes(index)) {
-        newSelected = newSelected.filter((i) => i !== index);
-      } else {
-        newSelected.push(index);
-      }
-      (setSelectedState as React.Dispatch<React.SetStateAction<number[]>>)(
-        newSelected
-      );
-      dispatch(setPostJobData({ [field]: newSelected.join(",") }));
-    } else {
-      const valueToDispatch = index === selectedState ? null : index;
-      (setSelectedState as React.Dispatch<React.SetStateAction<number | null>>)(
-        valueToDispatch
-      );
-      dispatch(
-        setPostJobData({
-          [field]: valueToDispatch !== null ? valueToDispatch.toString() : "",
-        })
-      );
-    }
-  };
+  const [tags, setTags] = useState<string[]>([]);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to update this job?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, update it!",
-      cancelButtonText: "No, cancel",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        const response = await updateJob({
-          ...profileData,
-          id: jobId,
-          job_type: selectedJobType?.toString() || "",
-          experience: selectedTotalExperience?.toString() || "",
-          location: selectedLocation?.toString() || "",
-          compensation: selectedCompensation?.toString() || "",
-          additional_perk: selectedAdditionalPerks.join(","),
-        }).unwrap();
-        if (response.code == 200) {
-          toast.success("Job updated successfully!", { theme: "colored" });
-          await addNotificationToFirestore("Job updated", `job has been updated`);
-          router.push("/manage-job");
-        } else if (response.code == 401) {
-          toast.error(response.message, { theme: "colored" });
-        } else if (response.code == 404) {
-          toast.error(response.message, { theme: "colored" });
-          dispatch(setPostJobErrors(response.errors));
-        } else {
-          console.error("Unexpected error format:", response);
-        }
-      } catch (err) {
-        console.error("Error updating job:", err);
-      }
-    }
+  const handleTagChange = (newTags: string[]) => {
+    setTags(newTags);
+    const tagValues = newTags.join(",");
+    dispatch(setPostJobData({ tags: tagValues }));
   };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    const tagValues = tags.join(",");
+    dispatch(setPostJobData({ tags: tagValues }));
     dispatch(setPostJobData({ [name]: value }));
   };
 
-  const handleSelectChange = (option: any, field: string) => {
-    if (field === "ctc") {
-      setSelectedSalary(option);
-    } else if (field === "sector") {
-      setSelectedSector(option);
-    }
-    dispatch(setPostJobData({ [field]: option?.id }));
+  const handleRemoveTag = (index: number) => {
+    const updatedTags = tags.filter((_, i) => i !== index);
+    setTags(updatedTags);
   };
-
-  useEffect(() => {
-    if (user && user.user?.designation_id !== null) {
-      const designationId = user.user.designation_id.toString();
-      const designation = designationOptions.find(
-        (option) => option.id === designationId
-      );
-      if (designation) {
-        setDesignationLabel(designation.label);
-      } else {
-        setDesignationLabel("Designation not found");
-      }
-    } else {
-      setDesignationLabel("Designation not available");
-    }
-  }, [user, designationOptions, refetch]);
-
-  useEffect(() => {
-    if (designationData?.data) {
-      const options = designationData.data.map((designation: any) => ({
-        value: designation.title,
-        label: designation.title,
-        id: designation.id.toString(),
-      }));
-      setDesignationOptions(options);
-    }
-  }, [designationData, refetch]);
-
-  useEffect(() => {
-    if (jobId) {
-      getJobs(jobId)
-        .unwrap()
-        .then((response: any) => {
-          if (response.data) {
-            const { data } = response;
-            dispatch(setPostJobData(data));
-            setSelectedJobType(data.job_type.id);
-            setSelectedLocation(data.location.id);
-            setSelectedCompensation(data.compensation.id);
-            setSelectedJoiningFee(Number(data.joining_fee));
-            setSelectedMaximumEducation(Number(data.maximum_education));
-            setSelectedTotalExperience(Number(data.experience.id));
-            setSelectedAdditionalPerks(
-              data.additional_perk ? [data.additional_perk.id] : []
-            );
-            setTags(data.tags.split(","));
-            setSelectedSalary({
-              value: data.ctc.toString(),
-              label: getCtcData?.data?.find(
-                (ctc) => ctc.id.toString() === data.ctc.toString()
-              )?.title,
-              id: data.ctc.toString(),
-            });
-            setSelectedSector({
-              value: data.sector.toString(),
-              label: getSectorData?.data?.find(
-                (sector) => sector.id.toString() === data.sector.toString()
-              )?.name,
-              id: data.sector.toString(),
-            });
-            setJobDescription(data.job_description);
-            setCandidateRequirement(data.candidate_requirement);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching job details:", error);
-        });
-    }
-  }, [jobId, getJobs, dispatch, getCtcData, getSectorData]);
-
-  interface OptionType {
-    value: string;
-    label: string | any;
-    id: string;
-  }
-
-  const ctcOptions: OptionType[] =
-    getCtcData?.data?.map((ctc) => ({
-      value: ctc.id.toString(),
-      label: ctc.title,
-      id: ctc.id.toString(),
-    })) || [];
-
-  const sectorOptions: OptionType[] =
-    getSectorData?.data?.map((sector) => ({
-      value: sector.id.toString(),
-      label: sector.name,
-      id: sector.id.toString(),
-    })) || [];
 
   const spanStyles = (isHovered: boolean, isSelected: boolean) => ({
     display: "flex",
@@ -388,6 +329,142 @@ const JobEditSection = () => {
     fontWeight: "bold",
   };
 
+  const customStyles = {
+    control: (base: any) => ({
+      ...base,
+      height: 38,
+      minHeight: 38,
+    }),
+  };
+
+  const [designationOptions, setDesignationOptions] = useState<any[]>([]);
+  const [designationLabel, setDesignationLabel] = useState<string>("");
+
+  useEffect(() => {
+    if (designationData?.data) {
+      const options = designationData.data.map((designation: any) => ({
+        value: designation.title,
+        label: designation.title,
+        id: designation.id.toString(),
+      }));
+      setDesignationOptions(options);
+    }
+  }, [designationData]);
+
+  useEffect(() => {
+    if (user && user.user?.designation_id !== null) {
+      const designationId = user.user.designation_id.toString();
+      const designation = designationOptions.find(
+        (option) => option.id === designationId
+      );
+      if (designation) {
+        setDesignationLabel(designation.label);
+      } else {
+        setDesignationLabel("Designation not found");
+      }
+    } else {
+      setDesignationLabel("Designation not available");
+    }
+  }, [user, designationOptions]);
+
+  interface OptionType {
+    value: string;
+    label: string | any;
+    id: string;
+  }
+  useEffect(() => {
+    if (jobId) {
+      getJobs(jobId)
+        .unwrap()
+        .then((response: any) => {
+          if (response.data) {
+            const { data } = response;
+            dispatch(setPostJobData(data));
+            setSelectedJobType(data.job_type.id);
+            setSelectedCompensation(data.compensation.id);
+            setSelectedMaximumEducation(Number(data.maximum_education));
+            setSelectedAdditionalPerks(data.additional_perks.map((item :any) => item?.id)); 
+            setSelectedExperience(data?.experience);
+            setTags(data.tags.split(","));
+            setSelectedCity(data?.city)
+            setSelectedState(data?.state)
+            setSelectedSalary({
+              value: data.ctc.toString(),
+              label: getCtcData?.data?.find(
+                (ctc) => ctc.id.toString() === data.ctc.toString()
+              )?.title,
+              id: data.ctc.toString(),
+            });
+            setSelectedSector({
+              value: data.sector.toString(),
+              label: getSectorData?.data?.find(
+                (sector) => sector.id.toString() === data.sector.toString()
+              )?.name,
+              id: data.sector.toString(),
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching job details:", error);
+        });
+    }
+  }, [jobId, getJobs, dispatch, getCtcData, getSectorData]);
+
+  const ctcOptions: OptionType[] =
+    getCtcData?.data?.map((ctc) => ({
+      value: ctc.id.toString(),
+      label: ctc.title,
+      id: ctc.id.toString(),
+    })) || [];
+
+  const sectorOptions: OptionType[] =
+    getSectorData?.data?.map((sector) => ({
+      value: sector.id.toString(),
+      label: sector.name,
+      id: sector.id.toString(),
+    })) || [];
+
+  const jobtypeOption =
+    jobtTypeData?.data?.map((job_type) => ({
+      value: job_type.id,
+      label: job_type.title,
+    })) || [];
+
+  const compensationOptions =
+    compensationData?.data?.map((compensation) => ({
+      value: compensation.id,
+      label: compensation.title,
+    })) || [];
+
+  const additionalPerkOptions =
+    additionalPerkData?.data?.map((perk) => ({
+      value: perk.id,
+      label: perk.title.replace(" +", ""),
+    })) || [];
+
+  const educationOptions =
+    educationData?.data?.map((education) => ({
+      value: education.id,
+      label: education.name,
+    })) || [];
+
+  const experienceOptionsList=
+  experienceOptions?.map((experience: any) => ({
+      value: experience.value,
+      label: experience.label,
+    })) || [];
+
+  const locationOptions =
+    cityData.map((city) => ({
+      value: city.city,
+      label: city.city,
+    })) || [];
+
+  const stateOptionList = indianStateOptions.map((state: any) => ({
+    value: state.state,
+    label: state.state,
+  }));
+
   return (
     <div className="page-content bg-white">
       <div className="content-block">
@@ -407,7 +484,7 @@ const JobEditSection = () => {
                             height={300}
                             onError={(e) =>
                               (e.currentTarget.src = "../../images/favicon.png")
-                            } // Fallback image
+                            }
                             style={{ borderRadius: "50%" }}
                           />
                         ) : (
@@ -418,28 +495,26 @@ const JobEditSection = () => {
                             height={300}
                             onError={(e) =>
                               (e.currentTarget.src = "../../images/favicon.png")
-                            } // Fallback image
+                            }
                             style={{ borderRadius: "50%" }}
                           />
                         )}
                       </div>
                       <div className="candidate-title">
-                        <div className="">
-                          <h4 className="m-b5">
-                            <Link href={"#"}>
-                              {user?.user?.name || "User Name"}
-                            </Link>
-                          </h4>
-                          <p className="m-b0">
-                            <Link href={"#"}>
-                              {designationLabel || "Not available"}
-                            </Link>
-                          </p>
-                        </div>
+                        <h4 className="m-b5">
+                          <Link href={"#"}>
+                            {user?.user?.name || "User Name"}
+                          </Link>
+                        </h4>
+                        <p className="m-b0">
+                          <Link href={"#"}>
+                            {designationLabel || "Not available"}
+                          </Link>
+                        </p>
                       </div>
                     </div>
                     <ul>
-                    <li>
+                      <li>
                         <Link href="/job-poster-dashboard">
                           <i className="fa fa-heart-o" aria-hidden="true"></i>
                           <span>Dashboard</span>
@@ -458,12 +533,12 @@ const JobEditSection = () => {
                         </Link>
                       </li>
                       <li>
-                        <Link className="active" href="/post-job">
+                        <Link href="/post-job" className="active">
                           <i
                             className="fa fa-file-text-o"
                             aria-hidden="true"
                           ></i>
-                          <span>Update Job</span>
+                          <span>Edit Job</span>
                         </Link>
                       </li>
                       <li>
@@ -472,35 +547,42 @@ const JobEditSection = () => {
                           CV Manager
                         </Link>
                       </li>
-                      <li>
-                        <Link href="/switch-plan">
-                          <i className="fa fa-money" aria-hidden="true"></i>
-                          Switch Plan
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/transaction">
-                          <i
-                            className="fa fa-file-text-o"
-                            aria-hidden="true"
-                          ></i>
-                          <span>Transaction</span>
-                        </Link>
-                      </li>
+
+                      {user?.user?.role === "job_poster" ? (
+                        <li>
+                          <Link href="/transaction">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Coins and voucher</span>
+                          </Link>
+                        </li>
+                      ) : (
+                        <li>
+                          <Link href="/transaction">
+                            <i
+                              className="fa fa-file-text-o"
+                              aria-hidden="true"
+                            ></i>
+                            <span>Billing</span>
+                          </Link>
+                        </li>
+                      )}
                       {/* <li>
-                        <Link href="#">
+                        <Link href="/analytics-and-report">
                           <i className="fa fa-bar-chart" aria-hidden="true"></i>
                           <span>Analytics & Report</span>
                         </Link>
                       </li> */}
                       <li>
-                        <Link href="#">
+                        <Link href="/account-setting">
                           <i className="fa fa-cog" aria-hidden="true"></i>
                           <span>Account Setting</span>
                         </Link>
                       </li>
                       <li>
-                        <Link href="#">
+                        <Link href="/support">
                           <i className="fa fa-life-ring" aria-hidden="true"></i>
                           <span>Support</span>
                         </Link>
@@ -519,7 +601,7 @@ const JobEditSection = () => {
                 <div className="job-bx submit-resume">
                   <div className="job-bx-title clearfix">
                     <h5 className="font-weight-700 pull-left text-uppercase">
-                      Update Job
+                      Edit Job
                     </h5>
                     <button
                       onClick={() => router.back()}
@@ -535,374 +617,199 @@ const JobEditSection = () => {
                     className={styles.customScrollbar}
                   >
                     <div className="row">
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Company you are hiring for</label>
                           <input
                             type="text"
                             className="form-control"
                             name="company_name"
-                            value={profileData.company_name}
+                            value={profileData.company_name || ""}
                             onChange={handleInputChange}
                             placeholder="Enter Company Name"
                           />
+                          <span className="text-red-500 text-danger">
+                            {errors?.company_name?.[0]}
+                          </span>
                         </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.company_name?.[0]}
-                        </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Job Title / Designation</label>
                           <input
                             type="text"
                             name="job_title"
-                            value={profileData.job_title}
+                            value={profileData.job_title || ""}
                             onChange={handleInputChange}
                             placeholder="Enter a job title"
-                            className="form-control tags_input"
+                            className="form-control"
                           />
                           <span className="text-red-500 text-danger">
                             {errors?.job_title?.[0]}
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Experience</label>
-                          <Form.Control
-                            as="select"
-                            name="total_experience"
-                            value={profileData.total_experience}
-                            onChange={(e) => handleInputChange(e as any)}
-                            className="custom-select"
-                          >
-                            <option selected>select experience</option>
-                            <option value="0">0 Years</option>
-                            <option value="1">1 Year</option>
-                            <option value="2">2 Years</option>
-                            <option value="3">3 Years</option>
-                            <option value="4">4 Years</option>
-                            <option value="5">5 Years</option>
-                            <option value="6">6 Years</option>
-                            <option value="7">7 Years</option>
-                            <option value="8">8 Years</option>
-                            <option value="9">9 Years</option>
-                            <option value="10">10 Years</option>
-                          </Form.Control>
+                          <label>Job Type</label>
+                          <Select
+                            options={jobtypeOption}
+                            onChange={handleJobTypeChange}
+                            value={
+                              jobtypeOption?.find(
+                                (option :any) => option.value == selectedJobType
+                              ) || null
+                            }
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Job Type"
+                          />
                           <span className="text-red-500 text-danger">
-                            {errors?.experience?.[0]}
+                            {errors?.job_type?.[0]}
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Job Type</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {jobtTypeData?.data?.map((job_type, index) => (
-                              <div
-                                key={job_type.id}
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    job_type.id,
-                                    "job_type",
-                                    setSelectedJobType,
-                                    selectedJobType
-                                  )
-                                }
-                                onMouseEnter={() =>
-                                  handleMouseEnter(index, setIsJobTypeHovered)
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(index, setIsJobTypeHovered)
-                                }
-                                style={spanStyles(
-                                  isJobTypeHovered[index],
-                                  selectedJobType === job_type.id
-                                )}
-                              >
-                                {job_type?.title}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.job_type?.[0]}
-                        </span>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Location</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {locationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isLocationHovered[index],
-                                  selectedLocation === text.id
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(index, setIsLocationHovered)
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(index, setIsLocationHovered)
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    text.id,
-                                    "location",
-                                    setSelectedLocation,
-                                    selectedLocation
-                                  )
-                                }
-                              >
-                                {text?.title}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.location?.[0]}
-                        </span>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Compensation</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {compensationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isCompensationHovered[index],
-                                  selectedCompensation === text.id
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsCompensationHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsCompensationHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    text.id,
-                                    "compensation",
-                                    setSelectedCompensation,
-                                    selectedCompensation
-                                  )
-                                }
-                              >
-                                {text?.title}
-                              </span>
-                            ))}
-                          </div>
+                          <Select
+                            options={compensationOptions}
+                            onChange={handleCompensationChange}
+                            value={
+                              compensationOptions.find(
+                                (compensation :any) =>
+                                  compensation.value == selectedCompensation
+                              ) || null
+                            }
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Compensation"
+                          />
                           <span className="text-red-500 text-danger">
                             {errors?.compensation?.[0]}
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Do You Offer any additional Perks?</label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {additionalPerkData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isAdditionalPerkHovered[index],
-                                  selectedAdditionalPerks.includes(text.id)
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsAdditionalPerkHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsAdditionalPerkHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    text.id,
-                                    "additional_perk",
-                                    setSelectedAdditionalPerks,
-                                    selectedAdditionalPerks,
-                                    true
-                                  )
-                                }
-                              >
-                                {text?.title?.replace(" +", "")}
-                                <span style={plusStyle}>+</span>
-                              </span>
-                            ))}
-                          </div>
+                          <Select
+  options={additionalPerkOptions}
+  onChange={handleAdditionalPerkChange}
+  value={additionalPerkOptions.filter((option) =>
+    selectedAdditionalPerks.includes(option.value)
+  )}
+  isMulti // Allow multiple selection
+  styles={{
+    control: (base) => ({
+      ...base,
+      height: "100%",
+      minHeight: 38,
+    }),
+  }}
+  placeholder="Select Additional Perks"
+/>
+
                           <span className="text-red-500 text-danger">
                             {errors?.additional_perk?.[0]}
                           </span>
                         </div>
                       </div>
 
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>
-                            Is There Any Joining Fee or Deposit Required from
-                            the Candidate?
-                          </label>
-                          <div
-                            className="job-time d-flex flex-wrap mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {["No", "YES"].map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isJoiningFeeHovered[index],
-                                  selectedJoiningFee === index + 1
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsJoiningFeeHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsJoiningFeeHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    index + 1,
-                                    "joining_fee",
-                                    setSelectedJoiningFee,
-                                    selectedJoiningFee
-                                  )
-                                }
-                              >
-                                {text}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.joining_fee?.[0]}
-                        </span>
-                      </div>
-
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Maximum Education</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {educationData?.data?.map((text, index) => (
-                              <span
-                                key={index}
-                                style={spanStyles(
-                                  isMaximumEducationHovered[index],
-                                  selectedMaximumEducation === text.id
-                                )}
-                                onMouseEnter={() =>
-                                  handleMouseEnter(
-                                    index,
-                                    setIsMaximumEducationHovered
-                                  )
-                                }
-                                onMouseLeave={() =>
-                                  handleMouseLeave(
-                                    index,
-                                    setIsMaximumEducationHovered
-                                  )
-                                }
-                                onClick={() =>
-                                  handleToggleSelect(
-                                    text.id,
-                                    "maximum_education",
-                                    setSelectedMaximumEducation,
-                                    selectedMaximumEducation
-                                  )
-                                }
-                              >
-                                {text?.name}
-                              </span>
-                            ))}
-                          </div>
+                          <Select
+                            options={educationOptions}
+                            onChange={handleEducationChange}
+                            value={
+                              educationOptions.find(
+                                (education) =>
+                                  education.value === selectedMaximumEducation
+                              ) || null
+                            }
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                            placeholder="Select Maximum Education"
+                          />
+                          <span className="text-red-500 text-danger">
+                            {errors?.maximum_education?.[0]}
+                          </span>
                         </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.maximum_education?.[0]}
-                        </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Total Experience Required</label>
-                          <div
-                            className="job-time d-flex gap-3 mr-auto"
-                            style={{ gap: "1rem" }}
-                          >
-                            {getExperience?.data?.map(
-                              (text :any, index :any) => (
-                                <span
-                                  key={index}
-                                  style={spanStyles(
-                                    isTotalExperienceHovered[index],
-                                    selectedTotalExperience === index + 1
-                                  )}
-                                  onMouseEnter={() =>
-                                    handleMouseEnter(
-                                      index,
-                                      setIsTotalExperienceHovered
-                                    )
-                                  }
-                                  onMouseLeave={() =>
-                                    handleMouseLeave(
-                                      index,
-                                      setIsTotalExperienceHovered
-                                    )
-                                  }
-                                  onClick={() =>
-                                    handleToggleSelect(
-                                      index + 1,
-                                      "total_experience",
-                                      setSelectedTotalExperience,
-                                      selectedTotalExperience
-                                    )
-                                  }
-                                >
-                                  {text?.title}
-                                </span>
-                              )
-                            )}
-                          </div>
+                          <label>Experience</label>
+                          <Select
+                            options={experienceOptionsList}
+                            value={
+                              experienceOptionsList.find(
+                                (experience :any) =>
+                                  experience.value == selectedExperience
+                              ) || null
+                            }
+                            onChange={handleExperienceChange}
+                            placeholder="Select experience"
+                            isClearable
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
+                          />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.total_experience?.[0]}
+                          {errors?.experience?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>CTC</label>
+                          <Select
+                            value={selectedSalary}
+                            onChange={handleSelectChange}
+                            options={ctcOptions}
+                            placeholder="Select Salary"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.ctc?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-6 col-md-12">
+                        <div className="form-group">
+                          <label>Industry</label>
+                          <Select
+                            value={selectedSector}
+                            onChange={handleSectorSelectChange}
+                            options={sectorOptions}
+                            placeholder="Select Industry"
+                          />
+                        </div>
+                        <span className="text-red-500 text-danger">
+                          {errors?.sector?.[0]}
+                        </span>
+                      </div>
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
                           <label>Tags</label>
                           <div
@@ -912,7 +819,7 @@ const JobEditSection = () => {
                             <div className="tags-container">
                               <ReactTagInput
                                 tags={tags}
-                                onChange={(newTags: any) => setTags(newTags)}
+                                onChange={handleTagChange}
                                 placeholder="Type tags and press Enter"
                               />
                             </div>
@@ -922,52 +829,59 @@ const JobEditSection = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Office Address/Landmark</label>
-                          <input
-                            type="text"
-                            name="address"
-                            value={profileData.address}
-                            onChange={handleInputChange}
-                            placeholder="Enter an address"
-                            className="form-control tags_input"
+                          <label>City</label>
+                          <Select
+                            name="city"
+                            options={locationOptions}
+                            onChange={handleLocationChange}
+                            value={
+                              locationOptions.find(
+                                (state :any) => state.value == selectedCity
+                              ) || null
+                            }
+                            placeholder="Enter city"
+                            isClearable
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.address?.[0]}
+                          {errors?.city?.[0]}
                         </span>
                       </div>
-                      <div className="col-lg-12 col-md-12">
+
+                      <div className="col-lg-6 col-md-12">
                         <div className="form-group">
-                          <label>Ctc</label>
+                          <label>State</label>
                           <Select
-                            value={selectedSalary}
-                            onChange={(option) =>
-                              handleSelectChange(option, "ctc")
+                            name="state"
+                            options={stateOptionList} // Should be distinct from city options
+                            onChange={handleStateChange}
+                            value={
+                              stateOptionList.find(
+                                (state) => state.value === selectedState
+                              ) || null
                             }
-                            options={ctcOptions}
-                            placeholder="Select Salary"
+                            placeholder="Select State"
+                            isClearable
+                            styles={{
+                              control: (base) => ({
+                                ...base,
+                                height: 38,
+                                minHeight: 38,
+                              }),
+                            }}
                           />
                         </div>
                         <span className="text-red-500 text-danger">
-                          {errors?.ctc?.[0]}
-                        </span>
-                      </div>
-                      <div className="col-lg-12 col-md-12">
-                        <div className="form-group">
-                          <label>Industry</label>
-                          <Select
-                            value={selectedSector}
-                            onChange={(option) =>
-                              handleSelectChange(option, "sector")
-                            }
-                            options={sectorOptions}
-                            placeholder="Select Industry"
-                          />
-                        </div>
-                        <span className="text-red-500 text-danger">
-                          {errors?.sector?.[0]}
+                          {errors?.state?.[0]}
                         </span>
                       </div>
                       <div className="col-lg-12 col-md-12">
@@ -975,10 +889,9 @@ const JobEditSection = () => {
                           <label>Candidate Requirement</label>
                           <CKEditor
                             editor={ClassicEditor}
-                            data={candidateRequirement}
+                            data={profileData.candidate_requirement}
                             onChange={(event, editor) => {
                               const data = editor.getData();
-                              setCandidateRequirement(data);
                               dispatch(
                                 setPostJobData({ candidate_requirement: data })
                               );
@@ -994,10 +907,9 @@ const JobEditSection = () => {
                           <label>Job Description</label>
                           <CKEditor
                             editor={ClassicEditor}
-                            data={jobDescription}
+                            data={profileData.job_description}
                             onChange={(event, editor) => {
                               const data = editor.getData();
-                              setJobDescription(data);
                               dispatch(
                                 setPostJobData({ job_description: data })
                               );
@@ -1009,13 +921,15 @@ const JobEditSection = () => {
                         </span>
                       </div>
                     </div>
-                    <button
-                      type="submit"
-                      className="site-button m-b30"
-                      style={{ fontFamily: "__Inter_Fallback_aaf875" }}
-                    >
-                      {updateJobLoading ? "Loading..." : "Update"}
-                    </button>
+                    <div className="button-group">
+                      <button
+                        type="submit"
+                        className="site-button m-b30"
+                        disabled={updateJobLoading}
+                      >
+                        {updateJobLoading ? "Loading..." : "Update"}
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>
@@ -1036,11 +950,10 @@ const JobEditSection = () => {
           background: #f1f1f1;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #2a8310; /* Blue color */
+          background-color: #2a8310;
           border-radius: 10px;
           border: 3px solid #ffffff;
         }
-        /* Firefox scrollbar */
         .custom-scrollbar {
           scrollbar-width: auto;
           scrollbar-color: #2a8310 #f1f1f1;

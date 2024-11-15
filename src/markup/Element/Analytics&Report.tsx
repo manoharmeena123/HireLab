@@ -186,15 +186,27 @@ const AnalyticsReport = () => {
                                 <span>Switch Plan</span>
                               </Link>
                             </li> */}
-                            <li>
+                           {user?.user?.role === "job_poster" ? (
+                              <li>
                               <Link href="/transaction">
                                 <i
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Coins and voucher</span>
                               </Link>
                             </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                           </>
                         ) : (
                           <>
@@ -261,15 +273,27 @@ const AnalyticsReport = () => {
                                 <span>Switch Plan</span>
                               </Link>
                             </li>
-                            <li>
+                            {user?.user?.role === "job_poster" ? (
+                              <li>
                               <Link href="/transaction">
                                 <i
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Coins and voucher</span>
                               </Link>
                             </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                           </>
                         )}
 {/* 

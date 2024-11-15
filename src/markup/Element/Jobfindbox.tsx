@@ -58,8 +58,8 @@ const Jobfindbox = () => {
 
   const [filters, setFilters] = useState<Filters>({
     job_title: "",
-    city: "",
-    sector: "",
+    location: "",
+    experience: "",
   });
 
   const handleChange = (e: any) => {

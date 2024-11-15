@@ -382,21 +382,33 @@ const JobPostedSection = () => {
                             <span>CV Manager</span>
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link href="/switch-plan">
                             <i className="fa fa-money" aria-hidden="true"></i>
                             Switch Plan
                           </Link>
-                        </li>
-                        <li>
-                          <Link href={"/transaction"}>
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
+                        </li> */}
+                     {user?.user?.role === "job_poster" ? (
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Coins and voucher</span>
+                              </Link>
+                            </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                         <li>
                           <Link href="#" onClick={handleLogout}>
                             <i

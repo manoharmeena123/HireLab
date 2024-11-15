@@ -27,7 +27,7 @@ const Transaction = () => {
   const [logout] = useLogoutMutation();
   const [designationOptions, setDesignationOptions] = useState<any[]>([]);
   const [designationLabel, setDesignationLabel] = useState<string>("");
-  const { data: transactiondata } = useMyTransactionsQuery();
+  const { data: transactiondata } = useMyTransactionsQuery({});
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5; // Number of transactions to display per page
 
@@ -166,13 +166,15 @@ const Transaction = () => {
                       <ul>
                         {user?.user?.role === "job_poster" ? (
                           <>
-                               <li>
-                               <Link href="/job-poster-dashboard" >
-                                 <i className="fa fa-heart-o" aria-hidden="true"></i>
-                                 <span>Dashboard</span>
-                               </Link>
-                             </li>
-                      
+                            <li>
+                              <Link href="/job-poster-dashboard">
+                                <i
+                                  className="fa fa-heart-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Dashboard</span>
+                              </Link>
+                            </li>
                           </>
                         ) : (
                           <li>
@@ -219,11 +221,11 @@ const Transaction = () => {
                               </Link>
                             </li>
                             <li>
-                               <Link href="/manage-job" >
-                                 <i className="fa fa-cog" aria-hidden="true"></i>
-                                 <span>Manage jobs</span>
-                               </Link>
-                             </li>
+                              <Link href="/manage-job">
+                                <i className="fa fa-cog" aria-hidden="true"></i>
+                                <span>Manage jobs</span>
+                              </Link>
+                            </li>
                             {/* <li>
                               <Link href="/job-posted">
                                 <i
@@ -292,7 +294,7 @@ const Transaction = () => {
                             Switch Plan
                           </Link>
                         </li> */}
-                        <li>
+                        {/* <li>
                           <Link href="/transaction" className="active">
                             <i
                               className="fa fa-file-text-o"
@@ -300,8 +302,29 @@ const Transaction = () => {
                             ></i>
                             <span>Transaction</span>
                           </Link>
-                        </li>
-                          
+                        </li> */}
+                        {user?.user?.role === "job_poster" ? (
+                          <li>
+                            <Link href="/transaction" className="active">
+                              <i
+                                className="fa fa-file-text-o"
+                                aria-hidden="true"
+                              ></i>
+                              <span>Coins and voucher</span>
+                            </Link>
+                          </li>
+                        ) : (
+                          <li>
+                            <Link href="/transaction" className="active">
+                              <i
+                                className="fa fa-file-text-o"
+                                aria-hidden="true"
+                              ></i>
+                              <span>Billing</span>
+                            </Link>
+                          </li>
+                        )}
+
                         {/* <li>
                           <Link href="/analytics-and-report">
                             <i

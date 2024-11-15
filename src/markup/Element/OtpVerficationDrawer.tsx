@@ -135,6 +135,7 @@ const OtpVerificationDrawer = ({ onClose }: any) => {
         // }
         dispatch(close());
         onClose()
+        window.location.reload();
       } else if (res.code === 401) {
         toast.error(res?.message, { theme: "colored" });
       } else if (res.code === 404 && res.data?.error) {

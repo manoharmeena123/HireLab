@@ -52,6 +52,7 @@ export const useAuthToken = () => {
         localStorage.removeItem(USER_KEY);
       }
       toast.success("Logout Successfully");
+      window.location.reload();
     } catch (error: any) {
       toast.error(error.message);
     }

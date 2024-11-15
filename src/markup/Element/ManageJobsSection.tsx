@@ -403,15 +403,27 @@ const ManageJobs = () => {
                             Switch Plan
                           </Link>
                         </li> */}
-                        <li>
-                          <Link href="/transaction">
-                            <i
-                              className="fa fa-file-text-o"
-                              aria-hidden="true"
-                            ></i>
-                            <span>Transaction</span>
-                          </Link>
-                        </li>
+                      {user?.user?.role === "job_poster" ? (
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Coins and voucher</span>
+                              </Link>
+                            </li>
+                            ):(
+                              <li>
+                              <Link href="/transaction">
+                                <i
+                                  className="fa fa-file-text-o"
+                                  aria-hidden="true"
+                                ></i>
+                                <span>Billing</span>
+                              </Link>
+                            </li>
+                            )}
                         {/* <li>
                           <Link href="#">
                             <i
@@ -676,18 +688,18 @@ const ManageJobs = () => {
                         ) : (
                           getJobuser?.data?.map((item: any, index: number) => (
                             <div className="d-flex py-4" key={index}>
-                              <div className="col-4 d-flex align-items-center">
+                              <div className="col-3 d-flex align-items-center">
                                 <div className="nav-link mn-icon">
                                   <i className="fa fa-user"></i>
                                 </div>
                                 <h6 className="mb-0">{item?.name || "N/A"}</h6>
                               </div>
-                              <div className="col-8 d-flex application-btns-wrap">
+                              <div className="col-9 d-flex application-btns-wrap">
                                 <Button
                                   variant="success"
                                   onClick={() => handleAcceptApplication(item)}
                                 >
-                                  ACCEPT
+                                  Accept
                                 </Button>
                                 <Button
                                   variant="success"
@@ -695,14 +707,14 @@ const ManageJobs = () => {
                                     handleRejectApplication(item?.id)
                                   }
                                 >
-                                  REJECT
+                                  Reject
                                 </Button>
-                                <Button variant="success">VIEW PROFILE</Button>
+                                <Button variant="success">Profile</Button>
                                 <Button
                                   variant="success"
                                   onClick={() => handleChatClick(item)}
                                 >
-                                  CHAT
+                                  Chat
                                 </Button>
                                 <div
                                   className="nav-link mn-icon text-success"

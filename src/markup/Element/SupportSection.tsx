@@ -175,7 +175,7 @@ const SupportSection = () => {
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Coin and voucher</span>
                               </Link>
                             </li>
                           </>
@@ -250,7 +250,7 @@ const SupportSection = () => {
                                   className="fa fa-file-text-o"
                                   aria-hidden="true"
                                 ></i>
-                                <span>Transaction</span>
+                                <span>Billing</span>
                               </Link>
                             </li>
                           </>
